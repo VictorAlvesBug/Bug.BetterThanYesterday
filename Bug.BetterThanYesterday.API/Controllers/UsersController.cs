@@ -2,8 +2,6 @@
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Bug.BetterThanYesterday.API.Controllers
 {
 	[Route("api/[controller]")]
@@ -17,40 +15,38 @@ namespace Bug.BetterThanYesterday.API.Controllers
 			_userRepository = userRepository;
 		}
 
-		// GET: api/<UsersController>
 		[HttpGet]
-		public async Task<IEnumerable<User>> Get()
+		public async Task<IActionResult> Get()
 		{
-			return await _userRepository.GetAllAsync();
+			return Ok(await _userRepository.GetAllAsync());
 		}
 
-		// GET api/<UsersController>/5
 		[HttpGet("{id}")]
-		public async Task<User> Get(string id)
+		public async Task<IActionResult> Get(string id)
 		{
-			return await _userRepository.GetByIdAsync(id);
+			return Ok(await _userRepository.GetByIdAsync(id));
 		}
 
-		// POST api/<UsersController>
 		[HttpPost]
-		public async Task Post([FromBody] User user)
+		public async Task<IActionResult> Post([FromBody] User user)
 		{
 			await _userRepository.AddAsync(user);
+			return Created();
 		}
 
-		// PUT api/<UsersController>/5
-		[HttpPut("{id}")]
-		public async Task Put(int id, [FromBody] User user)
+		[HttpPut]
+		public async Task<IActionResult> Put([FromBody] User user)
 		{
 			await _userRepository.UpdateAsync(user);
+			return NoContent();
 		}
 
-		// DELETE api/<UsersController>/5
 		[HttpDelete("{id}")]
-		public async Task Delete(string id)
+		public async Task<IActionResult> Delete(string id)
 		{
 			var user = await _userRepository.GetByIdAsync(id);
 			await _userRepository.DeleteAsync(user);
+			return NoContent();
 		}
 	}
 }

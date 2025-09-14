@@ -1,15 +1,16 @@
 ﻿using Bug.BetterThanYesterday.Domain.Configurations;
+using Bug.BetterThanYesterday.Domain.Users;
+using Bug.BetterThanYesterday.Infrastructure.Persistence.Users;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bug.BetterThanYesterday.Infrastructure.DependencyInjection
 {
 	public static class DependencyInjectionExtensions
 	{
-		/*public static IServiceCollection AddMongoDbConfiguration(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
 		{
-			services.Configure<IDatabaseConfig>(
-	configuration.GetSection("DatabaseConfig"));
-			builder.Services.AddSingleton<IDatabaseConfig>(sp => sp.GetRequiredService<IOptions<>>());
-		}*/
+			services.AddSingleton<IUserRepository, UserRepository>();
+			return services;
+		}
 	}
 }

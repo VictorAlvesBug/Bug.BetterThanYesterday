@@ -7,7 +7,8 @@
 		public string Email { get; set; }
 		public DateOnly CreatedAt { get; set; }
 
-		public User(string name, string email) {
+		public User(string name, string email)
+		{
 			Id = Guid.NewGuid().ToString();
 			Name = name;
 			Email = email;
