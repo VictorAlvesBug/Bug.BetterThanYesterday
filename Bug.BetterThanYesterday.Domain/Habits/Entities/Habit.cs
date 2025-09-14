@@ -1,4 +1,5 @@
-﻿using Bug.BetterThanYesterday.Domain.Commons;
+﻿using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
+using Bug.BetterThanYesterday.Domain.Commons;
 
 namespace Bug.BetterThanYesterday.Domain.Habits.Entities
 {
@@ -7,11 +8,22 @@ namespace Bug.BetterThanYesterday.Domain.Habits.Entities
 		public string Name { get; set; }
 		public DateOnly CreatedAt { get; set; }
 
-		private Habit(string name)
+		private Habit(
+			string id,
+			string name,
+			DateOnly createdAt)
 		{
-			Id = Guid.NewGuid().ToString();
+			Id = id;
 			Name = name;
-			CreatedAt = DateOnly.FromDateTime(DateTime.Today);
+			CreatedAt = createdAt;
+		}
+
+		private Habit(string name)
+			: this(
+				id: Guid.NewGuid().ToString(),
+				name,
+				createdAt: DateOnly.FromDateTime(DateTime.Today))
+		{
 		}
 
 		public static Habit CreateNew(string name)
@@ -20,6 +32,23 @@ namespace Bug.BetterThanYesterday.Domain.Habits.Entities
 				throw new ArgumentNullException(nameof(name), "Informe o nome do hábito");
 			
 			return new Habit(name);
+		}
+
+		public static Habit Restore(
+			string id,
+			string name,
+			DateOnly createdAt)
+		{
+			if (string.IsNullOrWhiteSpace(id))
+				throw new ArgumentNullException(nameof(id), "Informe o ID do hábito");
+
+			if (string.IsNullOrWhiteSpace(name))
+				throw new ArgumentNullException(nameof(name), "Informe o nome do hábito");
+
+			return new Habit(
+				id,
+				name,
+				createdAt);
 		}
 	}
 }

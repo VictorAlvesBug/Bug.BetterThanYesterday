@@ -6,17 +6,26 @@ using MongoDB.Driver;
 
 namespace Bug.BetterThanYesterday.Infrastructure.Persistence.CheckIns
 {
-	public class CheckInRepository(IDatabaseConfig databaseConfig)
-		: Repository<CheckIn>(databaseConfig, "checkins"), ICheckInRepository
+	public class CheckInRepository(
+		IDatabaseConfig databaseConfig,
+		IDocumentMapper<CheckIn, CheckInDocument> mapper)
+		: Repository<CheckIn, CheckInDocument>(
+			databaseConfig,
+			"checkins",
+			mapper), ICheckInRepository
 	{
 		public async Task<List<CheckIn>> ListByPlanIdAndUserIdAsync(string planId, string userId)
 		{
-			return (await _entities.FindAsync(checkIn => checkIn.PlanId == planId && checkIn.UserId == userId)).ToList();
+			return (await _collection.FindAsync(checkIn => checkIn.PlanId == planId && checkIn.UserId == userId))
+				.ToList()
+				.ConvertAll(mapper.ToDomain);
 		}
 
 		public async Task<List<CheckIn>> ListByPlanIdAsync(string planId)
 		{
-			return (await _entities.FindAsync(checkIn => checkIn.PlanId == planId)).ToList();
+			return (await _collection.FindAsync(checkIn => checkIn.PlanId == planId))
+				.ToList()
+				.ConvertAll(mapper.ToDomain);
 		}
 	}
 }

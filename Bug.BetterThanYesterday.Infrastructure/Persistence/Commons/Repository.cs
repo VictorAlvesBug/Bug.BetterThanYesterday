@@ -4,40 +4,49 @@ using MongoDB.Driver;
 
 namespace Bug.BetterThanYesterday.Infrastructure.Persistence.Commons
 {
-	public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
+	public class Repository<TEntity, TDocument> : IRepository<TEntity>
+		where TEntity : Entity
+		where TDocument : Document
 	{
-		protected readonly IMongoCollection<TEntity> _entities;
+		protected readonly IMongoCollection<TDocument> _collection;
+		protected readonly IDocumentMapper<TEntity, TDocument> _mapper;
 
-		public Repository(IDatabaseConfig databaseConfig, string entityCollection)
+		public Repository(
+			IDatabaseConfig databaseConfig,
+			string collectionName,
+			IDocumentMapper<TEntity, TDocument> mapper)
 		{
 			var client = new MongoClient(databaseConfig.ConnectionString);
 			var database = client.GetDatabase(databaseConfig.DatabaseName);
-			_entities = database.GetCollection<TEntity>(entityCollection);
+			_collection = database.GetCollection<TDocument>(collectionName);
+			_mapper = mapper;
 		}
 
 		public async Task AddAsync(TEntity entity)
 		{
-			await _entities.InsertOneAsync(entity);
+			await _collection.InsertOneAsync(_mapper.ToDocument(entity));
 		}
 
 		public async Task DeleteAsync(TEntity entity)
 		{
-			await _entities.DeleteOneAsync(u => u.Id == entity.Id);
+			await _collection.DeleteOneAsync(u => u.Id == entity.Id);
 		}
 
 		public async Task<List<TEntity>> ListAllAsync()
 		{
-			return (await _entities.FindAsync(_ => true)).ToList();
+			var documents = (await _collection.FindAsync(_ => true)).ToList();
+			return documents.ConvertAll(_mapper.ToDomain);
 		}
 
-		public async Task<TEntity> GetByIdAsync(string id)
+		public async Task<TEntity?> GetByIdAsync(string id)
 		{
-			return (await _entities.FindAsync(entity => entity.Id == id)).FirstOrDefault();
+			var document = (await _collection.FindAsync(entity => entity.Id == id)).FirstOrDefault();
+			return document is null ? null : _mapper.ToDomain(document);
 		}
 
 		public async Task UpdateAsync(TEntity entity)
 		{
-			await _entities.ReplaceOneAsync(u => u.Id == entity.Id, entity);
+			await _collection.ReplaceOneAsync(u => u.Id == entity.Id, _mapper.ToDocument(entity));
 		}
 	}
 }

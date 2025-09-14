@@ -9,12 +9,25 @@ namespace Bug.BetterThanYesterday.Domain.Users.Entities
 		public Email Email { get; set; }
 		public DateOnly CreatedAt { get; set; }
 
-		private User(string name, string email)
+		private User(
+			string id,
+			string name,
+			Email email,
+			DateOnly createdAt)
 		{
-			Id = Guid.NewGuid().ToString();
+			Id = id;
 			Name = name;
-			Email = Email.Create(email);
-			CreatedAt = DateOnly.FromDateTime(DateTime.Today);
+			Email = email;
+			CreatedAt = createdAt;
+		}
+
+		private User(string name, string email)
+			: this(
+				id: Guid.NewGuid().ToString(),
+				name,
+				Email.Create(email),
+				createdAt: DateOnly.FromDateTime(DateTime.Today))
+		{
 		}
 
 		public static User CreateNew(string name, string email)
@@ -23,6 +36,25 @@ namespace Bug.BetterThanYesterday.Domain.Users.Entities
 				throw new ArgumentNullException(nameof(name), "Informe o nome do usuário");
 
 			return new User(name, email);
+		}
+
+		public static User Restore(
+			string id,
+			string name,
+			Email email,
+			DateOnly createdAt)
+		{
+			if (string.IsNullOrWhiteSpace(id))
+				throw new ArgumentNullException(nameof(id), "Informe o ID do usuário");
+
+			if (string.IsNullOrWhiteSpace(name))
+				throw new ArgumentNullException(nameof(name), "Informe o nome do usuário");
+
+			return new User(
+				id,
+				name,
+				email,
+				createdAt);
 		}
 	}
 }
