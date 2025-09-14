@@ -6,21 +6,20 @@ using Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.PlanParticipants;
 using MongoDB.Driver;
 
-namespace Bug.BetterThanYesterday.Infrastructure.Persistence.Plans
+namespace Bug.BetterThanYesterday.Infrastructure.Persistence.Plans;
+
+public class PlanRepository(
+	IDatabaseConfig databaseConfig,
+	IDocumentMapper<Plan, PlanDocument> mapper)
+	: Repository<Plan, PlanDocument>(
+		databaseConfig,
+		"plans",
+		mapper), IPlanRepository
 {
-	public class PlanRepository(
-		IDatabaseConfig databaseConfig,
-		IDocumentMapper<Plan, PlanDocument> mapper)
-		: Repository<Plan, PlanDocument>(
-			databaseConfig,
-			"plans",
-			mapper), IPlanRepository
+	public async Task<List<Plan>> ListByHabitIdAsync(string habitId)
 	{
-		public async Task<List<Plan>> ListByHabitIdAsync(string habitId)
-		{
-			return (await _collection.FindAsync(plan => plan.HabitId == habitId))
-				.ToList()
-				.ConvertAll(mapper.ToDomain);
-		}
+		return (await _collection.FindAsync(plan => plan.HabitId == habitId))
+			.ToList()
+			.ConvertAll(mapper.ToDomain);
 	}
 }

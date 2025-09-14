@@ -1,10 +1,9 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 
-namespace Bug.BetterThanYesterday.Domain.Users
+namespace Bug.BetterThanYesterday.Domain.Users;
+
+public interface IUserRepository : IRepository<User>
 {
-	public interface IUserRepository : IRepository<User>
-	{
-		Task<User?> GetByEmailAsync(string email);
-	}
+	Task<User?> GetByEmailAsync(string email);
 }

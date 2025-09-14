@@ -1,11 +1,10 @@
 ﻿using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.Commons;
 
-namespace Bug.BetterThanYesterday.Domain.CheckIns
+namespace Bug.BetterThanYesterday.Domain.CheckIns;
+
+public interface ICheckInRepository : IRepository<CheckIn>
 {
-	public interface ICheckInRepository : IRepository<CheckIn>
-	{
-		Task<List<CheckIn>> ListByPlanIdAsync(string planId);
-		Task<List<CheckIn>> ListByPlanIdAndUserIdAsync(string planId, string userId);
-	}
+	Task<List<CheckIn>> ListByPlanIdAsync(string planId);
+	Task<List<CheckIn>> ListByPlanIdAndUserIdAsync(string planId, string userId);
 }

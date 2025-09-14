@@ -1,9 +1,8 @@
-﻿namespace Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure
+﻿namespace Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+
+public enum ResultStatus
 {
-	public enum ResultStatus
-	{
-		Failure = 0,
-		Success = 1,
-		Rejected = 2
-	}
+	Failure = 0,
+	Success = 1,
+	Rejected = 2
 }

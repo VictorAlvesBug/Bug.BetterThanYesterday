@@ -1,7 +1,6 @@
-﻿namespace Bug.BetterThanYesterday.Domain.Commons
+﻿namespace Bug.BetterThanYesterday.Domain.Commons;
+
+public class Entity
 {
-	public class Entity
-	{
-		public string Id { get; set; }
-	}
+	public string Id { get; set; }
 }
