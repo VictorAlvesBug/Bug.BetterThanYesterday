@@ -44,12 +44,20 @@ users (Collection)
 - Name (Ex: John Doe)
 - Email (Ex: johndoe@gmail.com) (unique)
 - CreatedAt (Ex: 2024-01-01)
+> ListAll
+> GetById
+> Register
+> Login
 
 
 habits (Collection)
 - Id (Ex: cd383069fbd840b3ad503447cf9e488d)
 - Name (Ex: Workout)
 - CreatedAt (Ex: 2024-01-01)
+> ListAll
+> GetById
+> Create
+> Update
 
 
 plans (Collection)
@@ -61,6 +69,12 @@ plans (Collection)
 - Status (Draft,Running,Finished,Cancelled)
 - Type (Public,Private)
 - CreatedAt (Ex: 2024-01-01)
+> ListAll
+> GetById
+> ListByHabitId
+> Create
+> UpdateStatus
+> Cancel
 
 
 plan_participants (Collection)
@@ -70,7 +84,12 @@ plan_participants (Collection)
 - JoinedAt (Ex: 2024-01-15)
 - LeftAt (Nullable, Ex: 2024-06-01)
 - Status (Active,Left,Blocked)
-
+> GetById
+> ListByPlanId
+> ListByUserId
+> Join
+> Leave
+> Block
 
 checkins (Collection)
 - Id (Ex: f1988915ee294c34bdc6ff8b3c467cdc)
@@ -79,6 +98,10 @@ checkins (Collection)
 - Date (Ex: 2024-01-05)
 - Title (Ex: Let's call it a day)
 - Description (Ex: Today was rough)
+> GetById
+> ListByPlanId
+> ListByPlanIdAndUserId
+> Check
 
 
 ########################################  Versão 2  ########################################

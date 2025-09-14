@@ -1,10 +1,8 @@
-﻿using Bug.BetterThanYesterday.Domain.Users.Entities;
-
-namespace Bug.BetterThanYesterday.Domain.Commons
+﻿namespace Bug.BetterThanYesterday.Domain.Commons
 {
 	public interface IRepository<TEntity> where TEntity : Entity
 	{
-		Task<List<TEntity>> GetAllAsync();
+		Task<List<TEntity>> ListAllAsync();
 		Task<TEntity> GetByIdAsync(string id);
 		Task AddAsync(TEntity entity);
 		Task UpdateAsync(TEntity entity);

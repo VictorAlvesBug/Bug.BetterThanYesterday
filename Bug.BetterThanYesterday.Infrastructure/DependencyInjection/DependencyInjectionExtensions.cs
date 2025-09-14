@@ -1,5 +1,4 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
-using Bug.BetterThanYesterday.Domain.Configurations;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Users;

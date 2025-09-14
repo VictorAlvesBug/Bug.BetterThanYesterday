@@ -25,7 +25,7 @@ namespace Bug.BetterThanYesterday.Infrastructure.Persistence.Commons
 			await _entities.DeleteOneAsync(u => u.Id == entity.Id);
 		}
 
-		public async Task<List<TEntity>> GetAllAsync()
+		public async Task<List<TEntity>> ListAllAsync()
 		{
 			return (await _entities.FindAsync(_ => true)).ToList();
 		}

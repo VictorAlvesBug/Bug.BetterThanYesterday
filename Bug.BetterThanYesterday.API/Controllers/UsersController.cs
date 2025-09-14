@@ -18,7 +18,7 @@ namespace Bug.BetterThanYesterday.API.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			return Ok(await _userRepository.GetAllAsync());
+			return Ok(await _userRepository.ListAllAsync());
 		}
 
 		[HttpGet("{id}")]
