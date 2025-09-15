@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bug.BetterThanYesterday.Application\Bug.BetterThanYesterday.Application.csproj" />
     <ProjectReference Include="..\Bug.BetterThanYesterday.Domain\Bug.BetterThanYesterday.Domain.csproj" />
     <ProjectReference Include="..\Bug.BetterThanYesterday.Infrastructure\Bug.BetterThanYesterday.Infrastructure.csproj" />
   </ItemGroup>

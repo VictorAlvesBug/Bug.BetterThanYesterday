@@ -1,19 +1,15 @@
-﻿using Bug.BetterThanYesterday.Domain.Configurations;
-using Bug.BetterThanYesterday.Domain.Habits.Entities;
-using Bug.BetterThanYesterday.Domain.PlanParticipants;
+﻿using Bug.BetterThanYesterday.Domain.PlanParticipants;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
-using Bug.BetterThanYesterday.Infrastructure.Persistence.Habits;
 using MongoDB.Driver;
 
 namespace Bug.BetterThanYesterday.Infrastructure.Persistence.PlanParticipants;
 
 public class PlanParticipantRepository(
-	IDatabaseConfig databaseConfig,
+	IMongoCollection<PlanParticipantDocument> collection,
 	IDocumentMapper<PlanParticipant, PlanParticipantDocument> mapper)
 	: Repository<PlanParticipant, PlanParticipantDocument>(
-		databaseConfig,
-		"plan_participants",
+		collection,
 		mapper), IPlanParticipantRepository
 {
 	public async Task<List<PlanParticipant>> ListByPlanIdAsync(string planId)

@@ -16,6 +16,9 @@ public sealed class Result<TData>
 	public static Result<TData> Success(TData data, string reason)
 		=> new(ResultStatus.Success, reason, data);
 
+	public static Result<TData> Success(TData data)
+		=> new(ResultStatus.Success, string.Empty, data);
+
 	public static Result<TData> Success(string reason)
 		=> new(ResultStatus.Success, reason);
 
@@ -30,4 +33,7 @@ public sealed class Result<TData>
 
 	public static Result<TData> Rejected(string reason)
 		=> new(ResultStatus.Rejected, reason);
+
+	public bool IsSuccess() => Status == ResultStatus.Success;
+	public bool IsRejected() => Status == ResultStatus.Rejected;
 }

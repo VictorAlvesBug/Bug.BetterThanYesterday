@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CheckIns\" />
+    <ProjectReference Include="..\Bug.BetterThanYesterday.Infrastructure\Bug.BetterThanYesterday.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

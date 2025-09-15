@@ -1,19 +1,15 @@
-﻿using Bug.BetterThanYesterday.Domain.Configurations;
-using Bug.BetterThanYesterday.Domain.Plans.Entities;
-using Bug.BetterThanYesterday.Domain.Users;
+﻿using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
-using Bug.BetterThanYesterday.Infrastructure.Persistence.Plans;
 using MongoDB.Driver;
 
 namespace Bug.BetterThanYesterday.Infrastructure.Persistence.Users;
 
 public class UserRepository(
-	IDatabaseConfig databaseConfig,
+	IMongoCollection<UserDocument> collection,
 	IDocumentMapper<User, UserDocument> mapper)
 	: Repository<User, UserDocument>(
-		databaseConfig,
-		"users",
+		collection,
 		mapper), IUserRepository
 {
 	public async Task<User?> GetByEmailAsync(string email)

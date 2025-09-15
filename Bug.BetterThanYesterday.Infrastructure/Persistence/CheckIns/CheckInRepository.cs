@@ -1,17 +1,15 @@
 ﻿using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
-using Bug.BetterThanYesterday.Domain.Configurations;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
 using MongoDB.Driver;
 
 namespace Bug.BetterThanYesterday.Infrastructure.Persistence.CheckIns;
 
 public class CheckInRepository(
-	IDatabaseConfig databaseConfig,
+	IMongoCollection<CheckInDocument> collection,
 	IDocumentMapper<CheckIn, CheckInDocument> mapper)
 	: Repository<CheckIn, CheckInDocument>(
-		databaseConfig,
-		"checkins",
+		collection,
 		mapper), ICheckInRepository
 {
 	public async Task<List<CheckIn>> ListByPlanIdAndUserIdAsync(string planId, string userId)

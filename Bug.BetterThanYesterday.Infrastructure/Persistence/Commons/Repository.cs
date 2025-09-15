@@ -1,5 +1,4 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
-using Bug.BetterThanYesterday.Domain.Configurations;
 using MongoDB.Driver;
 
 namespace Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
@@ -12,13 +11,13 @@ public class Repository<TEntity, TDocument> : IRepository<TEntity>
 	protected readonly IDocumentMapper<TEntity, TDocument> _mapper;
 
 	public Repository(
-		IDatabaseConfig databaseConfig,
-		string collectionName,
+		IMongoCollection<TDocument> collection,
 		IDocumentMapper<TEntity, TDocument> mapper)
 	{
-		var client = new MongoClient(databaseConfig.ConnectionString);
+		/*var client = new MongoClient(databaseConfig.ConnectionString);
 		var database = client.GetDatabase(databaseConfig.DatabaseName);
-		_collection = database.GetCollection<TDocument>(collectionName);
+		_collection = database.GetCollection<TDocument>(collectionName);*/
+		_collection = collection;
 		_mapper = mapper;
 	}
 

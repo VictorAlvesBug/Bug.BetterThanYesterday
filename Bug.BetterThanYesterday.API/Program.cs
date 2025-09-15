@@ -1,17 +1,27 @@
+using Bug.BetterThanYesterday.Application.DependencyInjection;
 using Bug.BetterThanYesterday.Domain.Configurations;
 using Bug.BetterThanYesterday.Infrastructure.Configurations;
 using Bug.BetterThanYesterday.Infrastructure.DependencyInjection;
 using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.Configure<DatabaseConfig>(
-    builder.Configuration.GetSection(nameof(DatabaseConfig)));
+	builder.Configuration.GetSection(nameof(DatabaseConfig)));
 builder.Services.AddSingleton<IDatabaseConfig>(sp =>
-    sp.GetRequiredService<IOptions<DatabaseConfig>>().Value);
+	sp.GetRequiredService<IOptions<DatabaseConfig>>().Value);
+
+builder.Services.AddSingleton(sp =>
+{
+	var dbConfig = sp.GetRequiredService<IOptions<DatabaseConfig>>().Value;
+	var client = (IMongoClient)new MongoClient(dbConfig.ConnectionString);
+	return client.GetDatabase(dbConfig.DatabaseName);
+});
 
 builder.Services.AddInfrastructureServices();
+builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -23,8 +33,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
