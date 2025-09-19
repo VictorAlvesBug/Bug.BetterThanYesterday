@@ -1,5 +1,6 @@
 ﻿using Bug.BetterThanYesterday.Application.CheckIns;
 using Bug.BetterThanYesterday.Application.Habits;
+using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
 using Bug.BetterThanYesterday.Application.PlanParticipants;
 using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork;
@@ -46,6 +47,9 @@ public static class DependencyInjectionExtensions
 		services.AddScoped<RegisterUserUseCase>();
 		services.AddScoped<IUseCase<ListAllUsersCommand, Result<List<UserModel>>>, ListAllUsersUseCase>();
 		services.AddScoped<ListAllUsersUseCase>();
+
+		services.AddScoped<IUseCase<CreateHabitCommand, Result<HabitModel>>, CreateHabitUseCase>();
+		services.AddScoped<CreateHabitUseCase>();
 
 		return services;
 	}

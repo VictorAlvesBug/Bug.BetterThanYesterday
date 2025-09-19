@@ -1,6 +1,6 @@
 ﻿namespace Bug.BetterThanYesterday.Application.Habits;
 
-internal class HabitModel
+public class HabitModel
 {
 	public string Id { get; set; }
 	public string Name { get; set; }
