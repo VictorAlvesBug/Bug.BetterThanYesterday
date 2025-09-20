@@ -1,18 +1,27 @@
-﻿using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
+﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Application.Users;
+using Bug.BetterThanYesterday.Application.Users.DeleteUser;
+using Bug.BetterThanYesterday.Application.Users.GetUserById;
+using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
 using Bug.BetterThanYesterday.Application.Users.RegisterUser;
+using Bug.BetterThanYesterday.Application.Users.UpdateUser;
 using Microsoft.AspNetCore.Mvc;
+using IResult = Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure.IResult;
 
 namespace Bug.BetterThanYesterday.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController(
-	ListAllUsersUseCase listAllUsersUseCase,
-	RegisterUserUseCase registerUserUseCase)
+	IUseCase<ListAllUsersCommand, IResult> listAllUsersUseCase,
+	IUseCase<GetUserByIdCommand, IResult> getUserByIdUseCase,
+	IUseCase<RegisterUserCommand, IResult> registerUserUseCase,
+	IUseCase<UpdateUserCommand, IResult> updateUserUseCase,
+	IUseCase<DeleteUserCommand, IResult> deleteUserUseCase)
 	: ControllerBase
 {
 	[HttpGet]
-	public async Task<IActionResult> Get()
+	public async Task<IActionResult> ListAll()
 	{
 		var result = await listAllUsersUseCase.HandleAsync(new ListAllUsersCommand());
 		
@@ -25,19 +34,14 @@ public class UsersController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	/*[HttpGet("{id}")]
-	public async Task<IActionResult> Get(string id)
+	[HttpGet("{id}")]
+	public async Task<IActionResult> GetById(string id)
 	{
-		return Ok(await _userRepository.GetByIdAsync(id));
-	}*/
-
-	[HttpPost]
-	public async Task<IActionResult> Post([FromBody] RegisterUserCommand command)
-	{
-		var result = await registerUserUseCase.HandleAsync(command);
+		var command = new GetUserByIdCommand(id);
+		var result = await getUserByIdUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
-			return Created();
+			return Ok(result);
 
 		if (result.IsRejected())
 			return BadRequest(result);
@@ -45,18 +49,49 @@ public class UsersController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	/*[HttpPut]
-	public async Task<IActionResult> Put([FromBody] User user)
+	[HttpPost]
+	public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
 	{
-		await _userRepository.UpdateAsync(user);
-		return NoContent();
-	}*/
+		var result = await registerUserUseCase.HandleAsync(command);
 
-	/*[HttpDelete("{id}")]
+		if (result.IsSuccess())
+		{
+			var data = ((Result<UserModel>)result).Data;
+			return Created($"Users/{data.Id}", result);
+		}
+
+		if (result.IsRejected())
+			return BadRequest(result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
+
+	[HttpPut]
+	public async Task<IActionResult> Update([FromBody] UpdateUserCommand command)
+	{
+		var result = await updateUserUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+			return NoContent();
+
+		if (result.IsRejected())
+			return BadRequest(result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
+
+	[HttpDelete("{id}")]
 	public async Task<IActionResult> Delete(string id)
 	{
-		var user = await _userRepository.GetByIdAsync(id);
-		await _userRepository.DeleteAsync(user);
-		return NoContent();
-	}*/
+		var command = new DeleteUserCommand(id);
+		var result = await deleteUserUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+			return NoContent();
+
+		if (result.IsRejected())
+			return BadRequest(result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
 }

@@ -1,11 +1,10 @@
-﻿using Bug.BetterThanYesterday.Application.SeedWork;
-using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
+﻿using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 
 namespace Bug.BetterThanYesterday.Application.CheckIns;
 
-internal sealed class CheckInMapper : IModelMapper<CheckIn, CheckInModel>
+internal static class CheckInMapper
 {
-	public CheckInModel ToModel(CheckIn checkIn) => new()
+	public static CheckInModel ToModel(this CheckIn checkIn) => new()
 	{
 		Id = checkIn.Id,
 		UserId = checkIn.UserId,

@@ -4,19 +4,20 @@ using Bug.BetterThanYesterday.Domain.Habits.Entities;
 
 namespace Bug.BetterThanYesterday.Application.Habits.CreateHabit;
 
-public sealed class CreateHabitUseCase(IHabitRepository habits)
-	: IUseCase<CreateHabitCommand, Result<HabitModel>>
+public sealed class CreateHabitUseCase(IHabitRepository habitRepository)
+	: IUseCase<CreateHabitCommand, IResult>
 {
-	public async Task<Result<HabitModel>> HandleAsync(CreateHabitCommand command)
+	public async Task<IResult> HandleAsync(CreateHabitCommand command)
 	{
 		try
 		{
-			await habits.AddAsync(Habit.CreateNew(command.Name));
-			return Result<HabitModel>.Success("Hábito cadastrado com sucesso.");
+			var habit = Habit.CreateNew(command.Name);
+			await habitRepository.AddAsync(habit);
+			return Result.Success(habit.ToModel(), "Hábito cadastrado com sucesso.");
 		}
 		catch (Exception ex)
 		{
-			return Result<HabitModel>.Failure(ex.Message);
+			return Result.Failure(ex.Message);
 		}
 	}
 }

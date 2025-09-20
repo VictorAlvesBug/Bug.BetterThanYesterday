@@ -1,11 +1,10 @@
-﻿using Bug.BetterThanYesterday.Application.SeedWork;
-using Bug.BetterThanYesterday.Domain.Habits.Entities;
+﻿using Bug.BetterThanYesterday.Domain.Habits.Entities;
 
 namespace Bug.BetterThanYesterday.Application.Habits;
 
-internal sealed class HabitMapper : IModelMapper<Habit, HabitModel>
+public static class HabitMapper
 {
-	public HabitModel ToModel(Habit habit) => new()
+	public static HabitModel ToModel(this Habit habit) => new()
 	{
 		Id = habit.Id,
 		Name = habit.Name,

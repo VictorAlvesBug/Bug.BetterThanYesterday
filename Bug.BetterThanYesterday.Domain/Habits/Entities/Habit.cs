@@ -49,4 +49,11 @@ public class Habit : Entity
 			name,
 			createdAt);
 	}
+
+	public void UpdateName(string name)
+	{
+		if (string.IsNullOrWhiteSpace(name))
+			throw new ArgumentNullException(nameof(name), "Informe o nome do hábito");
+		Name = name;
+	}
 }

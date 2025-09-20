@@ -5,9 +5,9 @@ using Bug.BetterThanYesterday.Domain.Users.Entities;
 namespace Bug.BetterThanYesterday.Application.Users.RegisterUser;
 
 public class RegisterUserUseCase(IUserRepository userRepository)
-	: IUseCase<RegisterUserCommand, Result<UserModel>>
+	: IUseCase<RegisterUserCommand, IResult>
 {
-	public async Task<Result<UserModel>> HandleAsync(RegisterUserCommand input)
+	public async Task<IResult> HandleAsync(RegisterUserCommand input)
 	{
 		try
 		{
@@ -15,15 +15,16 @@ public class RegisterUserUseCase(IUserRepository userRepository)
 
 			if (alreadyExists)
 			{
-				return Result<UserModel>.Rejected("E-mail já cadastrado");
+				return Result.Rejected("E-mail já cadastrado");
 			}
 
-			await userRepository.AddAsync(User.CreateNew(input.Name, input.Email));
-			return Result<UserModel>.Success("Usuário cadastrado com sucesso");
+			var user = User.CreateNew(input.Name, input.Email);
+			await userRepository.AddAsync(user);
+			return Result.Success(user.ToModel(), "Usuário cadastrado com sucesso");
 		}
 		catch (Exception ex)
 		{
-			return Result<UserModel>.Failure(ex.Message);
+			return Result.Failure(ex.Message);
 		}
 	}
 }

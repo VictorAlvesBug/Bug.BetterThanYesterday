@@ -1,5 +1,8 @@
-﻿namespace Bug.BetterThanYesterday.Application.Users.ListAllUsers;
+﻿using Bug.BetterThanYesterday.Application.SeedWork;
 
-public class ListAllUsersCommand
+namespace Bug.BetterThanYesterday.Application.Users.ListAllUsers;
+
+public class ListAllUsersCommand : ICommand
 {
+	public void Validate() { }
 }

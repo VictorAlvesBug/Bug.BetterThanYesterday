@@ -1,18 +1,16 @@
-﻿using Bug.BetterThanYesterday.Application.CheckIns;
-using Bug.BetterThanYesterday.Application.Habits;
+﻿using Bug.BetterThanYesterday.Application.Habits;
 using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
-using Bug.BetterThanYesterday.Application.PlanParticipants;
-using Bug.BetterThanYesterday.Application.Plans;
-using Bug.BetterThanYesterday.Application.SeedWork;
+using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
+using Bug.BetterThanYesterday.Application.Habits.GetHabitById;
+using Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
+using Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Users;
+using Bug.BetterThanYesterday.Application.Users.DeleteUser;
+using Bug.BetterThanYesterday.Application.Users.GetUserById;
 using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
 using Bug.BetterThanYesterday.Application.Users.RegisterUser;
-using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
-using Bug.BetterThanYesterday.Domain.Habits.Entities;
-using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
-using Bug.BetterThanYesterday.Domain.Plans.Entities;
-using Bug.BetterThanYesterday.Domain.Users.Entities;
+using Bug.BetterThanYesterday.Application.Users.UpdateUser;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bug.BetterThanYesterday.Application.DependencyInjection;
@@ -21,35 +19,29 @@ public static class DependencyInjectionExtensions
 {
 	public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 	{
-		services.AddModelMappers();
-		services.AddUseCases();
+		services.AddUserUseCases();
+		services.AddHabitUseCases();
 		return services;
 	}
 
-	public static IServiceCollection AddModelMappers(this IServiceCollection services)
+	public static IServiceCollection AddUserUseCases(this IServiceCollection services)
 	{
-		services.AddScoped<IModelMapper<CheckIn, CheckInModel>, CheckInMapper>();
-		services.AddScoped<IModelMapper<Habit, HabitModel>, HabitMapper>();
-		services.AddScoped<IModelMapper<Plan, PlanModel>, PlanMapper>();
-		services.AddScoped<IModelMapper<PlanParticipant, PlanParticipantModel>, PlanParticipantMapper>();
-		services.AddScoped<IModelMapper<User, UserModel>, UserMapper>();
-		return services;
-	}
-
-	public static IServiceCollection AddUseCases(this IServiceCollection services)
-	{
-		//services.AddScoped<IUseCase<*CheckInCommand, Result<CheckInModel>>, *ChecUseCase>();
-		//services.AddScoped<IUseCase<*HabitCommand, Result<HabitModel>>, *HabiUseCase>();
-		//services.AddScoped<IUseCase<*PlanCommand, Result<PlanModel>>, *PlanUseCase>();
-		//services.AddScoped<IUseCase<*PlanParticipantCommand, Result<PlanParticipantModel>>, *PlanUseCase>();
+		services.AddScoped<IUseCase<ListAllUsersCommand, IResult>, ListAllUsersUseCase>();
+		services.AddScoped<IUseCase<GetUserByIdCommand, IResult>, GetUserByIdUseCase>();
+		services.AddScoped<IUseCase<RegisterUserCommand, IResult>, RegisterUserUseCase>();
+		services.AddScoped<IUseCase<UpdateUserCommand, IResult>, UpdateUserUseCase>();
+		services.AddScoped<IUseCase<DeleteUserCommand, IResult>, DeleteUserUseCase>();
 		
-		services.AddScoped<IUseCase<RegisterUserCommand, Result<UserModel>>, RegisterUserUseCase>();
-		services.AddScoped<RegisterUserUseCase>();
-		services.AddScoped<IUseCase<ListAllUsersCommand, Result<List<UserModel>>>, ListAllUsersUseCase>();
-		services.AddScoped<ListAllUsersUseCase>();
+		return services;
+	}
 
-		services.AddScoped<IUseCase<CreateHabitCommand, Result<HabitModel>>, CreateHabitUseCase>();
-		services.AddScoped<CreateHabitUseCase>();
+	public static IServiceCollection AddHabitUseCases(this IServiceCollection services)
+	{
+		services.AddScoped<IUseCase<ListAllHabitsCommand, IResult>, ListAllHabitsUseCase>();
+		services.AddScoped<IUseCase<GetHabitByIdCommand, IResult>, GetHabitByIdUseCase>();
+		services.AddScoped<IUseCase<CreateHabitCommand, IResult>, CreateHabitUseCase>();
+		services.AddScoped<IUseCase<UpdateHabitCommand, IResult>, UpdateHabitUseCase>();
+		services.AddScoped<IUseCase<DeleteHabitCommand, IResult>, DeleteHabitUseCase>();
 
 		return services;
 	}

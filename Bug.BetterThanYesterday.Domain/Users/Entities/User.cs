@@ -56,4 +56,17 @@ public class User : Entity
 			email,
 			createdAt);
 	}
+
+	public void UpdateName(string name)
+	{
+		if (string.IsNullOrWhiteSpace(name))
+			throw new ArgumentNullException(nameof(name), "Informe o nome do usuário");
+
+		Name = name;
+	}
+
+	public void UpdateEmail(string email)
+	{
+		Email = Email.Create(email);
+	}
 }
