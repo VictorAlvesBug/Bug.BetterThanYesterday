@@ -86,6 +86,9 @@ plans (Collection)
 > UpdateStatus
 > Cancel
 
+TODO: Usar DateTime nas extremidades (document e model) e DateOnly no domínio
+TODO: Usar int nas extremidades (document e model) e PlanParticipantStatus no domínio
+
 
 plan_participants (Collection)
 - Id (Ex: d1f8e8c2a4b14c3e9f0e4b5a6c7d8e9f)
