@@ -2,12 +2,14 @@
 
 public class PlanModel
 {
-	public string Id { get; set; }
-	public string HabitId { get; set; }
+	public Guid Id { get; set; }
+	public Guid HabitId { get; set; }
 	public string? Description { get; set; }
-	public DateOnly StartsAt { get; set; }
-	public DateOnly EndsAt { get; set; }
-	public int Status { get; set; }
-	public int Type { get; set; }
-	public DateOnly CreatedAt { get; set; }
+	public DateTime StartsAt { get; set; }
+	public DateTime EndsAt { get; set; }
+	public int StatusId { get; set; }
+	public string StatusName { get; set; }
+	public int TypeId { get; set; }
+	public string TypeName { get; set; }
+	public DateTime CreatedAt { get; set; }
 }

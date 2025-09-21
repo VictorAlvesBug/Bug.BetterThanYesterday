@@ -1,13 +1,12 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.Plans;
-using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Habits.Policies;
 
 namespace Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
 
 public class DeleteHabitUseCase(
 	IHabitRepository habitRepository,
-	IPlanRepository planRepository)
+	IHabitDeletionPolicy habitDeletionPolicy)
 	: IUseCase<DeleteHabitCommand, IResult>
 {
 	public async Task<IResult> HandleAsync(DeleteHabitCommand command)
@@ -20,9 +19,7 @@ public class DeleteHabitUseCase(
 			if (habit is null)
 				return Result.Rejected("Hábito não encontrado");
 
-			var plans = await planRepository.ListByHabitIdAsync(command.Id);
-
-			if (plans.Any(plan => plan.Status != PlanStatus.Cancelled))
+			if(!await habitDeletionPolicy.CanDeleteAsync(habit.Id))
 				return Result.Rejected("Hábito não pode ser removido, pois possui planos vinculados");
 
 			await habitRepository.DeleteAsync(habit);

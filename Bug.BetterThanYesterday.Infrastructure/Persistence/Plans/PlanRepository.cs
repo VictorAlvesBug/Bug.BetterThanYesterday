@@ -12,7 +12,7 @@ public class PlanRepository(
 		collection,
 		mapper), IPlanRepository
 {
-	public async Task<List<Plan>> ListByHabitIdAsync(string habitId)
+	public async Task<List<Plan>> ListByHabitIdAsync(Guid habitId)
 	{
 		return (await _collection.FindAsync(plan => plan.HabitId == habitId))
 			.ToList()

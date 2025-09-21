@@ -12,8 +12,8 @@ public class RegisterUserCommand : ICommand
 		Email = email;
 	}
 
-	public string Name { get; }
-	public string Email { get; }
+	public string Name { get; init; }
+	public string Email { get; init; }
 
 	public void Validate()
 	{

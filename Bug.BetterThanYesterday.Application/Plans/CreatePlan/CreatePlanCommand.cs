@@ -5,28 +5,28 @@ namespace Bug.BetterThanYesterday.Application.Plans.CreatePlan;
 public class CreatePlanCommand : ICommand
 {
 	public CreatePlanCommand(
-		string habitId,
+		Guid habitId,
 		string description,
 		DateTime startsAt,
 		DateTime endsAt,
-		int type)
+		int typeId)
 	{
 		HabitId = habitId;
 		Description = description;
 		StartsAt = startsAt;
 		EndsAt = endsAt;
-		Type = type;
+		TypeId = typeId;
 	}
 
-	public string HabitId { get; init; }
+	public Guid HabitId { get; init; }
 	public string Description { get; init; }
 	public DateTime StartsAt { get; init; }
 	public DateTime EndsAt { get; init; }
-	public int Type { get; init; }
+	public int TypeId { get; init; }
 
 	public void Validate()
 	{
-		if (string.IsNullOrWhiteSpace(HabitId))
+		if (HabitId == Guid.Empty)
 			throw new ArgumentNullException(nameof(HabitId), "Informe o ID do hábito");
 
 		if (string.IsNullOrWhiteSpace(Description))
@@ -38,7 +38,7 @@ public class CreatePlanCommand : ICommand
 		if (EndsAt == DateTime.MinValue)
 			throw new ArgumentException("Informe a data final do plano", nameof(EndsAt));
 
-		if (Type <= 0)
-			throw new ArgumentException("Informe o tipo do plano", nameof(Type));
+		if (TypeId <= 0)
+			throw new ArgumentException("Informe o tipo do plano", nameof(TypeId));
 	}
 }

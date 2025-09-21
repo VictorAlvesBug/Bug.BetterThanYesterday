@@ -36,7 +36,7 @@ public class UsersController(
 	}
 
 	[HttpGet("{id}")]
-	public async Task<IActionResult> GetById(string id)
+	public async Task<IActionResult> GetById(Guid id)
 	{
 		var command = new GetUserByIdCommand(id);
 		var result = await getUserByIdUseCase.HandleAsync(command);
@@ -82,7 +82,7 @@ public class UsersController(
 	}
 
 	[HttpDelete("{id}")]
-	public async Task<IActionResult> Delete(string id)
+	public async Task<IActionResult> Delete(Guid id)
 	{
 		var command = new DeleteUserCommand(id);
 		var result = await deleteUserUseCase.HandleAsync(command);

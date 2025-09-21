@@ -6,5 +6,5 @@ public class UserDocument : Document
 {
 	public string Name { get; set; }
 	public string Email { get; set; }
-	public DateOnly CreatedAt { get; set; }
+	public DateTime CreatedAt { get; set; }
 }

@@ -5,6 +5,6 @@ namespace Bug.BetterThanYesterday.Domain.PlanParticipants;
 
 public interface IPlanParticipantRepository : IRepository<PlanParticipant>
 {
-	Task<List<PlanParticipant>> ListByPlanIdAsync(string planId);
-	Task<List<PlanParticipant>> ListByUserIdAsync(string userId);
+	Task<List<PlanParticipant>> ListByPlanIdAsync(Guid planId);
+	Task<List<PlanParticipant>> ListByUserIdAsync(Guid userId);
 }

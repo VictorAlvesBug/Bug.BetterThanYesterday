@@ -5,66 +5,72 @@ namespace Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
 
 public class PlanParticipant : Entity
 {
-	public string PlanId { get; set; }
-	public string UserId { get; set; }
+	public Guid PlanId { get; set; }
+	public Guid UserId { get; set; }
 	public DateOnly JoinedAt { get; set; }
 	public DateOnly? LeftAt { get; set; }
 	public PlanParticipantStatus Status { get; set; }
 
 	private PlanParticipant(
-		string id,
-		string planId,
-		string userId,
-		DateOnly joinedAt,
-		DateOnly? leftAt,
-		PlanParticipantStatus status)
+		Guid id,
+		Guid planId,
+		Guid userId,
+		DateTime joinedAt,
+		DateTime? leftAt,
+		int statusId)
 	{
 		Id = id;
 		PlanId = planId;
 		UserId = userId;
-		JoinedAt = joinedAt;
-		LeftAt = leftAt;
-		Status = status;
+		JoinedAt = DateOnly.FromDateTime(joinedAt);
+		LeftAt = leftAt is null ? null : DateOnly.FromDateTime(leftAt.Value);
+		Status = PlanParticipantStatus.FromId(statusId);
 	}
 
-	private PlanParticipant(string planId, string userId)
+	private PlanParticipant(Guid planId, Guid userId)
 		: this(
-		id: Guid.NewGuid().ToString(),
+		id: Guid.NewGuid(),
 		planId,
 		userId,
-		joinedAt: DateOnly.FromDateTime(DateTime.Today),
+		joinedAt: DateTime.Today,
 		leftAt: null,
-		status: PlanParticipantStatus.Active)
+		statusId: PlanParticipantStatus.Active.Id)
 	{
 	}
 
-	public static PlanParticipant CreateNew(string planId, string userId)
+	public static PlanParticipant CreateNew(Guid planId, Guid userId)
 	{
-		if (string.IsNullOrWhiteSpace(planId))
+		if (planId == Guid.Empty)
 			throw new ArgumentNullException(nameof(planId), "Informe o ID do plano");
 		
-		if (string.IsNullOrWhiteSpace(userId))
+		if (userId == Guid.Empty)
 			throw new ArgumentNullException(nameof(userId), "Informe o ID do usuário");
 
 		return new PlanParticipant(planId, userId);
 	}
 
 	public static PlanParticipant Restore(
-		string id,
-		string planId,
-		string userId,
-		DateOnly joinedAt,
-		DateOnly? leftAt,
-		PlanParticipantStatus status)
+		Guid id,
+		Guid planId,
+		Guid userId,
+		DateTime joinedAt,
+		DateTime? leftAt,
+		int statusId)
 	{
-		if (string.IsNullOrWhiteSpace(id))
+		if (id == Guid.Empty)
 			throw new ArgumentNullException(nameof(id), "Informe o ID do participante do plano");
 
-		if (string.IsNullOrWhiteSpace(planId))
+		if (planId == Guid.Empty)
 			throw new ArgumentNullException(nameof(planId), "Informe o ID do plano");
 
-		if (string.IsNullOrWhiteSpace(userId))
+		if (userId == Guid.Empty)
 			throw new ArgumentNullException(nameof(userId), "Informe o ID do usuário");
+
+		if (joinedAt == DateTime.MinValue)
+			throw new ArgumentNullException(nameof(joinedAt), "Informe a data de inclusão do usuário no plano");
+
+		if (statusId <= 0)
+			throw new ArgumentException("O ID do status do participante deve ser maior que zero", nameof(statusId));
 
 		return new PlanParticipant(
 			id,
@@ -72,6 +78,6 @@ public class PlanParticipant : Entity
 			userId,
 			joinedAt,
 			leftAt,
-			status);
+			statusId);
 	}
 }

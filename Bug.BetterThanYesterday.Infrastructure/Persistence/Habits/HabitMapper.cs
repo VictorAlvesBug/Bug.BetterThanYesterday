@@ -9,7 +9,7 @@ internal sealed class HabitMapper : IDocumentMapper<Habit, HabitDocument>
 	{
 		Id = habit.Id,
 		Name = habit.Name,
-		CreatedAt = habit.CreatedAt
+		CreatedAt = habit.CreatedAt.ToDateTime(TimeOnly.MinValue)
 	};
 
 	public Habit ToDomain(HabitDocument document) => Habit.Restore(

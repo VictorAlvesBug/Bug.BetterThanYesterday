@@ -10,7 +10,7 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 		Id = checkIn.Id,
 		UserId = checkIn.UserId,
 		PlanId = checkIn.PlanId,
-		Date = checkIn.Date,
+		Date = checkIn.Date.ToDateTime(TimeOnly.MinValue),
 		Title = checkIn.Title,
 		Description = checkIn.Description
 	};

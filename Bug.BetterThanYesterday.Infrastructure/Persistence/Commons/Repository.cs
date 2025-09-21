@@ -34,7 +34,7 @@ public class Repository<TEntity, TDocument> : IRepository<TEntity>
 		return documents.ConvertAll(_mapper.ToDomain);
 	}
 
-	public async Task<TEntity?> GetByIdAsync(string id)
+	public async Task<TEntity?> GetByIdAsync(Guid id)
 	{
 		var document = (await _collection.FindAsync(entity => entity.Id == id)).FirstOrDefault();
 		return document is null ? null : _mapper.ToDomain(document);

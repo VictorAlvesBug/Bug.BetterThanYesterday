@@ -76,7 +76,7 @@ plans (Collection)
 - Description (Ex: Workout 5 times a week)
 - StartsAt (Ex: 2024-01-01)
 - EndsAt (Ex: 2024-12-31)
-- Status (Draft,Running,Finished,Cancelled)
+- Status (NotStarted,Running,Finished,Cancelled)
 - Type (Public,Private)
 - CreatedAt (Ex: 2024-01-01)
 > ListAll
@@ -85,9 +85,6 @@ plans (Collection)
 > Create
 > UpdateStatus
 > Cancel
-
-TODO: Usar DateTime nas extremidades (document e model) e DateOnly no domínio
-TODO: Usar int nas extremidades (document e model) e PlanParticipantStatus no domínio
 
 
 plan_participants (Collection)
@@ -140,7 +137,7 @@ plans (Collection)
 - EndsAt (Ex: 2024-12-31)
 - Frequency: (Ex: { Count: 5, Per: "WEEK" })
 - RestsPerPeriod (Ex: 2)
-- Status (Draft,Running,Finished,Cancelled)
+- Status (NotStarted,Running,Finished,Cancelled)
 - Type (Public,Private)
 - CreatedAt (Ex: 2024-01-01)
 
@@ -193,7 +190,7 @@ plans (Collection)
 - PenaltyValueCents (Ex: 500)
 - Currency (Ex: BRL)
 - AdminFeePercent (Ex: 10)
-- Status (Draft,Running,Finished,Cancelled)
+- Status (NotStarted,Running,Finished,Cancelled)
 - Type (Public,Private)
 - CreatedAt (Ex: 2024-01-01)
 - Totals (Updated with Change Stream)

@@ -74,9 +74,5 @@ public static class DependencyInjectionExtensions
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<UserDocument>("users"));
 
 		return services;
-
-		/*var client = new MongoClient(databaseConfig.ConnectionString);
-		var database = client.GetDatabase(databaseConfig.DatabaseName);
-		_collection = database.GetCollection<TDocument>(collectionName);*/
 	}
 }

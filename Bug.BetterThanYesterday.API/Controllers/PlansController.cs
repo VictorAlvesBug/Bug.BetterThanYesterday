@@ -24,16 +24,16 @@ IUseCase<UpdatePlanStatusCommand, IResult> updatePlanStatusUseCase,
 IUseCase<CancelPlanCommand, IResult> cancelPlanUseCase) : ControllerBase
 {
 	[HttpGet]
-	public async Task<IActionResult> List([FromQuery] string? habitId = null)
+	public async Task<IActionResult> List([FromQuery] Guid? habitId = null)
 	{
-		if (string.IsNullOrWhiteSpace(habitId))
+		if (habitId is null || habitId == Guid.Empty)
 			return await ListAll();
 
-		return await ListByHabitId(habitId);
+		return await ListByHabitId(habitId.Value);
 	}
 
 	[HttpGet("{id}")]
-	public async Task<IActionResult> GetById(string id)
+	public async Task<IActionResult> GetById(Guid id)
 	{
 		var command = new GetPlanByIdCommand(id);
 		var result = await getPlanByIdUseCase.HandleAsync(command);
@@ -79,7 +79,7 @@ IUseCase<CancelPlanCommand, IResult> cancelPlanUseCase) : ControllerBase
 	}
 
 	[HttpDelete("{id}")]
-	public async Task<IActionResult> Cancel(string id)
+	public async Task<IActionResult> Cancel(Guid id)
 	{
 		var command = new CancelPlanCommand(id);
 		var result = await cancelPlanUseCase.HandleAsync(command);
@@ -108,7 +108,7 @@ IUseCase<CancelPlanCommand, IResult> cancelPlanUseCase) : ControllerBase
 	}
 
 	[HttpGet]
-	private async Task<IActionResult> ListByHabitId(string habitId)
+	private async Task<IActionResult> ListByHabitId(Guid habitId)
 	{
 		var command = new ListPlansByHabitIdCommand(habitId);
 		var result = await listPlansByHabitIdUseCase.HandleAsync(command);

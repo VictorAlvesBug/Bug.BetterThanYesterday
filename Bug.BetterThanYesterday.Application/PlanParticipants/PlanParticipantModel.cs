@@ -2,10 +2,11 @@
 
 public class PlanParticipantModel
 {
-	public string Id { get; set; }
-	public string PlanId { get; set; }
-	public string UserId { get; set; }
-	public DateOnly JoinedAt { get; set; }
-	public DateOnly? LeftAt { get; set; }
-	public string Status { get; set; }
+	public Guid Id { get; set; }
+	public Guid PlanId { get; set; }
+	public Guid UserId { get; set; }
+	public DateTime JoinedAt { get; set; }
+	public DateTime? LeftAt { get; set; }
+	public int StatusId { get; set; }
+	public string StatusName { get; set; }
 }

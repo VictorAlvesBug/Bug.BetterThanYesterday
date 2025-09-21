@@ -9,7 +9,7 @@ internal static class CheckInMapper
 		Id = checkIn.Id,
 		UserId = checkIn.UserId,
 		PlanId = checkIn.PlanId,
-		Date = checkIn.Date,
+		Date = checkIn.Date.ToDateTime(TimeOnly.MinValue),
 		Title = checkIn.Title,
 		Description = checkIn.Description
 	};

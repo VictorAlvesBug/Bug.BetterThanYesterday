@@ -2,10 +2,10 @@
 
 internal class CheckInModel
 {
-	public string Id { get; set; }
-	public string PlanId { get; set; }
-	public string UserId { get; set; }
-	public DateOnly Date { get; set; }
+	public Guid Id { get; set; }
+	public Guid PlanId { get; set; }
+	public Guid UserId { get; set; }
+	public DateTime Date { get; set; }
 	public string Title { get; set; }
 	public string? Description { get; set; }
 }

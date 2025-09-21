@@ -12,14 +12,16 @@ public class CheckInRepository(
 		collection,
 		mapper), ICheckInRepository
 {
-	public async Task<List<CheckIn>> ListByPlanIdAndUserIdAsync(string planId, string userId)
+	public async Task<List<CheckIn>> ListByPlanIdAndUserIdAsync(Guid planId, Guid userId)
 	{
-		return (await _collection.FindAsync(checkIn => checkIn.PlanId == planId && checkIn.UserId == userId))
+		return (await _collection.FindAsync(checkIn =>
+				checkIn.PlanId == planId 
+				&& checkIn.UserId == userId))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
 	}
 
-	public async Task<List<CheckIn>> ListByPlanIdAsync(string planId)
+	public async Task<List<CheckIn>> ListByPlanIdAsync(Guid planId)
 	{
 		return (await _collection.FindAsync(checkIn => checkIn.PlanId == planId))
 			.ToList()

@@ -12,8 +12,8 @@ internal sealed class PlanMapper : IDocumentMapper<Plan, PlanDocument>
 		Description = plan.Description,
 		StartsAt = plan.StartsAt.ToDateTime(TimeOnly.MinValue),
 		EndsAt = plan.EndsAt.ToDateTime(TimeOnly.MinValue),
-		Status = plan.Status.Id,
-		Type = plan.Type.Id,
+		StatusId = plan.Status.Id,
+		TypeId = plan.Type.Id,
 		CreatedAt = plan.CreatedAt.ToDateTime(TimeOnly.MinValue),
 	};
 
@@ -23,7 +23,7 @@ internal sealed class PlanMapper : IDocumentMapper<Plan, PlanDocument>
 		document.Description,
 		document.StartsAt,
 		document.EndsAt,
-		document.Status,
-		document.Type,
+		document.StatusId,
+		document.TypeId,
 		document.CreatedAt);
 }

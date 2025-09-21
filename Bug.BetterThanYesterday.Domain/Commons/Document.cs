@@ -1,6 +1,10 @@
-﻿namespace Bug.BetterThanYesterday.Domain.Commons;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace Bug.BetterThanYesterday.Domain.Commons;
 
 public class Document
 {
-	public string Id { get; set; }
+	[BsonRepresentation(BsonType.String)]
+	public Guid Id { get; set; }
 }

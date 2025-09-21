@@ -1,12 +1,17 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 
 namespace Bug.BetterThanYesterday.Infrastructure.Persistence.PlanParticipants;
 
 public class PlanParticipantDocument : Document
 {
-	public string PlanId { get; set; }
-	public string UserId { get; set; }
-	public DateOnly JoinedAt { get; set; }
-	public DateOnly? LeftAt { get; set; }
-	public string Status { get; set; }
+	[BsonRepresentation(BsonType.String)]
+	public Guid PlanId { get; set; }
+
+	[BsonRepresentation(BsonType.String)]
+	public Guid UserId { get; set; }
+	public DateTime JoinedAt { get; set; }
+	public DateTime? LeftAt { get; set; }
+	public int StatusId { get; set; }
 }

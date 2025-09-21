@@ -6,7 +6,7 @@ public class CreateHabitCommand : ICommand
 {
 	public CreateHabitCommand(string name) => Name = name;
 
-	public string Name { get; }
+	public string Name { get; init; }
 
 	public void Validate()
 	{

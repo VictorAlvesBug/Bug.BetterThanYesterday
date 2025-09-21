@@ -15,6 +15,7 @@ using Bug.BetterThanYesterday.Application.Users.GetUserById;
 using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
 using Bug.BetterThanYesterday.Application.Users.RegisterUser;
 using Bug.BetterThanYesterday.Application.Users.UpdateUser;
+using Bug.BetterThanYesterday.Domain.Habits.Policies;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bug.BetterThanYesterday.Application.DependencyInjection;
@@ -26,6 +27,7 @@ public static class DependencyInjectionExtensions
 		services.AddUserUseCases();
 		services.AddHabitUseCases();
 		services.AddPlanUseCases();
+		services.AddPolicies();
 		return services;
 	}
 
@@ -59,6 +61,13 @@ public static class DependencyInjectionExtensions
 		services.AddScoped<IUseCase<CreatePlanCommand, IResult>, CreatePlanUseCase>();
 		services.AddScoped<IUseCase<UpdatePlanStatusCommand, IResult>, UpdatePlanStatusUseCase>();
 		services.AddScoped<IUseCase<CancelPlanCommand, IResult>, CancelPlanUseCase>();
+
+		return services;
+	}
+
+	public static IServiceCollection AddPolicies(this IServiceCollection services)
+	{
+		services.AddScoped<IHabitDeletionPolicy, HabitDeletionPolicy>();
 
 		return services;
 	}

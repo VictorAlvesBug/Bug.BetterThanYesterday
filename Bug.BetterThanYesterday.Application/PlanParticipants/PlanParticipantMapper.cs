@@ -9,8 +9,9 @@ internal static class PlanParticipantMapper
 		Id = planParticipant.Id,
 		UserId = planParticipant.UserId,
 		PlanId = planParticipant.PlanId,
-		JoinedAt = planParticipant.JoinedAt,
-		LeftAt = planParticipant.LeftAt,
-		Status = planParticipant.Status
+		JoinedAt = planParticipant.JoinedAt.ToDateTime(TimeOnly.MinValue),
+		LeftAt = planParticipant.LeftAt?.ToDateTime(TimeOnly.MinValue),
+		StatusId = planParticipant.Status.Id,
+		StatusName = planParticipant.Status.Name
 	};
 }

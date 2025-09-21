@@ -10,23 +10,23 @@ public class User : Entity
 	public DateOnly CreatedAt { get; set; }
 
 	private User(
-		string id,
+		Guid id,
 		string name,
-		Email email,
-		DateOnly createdAt)
+		string email,
+		DateTime createdAt)
 	{
 		Id = id;
 		Name = name;
-		Email = email;
-		CreatedAt = createdAt;
+		Email = Email.Create(email);
+		CreatedAt = DateOnly.FromDateTime(createdAt);
 	}
 
 	private User(string name, string email)
 		: this(
-			id: Guid.NewGuid().ToString(),
+			id: Guid.NewGuid(),
 			name,
-			Email.Create(email),
-			createdAt: DateOnly.FromDateTime(DateTime.Today))
+			email,
+			createdAt: DateTime.Today)
 	{
 	}
 
@@ -35,20 +35,29 @@ public class User : Entity
 		if (string.IsNullOrWhiteSpace(name))
 			throw new ArgumentNullException(nameof(name), "Informe o nome do usuário");
 
+		if (string.IsNullOrWhiteSpace(email))
+			throw new ArgumentNullException(nameof(email), "Informe o e-mail do usuário");
+
 		return new User(name, email);
 	}
 
 	public static User Restore(
-		string id,
+		Guid id,
 		string name,
-		Email email,
-		DateOnly createdAt)
+		string email,
+		DateTime createdAt)
 	{
-		if (string.IsNullOrWhiteSpace(id))
+		if (id == Guid.Empty)
 			throw new ArgumentNullException(nameof(id), "Informe o ID do usuário");
 
 		if (string.IsNullOrWhiteSpace(name))
 			throw new ArgumentNullException(nameof(name), "Informe o nome do usuário");
+
+		if (string.IsNullOrWhiteSpace(email))
+			throw new ArgumentNullException(nameof(email), "Informe o e-mail do usuário");
+
+		if (createdAt == DateTime.MinValue)
+			throw new ArgumentNullException(nameof(createdAt), "Informe a data de criação do usuário");
 
 		return new User(
 			id,

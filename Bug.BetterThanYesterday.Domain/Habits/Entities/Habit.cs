@@ -8,20 +8,20 @@ public class Habit : Entity
 	public DateOnly CreatedAt { get; set; }
 
 	private Habit(
-		string id,
+		Guid id,
 		string name,
-		DateOnly createdAt)
+		DateTime createdAt)
 	{
 		Id = id;
 		Name = name;
-		CreatedAt = createdAt;
+		CreatedAt = DateOnly.FromDateTime(createdAt);
 	}
 
 	private Habit(string name)
 		: this(
-			id: Guid.NewGuid().ToString(),
+			id: Guid.NewGuid(),
 			name,
-			createdAt: DateOnly.FromDateTime(DateTime.Today))
+			createdAt: DateTime.Today)
 	{
 	}
 
@@ -34,15 +34,18 @@ public class Habit : Entity
 	}
 
 	public static Habit Restore(
-		string id,
+		Guid id,
 		string name,
-		DateOnly createdAt)
+		DateTime createdAt)
 	{
-		if (string.IsNullOrWhiteSpace(id))
+		if (id == Guid.Empty)
 			throw new ArgumentNullException(nameof(id), "Informe o ID do hábito");
 
 		if (string.IsNullOrWhiteSpace(name))
 			throw new ArgumentNullException(nameof(name), "Informe o nome do hábito");
+
+		if (createdAt == DateTime.MinValue)
+			throw new ArgumentNullException(nameof(createdAt), "Informe a data de criação do hábito");
 
 		return new Habit(
 			id,

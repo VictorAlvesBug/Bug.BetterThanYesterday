@@ -4,18 +4,18 @@ namespace Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
 
 public class UpdateHabitCommand : ICommand
 {
-	public UpdateHabitCommand(string id, string name)
+	public UpdateHabitCommand(Guid id, string name)
 	{
 		Id = id;
 		Name = name;
 	}
 
-	public string Id { get; }
-	public string Name { get; }
+	public Guid Id { get; init; }
+	public string Name { get; init; }
 
 	public void Validate()
 	{
-		if (string.IsNullOrWhiteSpace(Id))
+		if (Id == Guid.Empty)
 			throw new ArgumentNullException(nameof(Id), "Informe o ID do hábito");
 
 		if (string.IsNullOrWhiteSpace(Name))

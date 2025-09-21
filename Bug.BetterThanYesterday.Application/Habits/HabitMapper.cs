@@ -8,6 +8,6 @@ public static class HabitMapper
 	{
 		Id = habit.Id,
 		Name = habit.Name,
-		CreatedAt = habit.CreatedAt
+		CreatedAt = habit.CreatedAt.ToDateTime(TimeOnly.MinValue)
 	};
 }

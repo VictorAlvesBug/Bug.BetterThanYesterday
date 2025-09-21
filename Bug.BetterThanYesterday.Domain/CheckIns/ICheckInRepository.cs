@@ -5,6 +5,6 @@ namespace Bug.BetterThanYesterday.Domain.CheckIns;
 
 public interface ICheckInRepository : IRepository<CheckIn>
 {
-	Task<List<CheckIn>> ListByPlanIdAsync(string planId);
-	Task<List<CheckIn>> ListByPlanIdAndUserIdAsync(string planId, string userId);
+	Task<List<CheckIn>> ListByPlanIdAsync(Guid planId);
+	Task<List<CheckIn>> ListByPlanIdAndUserIdAsync(Guid planId, Guid userId);
 }

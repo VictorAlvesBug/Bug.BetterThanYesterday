@@ -4,20 +4,20 @@ namespace Bug.BetterThanYesterday.Application.Users.UpdateUser;
 
 public class UpdateUserCommand : ICommand
 {
-	public UpdateUserCommand(string id, string name, string email)
+	public UpdateUserCommand(Guid id, string name, string email)
 	{
 		Id = id;
 		Name = name;
 		Email = email;
 	}
 
-	public string Id { get; }
-	public string Name { get; }
-	public string Email { get; }
+	public Guid Id { get; init; }
+	public string Name { get; init; }
+	public string Email { get; init; }
 
 	public void Validate()
 	{
-		if (string.IsNullOrWhiteSpace(Id))
+		if (Id == Guid.Empty)
 			throw new ArgumentNullException(nameof(Id), "Informe o ID do usuário");
 
 		if (string.IsNullOrWhiteSpace(Name))

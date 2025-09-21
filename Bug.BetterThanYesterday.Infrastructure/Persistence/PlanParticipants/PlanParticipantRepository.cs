@@ -12,14 +12,14 @@ public class PlanParticipantRepository(
 		collection,
 		mapper), IPlanParticipantRepository
 {
-	public async Task<List<PlanParticipant>> ListByPlanIdAsync(string planId)
+	public async Task<List<PlanParticipant>> ListByPlanIdAsync(Guid planId)
 	{
 		return (await _collection.FindAsync(planParticipant => planParticipant.PlanId == planId))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
 	}
 
-	public async Task<List<PlanParticipant>> ListByUserIdAsync(string userId)
+	public async Task<List<PlanParticipant>> ListByUserIdAsync(Guid userId)
 	{
 		return (await _collection.FindAsync(planParticipant => planParticipant.UserId == userId))
 			.ToList()

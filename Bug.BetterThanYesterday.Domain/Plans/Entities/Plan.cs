@@ -3,9 +3,9 @@ using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 
 namespace Bug.BetterThanYesterday.Domain.Plans.Entities;
 
-public class Plan : Entity
+public sealed class Plan : Entity
 {
-	public string HabitId { get; set; }
+	public Guid HabitId { get; set; }
 	public string? Description { get; set; }
 	public DateOnly StartsAt { get; set; }
 	public DateOnly EndsAt { get; set; }
@@ -15,20 +15,20 @@ public class Plan : Entity
 
 	private Dictionary<PlanStatus, List<PlanStatus>> _allowedStatusChanges = new()
 	{
-		{ PlanStatus.Draft, new List<PlanStatus> { PlanStatus.Running, PlanStatus.Cancelled } },
+		{ PlanStatus.NotStarted, new List<PlanStatus> { PlanStatus.Running, PlanStatus.Cancelled } },
 		{ PlanStatus.Running, new List<PlanStatus> { PlanStatus.Finished, PlanStatus.Cancelled } },
 		{ PlanStatus.Finished, new List<PlanStatus>() },
 		{ PlanStatus.Cancelled, new List<PlanStatus>() }
 	};
 
 	private Plan(
-		string id,
-		string habitId,
+		Guid id,
+		Guid habitId,
 		string? description,
 		DateTime startsAt,
 		DateTime endsAt,
-		int status,
-		int type,
+		int statusId,
+		int typeId,
 		DateTime createdAt)
 	{
 		Id = id;
@@ -36,63 +36,81 @@ public class Plan : Entity
 		Description = description;
 		StartsAt = DateOnly.FromDateTime(startsAt);
 		EndsAt = DateOnly.FromDateTime(endsAt);
-		Status = PlanStatus.FromId(status);
-		Type = PlanType.FromId(type);
+		Status = PlanStatus.FromId(statusId);
+		Type = PlanType.FromId(typeId);
 		CreatedAt = DateOnly.FromDateTime(createdAt);
 	}
 
 	private Plan(
-		string habitId,
+		Guid habitId,
 		string? description,
 		DateTime startsAt,
 		DateTime endsAt,
-		int type)
+		int typeId)
 	: this(
-		id: Guid.NewGuid().ToString(),
+		id: Guid.NewGuid(),
 		habitId,
 		description,
 		startsAt,
 		endsAt,
-		status: PlanStatus.Draft.Id,
-		type,
+		statusId: PlanStatus.NotStarted.Id,
+		typeId,
 		createdAt: DateTime.Today)
 	{
 	}
 
 	public static Plan CreateNew(
-		string habitId,
+		Guid habitId,
 		string? description,
 		DateTime startsAt,
 		DateTime endsAt,
-		int type)
+		int typeId)
 	{
-		if (string.IsNullOrWhiteSpace(habitId))
+		if (habitId == Guid.Empty)
 			throw new ArgumentNullException(nameof(habitId), "Informe o ID do hábito");
-		
-		if (endsAt <= startsAt)
-			throw new ArgumentException("A data de término deve ser após a data de início");
 
-		return new Plan(habitId, description, startsAt, endsAt, type);
+		if (startsAt < DateTime.Today)
+			throw new ArgumentException("A data de início não pode ser anterior a hoje", nameof(startsAt));
+
+		if (endsAt <= startsAt)
+			throw new ArgumentException("A data de término deve ser após a data de início", nameof(endsAt));
+
+		if (typeId <= 0)
+			throw new ArgumentException("O ID do tipo de plano deve ser maior que zero", nameof(typeId));
+
+		return new Plan(habitId, description, startsAt, endsAt, typeId);
 	}
 
 	public static Plan Restore(
-		string id,
-		string habitId,
+		Guid id,
+		Guid habitId,
 		string? description,
 		DateTime startsAt,
 		DateTime endsAt,
-		int status,
-		int type,
+		int statusId,
+		int typeId,
 		DateTime createdAt)
 	{
-		if (string.IsNullOrWhiteSpace(id))
+		if (id == Guid.Empty)
 			throw new ArgumentNullException(nameof(id), "Informe o ID do plano");
 
-		if (string.IsNullOrWhiteSpace(habitId))
+		if (habitId == Guid.Empty)
 			throw new ArgumentNullException(nameof(habitId), "Informe o ID do hábito");
 
+		if (startsAt <= DateTime.MinValue)
+			throw new ArgumentException("Data de início do plano inválida", nameof(startsAt));
+
 		if (endsAt <= startsAt)
-			throw new ArgumentException("A data de término deve ser após a data de início");
+			throw new ArgumentException("A data de término deve ser após a data de início", nameof(endsAt));
+
+		if (statusId <= 0)
+			throw new ArgumentException("O ID do status do plano deve ser maior que zero", nameof(statusId));
+
+		if (typeId <= 0)
+			throw new ArgumentException("O ID do tipo de plano deve ser maior que zero", nameof(typeId));
+
+		if (createdAt == DateTime.MinValue)
+			throw new ArgumentNullException(nameof(createdAt), "Informe a data de criação do plano");
 
 		return new Plan(
 			id,
@@ -100,8 +118,8 @@ public class Plan : Entity
 			description,
 			startsAt,
 			endsAt,
-			status,
-			type,
+			statusId,
+			typeId,
 			createdAt);
 	}
 

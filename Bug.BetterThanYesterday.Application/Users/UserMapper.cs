@@ -9,6 +9,6 @@ internal static class UserMapper
 		Id = user.Id,
 		Name = user.Name,
 		Email = user.Email.Value,
-		CreatedAt = user.CreatedAt,
+		CreatedAt = user.CreatedAt.ToDateTime(TimeOnly.MinValue),
 	};
 }

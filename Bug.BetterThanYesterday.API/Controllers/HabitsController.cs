@@ -36,7 +36,7 @@ public class HabitsController(
 	}
 
 	[HttpGet("{id}")]
-	public async Task<IActionResult> GetById(string id)
+	public async Task<IActionResult> GetById(Guid id)
 	{
 		var command = new GetHabitByIdCommand(id);
 		var result = await getHabitByIdUseCase.HandleAsync(command);
@@ -82,7 +82,7 @@ public class HabitsController(
 	}
 
 	[HttpDelete("{id}")]
-	public async Task<IActionResult> Delete(string id)
+	public async Task<IActionResult> Delete(Guid id)
 	{
 		var command = new DeleteHabitCommand(id);
 		var result = await deleteHabitUseCase.HandleAsync(command);

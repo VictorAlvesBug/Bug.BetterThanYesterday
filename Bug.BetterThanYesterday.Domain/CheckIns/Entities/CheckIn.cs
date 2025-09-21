@@ -4,36 +4,36 @@ namespace Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 
 public class CheckIn : Entity
 {
-	public string PlanId { get; set; }
-	public string UserId { get; set; }
+	public Guid PlanId { get; set; }
+	public Guid UserId { get; set; }
 	public DateOnly Date { get; set; }
 	public string Title { get; set; }
 	public string? Description { get; set; }
 
 	private CheckIn(
-		string id,
-		string planId,
-		string userId,
-		DateOnly date,
+		Guid id,
+		Guid planId,
+		Guid userId,
+		DateTime date,
 		string title,
 		string? description)
 	{
 		Id = id;
 		PlanId = planId;
 		UserId = userId;
-		Date = date;
+		Date = DateOnly.FromDateTime(date);
 		Title = title;
 		Description = description;
 	}
 
 	private CheckIn(
-		string planId,
-		string userId,
-		DateOnly date,
+		Guid planId,
+		Guid userId,
+		DateTime date,
 		string title,
 		string? description)
 	: this(
-			id: Guid.NewGuid().ToString(),
+			id: Guid.NewGuid(),
 			planId,
 			userId,
 			date,
@@ -42,17 +42,20 @@ public class CheckIn : Entity
 	{ }
 
 	public static CheckIn CreateNew(
-		string planId,
-		string userId,
-		DateOnly date,
+		Guid planId,
+		Guid userId,
+		DateTime date,
 		string title,
 		string? description)
 	{
-		if (string.IsNullOrWhiteSpace(planId))
+		if (planId == Guid.Empty)
 			throw new ArgumentNullException(nameof(planId), "Informe o ID do plano");
 
-		if (string.IsNullOrWhiteSpace(userId))
+		if (userId == Guid.Empty)
 			throw new ArgumentNullException(nameof(userId), "Informe o ID do usuário");
+
+		if (date == DateTime.MinValue)
+			throw new ArgumentNullException(nameof(date), "Informe a data do check-in");
 
 		if (string.IsNullOrWhiteSpace(title))
 			throw new ArgumentNullException(nameof(title), "Informe o título do check-in");
@@ -61,21 +64,24 @@ public class CheckIn : Entity
 	}
 
 	public static CheckIn Restore(
-		string id,
-		string planId,
-		string userId,
-		DateOnly date,
+		Guid id,
+		Guid planId,
+		Guid userId,
+		DateTime date,
 		string title,
 		string? description)
 	{
-		if (string.IsNullOrWhiteSpace(id))
+		if (id == Guid.Empty)
 			throw new ArgumentNullException(nameof(id), "Informe o ID do check-in");
 
-		if (string.IsNullOrWhiteSpace(planId))
+		if (planId == Guid.Empty)
 			throw new ArgumentNullException(nameof(planId), "Informe o ID do plano");
 
-		if (string.IsNullOrWhiteSpace(userId))
+		if (userId == Guid.Empty)
 			throw new ArgumentNullException(nameof(userId), "Informe o ID do usuário");
+
+		if (date == DateTime.MinValue)
+			throw new ArgumentNullException(nameof(date), "Informe a data do check-in");
 
 		if (string.IsNullOrWhiteSpace(title))
 			throw new ArgumentNullException(nameof(title), "Informe o título do check-in");

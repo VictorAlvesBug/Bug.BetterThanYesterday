@@ -4,13 +4,13 @@ namespace Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
 
 public class ListPlansByHabitIdCommand : ICommand
 {
-	public ListPlansByHabitIdCommand(string habitId) => HabitId = habitId;
+	public ListPlansByHabitIdCommand(Guid habitId) => HabitId = habitId;
 
-	public string HabitId { get; }
+	public Guid HabitId { get; init; }
 
 	public void Validate()
 	{
-		if (string.IsNullOrWhiteSpace(HabitId))
+		if (HabitId == Guid.Empty)
 			throw new ArgumentNullException(nameof(HabitId), "Informe o ID do hábito");
 	}
 }

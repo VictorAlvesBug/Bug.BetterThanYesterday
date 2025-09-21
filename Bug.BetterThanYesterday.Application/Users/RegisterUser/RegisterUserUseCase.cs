@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
+using Bug.BetterThanYesterday.Domain.Users.ValueObjects;
 
 namespace Bug.BetterThanYesterday.Application.Users.RegisterUser;
 
@@ -12,7 +13,7 @@ public class RegisterUserUseCase(IUserRepository userRepository)
 		try
 		{
 			command.Validate();
-			var alreadyExists = (await userRepository.GetByEmailAsync(command.Email)) is not null;
+			var alreadyExists = (await userRepository.GetByEmailAsync(Email.Create(command.Email))) is not null;
 
 			if (alreadyExists)
 			{
