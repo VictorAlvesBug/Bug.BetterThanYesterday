@@ -1,5 +1,4 @@
-﻿using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
-using Bug.BetterThanYesterday.Domain.Plans.Entities;
+﻿using Bug.BetterThanYesterday.Domain.Plans.Entities;
 
 namespace Bug.BetterThanYesterday.Application.Plans;
 
