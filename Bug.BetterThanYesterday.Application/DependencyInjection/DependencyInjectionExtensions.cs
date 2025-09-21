@@ -32,53 +32,15 @@ public static class DependencyInjectionExtensions
 
 	private static IServiceCollection AddUseCases(this IServiceCollection services)
 	{
-		// 1) Registrar todos os IUseCase<,> concretos
+		// Registrar todos os IUseCase<> concretos
 		services.Scan(scan => scan
 			.FromApplicationDependencies()
 			.AddClasses(c => c.AssignableTo(typeof(IUseCase<>)))
 			.AsImplementedInterfaces()
 			.WithScopedLifetime());
 
-		// 2) Decorar TODOS os IUseCase<,> com o seu decorator
+		// Decorar TODOS os IUseCase<> com o seu decorator
 		services.Decorate(typeof(IUseCase<>), typeof(ExceptionToResultDecorator<>));
-
-		//services.AddUserUseCases();
-		//services.AddHabitUseCases();
-		//services.AddPlanUseCases();
-
-		return services;
-	}
-
-	private static IServiceCollection AddUserUseCases(this IServiceCollection services)
-	{
-		services.AddScoped<IUseCase<ListAllUsersCommand>, ListAllUsersUseCase>();
-		services.AddScoped<IUseCase<GetUserByIdCommand>, GetUserByIdUseCase>();
-		services.AddScoped<IUseCase<RegisterUserCommand>, RegisterUserUseCase>();
-		services.AddScoped<IUseCase<UpdateUserCommand>, UpdateUserUseCase>();
-		services.AddScoped<IUseCase<DeleteUserCommand>, DeleteUserUseCase>();
-		
-		return services;
-	}
-
-	private static IServiceCollection AddHabitUseCases(this IServiceCollection services)
-	{
-		services.AddScoped<IUseCase<ListAllHabitsCommand>, ListAllHabitsUseCase>();
-		services.AddScoped<IUseCase<GetHabitByIdCommand>, GetHabitByIdUseCase>();
-		services.AddScoped<IUseCase<CreateHabitCommand>, CreateHabitUseCase>();
-		services.AddScoped<IUseCase<UpdateHabitCommand>, UpdateHabitUseCase>();
-		services.AddScoped<IUseCase<DeleteHabitCommand>, DeleteHabitUseCase>();
-
-		return services;
-	}
-
-	private static IServiceCollection AddPlanUseCases(this IServiceCollection services)
-	{
-		services.AddScoped<IUseCase<ListAllPlansCommand>, ListAllPlansUseCase>();
-		services.AddScoped<IUseCase<GetPlanByIdCommand>, GetPlanByIdUseCase>();
-		services.AddScoped<IUseCase<ListPlansByHabitIdCommand>, ListPlansByHabitIdUseCase>();
-		services.AddScoped<IUseCase<CreatePlanCommand>, CreatePlanUseCase>();
-		services.AddScoped<IUseCase<UpdatePlanStatusCommand>, UpdatePlanStatusUseCase>();
-		services.AddScoped<IUseCase<CancelPlanCommand>, CancelPlanUseCase>();
 
 		return services;
 	}
