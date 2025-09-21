@@ -6,7 +6,6 @@ using Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
 using Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 using IResult = Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure.IResult;
 
 namespace Bug.BetterThanYesterday.API.Controllers;

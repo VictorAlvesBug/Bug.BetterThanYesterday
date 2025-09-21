@@ -6,7 +6,6 @@ using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
 using Bug.BetterThanYesterday.Application.Users.RegisterUser;
 using Bug.BetterThanYesterday.Application.Users.UpdateUser;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 using IResult = Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure.IResult;
 
 namespace Bug.BetterThanYesterday.API.Controllers;

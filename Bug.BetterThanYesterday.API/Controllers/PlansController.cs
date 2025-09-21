@@ -8,8 +8,6 @@ using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Microsoft.AspNetCore.Mvc;
 using Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
 using IResult = Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure.IResult;
-using Bug.BetterThanYesterday.Domain.Habits.Entities;
-using MongoDB.Driver;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
