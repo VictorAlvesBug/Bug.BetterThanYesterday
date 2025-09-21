@@ -5,36 +5,29 @@ using Bug.BetterThanYesterday.Domain.Users.ValueObjects;
 namespace Bug.BetterThanYesterday.Application.Users.UpdateUser;
 
 public class UpdateUserUseCase(IUserRepository userRepository)
-	: IUseCase<UpdateUserCommand, IResult>
+	: IUseCase<UpdateUserCommand>
 {
 	public async Task<IResult> HandleAsync(UpdateUserCommand command)
 	{
-		try
+		command.Validate();
+
+		var user = await userRepository.GetByIdAsync(command.Id);
+
+		if (user is null)
+			return Result.Rejected("Usuário não encontrado");
+
+		var existingEmailUser = await userRepository.GetByEmailAsync(Email.Create(command.Email));
+
+		if (existingEmailUser is not null
+			&& existingEmailUser.Id != user.Id)
 		{
-			command.Validate();
-			
-			var user = await userRepository.GetByIdAsync(command.Id);
-
-			if (user is null)
-				return Result.Rejected("Usuário não encontrado");
-
-			var existingEmailUser = await userRepository.GetByEmailAsync(Email.Create(command.Email));
-
-			if (existingEmailUser is not null
-				&& existingEmailUser.Id != user.Id)
-			{
-				return Result.Rejected("E-mail já cadastrado");
-			}
-
-			user.UpdateName(command.Name);
-			user.UpdateEmail(command.Email);
-			
-			await userRepository.UpdateAsync(user);
-			return Result.Success(user.ToModel(), "Usuário atualizado com sucesso");
+			return Result.Rejected("E-mail já cadastrado");
 		}
-		catch (Exception ex)
-		{
-			return Result.Failure(ex.Message);
-		}
+
+		user.UpdateName(command.Name);
+		user.UpdateEmail(command.Email);
+
+		await userRepository.UpdateAsync(user);
+		return Result.Success(user.ToModel(), "Usuário atualizado com sucesso");
 	}
 }

@@ -16,12 +16,13 @@ namespace Bug.BetterThanYesterday.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class PlansController(
-IUseCase<CreatePlanCommand, IResult> createPlanUseCase,
-IUseCase<ListAllPlansCommand, IResult> listAllPlansUseCase,
-IUseCase<GetPlanByIdCommand, IResult> getPlanByIdUseCase,
-IUseCase<ListPlansByHabitIdCommand, IResult> listPlansByHabitIdUseCase,
-IUseCase<UpdatePlanStatusCommand, IResult> updatePlanStatusUseCase,
-IUseCase<CancelPlanCommand, IResult> cancelPlanUseCase) : ControllerBase
+	IUseCase<CreatePlanCommand> createPlanUseCase,
+	IUseCase<ListAllPlansCommand> listAllPlansUseCase,
+	IUseCase<GetPlanByIdCommand> getPlanByIdUseCase,
+	IUseCase<ListPlansByHabitIdCommand> listPlansByHabitIdUseCase,
+	IUseCase<UpdatePlanStatusCommand> updatePlanStatusUseCase,
+	IUseCase<CancelPlanCommand> cancelPlanUseCase)
+	: ControllerBase
 {
 	[HttpGet]
 	public async Task<IActionResult> List([FromQuery] Guid? habitId = null)

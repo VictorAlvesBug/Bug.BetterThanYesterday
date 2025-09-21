@@ -4,24 +4,17 @@ using Bug.BetterThanYesterday.Domain.Users;
 namespace Bug.BetterThanYesterday.Application.Users.DeleteUser;
 
 public class DeleteUserUseCase(IUserRepository userRepository)
-	: IUseCase<DeleteUserCommand, IResult>
+	: IUseCase<DeleteUserCommand>
 {
 	public async Task<IResult> HandleAsync(DeleteUserCommand command)
 	{
-		try
-		{
-			command.Validate();
-			var user = await userRepository.GetByIdAsync(command.Id);
+		command.Validate();
+		var user = await userRepository.GetByIdAsync(command.Id);
 
-			if (user is null)
-				return Result.Rejected("Usuário não encontrado");
+		if (user is null)
+			return Result.Rejected("Usuário não encontrado");
 
-			await userRepository.DeleteAsync(user);
-			return Result.Success("Usuário deletado com sucesso");
-		}
-		catch (Exception ex)
-		{
-			return Result.Failure(ex.Message);
-		}
+		await userRepository.DeleteAsync(user);
+		return Result.Success("Usuário deletado com sucesso");
 	}
 }

@@ -7,27 +7,20 @@ namespace Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
 public class ListPlansByHabitIdUseCase(
 	IPlanRepository planRepository,
 	IHabitRepository habitRepository)
-	: IUseCase<ListPlansByHabitIdCommand, IResult>
+	: IUseCase<ListPlansByHabitIdCommand>
 {
 	public async Task<IResult> HandleAsync(ListPlansByHabitIdCommand command)
 	{
-		try
-		{
-			command.Validate();
-			
-			var habit = await habitRepository.GetByIdAsync(command.HabitId);
+		command.Validate();
 
-			if (habit is null)
-				return Result.Rejected("Hábito não encontrado");
+		var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
-			var plans = (await planRepository.ListByHabitIdAsync(command.HabitId))
-				.Select(habit => habit.ToModel());
+		if (habit is null)
+			return Result.Rejected("Hábito não encontrado");
 
-			return Result.Success(plans);
-		}
-		catch (Exception ex)
-		{
-			return Result.Failure(ex.Message);
-		}
+		var plans = (await planRepository.ListByHabitIdAsync(command.HabitId))
+			.Select(habit => habit.ToModel());
+
+		return Result.Success(plans);
 	}
 }

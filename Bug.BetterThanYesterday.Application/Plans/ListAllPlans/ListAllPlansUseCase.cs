@@ -4,19 +4,12 @@ using Bug.BetterThanYesterday.Domain.Plans;
 namespace Bug.BetterThanYesterday.Application.Plans.ListAllPlans;
 
 public class ListAllPlansUseCase(IPlanRepository planRepository)
-	: IUseCase<ListAllPlansCommand, IResult>
+	: IUseCase<ListAllPlansCommand>
 {
 	public async Task<IResult> HandleAsync(ListAllPlansCommand command)
 	{
-		try
-		{
-			command.Validate();
-			var plans = (await planRepository.ListAllAsync()).Select(plan => plan.ToModel());
-			return Result.Success(plans);
-		}
-		catch (Exception ex)
-		{
-			return Result.Failure(ex.Message);
-		}
+		command.Validate();
+		var plans = (await planRepository.ListAllAsync()).Select(plan => plan.ToModel());
+		return Result.Success(plans);
 	}
 }

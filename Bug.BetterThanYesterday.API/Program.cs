@@ -1,3 +1,4 @@
+using Bug.BetterThanYesterday.API;
 using Bug.BetterThanYesterday.Application.DependencyInjection;
 using Bug.BetterThanYesterday.Domain.Configurations;
 using Bug.BetterThanYesterday.Infrastructure.Configurations;
@@ -20,6 +21,9 @@ builder.Services.AddSingleton(sp =>
 	return client.GetDatabase(dbConfig.DatabaseName);
 });
 
+//builder.Services.AddTransient<IMiddleware, ExceptionHandlingMiddleware>();
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
 
@@ -29,6 +33,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

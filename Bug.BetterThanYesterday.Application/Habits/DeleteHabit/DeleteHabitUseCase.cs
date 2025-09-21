@@ -7,27 +7,20 @@ namespace Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
 public class DeleteHabitUseCase(
 	IHabitRepository habitRepository,
 	IHabitDeletionPolicy habitDeletionPolicy)
-	: IUseCase<DeleteHabitCommand, IResult>
+	: IUseCase<DeleteHabitCommand>
 {
 	public async Task<IResult> HandleAsync(DeleteHabitCommand command)
 	{
-		try
-		{
-			command.Validate();
-			var habit = await habitRepository.GetByIdAsync(command.Id);
+		command.Validate();
+		var habit = await habitRepository.GetByIdAsync(command.Id);
 
-			if (habit is null)
-				return Result.Rejected("Hábito não encontrado");
+		if (habit is null)
+			return Result.Rejected("Hábito não encontrado");
 
-			if(!await habitDeletionPolicy.CanDeleteAsync(habit.Id))
-				return Result.Rejected("Hábito não pode ser removido, pois possui planos vinculados");
+		if (!await habitDeletionPolicy.CanDeleteAsync(habit.Id))
+			return Result.Rejected("Hábito não pode ser removido, pois possui planos vinculados");
 
-			await habitRepository.DeleteAsync(habit);
-			return Result.Success("Hábito deletado com sucesso");
-		}
-		catch (Exception ex)
-		{
-			return Result.Failure(ex.Message);
-		}
+		await habitRepository.DeleteAsync(habit);
+		return Result.Success("Hábito deletado com sucesso");
 	}
 }

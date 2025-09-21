@@ -5,26 +5,19 @@ using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 namespace Bug.BetterThanYesterday.Application.Plans.CancelPlan;
 
 public class CancelPlanUseCase(IPlanRepository planRepository)
-	: IUseCase<CancelPlanCommand, IResult>
+	: IUseCase<CancelPlanCommand>
 {
 	public async Task<IResult> HandleAsync(CancelPlanCommand command)
 	{
-		try
-		{
-			command.Validate();
-			var plan = await planRepository.GetByIdAsync(command.Id);
+		command.Validate();
+		var plan = await planRepository.GetByIdAsync(command.Id);
 
-			if (plan is null)
-				return Result.Rejected("Plano não encontrado");
+		if (plan is null)
+			return Result.Rejected("Plano não encontrado");
 
-			plan.ChangeStatus(PlanStatus.Cancelled);
+		plan.ChangeStatus(PlanStatus.Cancelled);
 
-			await planRepository.UpdateAsync(plan);
-			return Result.Success(plan.ToModel(), "Plano cancelado com sucesso");
-		}
-		catch (Exception ex)
-		{
-			return Result.Failure(ex.Message);
-		}
+		await planRepository.UpdateAsync(plan);
+		return Result.Success(plan.ToModel(), "Plano cancelado com sucesso");
 	}
 }

@@ -5,27 +5,20 @@ using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 namespace Bug.BetterThanYesterday.Application.Plans.UpdatePlanStatus;
 
 public class UpdatePlanStatusUseCase(IPlanRepository planRepository)
-	: IUseCase<UpdatePlanStatusCommand, IResult>
+	: IUseCase<UpdatePlanStatusCommand>
 {
 	public async Task<IResult> HandleAsync(UpdatePlanStatusCommand command)
 	{
-		try
-		{
-			command.Validate();
-			var plan = await planRepository.GetByIdAsync(command.Id);
+		command.Validate();
+		var plan = await planRepository.GetByIdAsync(command.Id);
 
-			if (plan is null)
-				return Result.Rejected("Plano não encontrado");
+		if (plan is null)
+			return Result.Rejected("Plano não encontrado");
 
-			var newStatus = PlanStatus.FromId(command.StatusId);
-			plan.ChangeStatus(newStatus);
+		var newStatus = PlanStatus.FromId(command.StatusId);
+		plan.ChangeStatus(newStatus);
 
-			await planRepository.UpdateAsync(plan);
-			return Result.Success(plan.ToModel(), "Status do plano atualizado com sucesso");
-		}
-		catch (Exception ex)
-		{
-			return Result.Failure(ex.Message);
-		}
+		await planRepository.UpdateAsync(plan);
+		return Result.Success(plan.ToModel(), "Status do plano atualizado com sucesso");
 	}
 }

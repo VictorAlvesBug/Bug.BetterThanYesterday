@@ -15,28 +15,4 @@ public sealed class PlanType : Enumeration
 	public static PlanType FromName(string name) =>
 		GetAll<PlanType>().FirstOrDefault(type => type.Name == name)
 		?? throw new ArgumentOutOfRangeException(nameof(name), $"Nome do PlanType inválido: {name}");
-
-	/*public static bool TryParse(string value, out PlanType? type)
-	{
-		type = null;
-
-		if (string.IsNullOrWhiteSpace(value))
-			return false;
-
-		try
-		{
-			type = value switch
-			{
-				nameof(Public) => Public,
-				nameof(Private) => Private,
-				_ => null
-			};
-
-			return type is not null;
-		}
-		catch
-		{
-			return false;
-		}
-	}*/
 }

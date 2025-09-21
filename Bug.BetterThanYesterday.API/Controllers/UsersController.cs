@@ -13,11 +13,11 @@ namespace Bug.BetterThanYesterday.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController(
-	IUseCase<ListAllUsersCommand, IResult> listAllUsersUseCase,
-	IUseCase<GetUserByIdCommand, IResult> getUserByIdUseCase,
-	IUseCase<RegisterUserCommand, IResult> registerUserUseCase,
-	IUseCase<UpdateUserCommand, IResult> updateUserUseCase,
-	IUseCase<DeleteUserCommand, IResult> deleteUserUseCase)
+	IUseCase<ListAllUsersCommand> listAllUsersUseCase,
+	IUseCase<GetUserByIdCommand> getUserByIdUseCase,
+	IUseCase<RegisterUserCommand> registerUserUseCase,
+	IUseCase<UpdateUserCommand> updateUserUseCase,
+	IUseCase<DeleteUserCommand> deleteUserUseCase)
 	: ControllerBase
 {
 	[HttpGet]

@@ -24,48 +24,66 @@ public static class DependencyInjectionExtensions
 {
 	public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 	{
-		services.AddUserUseCases();
-		services.AddHabitUseCases();
-		services.AddPlanUseCases();
+
+		services.AddUseCases();
 		services.AddPolicies();
 		return services;
 	}
 
-	public static IServiceCollection AddUserUseCases(this IServiceCollection services)
+	private static IServiceCollection AddUseCases(this IServiceCollection services)
 	{
-		services.AddScoped<IUseCase<ListAllUsersCommand, IResult>, ListAllUsersUseCase>();
-		services.AddScoped<IUseCase<GetUserByIdCommand, IResult>, GetUserByIdUseCase>();
-		services.AddScoped<IUseCase<RegisterUserCommand, IResult>, RegisterUserUseCase>();
-		services.AddScoped<IUseCase<UpdateUserCommand, IResult>, UpdateUserUseCase>();
-		services.AddScoped<IUseCase<DeleteUserCommand, IResult>, DeleteUserUseCase>();
+		// 1) Registrar todos os IUseCase<,> concretos
+		services.Scan(scan => scan
+			.FromApplicationDependencies()
+			.AddClasses(c => c.AssignableTo(typeof(IUseCase<>)))
+			.AsImplementedInterfaces()
+			.WithScopedLifetime());
+
+		// 2) Decorar TODOS os IUseCase<,> com o seu decorator
+		services.Decorate(typeof(IUseCase<>), typeof(ExceptionToResultDecorator<>));
+
+		//services.AddUserUseCases();
+		//services.AddHabitUseCases();
+		//services.AddPlanUseCases();
+
+		return services;
+	}
+
+	private static IServiceCollection AddUserUseCases(this IServiceCollection services)
+	{
+		services.AddScoped<IUseCase<ListAllUsersCommand>, ListAllUsersUseCase>();
+		services.AddScoped<IUseCase<GetUserByIdCommand>, GetUserByIdUseCase>();
+		services.AddScoped<IUseCase<RegisterUserCommand>, RegisterUserUseCase>();
+		services.AddScoped<IUseCase<UpdateUserCommand>, UpdateUserUseCase>();
+		services.AddScoped<IUseCase<DeleteUserCommand>, DeleteUserUseCase>();
 		
 		return services;
 	}
 
-	public static IServiceCollection AddHabitUseCases(this IServiceCollection services)
+	private static IServiceCollection AddHabitUseCases(this IServiceCollection services)
 	{
-		services.AddScoped<IUseCase<ListAllHabitsCommand, IResult>, ListAllHabitsUseCase>();
-		services.AddScoped<IUseCase<GetHabitByIdCommand, IResult>, GetHabitByIdUseCase>();
-		services.AddScoped<IUseCase<CreateHabitCommand, IResult>, CreateHabitUseCase>();
-		services.AddScoped<IUseCase<UpdateHabitCommand, IResult>, UpdateHabitUseCase>();
-		services.AddScoped<IUseCase<DeleteHabitCommand, IResult>, DeleteHabitUseCase>();
+		services.AddScoped<IUseCase<ListAllHabitsCommand>, ListAllHabitsUseCase>();
+		services.AddScoped<IUseCase<GetHabitByIdCommand>, GetHabitByIdUseCase>();
+		services.AddScoped<IUseCase<CreateHabitCommand>, CreateHabitUseCase>();
+		services.AddScoped<IUseCase<UpdateHabitCommand>, UpdateHabitUseCase>();
+		services.AddScoped<IUseCase<DeleteHabitCommand>, DeleteHabitUseCase>();
 
 		return services;
 	}
 
-	public static IServiceCollection AddPlanUseCases(this IServiceCollection services)
+	private static IServiceCollection AddPlanUseCases(this IServiceCollection services)
 	{
-		services.AddScoped<IUseCase<ListAllPlansCommand, IResult>, ListAllPlansUseCase>();
-		services.AddScoped<IUseCase<GetPlanByIdCommand, IResult>, GetPlanByIdUseCase>();
-		services.AddScoped<IUseCase<ListPlansByHabitIdCommand, IResult>, ListPlansByHabitIdUseCase>();
-		services.AddScoped<IUseCase<CreatePlanCommand, IResult>, CreatePlanUseCase>();
-		services.AddScoped<IUseCase<UpdatePlanStatusCommand, IResult>, UpdatePlanStatusUseCase>();
-		services.AddScoped<IUseCase<CancelPlanCommand, IResult>, CancelPlanUseCase>();
+		services.AddScoped<IUseCase<ListAllPlansCommand>, ListAllPlansUseCase>();
+		services.AddScoped<IUseCase<GetPlanByIdCommand>, GetPlanByIdUseCase>();
+		services.AddScoped<IUseCase<ListPlansByHabitIdCommand>, ListPlansByHabitIdUseCase>();
+		services.AddScoped<IUseCase<CreatePlanCommand>, CreatePlanUseCase>();
+		services.AddScoped<IUseCase<UpdatePlanStatusCommand>, UpdatePlanStatusUseCase>();
+		services.AddScoped<IUseCase<CancelPlanCommand>, CancelPlanUseCase>();
 
 		return services;
 	}
 
-	public static IServiceCollection AddPolicies(this IServiceCollection services)
+	private static IServiceCollection AddPolicies(this IServiceCollection services)
 	{
 		services.AddScoped<IHabitDeletionPolicy, HabitDeletionPolicy>();
 

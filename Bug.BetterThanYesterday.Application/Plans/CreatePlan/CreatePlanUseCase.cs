@@ -8,31 +8,24 @@ namespace Bug.BetterThanYesterday.Application.Plans.CreatePlan;
 public class CreatePlanUseCase(
 	IPlanRepository planRepository,
 	IHabitRepository habitRepository)
-	: IUseCase<CreatePlanCommand, IResult>
+	: IUseCase<CreatePlanCommand>
 {
 	public async Task<IResult> HandleAsync(CreatePlanCommand command)
 	{
-		try
-		{
-			command.Validate();
-			var habit = await habitRepository.GetByIdAsync(command.HabitId);
+		command.Validate();
+		var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
-			if (habit is null)
-				return Result.Rejected("Hábito não encontrado");
+		if (habit is null)
+			return Result.Rejected("Hábito não encontrado");
 
-			var plan = Plan.CreateNew(
-				command.HabitId,
-				command.Description,
-				command.StartsAt,
-				command.EndsAt,
-				command.TypeId);
+		var plan = Plan.CreateNew(
+			command.HabitId,
+			command.Description,
+			command.StartsAt,
+			command.EndsAt,
+			command.TypeId);
 
-			await planRepository.AddAsync(plan);
-			return Result.Success(plan.ToModel(), "Plano cadastrado com sucesso.");
-		}
-		catch (Exception ex)
-		{
-			return Result.Failure(ex.Message);
-		}
+		await planRepository.AddAsync(plan);
+		return Result.Success(plan.ToModel(), "Plano cadastrado com sucesso.");
 	}
 }
