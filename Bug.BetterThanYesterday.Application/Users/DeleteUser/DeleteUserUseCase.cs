@@ -6,11 +6,12 @@ namespace Bug.BetterThanYesterday.Application.Users.DeleteUser;
 public class DeleteUserUseCase(IUserRepository userRepository)
 	: IUseCase<DeleteUserCommand, IResult>
 {
-	public async Task<IResult> HandleAsync(DeleteUserCommand input)
+	public async Task<IResult> HandleAsync(DeleteUserCommand command)
 	{
 		try
 		{
-			var user = await userRepository.GetByIdAsync(input.Id);
+			command.Validate();
+			var user = await userRepository.GetByIdAsync(command.Id);
 
 			if (user is null)
 				return Result.Rejected("Usuário não encontrado");

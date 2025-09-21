@@ -6,6 +6,7 @@ using Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
 using Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using IResult = Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure.IResult;
 
 namespace Bug.BetterThanYesterday.API.Controllers;
@@ -23,7 +24,8 @@ public class HabitsController(
 	[HttpGet]
 	public async Task<IActionResult> ListAll()
 	{
-		var result = await listAllHabitsUseCase.HandleAsync(new ListAllHabitsCommand());
+		var command = new ListAllHabitsCommand();
+		var result = await listAllHabitsUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
 			return Ok(result);

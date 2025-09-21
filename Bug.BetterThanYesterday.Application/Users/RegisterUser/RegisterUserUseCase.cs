@@ -7,18 +7,19 @@ namespace Bug.BetterThanYesterday.Application.Users.RegisterUser;
 public class RegisterUserUseCase(IUserRepository userRepository)
 	: IUseCase<RegisterUserCommand, IResult>
 {
-	public async Task<IResult> HandleAsync(RegisterUserCommand input)
+	public async Task<IResult> HandleAsync(RegisterUserCommand command)
 	{
 		try
 		{
-			var alreadyExists = (await userRepository.GetByEmailAsync(input.Email)) is not null;
+			command.Validate();
+			var alreadyExists = (await userRepository.GetByEmailAsync(command.Email)) is not null;
 
 			if (alreadyExists)
 			{
 				return Result.Rejected("E-mail já cadastrado");
 			}
 
-			var user = User.CreateNew(input.Name, input.Email);
+			var user = User.CreateNew(command.Name, command.Email);
 			await userRepository.AddAsync(user);
 			return Result.Success(user.ToModel(), "Usuário cadastrado com sucesso");
 		}

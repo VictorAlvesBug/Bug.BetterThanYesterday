@@ -6,11 +6,12 @@ namespace Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
 public sealed class ListAllHabitsUseCase(IHabitRepository habitRepository)
 	: IUseCase<ListAllHabitsCommand, IResult>
 {
-	public async Task<IResult> HandleAsync(ListAllHabitsCommand input)
+	public async Task<IResult> HandleAsync(ListAllHabitsCommand command)
 	{
 		try
 		{
-			var habits = (await habitRepository.ListAllAsync()).Select(h => h.ToModel());
+			command.Validate();
+			var habits = (await habitRepository.ListAllAsync()).Select(habit => habit.ToModel());
 			return Result.Success(habits);
 		}
 		catch (Exception ex)

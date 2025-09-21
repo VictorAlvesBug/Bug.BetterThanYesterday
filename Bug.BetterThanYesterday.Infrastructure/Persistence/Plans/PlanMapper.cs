@@ -11,20 +11,20 @@ internal sealed class PlanMapper : IDocumentMapper<Plan, PlanDocument>
 		Id = plan.Id,
 		HabitId = plan.HabitId,
 		Description = plan.Description,
-		StartsAt = plan.StartsAt,
-		EndsAt = plan.EndsAt,
-		Status = plan.Status,
-		Type = plan.Type,
-		CreatedAt = plan.CreatedAt,
+		StartsAt = plan.StartsAt.ToDateTime(TimeOnly.MinValue),
+		EndsAt = plan.EndsAt.ToDateTime(TimeOnly.MinValue),
+		Status = plan.Status.Id,
+		Type = plan.Type.Id,
+		CreatedAt = plan.CreatedAt.ToDateTime(TimeOnly.MinValue),
 	};
 
 	public Plan ToDomain(PlanDocument document) => Plan.Restore(
 		document.Id,
 		document.HabitId,
 		document.Description,
-		startsAt: document.StartsAt,
+		document.StartsAt,
 		document.EndsAt,
-		(PlanStatus) document.Status,
-		(PlanType) document.Type,
+		document.Status,
+		document.Type,
 		document.CreatedAt);
 }

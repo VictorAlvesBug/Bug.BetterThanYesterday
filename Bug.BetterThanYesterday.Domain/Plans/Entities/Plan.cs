@@ -13,50 +13,58 @@ public class Plan : Entity
 	public PlanType Type { get; set; }
 	public DateOnly CreatedAt { get; set; }
 
+	private Dictionary<PlanStatus, List<PlanStatus>> _allowedStatusChanges = new()
+	{
+		{ PlanStatus.Draft, new List<PlanStatus> { PlanStatus.Running, PlanStatus.Cancelled } },
+		{ PlanStatus.Running, new List<PlanStatus> { PlanStatus.Finished, PlanStatus.Cancelled } },
+		{ PlanStatus.Finished, new List<PlanStatus>() },
+		{ PlanStatus.Cancelled, new List<PlanStatus>() }
+	};
+
 	private Plan(
 		string id,
 		string habitId,
 		string? description,
-		DateOnly startsAt,
-		DateOnly endsAt,
-		PlanStatus status,
-		PlanType type,
-		DateOnly createdAt)
+		DateTime startsAt,
+		DateTime endsAt,
+		int status,
+		int type,
+		DateTime createdAt)
 	{
 		Id = id;
 		HabitId = habitId;
 		Description = description;
-		StartsAt = startsAt;
-		EndsAt = endsAt;
-		Status = status;
-		Type = type;
-		CreatedAt = createdAt;
+		StartsAt = DateOnly.FromDateTime(startsAt);
+		EndsAt = DateOnly.FromDateTime(endsAt);
+		Status = PlanStatus.FromId(status);
+		Type = PlanType.FromId(type);
+		CreatedAt = DateOnly.FromDateTime(createdAt);
 	}
 
 	private Plan(
 		string habitId,
 		string? description,
-		DateOnly startsAt,
-		DateOnly endsAt,
-		PlanType type)
+		DateTime startsAt,
+		DateTime endsAt,
+		int type)
 	: this(
 		id: Guid.NewGuid().ToString(),
 		habitId,
 		description,
 		startsAt,
 		endsAt,
-		status: PlanStatus.Draft,
+		status: PlanStatus.Draft.Id,
 		type,
-		createdAt: DateOnly.FromDateTime(DateTime.Today))
+		createdAt: DateTime.Today)
 	{
 	}
 
 	public static Plan CreateNew(
 		string habitId,
 		string? description,
-		DateOnly startsAt,
-		DateOnly endsAt,
-		string type)
+		DateTime startsAt,
+		DateTime endsAt,
+		int type)
 	{
 		if (string.IsNullOrWhiteSpace(habitId))
 			throw new ArgumentNullException(nameof(habitId), "Informe o ID do hábito");
@@ -64,18 +72,18 @@ public class Plan : Entity
 		if (endsAt <= startsAt)
 			throw new ArgumentException("A data de término deve ser após a data de início");
 
-		return new Plan(habitId, description, startsAt, endsAt, (PlanType) type);
+		return new Plan(habitId, description, startsAt, endsAt, type);
 	}
 
 	public static Plan Restore(
 		string id,
 		string habitId,
 		string? description,
-		DateOnly startsAt,
-		DateOnly endsAt,
-		PlanStatus status,
-		PlanType type,
-		DateOnly createdAt)
+		DateTime startsAt,
+		DateTime endsAt,
+		int status,
+		int type,
+		DateTime createdAt)
 	{
 		if (string.IsNullOrWhiteSpace(id))
 			throw new ArgumentNullException(nameof(id), "Informe o ID do plano");
@@ -95,5 +103,16 @@ public class Plan : Entity
 			status,
 			type,
 			createdAt);
+	}
+
+	public void ChangeStatus(PlanStatus newStatus)
+	{
+		var isChangeAllowed = _allowedStatusChanges.ContainsKey(Status)
+			&& _allowedStatusChanges[Status].Contains(newStatus);
+
+		if (!isChangeAllowed)
+			throw new InvalidOperationException($"Não é possível alterar o status de {Status.Name} para {newStatus.Name}");
+
+		Status = newStatus;
 	}
 }

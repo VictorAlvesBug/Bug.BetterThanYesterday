@@ -6,10 +6,11 @@ namespace Bug.BetterThanYesterday.Application.Users.ListAllUsers;
 public class ListAllUsersUseCase(IUserRepository userRepository)
 	: IUseCase<ListAllUsersCommand, IResult>
 {
-	public async Task<IResult> HandleAsync(ListAllUsersCommand input)
+	public async Task<IResult> HandleAsync(ListAllUsersCommand command)
 	{
 		try
 		{
+			command.Validate();
 			var users = (await userRepository.ListAllAsync()).Select(user => user.ToModel());
 			return Result.Success(users);
 		}

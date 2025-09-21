@@ -1,11 +1,15 @@
-﻿using Bug.BetterThanYesterday.Application.Habits;
-using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
+﻿using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
 using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
 using Bug.BetterThanYesterday.Application.Habits.GetHabitById;
 using Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
 using Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
+using Bug.BetterThanYesterday.Application.Plans.CancelPlan;
+using Bug.BetterThanYesterday.Application.Plans.CreatePlan;
+using Bug.BetterThanYesterday.Application.Plans.GetPlanById;
+using Bug.BetterThanYesterday.Application.Plans.ListAllPlans;
+using Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
+using Bug.BetterThanYesterday.Application.Plans.UpdatePlanStatus;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
-using Bug.BetterThanYesterday.Application.Users;
 using Bug.BetterThanYesterday.Application.Users.DeleteUser;
 using Bug.BetterThanYesterday.Application.Users.GetUserById;
 using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
@@ -21,6 +25,7 @@ public static class DependencyInjectionExtensions
 	{
 		services.AddUserUseCases();
 		services.AddHabitUseCases();
+		services.AddPlanUseCases();
 		return services;
 	}
 
@@ -42,6 +47,18 @@ public static class DependencyInjectionExtensions
 		services.AddScoped<IUseCase<CreateHabitCommand, IResult>, CreateHabitUseCase>();
 		services.AddScoped<IUseCase<UpdateHabitCommand, IResult>, UpdateHabitUseCase>();
 		services.AddScoped<IUseCase<DeleteHabitCommand, IResult>, DeleteHabitUseCase>();
+
+		return services;
+	}
+
+	public static IServiceCollection AddPlanUseCases(this IServiceCollection services)
+	{
+		services.AddScoped<IUseCase<ListAllPlansCommand, IResult>, ListAllPlansUseCase>();
+		services.AddScoped<IUseCase<GetPlanByIdCommand, IResult>, GetPlanByIdUseCase>();
+		services.AddScoped<IUseCase<ListPlansByHabitIdCommand, IResult>, ListPlansByHabitIdUseCase>();
+		services.AddScoped<IUseCase<CreatePlanCommand, IResult>, CreatePlanUseCase>();
+		services.AddScoped<IUseCase<UpdatePlanStatusCommand, IResult>, UpdatePlanStatusUseCase>();
+		services.AddScoped<IUseCase<CancelPlanCommand, IResult>, CancelPlanUseCase>();
 
 		return services;
 	}

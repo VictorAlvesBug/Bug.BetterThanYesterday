@@ -1,22 +1,42 @@
-﻿namespace Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+﻿using Bug.BetterThanYesterday.Domain.Commons;
 
-public sealed record PlanType
+namespace Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+
+public sealed class PlanType : Enumeration
 {
-	public static readonly PlanType Public = new(nameof(Public));
-	public static readonly PlanType Private = new(nameof(Private));
-	public string Value { get; }
-	private PlanType(string value)
-	{
-		Value = value;
-	}
-	public override string ToString() => Value;
+	public static readonly PlanType Public = new(1, nameof(Public));
+	public static readonly PlanType Private = new(2, nameof(Private));
 
-	public static implicit operator string(PlanType type) => type.Value;
+	private PlanType(int id, string name) : base(id, name) { }
 
-	public static explicit operator PlanType(string value) => value switch
+	public static PlanType FromId(int id) =>
+		GetAll<PlanType>().FirstOrDefault(type => type.Id == id)
+		?? throw new ArgumentOutOfRangeException(nameof(id), $"ID do PlanType inválido: {id}");
+	public static PlanType FromName(string name) =>
+		GetAll<PlanType>().FirstOrDefault(type => type.Name == name)
+		?? throw new ArgumentOutOfRangeException(nameof(name), $"Nome do PlanType inválido: {name}");
+
+	/*public static bool TryParse(string value, out PlanType? type)
 	{
-		nameof(Public) => Public,
-		nameof(Private) => Private,
-		_ => throw new InvalidCastException($"Erro ao converter '{value}' para um PlanType.")
-	};
+		type = null;
+
+		if (string.IsNullOrWhiteSpace(value))
+			return false;
+
+		try
+		{
+			type = value switch
+			{
+				nameof(Public) => Public,
+				nameof(Private) => Private,
+				_ => null
+			};
+
+			return type is not null;
+		}
+		catch
+		{
+			return false;
+		}
+	}*/
 }

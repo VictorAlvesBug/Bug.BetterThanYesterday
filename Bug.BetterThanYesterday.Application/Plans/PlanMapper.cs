@@ -11,8 +11,8 @@ internal static class PlanMapper
 		Description = plan.Description,
 		StartsAt = plan.StartsAt,
 		EndsAt = plan.EndsAt,
-		Status = plan.Status,
-		Type = plan.Type,
+		Status = plan.Status.Id,
+		Type = plan.Type.Id,
 		CreatedAt = plan.CreatedAt,
 	};
 }

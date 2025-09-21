@@ -7,16 +7,17 @@ public sealed class UpdateHabitUseCase(
 	IHabitRepository habitRepository)
 	: IUseCase<UpdateHabitCommand, IResult>
 {
-	public async Task<IResult> HandleAsync(UpdateHabitCommand input)
+	public async Task<IResult> HandleAsync(UpdateHabitCommand command)
 	{
 		try
 		{
-			var habit = await habitRepository.GetByIdAsync(input.Id);
+			command.Validate();
+			var habit = await habitRepository.GetByIdAsync(command.Id);
 
 			if(habit is null)
 				return Result.Rejected("Hábito não encontrado");
 
-			habit.UpdateName(input.Name);
+			habit.UpdateName(command.Name);
 
 			await habitRepository.UpdateAsync(habit);
 			return Result.Success(habit.ToModel(), "Hábito atualizado com sucesso");

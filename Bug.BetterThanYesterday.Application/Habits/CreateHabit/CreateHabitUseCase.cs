@@ -11,6 +11,7 @@ public sealed class CreateHabitUseCase(IHabitRepository habitRepository)
 	{
 		try
 		{
+			command.Validate();
 			var habit = Habit.CreateNew(command.Name);
 			await habitRepository.AddAsync(habit);
 			return Result.Success(habit.ToModel(), "Hábito cadastrado com sucesso.");

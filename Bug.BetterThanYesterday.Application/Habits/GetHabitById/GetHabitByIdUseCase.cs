@@ -6,11 +6,12 @@ namespace Bug.BetterThanYesterday.Application.Habits.GetHabitById;
 public sealed class GetHabitByIdUseCase(IHabitRepository habitRepository)
 	: IUseCase<GetHabitByIdCommand, IResult>
 {
-	public async Task<IResult> HandleAsync(GetHabitByIdCommand input)
+	public async Task<IResult> HandleAsync(GetHabitByIdCommand command)
 	{
 		try
 		{
-			var habit = await habitRepository.GetByIdAsync(input.Id);
+			command.Validate();
+			var habit = await habitRepository.GetByIdAsync(command.Id);
 
 			if (habit is null)
 				return Result.Rejected("Hábito não encontrado");

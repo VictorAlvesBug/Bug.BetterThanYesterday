@@ -1,26 +1,20 @@
-﻿namespace Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+﻿using Bug.BetterThanYesterday.Domain.Commons;
 
-public sealed record PlanStatus
+namespace Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+
+public sealed class PlanStatus : Enumeration
 {
-	public static readonly PlanStatus Draft = new(nameof(Draft));
-	public static readonly PlanStatus Running = new(nameof(Running));
-	public static readonly PlanStatus Finished = new(nameof(Finished));
-	public static readonly PlanStatus Cancelled = new(nameof(Cancelled));
-	public string Value { get; }
-	private PlanStatus(string value)
-	{
-		Value = value;
-	}
-	public override string ToString() => Value;
-	
-	public static implicit operator string(PlanStatus status) => status.Value;
-	
-	public static explicit operator PlanStatus(string value) => value switch
-	{
-		nameof(Draft) => Draft,
-		nameof(Running) => Running,
-		nameof(Finished) => Finished,
-		nameof(Cancelled) => Cancelled,
-		_ => throw new InvalidCastException($"Erro ao converter '{value}' para um PlanStatus.")
-	};
+	public static readonly PlanStatus Draft = new(1, nameof(Draft));
+	public static readonly PlanStatus Running = new(2, nameof(Running));
+	public static readonly PlanStatus Finished = new(3, nameof(Finished));
+	public static readonly PlanStatus Cancelled = new(4, nameof(Cancelled));
+
+	private PlanStatus(int id, string name) : base(id, name) { }
+
+	public static PlanStatus FromId(int id) =>
+		GetAll<PlanStatus>().FirstOrDefault(type => type.Id == id)
+		?? throw new ArgumentOutOfRangeException(nameof(id), $"ID do PlanStatus inválido: {id}");
+	public static PlanStatus FromName(string name) =>
+		GetAll<PlanStatus>().FirstOrDefault(type => type.Name == name)
+		?? throw new ArgumentOutOfRangeException(nameof(name), $"Nome do PlanStatus inválido: {name}");
 }

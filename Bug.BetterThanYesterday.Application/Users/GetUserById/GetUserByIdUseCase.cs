@@ -6,11 +6,12 @@ namespace Bug.BetterThanYesterday.Application.Users.GetUserById;
 public class GetUserByIdUseCase(IUserRepository userRepository)
 	: IUseCase<GetUserByIdCommand, IResult>
 {
-	public async Task<IResult> HandleAsync(GetUserByIdCommand input)
+	public async Task<IResult> HandleAsync(GetUserByIdCommand command)
 	{
 		try
 		{
-			var user = await userRepository.GetByIdAsync(input.Id);
+			command.Validate();
+			var user = await userRepository.GetByIdAsync(command.Id);
 
 			if (user is null)
 				return Result.Rejected("Usuário não encontrado");
