@@ -6,13 +6,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using NSubstitute;
+using Xunit;
 
 namespace Bug.BetterThanYesterday.Application.Tests;
 
 public class Tests
 {
 
-	[Test]
+	[Fact]
 	public void ShouldValidadeAllDepencencies()
 	{
 		// Arrange
@@ -58,6 +59,7 @@ public class Tests
 		}
 
 		// Assert
-		Assert.That(errorsSet, Is.Empty, string.Join("\n\n", errorsSet));
+		Assert.Empty(errorsSet);
+		Console.WriteLine(string.Join("\n\n", errorsSet));
 	}
 }

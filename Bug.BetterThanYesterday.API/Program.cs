@@ -53,6 +53,163 @@ app.Run();
 
 /*
 
+######### Cenários de teste #########
+
+# Testes do UseCase
+
+ ## RegisterUser(name, email)
+ - Test_RegisterUserUseCase_Valid_ShouldReturnSuccess();
+ - Test_RegisterUserUseCase_EmptyName_ShouldReturnRejected();
+ - Test_RegisterUserUseCase_EmptyEmail_ShouldReturnRejected();
+ - Test_RegisterUserUseCase_InvalidEmail_ShouldReturnRejected();
+ - Test_RegisterUserUseCase_DuplicatedEmail_ShouldReturnRejected();
+
+
+
+
+
+# Testes da Controller
+
+## ListAllUsers()
+ - Test_ListAllUsersUseCase_Valid_ShouldReturn200();
+ - Test_ListAllUsersUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_ListAllUsersUseCase_InvalidUserIdFromDb_ShouldReturn422();
+ - Test_ListAllUsersUseCase_EmptyNameFromDb_ShouldReturn422();
+ - Test_ListAllUsersUseCase_EmptyEmailFromDb_ShouldReturn422();
+ - Test_ListAllUsersUseCase_InvalidEmailFromDb_ShouldReturn422();
+ - Test_ListAllUsersUseCase_EmptyCreatedAtFromDb_ShouldReturn422();
+ - Test_ListAllUsersUseCase_InvalidCreatedAtFromDb_ShouldReturn422();
+ 
+ ## GetUserById(id)
+ - Test_GetUserByIdUseCase_Valid_ShouldReturn200();
+ - Test_GetUserByIdUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_GetUserByIdUseCase_InvalidUserId_ShouldReturn400();
+ - Test_GetUserByIdUseCase_NotFoundUserId_ShouldReturn404();
+ - Test_GetUserByIdUseCase_EmptyNameFromDb_ShouldReturn422();
+ - Test_GetUserByIdUseCase_EmptyEmailFromDb_ShouldReturn422();
+ - Test_GetUserByIdUseCase_InvalidEmailFromDb_ShouldReturn422();
+ - Test_GetUserByIdUseCase_EmptyCreatedAtFromDb_ShouldReturn422();
+ - Test_GetUserByIdUseCase_InvalidCreatedAtFromDb_ShouldReturn422();
+ 
+ ## RegisterUser(name, email)
+ - Test_RegisterUserUseCase_Valid_ShouldReturn201();
+ - Test_RegisterUserUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_RegisterUserUseCase_EmptyName_ShouldReturn400();
+ - Test_RegisterUserUseCase_EmptyEmail_ShouldReturn400();
+ - Test_RegisterUserUseCase_InvalidEmail_ShouldReturn400();
+ - Test_RegisterUserUseCase_DuplicatedEmail_ShouldReturn400();
+ 
+ ## UpdateUser(id, name, email)
+ - Test_UpdateUserUseCase_Valid_ShouldReturn200();
+ - Test_UpdateUserUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_UpdateUserUseCase_InvalidUserId_ShouldReturn400();
+ - Test_UpdateUserUseCase_NotFoundUserId_ShouldReturn404();
+ - Test_UpdateUserUseCase_EmptyNameAndEmail_ShouldReturn400();
+ - Test_UpdateUserUseCase_DuplicatedEmail_ShouldReturn400();
+ - Test_UpdateUserUseCase_EmptyNameFromDb_ShouldReturn422();
+ - Test_UpdateUserUseCase_EmptyEmailFromDb_ShouldReturn422();
+ - Test_UpdateUserUseCase_InvalidEmailFromDb_ShouldReturn422();
+ - Test_UpdateUserUseCase_EmptyCreatedAtFromDb_ShouldReturn422();
+ - Test_UpdateUserUseCase_InvalidCreatedAtFromDb_ShouldReturn422();
+ 
+ ## DeleteUser(id)
+ - Test_DeleteUserUseCase_Valid_ShouldReturn204();
+ - Test_DeleteUserUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_DeleteUserUseCase_InvalidUserId_ShouldReturn400();
+ - Test_DeleteUserUseCase_NotFoundUserId_ShouldReturn404();
+ - Test_DeleteUserUseCase_EmptyNameFromDb_ShouldReturn422();
+ - Test_DeleteUserUseCase_EmptyEmailFromDb_ShouldReturn422();
+ - Test_DeleteUserUseCase_InvalidEmailFromDb_ShouldReturn422();
+ - Test_DeleteUserUseCase_EmptyCreatedAtFromDb_ShouldReturn422();
+ - Test_DeleteUserUseCase_InvalidCreatedAtFromDb_ShouldReturn422(); ---
+ 
+ ## ListAllHabits()
+ - Test_ListAllHabitsUseCase_Valid_ShouldReturn200();
+ - Test_ListAllHabitsUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_ListAllHabitsUseCase_InvalidHabitIdFromDb_ShouldReturn422();
+ - Test_ListAllHabitsUseCase_EmptyNameFromDb_ShouldReturn422();
+ - Test_ListAllHabitsUseCase_EmptyCreatedAtFromDb_ShouldReturn422();
+ - Test_ListAllHabitsUseCase_InvalidCreatedAtFromDb_ShouldReturn422();
+ 
+ ## GetHabitById(id)
+ - Test_GetHabitByIdUseCase_Valid_ShouldReturn200();
+ - Test_GetHabitByIdUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_GetHabitByIdUseCase_InvalidHabitId_ShouldReturn400();
+ - Test_GetHabitByIdUseCase_NotFoundHabitId_ShouldReturn404();
+ - Test_GetHabitByIdUseCase_EmptyNameFromDb_ShouldReturn422();
+ - Test_GetHabitByIdUseCase_EmptyCreatedAtFromDb_ShouldReturn422();
+ - Test_GetHabitByIdUseCase_InvalidCreatedAtFromDb_ShouldReturn422();
+ 
+ ## CreateHabit(name)
+ - Test_CreateHabitUseCase_Valid_ShouldReturn201();
+ - Test_CreateHabitUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_CreateHabitUseCase_EmptyName_ShouldReturn400();
+ - Test_CreateHabitUseCase_DuplicatedName_ShouldReturn400();
+ 
+ ## UpdateHabit(id, name)
+ - Test_UpdateHabitUseCase_Valid_ShouldReturn200();
+ - Test_UpdateHabitUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_UpdateHabitUseCase_InvalidUserId_ShouldReturn400();
+ - Test_UpdateHabitUseCase_NotFoundUserId_ShouldReturn404();
+ - Test_UpdateHabitUseCase_EmptyName_ShouldReturn400();
+ - Test_UpdateHabitUseCase_DuplicatedName_ShouldReturn400();
+ - Test_UpdateHabitUseCase_EmptyNameFromDb_ShouldReturn422();
+ - Test_UpdateHabitUseCase_EmptyCreatedAtFromDb_ShouldReturn422();
+ - Test_UpdateHabitUseCase_InvalidCreatedAtFromDb_ShouldReturn422();
+ 
+ ## DeleteHabit(id)
+ - Test_DeleteHabitUseCase_Valid_ShouldReturn204();
+ - Test_DeleteHabitUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_DeleteHabitUseCase_InvalidHabitId_ShouldReturn400();
+ - Test_DeleteHabitUseCase_NotFoundHabitId_ShouldReturn404();
+ - Test_DeleteHabitUseCase_NonCancelledPlansRelated_ShouldReturn400();
+ - Test_DeleteHabitUseCase_EmptyNameFromDb_ShouldReturn422();
+ - Test_DeleteHabitUseCase_EmptyCreatedAtFromDb_ShouldReturn422();
+ - Test_DeleteHabitUseCase_InvalidCreatedAtFromDb_ShouldReturn422(); --- // Definir testes de 422 (recursos inválidos vindos do banco) de planos
+ 
+ ## ListAllPlans()
+ - Test_ListAllPlansUseCase_Valid_ShouldReturn200();
+ - Test_ListAllPlansUseCase_InvalidOrMissingToken_ShouldReturn401();
+ 
+ ## GetPlanById(id)
+ - Test_GetPlanByIdUseCase_Valid_ShouldReturn200();
+ - Test_GetPlanByIdUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_GetPlanByIdUseCase_InvalidPlanId_ShouldReturn400();
+ - Test_GetPlanByIdUseCase_NotFoundPlanId_ShouldReturn404();
+ 
+ ## ListPlansByHabitId(habitId)
+ - Test_ListPlansByHabitIdUseCase_Valid_ShouldReturn200();
+ - Test_ListPlansByHabitIdUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_ListPlansByHabitIdUseCase_InvalidHabitId_ShouldReturn400();
+ - Test_ListPlansByHabitIdUseCase_NotFoundHabitId_ShouldReturn404();
+ 
+ ## CreatePlan(habitId, description, startsAt, endsAt, typeId)
+ - Test_CreatePlanUseCase_Valid_ShouldReturn201();
+ - Test_CreatePlanUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_CreatePlanUseCase_InvalidHabitId_ShouldReturn400();
+ - Test_CreatePlanUseCase_NotFoundHabitId_ShouldReturn404();
+ - Test_CreatePlanUseCase_EmptyStartsAt_ShouldReturn400();
+ - Test_CreatePlanUseCase_StartsAtBeforeToday_ShouldReturn400();
+ - Test_CreatePlanUseCase_EmptyEndsAt_ShouldReturn400();
+ - Test_CreatePlanUseCase_EndsAtBeforeStartsAt_ShouldReturn400();
+ - Test_CreatePlanUseCase_EmptyTypeId_ShouldReturn400();
+ - Test_CreatePlanUseCase_InvalidTypeId_ShouldReturn400();
+ 
+ ## UpdatePlanStatus(id, statusId)
+ - Test_UpdatePlanStatusUseCase_Valid_ShouldReturn200();
+ - Test_UpdatePlanStatusUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_UpdatePlanStatusUseCase_InvalidPlanId_ShouldReturn400();
+ - Test_UpdatePlanStatusUseCase_NotFoundPlanId_ShouldReturn404();
+ - Test_UpdatePlanStatusUseCase_EmptyStatusId_ShouldReturn400();
+ - Test_UpdatePlanStatusUseCase_InvalidStatusId_ShouldReturn400();
+ - Test_UpdatePlanStatusUseCase_StatusIdNotAllowed_ShouldReturn400();
+ 
+ ## CancelPlan(id)
+ - Test_CancelPlanUseCase_Valid_ShouldReturn200();
+ - Test_CancelPlanUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_CancelPlanUseCase_InvalidPlanId_ShouldReturn400();
+ - Test_CancelPlanUseCase_NotFoundPlanId_ShouldReturn404();
+
 ########################################  Versão 1  ########################################
 
 users (Collection)
