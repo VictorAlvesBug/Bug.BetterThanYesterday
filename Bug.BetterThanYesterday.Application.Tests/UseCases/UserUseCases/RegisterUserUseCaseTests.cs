@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Application.Users.RegisterUser;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
@@ -17,7 +18,8 @@ public class RegisterUserUseCaseTests
 	private Mock<IUserRepository> _userRepository;
 	public RegisterUserUseCaseTests()
 	{
-		SetupUserRepositoryMock();
+		_userRepository = UserRepositoryMockFactory.CreateDefault();
+		_mocker.Use(_userRepository.Object);
 	}
 
 	[Fact]
@@ -94,35 +96,5 @@ public class RegisterUserUseCaseTests
 		Assert.True(result.IsRejected());
 		_userRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Once);
 		_userRepository.Verify(repo => repo.AddAsync(It.IsAny<User>()), Times.Never);
-	}
-
-	private void SetupUserRepositoryMock()
-	{
-		var users = new List<User>
-		{
-			User.CreateNew("Fake User", "existing@email.com")
-		};
-
-		_userRepository = _mocker.GetMock<IUserRepository>();
-
-		_userRepository.Setup(repo => repo.AddAsync(It.IsAny<User>()));
-
-		_userRepository
-			.Setup(repo => repo.GetByEmailAsync(users[0].Email))
-			.ReturnsAsync(users[0]);
-
-		_userRepository
-			.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
-			.ReturnsAsync(users[0]);
-
-		_userRepository
-			.Setup(repo => repo.ListAllAsync())
-			.ReturnsAsync(users);
-
-		_userRepository
-			.Setup(repo => repo.UpdateAsync(It.IsAny<User>()));
-
-		_userRepository
-			.Setup(repo => repo.DeleteAsync(It.IsAny<User>()));
 	}
 }
