@@ -26,6 +26,6 @@ public class CreatePlanUseCase(
 			command.TypeId);
 
 		await planRepository.AddAsync(plan);
-		return Result.Success(plan.ToModel(), "Plano cadastrado com sucesso.");
+		return Result.Success(plan.ToModel(), "Plano cadastrado com sucesso");
 	}
 }

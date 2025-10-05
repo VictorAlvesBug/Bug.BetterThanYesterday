@@ -12,4 +12,9 @@ public class HabitRepository(
 		collection,
 		mapper), IHabitRepository
 {
+	public async Task<Habit?> GetByNameAsync(string name)
+	{
+		var document = (await _collection.FindAsync(user => user.Name == name)).FirstOrDefault();
+		return document is null ? null : _mapper.ToDomain(document);
+	}
 }

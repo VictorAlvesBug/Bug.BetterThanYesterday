@@ -1,8 +1,5 @@
-﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
-using Bug.BetterThanYesterday.Application.Tests.Commons;
-using Bug.BetterThanYesterday.Application.Users;
+﻿using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Application.Users.DeleteUser;
-using Bug.BetterThanYesterday.Application.Users.GetUserById;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Moq;
@@ -39,6 +36,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.UserUseCases
 			Assert.True(result.IsSuccess());
 
 			_userRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+			_userRepository.Verify(repo => repo.DeleteAsync(It.IsAny<User>()), Times.Once);
 		}
 
 		[Fact]
@@ -56,6 +54,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.UserUseCases
 			Assert.True(result.IsRejected());
 
 			_userRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+			_userRepository.Verify(repo => repo.DeleteAsync(It.IsAny<User>()), Times.Never);
 		}
 	}
 }

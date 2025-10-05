@@ -5,4 +5,5 @@ namespace Bug.BetterThanYesterday.Domain.Habits;
 
 public interface IHabitRepository : IRepository<Habit>
 {
+	Task<Habit?> GetByNameAsync(string name);
 }

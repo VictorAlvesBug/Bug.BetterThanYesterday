@@ -14,9 +14,7 @@ public class RegisterUserUseCase(IUserRepository userRepository)
 		var alreadyExists = (await userRepository.GetByEmailAsync(Email.Create(command.Email))) is not null;
 
 		if (alreadyExists)
-		{
 			return Result.Rejected("E-mail já cadastrado");
-		}
 
 		var user = User.CreateNew(command.Name, command.Email);
 		await userRepository.AddAsync(user);

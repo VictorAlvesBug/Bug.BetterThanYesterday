@@ -4,7 +4,6 @@ using Bug.BetterThanYesterday.Application.Users;
 using Bug.BetterThanYesterday.Application.Users.GetUserById;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
-using MongoDB.Bson.Serialization.IdGenerators;
 using Moq;
 using Moq.AutoMock;
 using Xunit;

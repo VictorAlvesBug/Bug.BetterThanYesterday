@@ -1,20 +1,5 @@
-﻿using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
-using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
-using Bug.BetterThanYesterday.Application.Habits.GetHabitById;
-using Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
-using Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
-using Bug.BetterThanYesterday.Application.Plans.CancelPlan;
-using Bug.BetterThanYesterday.Application.Plans.CreatePlan;
-using Bug.BetterThanYesterday.Application.Plans.GetPlanById;
-using Bug.BetterThanYesterday.Application.Plans.ListAllPlans;
-using Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
-using Bug.BetterThanYesterday.Application.Plans.UpdatePlanStatus;
+﻿using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
-using Bug.BetterThanYesterday.Application.Users.DeleteUser;
-using Bug.BetterThanYesterday.Application.Users.GetUserById;
-using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
-using Bug.BetterThanYesterday.Application.Users.RegisterUser;
-using Bug.BetterThanYesterday.Application.Users.UpdateUser;
 using Bug.BetterThanYesterday.Domain.Habits.Policies;
 using Microsoft.Extensions.DependencyInjection;
 

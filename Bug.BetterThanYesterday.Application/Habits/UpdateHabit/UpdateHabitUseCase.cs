@@ -15,6 +15,14 @@ public sealed class UpdateHabitUseCase(
 		if (habit is null)
 			return Result.Rejected("Hábito não encontrado");
 
+		var existingNameHabit = await habitRepository.GetByNameAsync(command.Name);
+
+		if (existingNameHabit is not null 
+			&& existingNameHabit.Id != habit.Id)
+		{
+			return Result.Rejected("Já existe um hábito cadastrado com esse nome");
+		}
+
 		habit.UpdateName(command.Name);
 
 		await habitRepository.UpdateAsync(habit);

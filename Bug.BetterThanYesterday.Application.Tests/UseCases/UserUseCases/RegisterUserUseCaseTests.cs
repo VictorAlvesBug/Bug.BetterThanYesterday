@@ -3,7 +3,6 @@ using Bug.BetterThanYesterday.Application.Users.RegisterUser;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Bug.BetterThanYesterday.Domain.Users.ValueObjects;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Moq.AutoMock;
 using Xunit;
@@ -87,7 +86,8 @@ public class RegisterUserUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
-		var command = new RegisterUserCommand("Other Name", _users[0].Email.Value);
+		var firstUser = _users[0];
+		var command = new RegisterUserCommand("Other Name", firstUser.Email.Value);
 
 		// Act
 		var result = await useCase.HandleAsync(command);

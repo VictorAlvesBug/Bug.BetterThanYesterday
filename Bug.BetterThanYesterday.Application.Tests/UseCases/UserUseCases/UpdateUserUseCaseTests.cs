@@ -1,5 +1,4 @@
 ﻿using Bug.BetterThanYesterday.Application.Tests.Commons;
-using Bug.BetterThanYesterday.Application.Users.RegisterUser;
 using Bug.BetterThanYesterday.Application.Users.UpdateUser;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;

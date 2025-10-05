@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\HabitUseCases\" />
     <Folder Include="UseCases\PlanUseCases\" />
   </ItemGroup>
 
