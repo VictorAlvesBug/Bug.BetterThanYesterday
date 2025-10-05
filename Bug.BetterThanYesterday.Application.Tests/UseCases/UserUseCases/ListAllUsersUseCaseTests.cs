@@ -1,45 +1,30 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
-using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Application.Users;
 using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
-using Bug.BetterThanYesterday.Domain.Users;
-using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Moq;
-using Moq.AutoMock;
 using Xunit;
 
-namespace Bug.BetterThanYesterday.Application.Tests.UseCases.UserUseCases
+namespace Bug.BetterThanYesterday.Application.Tests.UseCases.UserUseCases;
+
+public class ListAllUsersUseCaseTests : BaseUserUseCaseTests
 {
-	public class ListAllUsersUseCaseTests
+	[Fact]
+	public async Task Test_ListAllUsersUseCase_Valid_ShouldReturnSuccess()
 	{
-		private readonly AutoMocker _mocker = new();
-		private Mock<IUserRepository> _userRepository;
-		private readonly List<User> _users;
+		// Arrange
+		var useCase = _mocker.CreateInstance<ListAllUsersUseCase>();
+		var command = new ListAllUsersCommand();
 
-		public ListAllUsersUseCaseTests()
-		{
-			(_userRepository, _users) = UserRepositoryMockFactory.Create();
-			_mocker.Use(_userRepository.Object);
-		}
+		// Act
+		var result = await useCase.HandleAsync(command);
 
-		[Fact]
-		public async Task Test_ListAllUsersUseCase_Valid_ShouldReturnSuccess()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<ListAllUsersUseCase>();
-			var command = new ListAllUsersCommand();
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsSuccess());
 
-			// Act
-			var result = await useCase.HandleAsync(command);
+		var resultData = Assert.IsType<Result<IEnumerable<UserModel>>>(result).Data;
+		Assert.Equal(_mock.Users.Count, resultData.Count());
 
-			// Assert
-			Assert.NotNull(result);
-			Assert.True(result.IsSuccess());
-
-			var resultData = Assert.IsType<Result<IEnumerable<UserModel>>>(result).Data;
-			Assert.Equal(_users.Count, resultData.Count());
-
-			_userRepository.Verify(repo => repo.ListAllAsync(), Times.Once);
-		}
+		_mock.UserRepository.Verify(repo => repo.ListAllAsync(), Times.Once);
 	}
 }

@@ -1,74 +1,60 @@
 ﻿using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
-using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
-using Bug.BetterThanYesterday.Domain.Habits;
-using Moq.AutoMock;
 using Moq;
 using Xunit;
 
-namespace Bug.BetterThanYesterday.Application.Tests.UseCases.HabitUseCases
+namespace Bug.BetterThanYesterday.Application.Tests.UseCases.HabitUseCases;
+
+public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 {
-	public class CreateHabitUseCaseTests
+	[Fact]
+	public async Task Test_CreateHabitUseCase_Valid_ShouldReturnSuccess()
 	{
-		private readonly AutoMocker _mocker = new();
-		private Mock<IHabitRepository> _habitRepository;
-		private readonly List<Habit> _habits;
+		// Arrange
+		var useCase = _mocker.CreateInstance<CreateHabitUseCase>();
+		var command = new CreateHabitCommand("Health Eating");
 
-		public CreateHabitUseCaseTests()
-		{
-			(_habitRepository, _habits) = HabitRepositoryMockFactory.Create();
-			_mocker.Use(_habitRepository.Object);
-		}
+		// Act
+		var result = await useCase.HandleAsync(command);
 
-		[Fact]
-		public async Task Test_CreateHabitUseCase_Valid_ShouldReturnSuccess()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<CreateHabitUseCase>();
-			var command = new CreateHabitCommand("Health Eating");
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsSuccess());
 
-			// Act
-			var result = await useCase.HandleAsync(command);
+		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+		_mock.HabitRepository.Verify(repo => repo.AddAsync(It.IsAny<Habit>()), Times.Once);
+	}
 
-			// Assert
-			Assert.NotNull(result);
-			Assert.True(result.IsSuccess());
+	[Fact]
+	public async Task Test_CreateHabitUseCase_EmptyName_ShouldReturnRejected()
+	{
+		// Arrange
+		var useCase = _mocker.CreateInstance<CreateHabitUseCase>();
+		var command = new CreateHabitCommand("");
 
-			_habitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
-			_habitRepository.Verify(repo => repo.AddAsync(It.IsAny<Habit>()), Times.Once);
-		}
+		// Act & Assert
+		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
 
-		[Fact]
-		public async Task Test_CreateHabitUseCase_EmptyName_ShouldReturnRejected()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<CreateHabitUseCase>();
-			var command = new CreateHabitCommand("");
+		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
+		_mock.HabitRepository.Verify(repo => repo.AddAsync(It.IsAny<Habit>()), Times.Never);
+	}
 
-			// Act & Assert
-			await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
+	[Fact]
+	public async Task Test_CreateHabitUseCase_DuplicatedName_ShouldReturnRejected()
+	{
+		// Arrange
+		var useCase = _mocker.CreateInstance<CreateHabitUseCase>();
+		var firstHabit = _mock.Habits[0];
+		var command = new CreateHabitCommand(firstHabit.Name);
 
-			_habitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
-			_habitRepository.Verify(repo => repo.AddAsync(It.IsAny<Habit>()), Times.Never);
-		}
+		// Act
+		var result = await useCase.HandleAsync(command);
 
-		[Fact]
-		public async Task Test_CreateHabitUseCase_DuplicatedName_ShouldReturnRejected()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<CreateHabitUseCase>();
-			var firstHabit = _habits[0];
-			var command = new CreateHabitCommand(firstHabit.Name);
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
 
-			// Act
-			var result = await useCase.HandleAsync(command);
-
-			// Assert
-			Assert.NotNull(result);
-			Assert.True(result.IsRejected());
-
-			_habitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
-			_habitRepository.Verify(repo => repo.AddAsync(It.IsAny<Habit>()), Times.Never);
-		}
+		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+		_mock.HabitRepository.Verify(repo => repo.AddAsync(It.IsAny<Habit>()), Times.Never);
 	}
 }

@@ -1,60 +1,46 @@
-﻿using Bug.BetterThanYesterday.Application.Tests.Commons;
-using Bug.BetterThanYesterday.Application.Users.DeleteUser;
-using Bug.BetterThanYesterday.Domain.Users;
+﻿using Bug.BetterThanYesterday.Application.Users.DeleteUser;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Moq;
-using Moq.AutoMock;
 using Xunit;
 
-namespace Bug.BetterThanYesterday.Application.Tests.UseCases.UserUseCases
+namespace Bug.BetterThanYesterday.Application.Tests.UseCases.UserUseCases;
+
+public class DeleteUserUseCaseTests : BaseUserUseCaseTests
 {
-	public class DeleteUserUseCaseTests
+	[Fact]
+	public async Task Test_DeleteUserUseCase_Valid_ShouldReturnSuccess()
 	{
-		private readonly AutoMocker _mocker = new();
-		private Mock<IUserRepository> _userRepository;
-		private readonly List<User> _users;
+		// Arrange
+		var useCase = _mocker.CreateInstance<DeleteUserUseCase>();
+		var firstUser = _mock.Users[0];
+		var command = new DeleteUserCommand(firstUser.Id);
 
-		public DeleteUserUseCaseTests()
-		{
-			(_userRepository, _users) = UserRepositoryMockFactory.Create();
-			_mocker.Use(_userRepository.Object);
-		}
+		// Act
+		var result = await useCase.HandleAsync(command);
 
-		[Fact]
-		public async Task Test_DeleteUserUseCase_Valid_ShouldReturnSuccess()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<DeleteUserUseCase>();
-			var firstUser = _users[0];
-			var command = new DeleteUserCommand(firstUser.Id);
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsSuccess());
 
-			// Act
-			var result = await useCase.HandleAsync(command);
+		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+		_mock.UserRepository.Verify(repo => repo.DeleteAsync(It.IsAny<User>()), Times.Once);
+	}
 
-			// Assert
-			Assert.NotNull(result);
-			Assert.True(result.IsSuccess());
+	[Fact]
+	public async Task Test_DeleteUserUseCase_NotFoundUserId_ShouldReturnRejected()
+	{
+		// Arrange
+		var useCase = _mocker.CreateInstance<DeleteUserUseCase>();
+		var command = new DeleteUserCommand(Guid.NewGuid());
 
-			_userRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-			_userRepository.Verify(repo => repo.DeleteAsync(It.IsAny<User>()), Times.Once);
-		}
+		// Act
+		var result = await useCase.HandleAsync(command);
 
-		[Fact]
-		public async Task Test_DeleteUserUseCase_NotFoundUserId_ShouldReturnRejected()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<DeleteUserUseCase>();
-			var command = new DeleteUserCommand(Guid.NewGuid());
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
 
-			// Act
-			var result = await useCase.HandleAsync(command);
-
-			// Assert
-			Assert.NotNull(result);
-			Assert.True(result.IsRejected());
-
-			_userRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-			_userRepository.Verify(repo => repo.DeleteAsync(It.IsAny<User>()), Times.Never);
-		}
+		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+		_mock.UserRepository.Verify(repo => repo.DeleteAsync(It.IsAny<User>()), Times.Never);
 	}
 }

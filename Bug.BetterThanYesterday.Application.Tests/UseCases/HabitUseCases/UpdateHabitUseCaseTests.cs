@@ -1,119 +1,105 @@
-﻿using Bug.BetterThanYesterday.Application.Tests.Commons;
-using Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
+﻿using Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
-using Bug.BetterThanYesterday.Domain.Habits;
-using Moq.AutoMock;
 using Moq;
 using Xunit;
 
-namespace Bug.BetterThanYesterday.Application.Tests.UseCases.HabitUseCases
+namespace Bug.BetterThanYesterday.Application.Tests.UseCases.HabitUseCases;
+
+public class UpdateHabitUseCaseTests : BaseHabitUseCaseTests
 {
-	public class UpdateHabitUseCaseTests
+	[Fact]
+	public async Task Test_UpdateHabitUseCase_Valid_ShouldReturnSuccess()
 	{
-		private readonly AutoMocker _mocker = new();
-		private readonly Mock<IHabitRepository> _habitRepository;
-		private readonly List<Habit> _habits;
+		// Arrange
+		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
+		var firstHabit = _mock.Habits[0];
+		var command = new UpdateHabitCommand(firstHabit.Id, "Gym");
 
-		public UpdateHabitUseCaseTests()
-		{
-			(_habitRepository, _habits) = HabitRepositoryMockFactory.Create();
-			_mocker.Use(_habitRepository.Object);
-		}
+		// Act
+		var result = await useCase.HandleAsync(command);
 
-		[Fact]
-		public async Task Test_UpdateHabitUseCase_Valid_ShouldReturnSuccess()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
-			var firstHabit = _habits[0];
-			var command = new UpdateHabitCommand(firstHabit.Id, "Gym");
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsSuccess());
 
-			// Act
-			var result = await useCase.HandleAsync(command);
+		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+		_mock.HabitRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Habit>()), Times.Once);
+	}
 
-			// Assert
-			Assert.NotNull(result);
-			Assert.True(result.IsSuccess());
+	[Fact]
+	public async Task Test_UpdateHabitUseCase_NotFoundHabitId_ShouldReturnRejected()
+	{
+		// Arrange
+		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
+		var command = new UpdateHabitCommand(Guid.NewGuid(), "Gym");
 
-			_habitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-			_habitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
-			_habitRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Habit>()), Times.Once);
-		}
+		// Act
+		var result = await useCase.HandleAsync(command);
 
-		[Fact]
-		public async Task Test_UpdateHabitUseCase_NotFoundHabitId_ShouldReturnRejected()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
-			var command = new UpdateHabitCommand(Guid.NewGuid(), "Gym");
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
 
-			// Act
-			var result = await useCase.HandleAsync(command);
+		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
+		_mock.HabitRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Habit>()), Times.Never);
+	}
 
-			// Assert
-			Assert.NotNull(result);
-			Assert.True(result.IsRejected());
+	[Fact]
+	public async Task Test_UpdateHabitUseCase_EmptyName_ShouldReturnRejected()
+	{
+		// Arrange
+		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
+		var firstHabit = _mock.Habits[0];
+		var command = new UpdateHabitCommand(firstHabit.Id, "");
 
-			_habitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-			_habitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
-			_habitRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Habit>()), Times.Never);
-		}
+		// Act & Assert
+		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
 
-		[Fact]
-		public async Task Test_UpdateHabitUseCase_EmptyName_ShouldReturnRejected()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
-			var firstHabit = _habits[0];
-			var command = new UpdateHabitCommand(firstHabit.Id, "");
+		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
+		_mock.HabitRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Habit>()), Times.Never);
+	}
 
-			// Act & Assert
-			await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
+	[Fact]
+	public async Task Test_UpdateHabitUseCase_SameNameAndOtherId_ShouldReturnRejected()
+	{
+		// Arrange
+		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
+		var firstHabit = _mock.Habits[0];
+		var otherHabit = _mock.Habits[1];
+		var command = new UpdateHabitCommand(firstHabit.Id, otherHabit.Name);
 
-			_habitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
-			_habitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
-			_habitRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Habit>()), Times.Never);
-		}
+		// Act
+		var result = await useCase.HandleAsync(command);
 
-		[Fact]
-		public async Task Test_UpdateHabitUseCase_SameNameAndOtherId_ShouldReturnRejected()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
-			var firstHabit = _habits[0];
-			var otherHabit = _habits[1];
-			var command = new UpdateHabitCommand(firstHabit.Id, otherHabit.Name);
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
 
-			// Act
-			var result = await useCase.HandleAsync(command);
+		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+		_mock.HabitRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Habit>()), Times.Never);
+	}
 
-			// Assert
-			Assert.NotNull(result);
-			Assert.True(result.IsRejected());
+	[Fact]
+	public async Task Test_UpdateHabitUseCase_SameNameAndSameId_ShouldReturnSuccess()
+	{
+		// Arrange
+		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
+		var firstHabit = _mock.Habits[0];
+		var command = new UpdateHabitCommand(firstHabit.Id, firstHabit.Name);
 
-			_habitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-			_habitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
-			_habitRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Habit>()), Times.Never);
-		}
+		// Act
+		var result = await useCase.HandleAsync(command);
 
-		[Fact]
-		public async Task Test_UpdateHabitUseCase_SameNameAndSameId_ShouldReturnSuccess()
-		{
-			// Arrange
-			var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
-			var firstHabit = _habits[0];
-			var command = new UpdateHabitCommand(firstHabit.Id, firstHabit.Name);
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsSuccess());
 
-			// Act
-			var result = await useCase.HandleAsync(command);
-
-			// Assert
-			Assert.NotNull(result);
-			Assert.True(result.IsSuccess());
-
-			_habitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-			_habitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
-			_habitRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Habit>()), Times.Once);
-		}
+		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+		_mock.HabitRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Habit>()), Times.Once);
 	}
 }
