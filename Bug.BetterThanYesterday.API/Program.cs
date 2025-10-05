@@ -57,15 +57,6 @@ app.Run();
 
 # Testes do UseCase
 
- ## RegisterUser(name, email)
- - Test_RegisterUserUseCase_Valid_ShouldReturnSuccess();
- - Test_RegisterUserUseCase_EmptyName_ShouldReturnRejected();
- - Test_RegisterUserUseCase_EmptyEmail_ShouldReturnRejected();
- - Test_RegisterUserUseCase_InvalidEmail_ShouldReturnRejected();
- - Test_RegisterUserUseCase_DuplicatedEmail_ShouldReturnRejected();
-
-
-
 
 
 # Testes da Controller
