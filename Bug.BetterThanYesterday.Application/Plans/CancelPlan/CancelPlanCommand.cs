@@ -4,13 +4,13 @@ namespace Bug.BetterThanYesterday.Application.Plans.CancelPlan;
 
 public class CancelPlanCommand : ICommand
 {
-	public CancelPlanCommand(Guid id) => Id = id;
+	public CancelPlanCommand(Guid planId) => PlanId = planId;
 
-	public Guid Id { get; init; }
+	public Guid PlanId { get; init; }
 
 	public void Validate()
 	{
-		if (Id == Guid.Empty)
-			throw new ArgumentNullException(nameof(Id), "Informe o ID do plano");
+		if (PlanId == Guid.Empty)
+			throw new ArgumentNullException(nameof(PlanId), "Informe o ID do plano");
 	}
 }

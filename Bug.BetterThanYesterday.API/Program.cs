@@ -57,37 +57,57 @@ app.Run();
 
 # Testes do UseCase
 
-## ListAllPlans()
-- Test_ListAllPlansUseCase_Valid_ShouldReturnSuccess();
- 
-## GetPlanById(id)
-- Test_GetPlanByIdUseCase_Valid_ShouldReturnSuccess();
-- Test_GetPlanByIdUseCase_NotFoundPlanId_ShouldReturnRejected();
- 
-## ListPlansByHabitId(habitId)
-- Test_ListPlansByHabitIdUseCase_Valid_ShouldReturnSuccess();
-- Test_ListPlansByHabitIdUseCase_NotFoundHabitId_ShouldReturnRejected();
- 
-## CreatePlan(habitId, description, startsAt, endsAt, typeId)
-- Test_CreatePlanUseCase_Valid_ShouldReturnSuccess();
-- Test_CreatePlanUseCase_NotFoundHabitId_ShouldReturnRejected();
-- Test_CreatePlanUseCase_EmptyStartsAt_ShouldReturnRejected();
-- Test_CreatePlanUseCase_StartsAtBeforeToday_ShouldReturnRejected();
-- Test_CreatePlanUseCase_EmptyEndsAt_ShouldReturnRejected();
-- Test_CreatePlanUseCase_EndsAtBeforeStartsAt_ShouldReturnRejected();
-- Test_CreatePlanUseCase_EmptyTypeId_ShouldReturnRejected();
-- Test_CreatePlanUseCase_InvalidTypeId_ShouldReturnRejected();
- 
-## UpdatePlanStatus(id, statusId)
-- Test_UpdatePlanStatusUseCase_Valid_ShouldReturnSuccess();
-- Test_UpdatePlanStatusUseCase_NotFoundPlanId_ShouldReturnRejected();
-- Test_UpdatePlanStatusUseCase_EmptyStatusId_ShouldReturnRejected();
-- Test_UpdatePlanStatusUseCase_InvalidStatusId_ShouldReturnRejected();
-- Test_UpdatePlanStatusUseCase_StatusIdNotAllowed_ShouldReturnRejected();
- 
-## CancelPlan(id)
-- Test_CancelPlanUseCase_Valid_ShouldReturnSuccess();
-- Test_CancelPlanUseCase_NotFoundPlanId_ShouldReturnRejected();
+##### PlanParticipants #####
+
+## GetPlanParticipantById(planParticipantId)
+ - Test_GetPlanParticipantByIdUseCase_Valid_ShouldReturnSuccess();
+ - Test_GetPlanParticipantByIdUseCase_NotFoundPlanParticipantId_ShouldReturnRejected();
+
+## ListPlanParticipantsByPlanId(planId)
+ - Test_ListPlanParticipantsByPlanIdUseCase_Valid_ShouldReturnSuccess();
+ - Test_ListPlanParticipantsByPlanIdUseCase_NotFoundPlanId_ShouldReturnRejected();
+
+## ListPlanParticipantsByUserId(userId)
+ - Test_ListPlanParticipantsByUserIdUseCase_Valid_ShouldReturnSuccess();
+ - Test_ListPlanParticipantsByUserIdUseCase_NotFoundUserId_ShouldReturnRejected();
+
+## AddUserToPlan(planId, userId)
+ - Test_AddUserToPlanUseCase_Valid_ShouldReturnSuccess();
+ - Test_AddUserToPlanUseCase_NotFoundPlanId_ShouldReturnRejected();
+ - Test_AddUserToPlanUseCase_NotFoundUserId_ShouldReturnRejected();
+ - Test_AddUserToPlanUseCase_UserIsAlreadyInThePlan_ShouldReturnRejected();
+ - Test_AddUserToPlanUseCase_UserCannotBeAddedToRunningPlan_ShouldReturnRejected();
+ - Test_AddUserToPlanUseCase_UserCannotBeAddedToFinishedPlan_ShouldReturnRejected();
+ - Test_AddUserToPlanUseCase_UserCannotBeAddedToCancelledPlan_ShouldReturnRejected();
+
+## RemoveUserFromPlan(planId, userId)
+ - Test_RemoveUserFromPlanUseCase_Valid_ShouldReturnSuccess();
+ - Test_RemoveUserFromPlanUseCase_NotFoundPlanId_ShouldReturnRejected();
+ - Test_RemoveUserFromPlanUseCase_NotFoundUserId_ShouldReturnRejected();
+ - Test_RemoveUserFromPlanUseCase_UserIsNotInThePlan_ShouldReturnRejected();
+ - Test_RemoveUserFromPlanUseCase_UserCannotBeRemovedFromFinishedPlan_ShouldReturnRejected();
+ - Test_RemoveUserFromPlanUseCase_UserCannotBeRemovedFromCancelledPlan_ShouldReturnRejected();
+
+## BlockUserInThePlan(planId, userId)
+ - Test_BlockUserInThePlanUseCase_Valid_ShouldReturnSuccess();
+ - Test_BlockUserInThePlanUseCase_NotFoundPlanId_ShouldReturnRejected();
+ - Test_BlockUserInThePlanUseCase_NotFoundUserId_ShouldReturnRejected();
+ - Test_BlockUserInThePlanUseCase_UserIsNotInThePlan_ShouldReturnRejected();
+ - Test_BlockUserInThePlanUseCase_UserIsAlreadyBlocked_ShouldReturnRejected();
+ - Test_BlockUserInThePlanUseCase_UserCannotBeBlockedInNotStartedPlan_ShouldReturnRejected();
+ - Test_BlockUserInThePlanUseCase_UserCannotBeBlockedInFinishedPlan_ShouldReturnRejected();
+ - Test_BlockUserInThePlanUseCase_UserCannotBeBlockedInCancelledPlan_ShouldReturnRejected();
+
+## UnblockUserInThePlan(planId, userId)
+ - Test_UnblockUserInThePlanUseCase_Valid_ShouldReturnSuccess();
+ - Test_UnblockUserInThePlanUseCase_NotFoundPlanId_ShouldReturnRejected();
+ - Test_UnblockUserInThePlanUseCase_NotFoundUserId_ShouldReturnRejected();
+ - Test_UnblockUserInThePlanUseCase_UserIsNotInThePlan_ShouldReturnRejected();
+ - Test_UnblockUserInThePlanUseCase_UserIsNotBlocked_ShouldReturnRejected();
+ - Test_BlockUserInThePlanUseCase_UserCannotBeUnblockedInNotStartedPlan_ShouldReturnRejected();
+ - Test_BlockUserInThePlanUseCase_UserCannotBeUnblockedInFinishedPlan_ShouldReturnRejected();
+ - Test_BlockUserInThePlanUseCase_UserCannotBeUnblockedInCancelledPlan_ShouldReturnRejected();
+
 
 
 
@@ -240,6 +260,8 @@ app.Run();
  - Test_CancelPlanUseCase_InvalidPlanId_ShouldReturn400();
  - Test_CancelPlanUseCase_NotFoundPlanId_ShouldReturn404();
 
+
+
 ########################################  Versão 1  ########################################
 
 users (Collection)
@@ -290,9 +312,10 @@ plan_participants (Collection)
 > GetById
 > ListByPlanId
 > ListByUserId
-> Join
-> Leave
-> Block
+> AddUserToPlan
+> RemoveUserFromPlan
+> BlockUserInThePlan
+> UnblockUserInThePlan
 
 checkins (Collection)
 - Id (Ex: f1988915ee294c34bdc6ff8b3c467cdc)

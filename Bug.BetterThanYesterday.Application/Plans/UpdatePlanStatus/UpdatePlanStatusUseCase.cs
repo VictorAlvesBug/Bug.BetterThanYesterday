@@ -10,7 +10,7 @@ public class UpdatePlanStatusUseCase(IPlanRepository planRepository)
 	public async Task<IResult> HandleAsync(UpdatePlanStatusCommand command)
 	{
 		command.Validate();
-		var plan = await planRepository.GetByIdAsync(command.Id);
+		var plan = await planRepository.GetByIdAsync(command.PlanId);
 
 		if (plan is null)
 			return Result.Rejected("Plano não encontrado");

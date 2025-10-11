@@ -48,12 +48,12 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateUserUseCase_EmptyNameAndEmail_ShouldReturnRejected()
+	public async Task Test_UpdateUserUseCase_EmptyNameAndEmail_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateUserUseCase>();
 		var firstUser = _mock.Users[0];
-		var command = new UpdateUserCommand(firstUser.Id, "", "");
+		var command = new UpdateUserCommand(firstUser.Id, string.Empty, string.Empty);
 
 		// Act & Assert
 		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
@@ -105,7 +105,7 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateUserUseCase_InvalidEmail_ShouldReturnRejected()
+	public async Task Test_UpdateUserUseCase_InvalidEmail_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateUserUseCase>();

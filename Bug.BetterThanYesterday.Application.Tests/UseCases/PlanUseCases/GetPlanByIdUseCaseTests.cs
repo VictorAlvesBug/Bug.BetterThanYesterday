@@ -3,7 +3,6 @@ using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Moq;
 using Xunit;
-using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 
@@ -25,7 +24,7 @@ public class GetPlanByIdUseCaseTests : BasePlanUseCaseTests
 		Assert.True(result.IsSuccess());
 
 		var resultData = Assert.IsType<Result<PlanModel>>(result).Data;
-		Assert.Equal(firstPlan.Id, resultData.Id);
+		Assert.Equal(firstPlan.Id, resultData.PlanId);
 		Assert.Equal(firstPlan.HabitId, resultData.HabitId);
 		Assert.Equal(firstPlan.Description, resultData.Description);
 		Assert.Equal(firstPlan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.StartsAt);

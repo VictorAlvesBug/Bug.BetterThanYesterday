@@ -12,7 +12,7 @@ public class DeleteHabitUseCase(
 	public async Task<IResult> HandleAsync(DeleteHabitCommand command)
 	{
 		command.Validate();
-		var habit = await habitRepository.GetByIdAsync(command.Id);
+		var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
 		if (habit is null)
 			return Result.Rejected("Hábito não encontrado");

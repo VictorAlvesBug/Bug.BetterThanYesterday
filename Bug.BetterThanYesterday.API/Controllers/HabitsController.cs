@@ -34,10 +34,10 @@ public class HabitsController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpGet("{id}")]
-	public async Task<IActionResult> GetById(Guid id)
+	[HttpGet("{habitId}")]
+	public async Task<IActionResult> GetById(Guid habitId)
 	{
-		var command = new GetHabitByIdCommand(id);
+		var command = new GetHabitByIdCommand(habitId);
 		var result = await getHabitByIdUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
@@ -57,7 +57,7 @@ public class HabitsController(
 		if (result.IsSuccess())
 		{
 			var data = ((Result<HabitModel>)result).Data;
-			return Created($"Habits/{data.Id}", result);
+			return Created($"Habits/{data.HabitId}", result);
 		}
 
 		if (result.IsRejected())
@@ -80,10 +80,10 @@ public class HabitsController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpDelete("{id}")]
-	public async Task<IActionResult> Delete(Guid id)
+	[HttpDelete("{habitId}")]
+	public async Task<IActionResult> Delete(Guid habitId)
 	{
-		var command = new DeleteHabitCommand(id);
+		var command = new DeleteHabitCommand(habitId);
 		var result = await deleteHabitUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())

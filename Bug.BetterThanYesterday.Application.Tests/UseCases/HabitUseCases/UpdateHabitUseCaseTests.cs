@@ -26,7 +26,7 @@ public class UpdateHabitUseCaseTests : BaseHabitUseCaseTests
 		Assert.True(result.IsSuccess());
 
 		var resultData = Assert.IsType<Result<HabitModel>>(result).Data;
-		Assert.Equal(firstHabit.Id, resultData.Id);
+		Assert.Equal(firstHabit.Id, resultData.HabitId);
 		Assert.Equal(newName, resultData.Name);
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -54,12 +54,12 @@ public class UpdateHabitUseCaseTests : BaseHabitUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateHabitUseCase_EmptyName_ShouldReturnRejected()
+	public async Task Test_UpdateHabitUseCase_EmptyName_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
 		var firstHabit = _mock.Habits[0];
-		var command = new UpdateHabitCommand(firstHabit.Id, "");
+		var command = new UpdateHabitCommand(firstHabit.Id, string.Empty);
 
 		// Act & Assert
 		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));

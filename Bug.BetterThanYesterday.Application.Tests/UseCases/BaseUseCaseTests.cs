@@ -1,11 +1,10 @@
 ﻿using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Moq.AutoMock;
 
-namespace Bug.BetterThanYesterday.Application.Tests.UseCases
+namespace Bug.BetterThanYesterday.Application.Tests.UseCases;
+
+public class BaseUseCaseTests
 {
-	public class BaseUseCaseTests
-	{
-		protected readonly AutoMocker _mocker = new();
-		protected MockedValues _mock;
-	}
+	protected readonly AutoMocker _mocker = new();
+	protected MockedValues _mock;
 }

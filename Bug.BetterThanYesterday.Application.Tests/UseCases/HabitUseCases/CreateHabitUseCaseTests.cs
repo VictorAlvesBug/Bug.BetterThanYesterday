@@ -1,6 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.Habits;
 using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
-using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
 using Moq;
@@ -28,7 +27,7 @@ public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 		Assert.True(result.IsSuccess());
 
 		var resultData = Assert.IsType<Result<HabitModel>>(result).Data;
-		Assert.NotEqual(Guid.Empty, resultData.Id);
+		Assert.NotEqual(Guid.Empty, resultData.HabitId);
 		Assert.Equal(habitName, resultData.Name);
 		Assert.Equal(_today, resultData.CreatedAt);
 
@@ -37,11 +36,11 @@ public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CreateHabitUseCase_EmptyName_ShouldReturnRejected()
+	public async Task Test_CreateHabitUseCase_EmptyName_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreateHabitUseCase>();
-		var command = new CreateHabitCommand("");
+		var command = new CreateHabitCommand(string.Empty);
 
 		// Act & Assert
 		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));

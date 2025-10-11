@@ -4,13 +4,13 @@ namespace Bug.BetterThanYesterday.Application.Users.GetUserById;
 
 public class GetUserByIdCommand : ICommand
 {
-	public GetUserByIdCommand(Guid id) => Id = id;
+	public GetUserByIdCommand(Guid userId) => UserId = userId;
 
-	public Guid Id { get; init; }
+	public Guid UserId { get; init; }
 
 	public void Validate()
 	{
-		if (Id == Guid.Empty)
-			throw new ArgumentNullException(nameof(Id), "Informe o ID do usuário");
+		if (UserId == Guid.Empty)
+			throw new ArgumentNullException(nameof(UserId), "Informe o ID do usuário");
 	}
 }

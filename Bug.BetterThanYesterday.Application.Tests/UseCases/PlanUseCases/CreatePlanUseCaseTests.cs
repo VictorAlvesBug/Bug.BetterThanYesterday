@@ -4,7 +4,6 @@ using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Moq;
 using Xunit;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
-using NSubstitute;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
@@ -35,7 +34,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		Assert.True(result.IsSuccess());
 
 		var resultData = Assert.IsType<Result<PlanModel>>(result).Data;
-		Assert.NotEqual(Guid.Empty, resultData.Id);
+		Assert.NotEqual(Guid.Empty, resultData.PlanId);
 		Assert.Equal(command.HabitId, resultData.HabitId);
 		Assert.Equal(command.Description, resultData.Description);
 		Assert.Equal(command.StartsAt, resultData.StartsAt);
@@ -72,7 +71,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_EmptyStartsAt_ShouldReturnRejected()
+	public async Task Test_CreatePlanUseCase_EmptyStartsAt_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -93,7 +92,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_StartsAtBeforeToday_ShouldReturnRejected()
+	public async Task Test_CreatePlanUseCase_StartsAtBeforeToday_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -114,7 +113,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_EmptyEndsAt_ShouldReturnRejected()
+	public async Task Test_CreatePlanUseCase_EmptyEndsAt_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -135,7 +134,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_EndsAtBeforeStartsAt_ShouldReturnRejected()
+	public async Task Test_CreatePlanUseCase_EndsAtBeforeStartsAt_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -156,7 +155,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_EmptyTypeId_ShouldReturnRejected()
+	public async Task Test_CreatePlanUseCase_EmptyTypeId_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -177,7 +176,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_InvalidTypeId_ShouldReturnRejected()
+	public async Task Test_CreatePlanUseCase_InvalidTypeId_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();

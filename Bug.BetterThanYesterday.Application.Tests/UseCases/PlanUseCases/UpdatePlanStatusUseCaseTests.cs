@@ -27,7 +27,7 @@ public class UpdatePlanStatusUseCaseTests : BasePlanUseCaseTests
 		Assert.True(result.IsSuccess());
 
 		var resultData = Assert.IsType<Result<PlanModel>>(result).Data;
-		Assert.Equal(firstPlan.Id, resultData.Id);
+		Assert.Equal(firstPlan.Id, resultData.PlanId);
 		Assert.Equal(firstPlan.HabitId, resultData.HabitId);
 		Assert.Equal(firstPlan.Description, resultData.Description);
 		Assert.Equal(firstPlan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.StartsAt);
@@ -60,7 +60,7 @@ public class UpdatePlanStatusUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdatePlanStatusUseCase_EmptyStatusId_ShouldReturnRejected()
+	public async Task Test_UpdatePlanStatusUseCase_EmptyStatusId_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdatePlanStatusUseCase>();
@@ -75,7 +75,7 @@ public class UpdatePlanStatusUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdatePlanStatusUseCase_InvalidStatusId_ShouldReturnRejected()
+	public async Task Test_UpdatePlanStatusUseCase_InvalidStatusId_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdatePlanStatusUseCase>();
@@ -90,7 +90,7 @@ public class UpdatePlanStatusUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdatePlanStatusUseCase_StatusIdNotAllowed_ShouldReturnRejected()
+	public async Task Test_UpdatePlanStatusUseCase_StatusIdNotAllowed_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdatePlanStatusUseCase>();

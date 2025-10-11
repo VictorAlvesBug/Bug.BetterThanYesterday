@@ -2,7 +2,7 @@
 
 public class PlanParticipantModel
 {
-	public Guid Id { get; set; }
+	public Guid PlanParticipantId { get; set; }
 	public Guid PlanId { get; set; }
 	public Guid UserId { get; set; }
 	public DateTime JoinedAt { get; set; }

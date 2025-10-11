@@ -9,7 +9,7 @@ public sealed class GetHabitByIdUseCase(IHabitRepository habitRepository)
 	public async Task<IResult> HandleAsync(GetHabitByIdCommand command)
 	{
 		command.Validate();
-		var habit = await habitRepository.GetByIdAsync(command.Id);
+		var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
 		if (habit is null)
 			return Result.Rejected("Hábito não encontrado");

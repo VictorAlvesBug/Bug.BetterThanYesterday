@@ -34,10 +34,10 @@ public class UsersController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpGet("{id}")]
-	public async Task<IActionResult> GetById(Guid id)
+	[HttpGet("{userId}")]
+	public async Task<IActionResult> GetById(Guid userId)
 	{
-		var command = new GetUserByIdCommand(id);
+		var command = new GetUserByIdCommand(userId);
 		var result = await getUserByIdUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
@@ -57,7 +57,7 @@ public class UsersController(
 		if (result.IsSuccess())
 		{
 			var data = ((Result<UserModel>)result).Data;
-			return Created($"Users/{data.Id}", result);
+			return Created($"Users/{data.UserId}", result);
 		}
 
 		if (result.IsRejected())
@@ -80,10 +80,10 @@ public class UsersController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpDelete("{id}")]
-	public async Task<IActionResult> Delete(Guid id)
+	[HttpDelete("{userId}")]
+	public async Task<IActionResult> Delete(Guid userId)
 	{
-		var command = new DeleteUserCommand(id);
+		var command = new DeleteUserCommand(userId);
 		var result = await deleteUserUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())

@@ -24,7 +24,7 @@ public class GetHabitByIdUseCaseTests : BaseHabitUseCaseTests
 		Assert.True(result.IsSuccess());
 
 		var resultData = Assert.IsType<Result<HabitModel>>(result).Data;
-		Assert.Equal(firstHabit.Id, resultData.Id);
+		Assert.Equal(firstHabit.Id, resultData.HabitId);
 		Assert.Equal(firstHabit.Name, resultData.Name);
 		Assert.Equal(firstHabit.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.CreatedAt);
 

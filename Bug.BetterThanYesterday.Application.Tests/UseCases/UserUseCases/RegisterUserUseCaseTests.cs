@@ -27,11 +27,11 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_RegisterUserUseCase_EmptyName_ShouldReturnRejected()
+	public async Task Test_RegisterUserUseCase_EmptyName_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
-		var command = new RegisterUserCommand("", "jane.doe@email.com");
+		var command = new RegisterUserCommand(string.Empty, "jane.doe@email.com");
 
 		// Act & Assert
 		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
@@ -41,11 +41,11 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_RegisterUserUseCase_EmptyEmail_ShouldReturnRejected()
+	public async Task Test_RegisterUserUseCase_EmptyEmail_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
-		var command = new RegisterUserCommand("Jane Doe", "");
+		var command = new RegisterUserCommand("Jane Doe", string.Empty);
 
 		// Act & Assert
 		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
@@ -55,7 +55,7 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_RegisterUserUseCase_InvalidEmail_ShouldReturnRejected()
+	public async Task Test_RegisterUserUseCase_InvalidEmail_ShouldThrowsException()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();

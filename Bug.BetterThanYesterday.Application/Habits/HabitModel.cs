@@ -2,7 +2,7 @@
 
 public class HabitModel
 {
-	public Guid Id { get; set; }
+	public Guid HabitId { get; set; }
 	public string Name { get; set; }
 	public DateTime CreatedAt { get; set; }
 

@@ -11,7 +11,7 @@ public class UpdateUserUseCase(IUserRepository userRepository)
 	{
 		command.Validate();
 
-		var user = await userRepository.GetByIdAsync(command.Id);
+		var user = await userRepository.GetByIdAsync(command.UserId);
 
 		if (user is null)
 			return Result.Rejected("Usuário não encontrado");

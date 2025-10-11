@@ -2,7 +2,6 @@
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Bug.BetterThanYesterday.Domain.Users.ValueObjects;
 using Moq;
-using Moq.AutoMock;
 
 namespace Bug.BetterThanYesterday.Application.Tests.Commons;
 

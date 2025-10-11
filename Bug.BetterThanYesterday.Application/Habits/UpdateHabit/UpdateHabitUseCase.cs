@@ -10,7 +10,7 @@ public sealed class UpdateHabitUseCase(
 	public async Task<IResult> HandleAsync(UpdateHabitCommand command)
 	{
 		command.Validate();
-		var habit = await habitRepository.GetByIdAsync(command.Id);
+		var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
 		if (habit is null)
 			return Result.Rejected("Hábito não encontrado");

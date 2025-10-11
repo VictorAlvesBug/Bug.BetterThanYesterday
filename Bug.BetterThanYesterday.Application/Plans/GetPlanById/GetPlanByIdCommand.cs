@@ -4,13 +4,13 @@ namespace Bug.BetterThanYesterday.Application.Plans.GetPlanById;
 
 public class GetPlanByIdCommand : ICommand
 {
-	public GetPlanByIdCommand(Guid id) => Id = id;
+	public GetPlanByIdCommand(Guid planId) => PlanId = planId;
 
-	public Guid Id { get; init; }
+	public Guid PlanId { get; init; }
 
 	public void Validate()
 	{
-		if (Id == Guid.Empty)
-			throw new ArgumentNullException(nameof(Id), "Informe o ID do plano");
+		if (PlanId == Guid.Empty)
+			throw new ArgumentNullException(nameof(PlanId), "Informe o ID do plano");
 	}
 }

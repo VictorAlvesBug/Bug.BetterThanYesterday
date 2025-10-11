@@ -6,7 +6,7 @@ internal static class PlanParticipantMapper
 {
 	public static PlanParticipantModel ToModel(this PlanParticipant planParticipant) => new()
 	{
-		Id = planParticipant.Id,
+		PlanParticipantId = planParticipant.Id,
 		UserId = planParticipant.UserId,
 		PlanId = planParticipant.PlanId,
 		JoinedAt = planParticipant.JoinedAt.ToDateTime(TimeOnly.MinValue),

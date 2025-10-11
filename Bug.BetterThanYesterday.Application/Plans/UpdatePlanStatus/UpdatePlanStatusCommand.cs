@@ -4,19 +4,19 @@ namespace Bug.BetterThanYesterday.Application.Plans.UpdatePlanStatus;
 
 public class UpdatePlanStatusCommand : ICommand
 {
-	public UpdatePlanStatusCommand(Guid id, int statusId)
+	public UpdatePlanStatusCommand(Guid planId, int statusId)
 	{
-		Id = id;
+		PlanId = planId;
 		StatusId = statusId;
 	}
 
-	public Guid Id { get; init; }
+	public Guid PlanId { get; init; }
 	public int StatusId { get; init; }
 
 	public void Validate()
 	{
-		if (Id == Guid.Empty)
-			throw new ArgumentNullException(nameof(Id), "Informe o ID do plano");
+		if (PlanId == Guid.Empty)
+			throw new ArgumentNullException(nameof(PlanId), "Informe o ID do plano");
 
 		if (StatusId <= 0)
 			throw new ArgumentException("Informe o status do plano", nameof(StatusId));

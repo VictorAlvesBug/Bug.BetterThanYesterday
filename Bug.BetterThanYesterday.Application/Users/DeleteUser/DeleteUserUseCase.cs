@@ -9,7 +9,7 @@ public class DeleteUserUseCase(IUserRepository userRepository)
 	public async Task<IResult> HandleAsync(DeleteUserCommand command)
 	{
 		command.Validate();
-		var user = await userRepository.GetByIdAsync(command.Id);
+		var user = await userRepository.GetByIdAsync(command.UserId);
 
 		if (user is null)
 			return Result.Rejected("Usuário não encontrado");

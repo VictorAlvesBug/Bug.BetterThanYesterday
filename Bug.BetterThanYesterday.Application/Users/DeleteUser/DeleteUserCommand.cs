@@ -4,13 +4,13 @@ namespace Bug.BetterThanYesterday.Application.Users.DeleteUser;
 
 public class DeleteUserCommand : ICommand
 {
-	public DeleteUserCommand(Guid id) => Id = id;
+	public DeleteUserCommand(Guid userId) => UserId = userId;
 
-	public Guid Id { get; init; }
+	public Guid UserId { get; init; }
 
 	public void Validate()
 	{
-		if (Id == Guid.Empty)
-			throw new ArgumentNullException(nameof(Id), "Informe o ID do usuário");
+		if (UserId == Guid.Empty)
+			throw new ArgumentNullException(nameof(UserId), "Informe o ID do usuário");
 	}
 }

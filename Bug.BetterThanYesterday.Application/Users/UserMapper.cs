@@ -6,7 +6,7 @@ internal static class UserMapper
 {
 	public static UserModel ToModel(this User user) => new()
 	{
-		Id = user.Id,
+		UserId = user.Id,
 		Name = user.Name,
 		Email = user.Email.Value,
 		CreatedAt = user.CreatedAt.ToDateTime(TimeOnly.MinValue),

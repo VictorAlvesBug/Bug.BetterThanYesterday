@@ -32,10 +32,10 @@ public class PlansController(
 		return await ListByHabitId(habitId.Value);
 	}
 
-	[HttpGet("{id}")]
-	public async Task<IActionResult> GetById(Guid id)
+	[HttpGet("{planId}")]
+	public async Task<IActionResult> GetById(Guid planId)
 	{
-		var command = new GetPlanByIdCommand(id);
+		var command = new GetPlanByIdCommand(planId);
 		var result = await getPlanByIdUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
@@ -55,7 +55,7 @@ public class PlansController(
 		if (result.IsSuccess())
 		{
 			var data = ((Result<PlanModel>)result).Data;
-			return Created($"Plans/{data.Id}", result);
+			return Created($"Plans/{data.PlanId}", result);
 		}
 
 		if (result.IsRejected())
@@ -78,10 +78,10 @@ public class PlansController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpDelete("{id}")]
-	public async Task<IActionResult> Cancel(Guid id)
+	[HttpDelete("{planId}")]
+	public async Task<IActionResult> Cancel(Guid planId)
 	{
-		var command = new CancelPlanCommand(id);
+		var command = new CancelPlanCommand(planId);
 		var result = await cancelPlanUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())

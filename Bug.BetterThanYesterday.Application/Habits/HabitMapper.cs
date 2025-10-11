@@ -6,7 +6,7 @@ public static class HabitMapper
 {
 	public static HabitModel ToModel(this Habit habit) => new()
 	{
-		Id = habit.Id,
+		HabitId = habit.Id,
 		Name = habit.Name,
 		CreatedAt = habit.CreatedAt.ToDateTime(TimeOnly.MinValue)
 	};

@@ -9,7 +9,7 @@ public class GetPlanByIdUseCase(IPlanRepository planRepository)
 	public async Task<IResult> HandleAsync(GetPlanByIdCommand command)
 	{
 		command.Validate();
-		var plan = await planRepository.GetByIdAsync(command.Id);
+		var plan = await planRepository.GetByIdAsync(command.PlanId);
 
 		if (plan is null)
 			return Result.Rejected("Plano não encontrado");
