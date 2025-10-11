@@ -22,7 +22,7 @@ public static class HabitRepositoryMockFactory
 			),
 			Habit.Restore(
 				Guid.Parse("f8cfc6a0-7304-41bb-985e-a3ce9c955bde"),
-				"Studing",
+				"Studying",
 				new DateTime(2005, 04, 02)
 			),
 			Habit.Restore(

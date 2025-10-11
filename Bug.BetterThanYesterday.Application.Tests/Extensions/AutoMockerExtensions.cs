@@ -40,9 +40,13 @@ public static class AutoMockerExtensions
 	{
 		mockedValues ??= new MockedValues();
 
-		var (planRepository, plans) = PlanRepositoryMockFactory.Create();
-		mocker.Use(planRepository.Object);
-		mocker.Use(plans);
+		(mockedValues.PlanRepository, mockedValues.Plans) = PlanRepositoryMockFactory.Create();
+		mocker.Use(mockedValues.PlanRepository.Object);
+		mocker.Use(mockedValues.Plans);
+
+		(mockedValues.HabitRepository, mockedValues.Habits) = HabitRepositoryMockFactory.Create();
+		mocker.Use(mockedValues.HabitRepository.Object);
+		mocker.Use(mockedValues.Habits);
 
 		return mockedValues;
 	}

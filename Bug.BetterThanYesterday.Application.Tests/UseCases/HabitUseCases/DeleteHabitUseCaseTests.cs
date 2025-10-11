@@ -51,8 +51,8 @@ public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteHabitUseCase>();
-		var studingHabit = _mock.Habits.First(habit => habit.Name == "Studing");
-		var command = new DeleteHabitCommand(studingHabit.Id);
+		var studyingHabit = _mock.Habits.First(habit => habit.Name == "Studying");
+		var command = new DeleteHabitCommand(studyingHabit.Id);
 
 		// Act
 		var result = await useCase.HandleAsync(command);

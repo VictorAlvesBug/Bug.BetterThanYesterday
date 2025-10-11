@@ -28,8 +28,4 @@
     <ProjectReference Include="..\Bug.BetterThanYesterday.Application\Bug.BetterThanYesterday.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\PlanUseCases\" />
-  </ItemGroup>
-
 </Project>

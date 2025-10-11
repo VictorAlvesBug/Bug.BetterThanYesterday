@@ -57,30 +57,37 @@ app.Run();
 
 # Testes do UseCase
 
-
- ## ListAllHabits()
- - Test_ListAllHabitsUseCase_Valid_ShouldReturnSuccess();
+## ListAllPlans()
+- Test_ListAllPlansUseCase_Valid_ShouldReturnSuccess();
  
- ## GetHabitById(id)
- - Test_GetHabitByIdUseCase_Valid_ShouldReturnSuccess();
- - Test_GetHabitByIdUseCase_NotFoundHabitId_ShouldReturnRejected();
+## GetPlanById(id)
+- Test_GetPlanByIdUseCase_Valid_ShouldReturnSuccess();
+- Test_GetPlanByIdUseCase_NotFoundPlanId_ShouldReturnRejected();
  
- ## CreateHabit(name)
- - Test_CreateHabitUseCase_Valid_ShouldReturnSuccess();
- - Test_CreateHabitUseCase_EmptyName_ShouldReturnRejected();
- - Test_CreateHabitUseCase_DuplicatedName_ShouldReturnRejected();
+## ListPlansByHabitId(habitId)
+- Test_ListPlansByHabitIdUseCase_Valid_ShouldReturnSuccess();
+- Test_ListPlansByHabitIdUseCase_NotFoundHabitId_ShouldReturnRejected();
  
- ## UpdateHabit(id, name)
- - Test_UpdateHabitUseCase_Valid_ShouldReturnSuccess();
- - Test_UpdateHabitUseCase_NotFoundHabitId_ShouldReturnRejected();
- - Test_UpdateHabitUseCase_EmptyName_ShouldReturnRejected();
- - Test_UpdateHabitUseCase_SameNameAndOtherId_ShouldReturnRejected();
- - Test_UpdateHabitUseCase_SameNameAndSameId_ShouldReturnSuccess();
+## CreatePlan(habitId, description, startsAt, endsAt, typeId)
+- Test_CreatePlanUseCase_Valid_ShouldReturnSuccess();
+- Test_CreatePlanUseCase_NotFoundHabitId_ShouldReturnRejected();
+- Test_CreatePlanUseCase_EmptyStartsAt_ShouldReturnRejected();
+- Test_CreatePlanUseCase_StartsAtBeforeToday_ShouldReturnRejected();
+- Test_CreatePlanUseCase_EmptyEndsAt_ShouldReturnRejected();
+- Test_CreatePlanUseCase_EndsAtBeforeStartsAt_ShouldReturnRejected();
+- Test_CreatePlanUseCase_EmptyTypeId_ShouldReturnRejected();
+- Test_CreatePlanUseCase_InvalidTypeId_ShouldReturnRejected();
  
- ## DeleteHabit(id)
- - Test_DeleteHabitUseCase_Valid_ShouldReturnSuccess();
- - Test_DeleteHabitUseCase_NotFoundHabitId_ShouldReturnRejected();
- - Test_DeleteHabitUseCase_NonCancelledPlansRelated_ShouldReturnRejected();
+## UpdatePlanStatus(id, statusId)
+- Test_UpdatePlanStatusUseCase_Valid_ShouldReturnSuccess();
+- Test_UpdatePlanStatusUseCase_NotFoundPlanId_ShouldReturnRejected();
+- Test_UpdatePlanStatusUseCase_EmptyStatusId_ShouldReturnRejected();
+- Test_UpdatePlanStatusUseCase_InvalidStatusId_ShouldReturnRejected();
+- Test_UpdatePlanStatusUseCase_StatusIdNotAllowed_ShouldReturnRejected();
+ 
+## CancelPlan(id)
+- Test_CancelPlanUseCase_Valid_ShouldReturnSuccess();
+- Test_CancelPlanUseCase_NotFoundPlanId_ShouldReturnRejected();
 
 
 

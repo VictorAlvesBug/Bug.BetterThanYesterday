@@ -1,4 +1,7 @@
-﻿using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
+﻿using Bug.BetterThanYesterday.Application.Habits;
+using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
+using Bug.BetterThanYesterday.Application.Plans;
+using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
 using Moq;
 using Xunit;
@@ -7,12 +10,15 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.HabitUseCases;
 
 public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 {
+	private readonly DateTime _today = DateTime.Today;
+
 	[Fact]
 	public async Task Test_CreateHabitUseCase_Valid_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreateHabitUseCase>();
-		var command = new CreateHabitCommand("Health Eating");
+		var habitName = "Health Eating";
+		var command = new CreateHabitCommand(habitName);
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -20,6 +26,11 @@ public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+
+		var resultData = Assert.IsType<Result<HabitModel>>(result).Data;
+		Assert.NotEqual(Guid.Empty, resultData.Id);
+		Assert.Equal(habitName, resultData.Name);
+		Assert.Equal(_today, resultData.CreatedAt);
 
 		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
 		_mock.HabitRepository.Verify(repo => repo.AddAsync(It.IsAny<Habit>()), Times.Once);

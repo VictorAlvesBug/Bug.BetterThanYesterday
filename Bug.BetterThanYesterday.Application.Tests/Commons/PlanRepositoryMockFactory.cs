@@ -34,7 +34,7 @@ public static class PlanRepositoryMockFactory
 			Plan.Restore(
 				Guid.Parse("bea8b9e8-5588-460e-bd5d-ae1c042bc166"),
 				Guid.Parse("f8cfc6a0-7304-41bb-985e-a3ce9c955bde"),
-				"Studing AWS every weekend",
+				"Studying AWS every weekend",
 				new DateTime(2025, 01, 01),
 				new DateTime(2025, 12, 31),
 				PlanStatus.Cancelled.Id,
@@ -44,7 +44,7 @@ public static class PlanRepositoryMockFactory
 			Plan.Restore(
 				Guid.Parse("79754103-5278-4ed2-afc5-bad44e97c4f6"),
 				Guid.Parse("f8cfc6a0-7304-41bb-985e-a3ce9c955bde"),
-				"Studing React every weekend",
+				"Studying React every weekend",
 				new DateTime(2024, 01, 01),
 				new DateTime(2024, 12, 31),
 				PlanStatus.Finished.Id,
