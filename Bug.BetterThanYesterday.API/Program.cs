@@ -59,17 +59,17 @@ app.Run();
 
 ##### PlanParticipants #####
 
-## GetPlanParticipantById(planParticipantId)
- - Test_GetPlanParticipantByIdUseCase_Valid_ShouldReturnSuccess();
- - Test_GetPlanParticipantByIdUseCase_NotFoundPlanParticipantId_ShouldReturnRejected();
+## GetPlanParticipantDetails(planId, userId)
+ - Test_GetPlanParticipantDetailsUseCase_Valid_ShouldReturnSuccess();
+ - Test_GetPlanParticipantDetailsUseCase_NotFoundPlanParticipantId_ShouldReturnRejected();
 
-## ListPlanParticipantsByPlanId(planId)
- - Test_ListPlanParticipantsByPlanIdUseCase_Valid_ShouldReturnSuccess();
- - Test_ListPlanParticipantsByPlanIdUseCase_NotFoundPlanId_ShouldReturnRejected();
+## GetPlanWithParticipantsByPlanId(planId)
+ - Test_GetPlanWithParticipantsByPlanIdUseCase_Valid_ShouldReturnSuccess();
+ - Test_GetPlanWithParticipantsByPlanIdUseCase_NotFoundPlanId_ShouldReturnRejected();
 
-## ListPlanParticipantsByUserId(userId)
- - Test_ListPlanParticipantsByUserIdUseCase_Valid_ShouldReturnSuccess();
- - Test_ListPlanParticipantsByUserIdUseCase_NotFoundUserId_ShouldReturnRejected();
+## GetUserWithPlansByUserId(userId)
+ - Test_GetUserWithPlansByUserIdUseCase_Valid_ShouldReturnSuccess();
+ - Test_GetUserWithPlansByUserIdUseCase_NotFoundUserId_ShouldReturnRejected();
 
 ## AddUserToPlan(planId, userId)
  - Test_AddUserToPlanUseCase_Valid_ShouldReturnSuccess();

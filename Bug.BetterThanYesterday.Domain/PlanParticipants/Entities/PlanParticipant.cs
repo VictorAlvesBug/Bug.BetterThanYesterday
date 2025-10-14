@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
+using Bug.BetterThanYesterday.Domain.PlanParticipants.Utils;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.ValueObjects;
 
 namespace Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
@@ -29,13 +30,24 @@ public class PlanParticipant : Entity
 
 	private PlanParticipant(Guid planId, Guid userId)
 		: this(
-		id: Guid.NewGuid(),
+		id: GenerateId(planId, userId),
 		planId,
 		userId,
 		joinedAt: DateTime.Today,
 		leftAt: null,
 		statusId: PlanParticipantStatus.Active.Id)
 	{
+	}
+
+	public static Guid GenerateId(Guid planId, Guid userId)
+	{
+		if (planId == Guid.Empty)
+			throw new ArgumentNullException(nameof(planId), "Informe o ID do plano");
+		
+		if (userId == Guid.Empty)
+			throw new ArgumentNullException(nameof(userId), "Informe o ID do usuário");
+
+		return planId.Combine(userId);
 	}
 
 	public static PlanParticipant CreateNew(Guid planId, Guid userId)

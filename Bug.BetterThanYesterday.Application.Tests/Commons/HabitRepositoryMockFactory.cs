@@ -51,6 +51,10 @@ public static class HabitRepositoryMockFactory
 			.ReturnsAsync((Guid habitId) => habits.Find(habit => habit.Id == habitId));
 
 		habitRepository
+			.Setup(repo => repo.BatchGetByIdAsync(It.IsAny<List<Guid>>()))
+			.ReturnsAsync((List<Guid> habitIds) => habits.Where(habit => habitIds.Contains(habit.Id)).ToList());
+
+		habitRepository
 			.Setup(repo => repo.GetByNameAsync(It.IsAny<string>()))
 			.ReturnsAsync((string name) => habits.Find(habit => habit.Name == name));
 

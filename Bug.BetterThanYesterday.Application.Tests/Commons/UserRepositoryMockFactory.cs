@@ -22,6 +22,12 @@ public static class UserRepositoryMockFactory
 				"Bob",
 				"bob@ex.com",
 				new DateTime(2024, 01, 10)
+			),
+			User.Restore(
+				Guid.Parse("cc16329d-cbfc-4ef3-95bb-1b031179005f"),
+				"Carl",
+				"carl@ex.com",
+				new DateTime(2020, 06, 20)
 			)
 		];
 
@@ -41,11 +47,19 @@ public static class UserRepositoryMockFactory
 
 		userRepository
 			.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
-			.ReturnsAsync((Guid userId) => users.Find(user => user.Id == userId));
+			.ReturnsAsync((Guid userId) => users
+				.Find(user => user.Id == userId));
+
+		userRepository
+			.Setup(repo => repo.BatchGetByIdAsync(It.IsAny<List<Guid>>()))
+			.ReturnsAsync((List<Guid> userIds) => users
+				.Where(user => userIds.Contains(user.Id))
+				.ToList());
 
 		userRepository
 			.Setup(repo => repo.GetByEmailAsync(It.IsAny<Email>()))
-			.ReturnsAsync((Email email) => users.Find(user => user.Email == email));
+			.ReturnsAsync((Email email) => users
+				.Find(user => user.Email == email));
 
 		return (userRepository, users);
 	}

@@ -5,6 +5,8 @@ using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Bug.BetterThanYesterday.Domain.Users;
 using Moq;
+using Bug.BetterThanYesterday.Domain.PlanParticipants;
+using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
 
 namespace Bug.BetterThanYesterday.Application.Tests.Commons;
 
@@ -13,7 +15,9 @@ public class MockedValues
 	public Mock<IUserRepository> UserRepository { get; set; }
 	public Mock<IHabitRepository> HabitRepository { get; set; }
 	public Mock<IPlanRepository> PlanRepository { get; set; }
+	public Mock<IPlanParticipantRepository> PlanParticipantRepository { get; set; }
 	public List<User> Users { get; set; }
 	public List<Habit> Habits { get; set; }
 	public List<Plan> Plans { get; set; }
+	public List<PlanParticipant> PlanParticipants { get; set; }
 }

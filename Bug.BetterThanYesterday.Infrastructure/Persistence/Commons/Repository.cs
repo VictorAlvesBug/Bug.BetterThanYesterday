@@ -40,6 +40,19 @@ public class Repository<TEntity, TDocument> : IRepository<TEntity>
 		return document is null ? null : _mapper.ToDomain(document);
 	}
 
+	public async Task<List<TEntity>> BatchGetByIdAsync(List<Guid> ids)
+	{
+		var documents = new List<TDocument>();
+
+		foreach(var chunk in ids.Chunk(1000))
+        {
+			var filter = Builders<TDocument>.Filter.In(entity => entity.Id, chunk);
+			documents.AddRange((await _collection.FindAsync(filter)).ToList());
+        }
+
+		return documents.ConvertAll(_mapper.ToDomain);
+	}
+
 	public async Task UpdateAsync(TEntity entity)
 	{
 		await _collection.ReplaceOneAsync(u => u.Id == entity.Id, _mapper.ToDocument(entity));
