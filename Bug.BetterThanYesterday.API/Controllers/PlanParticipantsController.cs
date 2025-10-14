@@ -62,7 +62,7 @@ public class PlanPlarticipantsController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 	
-	[HttpGet("Users/{userId}")]
+	[HttpGet("Users/{userId}/Plans")]
 	public async Task<IActionResult> GetByUserId(Guid userId)
 	{
 		var command = new GetUserWithPlansByUserIdCommand(userId);
