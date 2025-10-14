@@ -1,12 +1,4 @@
-﻿using Bug.BetterThanYesterday.Application.PlanParticipants;
-using Bug.BetterThanYesterday.Application.PlanParticipants.UnblockUserInThePlan;
-using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
-using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
-using Bug.BetterThanYesterday.Domain.Plans.Entities;
-using Moq;
-using Xunit;
-
-namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanParticipantUseCases;
+﻿namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanParticipantUseCases;
 
 public class UnblockUserInThePlanUseCaseTests : BasePlanParticipantUseCaseTests
 {

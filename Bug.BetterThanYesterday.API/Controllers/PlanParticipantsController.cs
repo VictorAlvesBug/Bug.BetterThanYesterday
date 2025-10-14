@@ -1,12 +1,5 @@
-﻿using Bug.BetterThanYesterday.Application.Plans.CreatePlan;
-using Bug.BetterThanYesterday.Application.Plans.CancelPlan;
-using Bug.BetterThanYesterday.Application.Plans.GetPlanById;
-using Bug.BetterThanYesterday.Application.Plans.ListAllPlans;
-using Bug.BetterThanYesterday.Application.Plans.UpdatePlanStatus;
-using Bug.BetterThanYesterday.Application.Plans;
-using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Microsoft.AspNetCore.Mvc;
-using Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
 using Bug.BetterThanYesterday.Application.PlanParticipants.AddUserToPlan;
 using Bug.BetterThanYesterday.Application.PlanParticipants.GetPlanParticipantDetails;
 using Bug.BetterThanYesterday.Application.PlanParticipants.GetPlanWithParticipantsByPlanId;

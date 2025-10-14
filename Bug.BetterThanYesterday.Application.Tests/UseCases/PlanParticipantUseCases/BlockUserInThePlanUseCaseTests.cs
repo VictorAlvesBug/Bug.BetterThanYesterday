@@ -1,6 +1,4 @@
-﻿using Bug.BetterThanYesterday.Application.PlanParticipants.BlockUserInThePlan;
-
-namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanParticipantUseCases;
+﻿namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanParticipantUseCases;
 
 public class BlockUserInThePlanUseCaseTests : BasePlanParticipantUseCaseTests
 {
