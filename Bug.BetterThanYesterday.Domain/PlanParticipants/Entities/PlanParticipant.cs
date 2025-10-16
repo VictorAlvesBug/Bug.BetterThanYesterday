@@ -30,7 +30,7 @@ public class PlanParticipant : Entity
 
 	private PlanParticipant(Guid planId, Guid userId)
 		: this(
-		id: GenerateId(planId, userId),
+		id: BuildId(planId, userId),
 		planId,
 		userId,
 		joinedAt: DateTime.Today,
@@ -39,7 +39,7 @@ public class PlanParticipant : Entity
 	{
 	}
 
-	public static Guid GenerateId(Guid planId, Guid userId)
+	public static Guid BuildId(Guid planId, Guid userId)
 	{
 		if (planId == Guid.Empty)
 			throw new ArgumentNullException(nameof(planId), "Informe o ID do plano");
@@ -92,4 +92,56 @@ public class PlanParticipant : Entity
 			leftAt,
 			statusId);
 	}
+
+	public void MarkAsLeft()
+	{
+		if (Status == PlanParticipantStatus.Active)
+		{
+			Status = PlanParticipantStatus.Left;
+			LeftAt = DateOnly.FromDateTime(DateTime.Today);
+			return;
+		}
+
+		if (Status == PlanParticipantStatus.Left)
+			throw new InvalidOperationException("Este usuário já foi removido do plano");
+
+		if (Status == PlanParticipantStatus.Blocked)
+			throw new InvalidOperationException("Este usuário não pode ser removido do plano, pois está bloqueado");
+			
+		throw new InvalidOperationException("Alteração não mapeada para status atual");
+    }
+
+	public void MarkAsBlocked()
+	{
+		if (Status == PlanParticipantStatus.Active)
+		{
+			Status = PlanParticipantStatus.Blocked;
+			return;
+		}
+
+        if (Status == PlanParticipantStatus.Blocked)
+			throw new InvalidOperationException("Este participante já está bloqueado neste plano");
+
+		if (Status == PlanParticipantStatus.Left)
+			throw new InvalidOperationException("O usuário não está mais neste plano");
+			
+		throw new InvalidOperationException("Alteração não mapeada para status atual");
+    }
+
+	public void MarkAsActive()
+	{
+		if (Status == PlanParticipantStatus.Blocked)
+		{
+			Status = PlanParticipantStatus.Active;
+			return;
+		}
+
+        if (Status == PlanParticipantStatus.Active)
+			throw new InvalidOperationException("Este participante já está desbloqueado neste plano");
+
+		if (Status == PlanParticipantStatus.Left)
+			throw new InvalidOperationException("O usuário não está mais neste plano");
+			
+		throw new InvalidOperationException("Alteração não mapeada para status atual");
+    }
 }

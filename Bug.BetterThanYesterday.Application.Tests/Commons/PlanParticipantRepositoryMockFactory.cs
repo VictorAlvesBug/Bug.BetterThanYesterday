@@ -9,43 +9,52 @@ public static class PlanParticipantRepositoryMockFactory
 {
 	public static (Mock<IPlanParticipantRepository> repo, List<PlanParticipant> data) Create()
 	{
-		var anaId = Guid.Parse("57b8652a-81ad-46af-b50b-e1de389250da");
-		var bobId = Guid.Parse("814fbb49-66e1-4d51-a69e-bf1eb6d8fc4a");
-		
-		var workoutFiveTimesAWeekId = Guid.Parse("40c8f170-b8b8-4e41-ac37-816750808650");
-		var readingFifteenPagesEverydayId = Guid.Parse("a7f73852-db21-4791-94b0-1bcb55b0b496");
-		var studyingReactEveryWeekendId = Guid.Parse("79754103-5278-4ed2-afc5-bad44e97c4f6");
-
 		List<PlanParticipant> planParticipants =
 		[
 			PlanParticipant.Restore(
-				PlanParticipant.GenerateId(workoutFiveTimesAWeekId, anaId),
-				workoutFiveTimesAWeekId,
-				anaId,
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active, UserRepositoryMockFactory.UserId1),
+				PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active,
+				UserRepositoryMockFactory.UserId1,
 				new DateTime(2020, 01, 01),
 				null,
 				PlanParticipantStatus.Active.Id
 			),
 			PlanParticipant.Restore(
-				PlanParticipant.GenerateId(readingFifteenPagesEverydayId, anaId),
-				readingFifteenPagesEverydayId,
-				anaId,
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left, UserRepositoryMockFactory.UserId1),
+				PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left,
+				UserRepositoryMockFactory.UserId1,
 				new DateTime(2020, 01, 01),
 				null,
 				PlanParticipantStatus.Active.Id
 			),
 			PlanParticipant.Restore(
-				PlanParticipant.GenerateId(readingFifteenPagesEverydayId, bobId),
-				readingFifteenPagesEverydayId,
-				bobId,
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left, UserRepositoryMockFactory.UserId2),
+				PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left,
+				UserRepositoryMockFactory.UserId2,
+				new DateTime(2020, 01, 01),
+				null,
+				PlanParticipantStatus.Blocked.Id
+			),
+			PlanParticipant.Restore(
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left, UserRepositoryMockFactory.UserId3),
+				PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left,
+				UserRepositoryMockFactory.UserId3,
 				new DateTime(2020, 01, 01),
 				null,
 				PlanParticipantStatus.Left.Id
 			),
 			PlanParticipant.Restore(
-				PlanParticipant.GenerateId(studyingReactEveryWeekendId, bobId),
-				studyingReactEveryWeekendId,
-				bobId,
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked, UserRepositoryMockFactory.UserId2),
+				PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked,
+				UserRepositoryMockFactory.UserId2,
+				new DateTime(2020, 01, 01),
+				null,
+				PlanParticipantStatus.Left.Id
+			),
+			PlanParticipant.Restore(
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked, UserRepositoryMockFactory.UserId2),
+				PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked,
+				UserRepositoryMockFactory.UserId3,
 				new DateTime(2020, 01, 01),
 				null,
 				PlanParticipantStatus.Blocked.Id

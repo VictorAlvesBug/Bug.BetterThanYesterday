@@ -15,7 +15,7 @@ public sealed class GetPlanParticipantDetailsUseCase(
     public async Task<IResult> HandleAsync(GetPlanParticipantDetailsCommand command)
     {
         command.Validate();
-        var planParticipantId = PlanParticipant.GenerateId(
+        var planParticipantId = PlanParticipant.BuildId(
             command.PlanId,
             command.UserId
         );

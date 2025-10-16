@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
+using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
 using Moq;
 using Xunit;
@@ -12,8 +13,8 @@ public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteHabitUseCase>();
-		var cookingHabit = _mock.Habits.First(habit => habit.Name == "Cooking");
-		var command = new DeleteHabitCommand(cookingHabit.Id);
+		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
+		var command = new DeleteHabitCommand(habit.Id);
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -51,8 +52,8 @@ public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteHabitUseCase>();
-		var studyingHabit = _mock.Habits.First(habit => habit.Name == "Studying");
-		var command = new DeleteHabitCommand(studyingHabit.Id);
+		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId3);
+		var command = new DeleteHabitCommand(habit.Id);
 
 		// Act
 		var result = await useCase.HandleAsync(command);

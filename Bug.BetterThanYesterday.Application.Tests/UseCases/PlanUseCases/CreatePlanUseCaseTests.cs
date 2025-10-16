@@ -5,6 +5,7 @@ using Moq;
 using Xunit;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
+using Bug.BetterThanYesterday.Application.Tests.Commons;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 
@@ -17,9 +18,9 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
-		var cookingHabit = _mock.Habits.First(habit => habit.Name == "Cooking");
+		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
-			cookingHabit.Id,
+			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year + 1, 01, 01),
 			new DateTime(_today.Year + 1, 12, 31),
@@ -75,9 +76,9 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
-		var cookingHabit = _mock.Habits.First(habit => habit.Name == "Cooking");
+		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
-			cookingHabit.Id,
+			habit.Id,
 			"Prepare a meal once a week",
 			DateTime.MinValue,
 			new DateTime(_today.Year + 1, 12, 31),
@@ -96,9 +97,9 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
-		var cookingHabit = _mock.Habits.First(habit => habit.Name == "Cooking");
+		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
-			cookingHabit.Id,
+			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year - 1, 01, 01),
 			new DateTime(_today.Year + 1, 12, 31),
@@ -117,9 +118,9 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
-		var cookingHabit = _mock.Habits.First(habit => habit.Name == "Cooking");
+		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
-			cookingHabit.Id,
+			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year + 1, 01, 01),
 			DateTime.MinValue,
@@ -138,9 +139,9 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
-		var cookingHabit = _mock.Habits.First(habit => habit.Name == "Cooking");
+		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
-			cookingHabit.Id,
+			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year + 2, 01, 01),
 			new DateTime(_today.Year + 1, 12, 31),
@@ -159,9 +160,9 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
-		var cookingHabit = _mock.Habits.First(habit => habit.Name == "Cooking");
+		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
-			cookingHabit.Id,
+			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year + 1, 01, 01),
 			new DateTime(_today.Year + 1, 12, 31),
@@ -180,9 +181,9 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
-		var cookingHabit = _mock.Habits.First(habit => habit.Name == "Cooking");
+		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
-			cookingHabit.Id,
+			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year + 1, 01, 01),
 			new DateTime(_today.Year + 1, 12, 31),

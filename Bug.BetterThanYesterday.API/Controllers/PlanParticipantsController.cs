@@ -7,6 +7,7 @@ using Bug.BetterThanYesterday.Application.PlanParticipants.GetUserWithPlansByUse
 using Bug.BetterThanYesterday.Application.PlanParticipants.BlockUserInThePlan;
 using Bug.BetterThanYesterday.Application.PlanParticipants.UnblockUserInThePlan;
 using Bug.BetterThanYesterday.Application.PlanParticipants.RemoveUserFromPlan;
+using Bug.BetterThanYesterday.Application.PlanParticipants;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -38,22 +39,6 @@ public class PlanPlarticipantsController(
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
-
-	[HttpGet("Plans/{planId}/Participants/{userId}")]
-	[HttpGet("Users/{userId}/Plans/{planId}")]
-	public async Task<IActionResult> GetByPlanIdAndUserId(Guid planId, Guid userId)
-	{
-		var command = new GetPlanParticipantDetailsCommand(planId, userId);
-		var result = await getPlanParticipantDetailsUseCase.HandleAsync(command);
-
-		if (result.IsSuccess())
-			return Ok(result);
-
-		if (result.IsRejected())
-			return BadRequest(result);
-
-		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}
 	
 	[HttpGet("Users/{userId}/Plans")]
 	public async Task<IActionResult> GetByUserId(Guid userId)
@@ -70,27 +55,12 @@ public class PlanPlarticipantsController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	/*[HttpPost]
-	public async Task<IActionResult> AddUserToPlan([FromBody] AddUserToPlanCommand command)
+	[HttpGet("Plans/{planId}/Participants/{userId}")]
+	[HttpGet("Users/{userId}/Plans/{planId}")]
+	public async Task<IActionResult> GetByPlanIdAndUserId(Guid planId, Guid userId)
 	{
-		var result = await addUserToPlanUseCase.HandleAsync(command);
-
-		if (result.IsSuccess())
-		{
-			var data = ((Result<PlanModel>)result).Data;
-			return Created($"Plans/{data.PlanId}", result);
-		}
-
-		if (result.IsRejected())
-			return BadRequest(result);
-
-		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}*/
-
-	/*[HttpPut]
-	public async Task<IActionResult> UpdateStatus([FromBody] UpdatePlanStatusCommand command)
-	{
-		var result = await updatePlanStatusUseCase.HandleAsync(command);
+		var command = new GetPlanParticipantDetailsCommand(planId, userId);
+		var result = await getPlanParticipantDetailsUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
 			return Ok(result);
@@ -99,13 +69,33 @@ public class PlanPlarticipantsController(
 			return BadRequest(result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}*/
+	}
 
-	/*[HttpDelete("{planId}")]
-	public async Task<IActionResult> RemoveUserFromPlan(Guid planId)
+	[HttpPost("Plans/{planId}/Participants/{userId}")]
+	[HttpPost("Users/{userId}/Plans/{planId}")]
+	public async Task<IActionResult> AddUserToPlan(Guid planId, Guid userId)
 	{
-		var command = new CancelPlanCommand(planId);
-		var result = await cancelPlanUseCase.HandleAsync(command);
+		var command = new AddUserToPlanCommand(planId, userId);
+		var result = await addUserToPlanUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+		{
+			var data = ((Result<PlanParticipantDetailsModel>)result).Data;
+			return Created($"Plans/{data.Plan.PlanId}/Participants/{data.Participant.UserId}", result);
+		}
+
+		if (result.IsRejected())
+			return BadRequest(result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
+
+	[HttpDelete("Plans/{planId}/Participants/{userId}")]
+	[HttpDelete("Users/{userId}/Plans/{planId}")]
+	public async Task<IActionResult> RemoveUserFromPlan(Guid planId, Guid userId)
+	{
+		var command = new RemoveUserFromPlanCommand(planId, userId);
+		var result = await removeUserFromPlanUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
 			return NoContent();
@@ -114,5 +104,40 @@ public class PlanPlarticipantsController(
 			return BadRequest(result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}*/
+	}
+
+	[HttpPost("Plans/{planId}/Participants/{userId}/Block")]
+	[HttpPost("Users/{userId}/Plans/{planId}/Block")]
+	public async Task<IActionResult> BlockUserInThePlan(Guid planId, Guid userId)
+	{
+		var command = new BlockUserInThePlanCommand(planId, userId);
+		var result = await blockUserInThePlanUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+		{
+			var data = ((Result<PlanParticipantDetailsModel>)result).Data;
+			return Created($"Plans/{data.Plan.PlanId}/Participants/{data.Participant.UserId}/Block", result);
+		}
+
+		if (result.IsRejected())
+			return BadRequest(result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
+
+	[HttpDelete("Plans/{planId}/Participants/{userId}/Block")]
+	[HttpDelete("Users/{userId}/Plans/{planId}/Block")]
+	public async Task<IActionResult> UnblockUserInThePlan(Guid planId, Guid userId)
+	{
+		var command = new UnblockUserInThePlanCommand(planId, userId);
+		var result = await unblockUserInThePlanUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+			return Ok(result);
+
+		if (result.IsRejected())
+			return BadRequest(result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
 }

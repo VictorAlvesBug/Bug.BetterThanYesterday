@@ -7,17 +7,18 @@ namespace Bug.BetterThanYesterday.Application.Tests.Commons;
 
 public static class PlanRepositoryMockFactory
 {
+	public static readonly Guid PublicRunningPlanId1_WithUserId1Active = Guid.Parse("40c8f170-b8b8-4e41-ac37-816750808650");
+	public static readonly Guid PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left = Guid.Parse("a7f73852-db21-4791-94b0-1bcb55b0b496");
+	public static readonly Guid PublicCancelledPlanId3 = Guid.Parse("bea8b9e8-5588-460e-bd5d-ae1c042bc166");
+	public static readonly Guid PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked = Guid.Parse("79754103-5278-4ed2-afc5-bad44e97c4f6");
+
 	public static (Mock<IPlanRepository> repo, List<Plan> data) Create()
 	{
-		var workoutId = Guid.Parse("0160269d-1e78-4ca2-b100-ee42805b5c1e");
-		var readingId = Guid.Parse("f523e101-d4b9-453e-8669-c9e8a6918544");
-		var studyingId = Guid.Parse("f8cfc6a0-7304-41bb-985e-a3ce9c955bde");
-
 		List<Plan> plans =
 		[
 			Plan.Restore(
-				Guid.Parse("40c8f170-b8b8-4e41-ac37-816750808650"),
-				workoutId,
+				PublicRunningPlanId1_WithUserId1Active,
+				HabitRepositoryMockFactory.HabitId1,
 				"Workout 5 times a week",
 				new DateTime(2025, 01, 01),
 				new DateTime(2025, 12, 31),
@@ -26,8 +27,8 @@ public static class PlanRepositoryMockFactory
 				new DateTime(2024, 06, 15)
 			),
 			Plan.Restore(
-				Guid.Parse("a7f73852-db21-4791-94b0-1bcb55b0b496"),
-				readingId,
+				PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left,
+				HabitRepositoryMockFactory.HabitId2,
 				"Reading 15 pages everyday",
 				new DateTime(2026, 01, 01),
 				new DateTime(2026, 12, 31),
@@ -36,8 +37,8 @@ public static class PlanRepositoryMockFactory
 				new DateTime(2025, 10, 05)
 			),
 			Plan.Restore(
-				Guid.Parse("bea8b9e8-5588-460e-bd5d-ae1c042bc166"),
-				studyingId,
+				PublicCancelledPlanId3,
+				HabitRepositoryMockFactory.HabitId3,
 				"Studying AWS every weekend",
 				new DateTime(2025, 01, 01),
 				new DateTime(2025, 12, 31),
@@ -46,8 +47,8 @@ public static class PlanRepositoryMockFactory
 				new DateTime(2020, 10, 05)
 			),
 			Plan.Restore(
-				Guid.Parse("79754103-5278-4ed2-afc5-bad44e97c4f6"),
-				studyingId,
+				PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked,
+				HabitRepositoryMockFactory.HabitId3,
 				"Studying React every weekend",
 				new DateTime(2024, 01, 01),
 				new DateTime(2024, 12, 31),

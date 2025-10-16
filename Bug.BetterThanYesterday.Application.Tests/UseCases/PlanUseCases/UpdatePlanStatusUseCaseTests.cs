@@ -5,6 +5,7 @@ using Moq;
 using Xunit;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
+using Bug.BetterThanYesterday.Application.Tests.Commons;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 
@@ -94,8 +95,8 @@ public class UpdatePlanStatusUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdatePlanStatusUseCase>();
-		var studyingAwsEveryWeekendPlan = _mock.Plans.First(plan => plan.Description == "Studying AWS every weekend");
-		var command = new UpdatePlanStatusCommand(studyingAwsEveryWeekendPlan.Id, PlanStatus.Finished.Id);
+		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicCancelledPlanId3);
+		var command = new UpdatePlanStatusCommand(plan.Id, PlanStatus.Finished.Id);
 
 		// Act & Assert
 		await Assert.ThrowsAsync<InvalidOperationException>(async () => await useCase.HandleAsync(command));

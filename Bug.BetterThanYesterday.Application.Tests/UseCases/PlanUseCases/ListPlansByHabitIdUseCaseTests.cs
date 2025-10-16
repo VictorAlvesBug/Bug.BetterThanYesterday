@@ -3,6 +3,7 @@ using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Moq;
 using Xunit;
+using Bug.BetterThanYesterday.Application.Tests.Commons;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 
@@ -13,8 +14,8 @@ public class ListPlansByHabitIdUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<ListPlansByHabitIdUseCase>();
-		var studyingHabit = _mock.Habits.First(h => h.Name == "Studying");
-		var command = new ListPlansByHabitIdCommand(studyingHabit.Id);
+		var habit = _mock.Habits.First(h => h.Id == HabitRepositoryMockFactory.HabitId3);
+		var command = new ListPlansByHabitIdCommand(habit.Id);
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -24,7 +25,7 @@ public class ListPlansByHabitIdUseCaseTests : BasePlanUseCaseTests
 		Assert.True(result.IsSuccess());
 
 		var resultData = Assert.IsType<Result<IEnumerable<PlanModel>>>(result).Data;
-		Assert.Equal(_mock.Plans.Count(plan => plan.HabitId == studyingHabit.Id), resultData.Count());
+		Assert.Equal(_mock.Plans.Count(plan => plan.HabitId == habit.Id), resultData.Count());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanRepository.Verify(repo => repo.ListByHabitIdAsync(It.IsAny<Guid>()), Times.Once);

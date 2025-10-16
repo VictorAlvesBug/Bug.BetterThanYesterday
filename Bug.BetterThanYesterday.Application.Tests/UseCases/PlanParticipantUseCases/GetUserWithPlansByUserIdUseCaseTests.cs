@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.PlanParticipants;
 using Bug.BetterThanYesterday.Application.PlanParticipants.GetUserWithPlansByUserId;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Moq;
 using Xunit;
 
@@ -54,8 +55,8 @@ public class GetUserWithPlansByUserIdUseCaseTests : BasePlanParticipantUseCaseTe
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<GetUserWithPlansByUserIdUseCase>();
-		var carlUser = _mock.Users.Find(user => user.Name == "Carl");
-		var command = new GetUserWithPlansByUserIdCommand(carlUser.Id);
+		var user = _mock.Users.Find(user => user.Id == UserRepositoryMockFactory.UserId4);
+		var command = new GetUserWithPlansByUserIdCommand(user.Id);
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -65,10 +66,10 @@ public class GetUserWithPlansByUserIdUseCaseTests : BasePlanParticipantUseCaseTe
 		Assert.True(result.IsSuccess());
 
 		var resultData = Assert.IsType<Result<UserWithPlansModel>>(result).Data;
-		Assert.Equal(carlUser.Id, resultData.User.UserId);
-		Assert.Equal(carlUser.Name, resultData.User.Name);
-		Assert.Equal(carlUser.Email.Value, resultData.User.Email);
-		Assert.Equal(carlUser.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.User.CreatedAt);
+		Assert.Equal(user.Id, resultData.User.UserId);
+		Assert.Equal(user.Name, resultData.User.Name);
+		Assert.Equal(user.Email.Value, resultData.User.Email);
+		Assert.Equal(user.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.User.CreatedAt);
 		
 		Assert.Empty(resultData.Plans);
 

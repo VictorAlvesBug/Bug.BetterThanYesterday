@@ -7,26 +7,37 @@ namespace Bug.BetterThanYesterday.Application.Tests.Commons;
 
 public static class UserRepositoryMockFactory
 {
+	public static readonly Guid UserId1 = Guid.Parse("57b8652a-81ad-46af-b50b-e1de389250da");
+	public static readonly Guid UserId2 = Guid.Parse("814fbb49-66e1-4d51-a69e-bf1eb6d8fc4a");
+	public static readonly Guid UserId3 = Guid.Parse("cc16329d-cbfc-4ef3-95bb-1b031179005f");
+	public static readonly Guid UserId4 = Guid.Parse("78edf69e-bd58-4117-899d-be9150252d25");
+	
 	public static (Mock<IUserRepository> repo, List<User> data) Create()
 	{
 		List<User> users =
 		[
 			User.Restore(
-				Guid.Parse("57b8652a-81ad-46af-b50b-e1de389250da"),
+				UserId1,
 				"Ana",
 				"ana@ex.com",
 				new DateTime(2023, 06, 20)
 			),
 			User.Restore(
-				Guid.Parse("814fbb49-66e1-4d51-a69e-bf1eb6d8fc4a"),
+				UserId2,
 				"Bob",
 				"bob@ex.com",
 				new DateTime(2024, 01, 10)
 			),
 			User.Restore(
-				Guid.Parse("cc16329d-cbfc-4ef3-95bb-1b031179005f"),
+				UserId3,
 				"Carl",
 				"carl@ex.com",
+				new DateTime(2020, 06, 20)
+			),
+			User.Restore(
+				UserId4,
+				"David",
+				"david@ex.com",
 				new DateTime(2020, 06, 20)
 			)
 		];

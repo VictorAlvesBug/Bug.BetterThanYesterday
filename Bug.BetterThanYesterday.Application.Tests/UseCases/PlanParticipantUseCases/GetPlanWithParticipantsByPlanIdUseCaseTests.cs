@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.PlanParticipants;
 using Bug.BetterThanYesterday.Application.PlanParticipants.GetPlanWithParticipantsByPlanId;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Moq;
 using Xunit;
 
@@ -60,8 +61,8 @@ public class GetPlanWithParticipantsByPlanIdUseCaseTests : BasePlanParticipantUs
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<GetPlanWithParticipantsByPlanIdUseCase>();
-		var studyingAwsPlan = _mock.Plans.Find(plan => plan.Description == "Studying AWS every weekend");
-		var command = new GetPlanWithParticipantsByPlanIdCommand(studyingAwsPlan.Id);
+		var plan = _mock.Plans.Find(plan => plan.Id == PlanRepositoryMockFactory.PublicCancelledPlanId3);
+		var command = new GetPlanWithParticipantsByPlanIdCommand(plan.Id);
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -71,16 +72,16 @@ public class GetPlanWithParticipantsByPlanIdUseCaseTests : BasePlanParticipantUs
 		Assert.True(result.IsSuccess());
 
 		var resultData = Assert.IsType<Result<PlanWithParticipantsModel>>(result).Data;
-		Assert.Equal(studyingAwsPlan.Id, resultData.Plan.PlanId);
-		Assert.Equal(studyingAwsPlan.HabitId, resultData.Plan.HabitId);
-		Assert.Equal(studyingAwsPlan.Description, resultData.Plan.Description);
-		Assert.Equal(studyingAwsPlan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
-		Assert.Equal(studyingAwsPlan.EndsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.EndsAt);
-		Assert.Equal(studyingAwsPlan.Status.Id, resultData.Plan.StatusId);
-		Assert.Equal(studyingAwsPlan.Status.Name, resultData.Plan.StatusName);
-		Assert.Equal(studyingAwsPlan.Type.Id, resultData.Plan.TypeId);
-		Assert.Equal(studyingAwsPlan.Type.Name, resultData.Plan.TypeName);
-		Assert.Equal(studyingAwsPlan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.CreatedAt);
+		Assert.Equal(plan.Id, resultData.Plan.PlanId);
+		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
+		Assert.Equal(plan.Description, resultData.Plan.Description);
+		Assert.Equal(plan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
+		Assert.Equal(plan.EndsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.EndsAt);
+		Assert.Equal(plan.Status.Id, resultData.Plan.StatusId);
+		Assert.Equal(plan.Status.Name, resultData.Plan.StatusName);
+		Assert.Equal(plan.Type.Id, resultData.Plan.TypeId);
+		Assert.Equal(plan.Type.Name, resultData.Plan.TypeName);
+		Assert.Equal(plan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.CreatedAt);
 		
 		Assert.Empty(resultData.Participants);
 
