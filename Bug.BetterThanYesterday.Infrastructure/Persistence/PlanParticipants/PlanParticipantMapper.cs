@@ -8,8 +8,8 @@ internal sealed class PlanParticipantMapper : IDocumentMapper<PlanParticipant, P
 	public PlanParticipantDocument ToDocument(PlanParticipant planParticipant) => new()
 	{
 		Id = planParticipant.Id,
-		UserId = planParticipant.UserId,
 		PlanId = planParticipant.PlanId,
+		UserId = planParticipant.UserId,
 		JoinedAt = planParticipant.JoinedAt.ToDateTime(TimeOnly.MinValue),
 		LeftAt = planParticipant.LeftAt?.ToDateTime(TimeOnly.MinValue),
 		StatusId = planParticipant.Status.Id
@@ -17,8 +17,8 @@ internal sealed class PlanParticipantMapper : IDocumentMapper<PlanParticipant, P
 
 	public PlanParticipant ToDomain(PlanParticipantDocument document) => PlanParticipant.Restore(
 		document.Id,
-		document.UserId,
 		document.PlanId,
+		document.UserId,
 		document.JoinedAt,
 		document.LeftAt,
 		document.StatusId

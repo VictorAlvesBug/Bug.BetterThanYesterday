@@ -8,8 +8,8 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 	public CheckInDocument ToDocument(CheckIn checkIn) => new()
 	{
 		Id = checkIn.Id,
-		UserId = checkIn.UserId,
 		PlanId = checkIn.PlanId,
+		UserId = checkIn.UserId,
 		Date = checkIn.Date.ToDateTime(TimeOnly.MinValue),
 		Title = checkIn.Title,
 		Description = checkIn.Description
@@ -17,8 +17,8 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 
 	public CheckIn ToDomain(CheckInDocument document) => CheckIn.Restore(
 		document.Id,
-		document.UserId,
 		document.PlanId,
+		document.UserId,
 		document.Date,
 		document.Title,
 		document.Description);

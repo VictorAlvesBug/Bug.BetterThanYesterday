@@ -7,8 +7,8 @@ internal static class CheckInMapper
 	public static CheckInModel ToModel(this CheckIn checkIn) => new()
 	{
 		CheckInId = checkIn.Id,
-		UserId = checkIn.UserId,
 		PlanId = checkIn.PlanId,
+		UserId = checkIn.UserId,
 		Date = checkIn.Date.ToDateTime(TimeOnly.MinValue),
 		Title = checkIn.Title,
 		Description = checkIn.Description

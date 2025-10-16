@@ -57,59 +57,6 @@ app.Run();
 
 # Testes do UseCase
 
-##### PlanParticipants #####
-
-## GetPlanParticipantDetails(planId, userId)
- - Test_GetPlanParticipantDetailsUseCase_Valid_ShouldReturnSuccess();
- - Test_GetPlanParticipantDetailsUseCase_NotFoundPlanParticipantId_ShouldReturnRejected();
-
-## GetPlanWithParticipantsByPlanId(planId)
- - Test_GetPlanWithParticipantsByPlanIdUseCase_Valid_ShouldReturnSuccess();
- - Test_GetPlanWithParticipantsByPlanIdUseCase_NotFoundPlanId_ShouldReturnRejected();
-
-## GetUserWithPlansByUserId(userId)
- - Test_GetUserWithPlansByUserIdUseCase_Valid_ShouldReturnSuccess();
- - Test_GetUserWithPlansByUserIdUseCase_NotFoundUserId_ShouldReturnRejected();
-
-## AddUserToPlan(planId, userId)
- - Test_AddUserToPlanUseCase_Valid_ShouldReturnSuccess();
- - Test_AddUserToPlanUseCase_NotFoundPlanId_ShouldReturnRejected();
- - Test_AddUserToPlanUseCase_NotFoundUserId_ShouldReturnRejected();
- - Test_AddUserToPlanUseCase_UserIsAlreadyInThePlan_ShouldReturnRejected();
- - Test_AddUserToPlanUseCase_UserCannotBeAddedToRunningPlan_ShouldReturnRejected();
- - Test_AddUserToPlanUseCase_UserCannotBeAddedToFinishedPlan_ShouldReturnRejected();
- - Test_AddUserToPlanUseCase_UserCannotBeAddedToCancelledPlan_ShouldReturnRejected();
-
-## RemoveUserFromPlan(planId, userId)
- - Test_RemoveUserFromPlanUseCase_Valid_ShouldReturnSuccess();
- - Test_RemoveUserFromPlanUseCase_NotFoundPlanId_ShouldReturnRejected();
- - Test_RemoveUserFromPlanUseCase_NotFoundUserId_ShouldReturnRejected();
- - Test_RemoveUserFromPlanUseCase_UserIsNotInThePlan_ShouldReturnRejected();
- - Test_RemoveUserFromPlanUseCase_UserCannotBeRemovedFromFinishedPlan_ShouldReturnRejected();
- - Test_RemoveUserFromPlanUseCase_UserCannotBeRemovedFromCancelledPlan_ShouldReturnRejected();
-
-## BlockUserInThePlan(planId, userId)
- - Test_BlockUserInThePlanUseCase_Valid_ShouldReturnSuccess();
- - Test_BlockUserInThePlanUseCase_NotFoundPlanId_ShouldReturnRejected();
- - Test_BlockUserInThePlanUseCase_NotFoundUserId_ShouldReturnRejected();
- - Test_BlockUserInThePlanUseCase_UserIsNotInThePlan_ShouldReturnRejected();
- - Test_BlockUserInThePlanUseCase_UserIsAlreadyBlocked_ShouldReturnRejected();
- - Test_BlockUserInThePlanUseCase_UserCannotBeBlockedInNotStartedPlan_ShouldReturnRejected();
- - Test_BlockUserInThePlanUseCase_UserCannotBeBlockedInFinishedPlan_ShouldReturnRejected();
- - Test_BlockUserInThePlanUseCase_UserCannotBeBlockedInCancelledPlan_ShouldReturnRejected();
-
-## UnblockUserInThePlan(planId, userId)
- - Test_UnblockUserInThePlanUseCase_Valid_ShouldReturnSuccess();
- - Test_UnblockUserInThePlanUseCase_NotFoundPlanId_ShouldReturnRejected();
- - Test_UnblockUserInThePlanUseCase_NotFoundUserId_ShouldReturnRejected();
- - Test_UnblockUserInThePlanUseCase_UserIsNotInThePlan_ShouldReturnRejected();
- - Test_UnblockUserInThePlanUseCase_UserIsNotBlocked_ShouldReturnRejected();
- - Test_BlockUserInThePlanUseCase_UserCannotBeUnblockedInNotStartedPlan_ShouldReturnRejected();
- - Test_BlockUserInThePlanUseCase_UserCannotBeUnblockedInFinishedPlan_ShouldReturnRejected();
- - Test_BlockUserInThePlanUseCase_UserCannotBeUnblockedInCancelledPlan_ShouldReturnRejected();
-
-
-
 
 
 # Testes da Controller
