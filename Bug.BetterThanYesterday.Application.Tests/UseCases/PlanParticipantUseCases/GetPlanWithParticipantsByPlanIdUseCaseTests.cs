@@ -61,7 +61,7 @@ public class GetPlanWithParticipantsByPlanIdUseCaseTests : BasePlanParticipantUs
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<GetPlanWithParticipantsByPlanIdUseCase>();
-		var plan = _mock.Plans.Find(plan => plan.Id == PlanRepositoryMockFactory.PublicCancelledPlanId3);
+		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicCancelledPlanId3);
 		var command = new GetPlanWithParticipantsByPlanIdCommand(plan.Id);
 
 		// Act

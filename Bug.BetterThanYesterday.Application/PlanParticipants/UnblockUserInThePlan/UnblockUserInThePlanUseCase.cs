@@ -37,7 +37,14 @@ public sealed class UnblockUserInThePlanUseCase(
         if (plan.Status != PlanStatus.Running)
             return Result.Rejected("O status atual do plano não permite o desbloqueio desse participante");
 
-        planParticipant.MarkAsActive();
+        try
+        {
+            planParticipant.MarkAsActive();
+        }
+        catch (Exception ex)
+        {
+            return Result.Rejected(ex.Message);
+        }
         
         await planParticipantRepository.UpdateAsync(planParticipant);
         return Result.Success(

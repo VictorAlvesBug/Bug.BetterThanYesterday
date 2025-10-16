@@ -11,6 +11,9 @@ public static class PlanRepositoryMockFactory
 	public static readonly Guid PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left = Guid.Parse("a7f73852-db21-4791-94b0-1bcb55b0b496");
 	public static readonly Guid PublicCancelledPlanId3 = Guid.Parse("bea8b9e8-5588-460e-bd5d-ae1c042bc166");
 	public static readonly Guid PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked = Guid.Parse("79754103-5278-4ed2-afc5-bad44e97c4f6");
+	public static readonly Guid PrivateFinishedPlanId5_WithUserId5Active = Guid.Parse("453f7331-6170-4cdd-912f-9ffc83a1ea8d");
+	public static readonly Guid PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active = Guid.Parse("fb4e4d61-d64f-4dba-814b-c5e157776c15");
+	public static readonly Guid PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active = Guid.Parse("5f63f6bc-bd97-47e7-b3d1-cb4eb64d9b26");
 
 	public static (Mock<IPlanRepository> repo, List<Plan> data) Create()
 	{
@@ -54,6 +57,36 @@ public static class PlanRepositoryMockFactory
 				new DateTime(2024, 12, 31),
 				PlanStatus.Finished.Id,
 				PlanType.Private.Id,
+				new DateTime(2021, 10, 05)
+			),
+			Plan.Restore(
+				PrivateFinishedPlanId5_WithUserId5Active,
+				HabitRepositoryMockFactory.HabitId3,
+				"Studying English every weekend",
+				new DateTime(2024, 01, 01),
+				new DateTime(2024, 12, 31),
+				PlanStatus.Finished.Id,
+				PlanType.Private.Id,
+				new DateTime(2021, 10, 05)
+			),
+			Plan.Restore(
+				PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
+				HabitRepositoryMockFactory.HabitId3,
+				"Studying Math every weekend",
+				new DateTime(2024, 01, 01),
+				new DateTime(2024, 12, 31),
+				PlanStatus.Cancelled.Id,
+				PlanType.Public.Id,
+				new DateTime(2021, 10, 05)
+			),
+			Plan.Restore(
+				PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active,
+				HabitRepositoryMockFactory.HabitId3,
+				"Studying Anatomy every weekend",
+				new DateTime(2025, 01, 01),
+				new DateTime(DateTime.Today.Year, 12, 31),
+				PlanStatus.Running.Id,
+				PlanType.Public.Id,
 				new DateTime(2021, 10, 05)
 			)
 		];

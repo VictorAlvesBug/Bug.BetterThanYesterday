@@ -38,8 +38,15 @@ public sealed class BlockUserInThePlanUseCase(
         if (plan.Status != PlanStatus.Running)
             return Result.Rejected("O status atual do plano não permite o bloqueio desse participante");
 
-        planParticipant.MarkAsBlocked();
-        
+        try
+        {
+            planParticipant.MarkAsBlocked();
+        }
+        catch (Exception ex)
+        {
+            return Result.Rejected(ex.Message);
+        }
+    
         await planParticipantRepository.UpdateAsync(planParticipant);
         return Result.Success(
             planParticipant.ToPlanParticipantDetailsModel(plan, user),

@@ -39,7 +39,14 @@ public sealed class RemoveUserFromPlanUseCase(
         if (!allowedPlanStatuses.Contains(plan.Status))
             return Result.Rejected("O status atual do plano não permite a saída de participantes");
 
-        planParticipant.MarkAsLeft();
+        try
+        {
+            planParticipant.MarkAsLeft();
+        }
+        catch (Exception ex)
+        {
+            return Result.Rejected(ex.Message);
+        }
         
         await planParticipantRepository.UpdateAsync(planParticipant);
         return Result.Success(

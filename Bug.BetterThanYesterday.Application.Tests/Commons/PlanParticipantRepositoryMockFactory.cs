@@ -52,9 +52,57 @@ public static class PlanParticipantRepositoryMockFactory
 				PlanParticipantStatus.Left.Id
 			),
 			PlanParticipant.Restore(
-				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked, UserRepositoryMockFactory.UserId2),
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked, UserRepositoryMockFactory.UserId3),
 				PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked,
 				UserRepositoryMockFactory.UserId3,
+				new DateTime(2020, 01, 01),
+				null,
+				PlanParticipantStatus.Blocked.Id
+			),
+			PlanParticipant.Restore(
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId5_WithUserId5Active, UserRepositoryMockFactory.UserId5),
+				PlanRepositoryMockFactory.PrivateFinishedPlanId5_WithUserId5Active,
+				UserRepositoryMockFactory.UserId5,
+				new DateTime(2020, 01, 01),
+				null,
+				PlanParticipantStatus.Active.Id
+			),
+			PlanParticipant.Restore(
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active, UserRepositoryMockFactory.UserId5),
+				PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
+				UserRepositoryMockFactory.UserId5,
+				new DateTime(2020, 01, 01),
+				null,
+				PlanParticipantStatus.Active.Id
+			),
+			PlanParticipant.Restore(
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active, UserRepositoryMockFactory.UserId3),
+				PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active,
+				UserRepositoryMockFactory.UserId3,
+				new DateTime(2020, 01, 01),
+				null,
+				PlanParticipantStatus.Blocked.Id
+			),
+			PlanParticipant.Restore(
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active, UserRepositoryMockFactory.UserId4),
+				PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active,
+				UserRepositoryMockFactory.UserId4,
+				new DateTime(2020, 01, 01),
+				new DateTime(2020, 01, 05),
+				PlanParticipantStatus.Left.Id
+			),
+			PlanParticipant.Restore(
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active, UserRepositoryMockFactory.UserId5),
+				PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active,
+				UserRepositoryMockFactory.UserId5,
+				new DateTime(2020, 01, 01),
+				null,
+				PlanParticipantStatus.Active.Id
+			),
+			PlanParticipant.Restore(
+				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active, UserRepositoryMockFactory.UserId4),
+				PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
+				UserRepositoryMockFactory.UserId4,
 				new DateTime(2020, 01, 01),
 				null,
 				PlanParticipantStatus.Blocked.Id

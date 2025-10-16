@@ -11,6 +11,8 @@ public static class UserRepositoryMockFactory
 	public static readonly Guid UserId2 = Guid.Parse("814fbb49-66e1-4d51-a69e-bf1eb6d8fc4a");
 	public static readonly Guid UserId3 = Guid.Parse("cc16329d-cbfc-4ef3-95bb-1b031179005f");
 	public static readonly Guid UserId4 = Guid.Parse("78edf69e-bd58-4117-899d-be9150252d25");
+	public static readonly Guid UserId5 = Guid.Parse("b7ddfa2f-1ca9-4f41-a105-c7170d4b1cc8");
+	public static readonly Guid UserId6 = Guid.Parse("7cbe7e0c-61d0-4934-8482-cf17d4b0854f");
 	
 	public static (Mock<IUserRepository> repo, List<User> data) Create()
 	{
@@ -38,6 +40,18 @@ public static class UserRepositoryMockFactory
 				UserId4,
 				"David",
 				"david@ex.com",
+				new DateTime(2020, 06, 20)
+			),
+			User.Restore(
+				UserId5,
+				"Ellie",
+				"ellie@ex.com",
+				new DateTime(2020, 06, 20)
+			),
+			User.Restore(
+				UserId6,
+				"Fred",
+				"fred@ex.com",
 				new DateTime(2020, 06, 20)
 			)
 		];
