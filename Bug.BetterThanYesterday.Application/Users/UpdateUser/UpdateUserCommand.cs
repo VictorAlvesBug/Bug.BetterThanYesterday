@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Users.UpdateUser;
 
@@ -18,12 +19,12 @@ public class UpdateUserCommand : ICommand
 	public void Validate()
 	{
 		if (UserId == Guid.Empty)
-			throw new ArgumentNullException(nameof(UserId), "Informe o ID do usuário");
+			throw new ArgumentNullException(nameof(UserId), Messages.EnterUserId);
 
 		if (string.IsNullOrWhiteSpace(Name))
-			throw new ArgumentNullException(nameof(Name), "Informe o nome do usuário");
+			throw new ArgumentNullException(nameof(Name), Messages.EnterUserName);
 
 		if (string.IsNullOrWhiteSpace(Email))
-			throw new ArgumentNullException(nameof(Email), "Informe o e-mail do usuário");
+			throw new ArgumentNullException(nameof(Email), Messages.EnterUserEmail);
 	}
 }

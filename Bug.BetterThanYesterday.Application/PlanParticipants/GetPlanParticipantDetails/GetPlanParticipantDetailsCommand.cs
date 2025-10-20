@@ -1,4 +1,5 @@
 using Bug.BetterThanYesterday.Application.SeedWork;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.PlanParticipants.GetPlanParticipantDetails;
 
@@ -16,9 +17,9 @@ public class GetPlanParticipantDetailsCommand : ICommand
     public void Validate()
     {
         if (PlanId == Guid.Empty)
-            throw new ArgumentNullException(nameof(PlanId), "Informe o ID do plano");
+            throw new ArgumentNullException(nameof(PlanId), Messages.EnterPlanId);
             
         if (UserId == Guid.Empty)
-            throw new ArgumentNullException(nameof(UserId), "Informe o ID do usuário");
+            throw new ArgumentNullException(nameof(UserId), Messages.EnterUserId);
     }
 }

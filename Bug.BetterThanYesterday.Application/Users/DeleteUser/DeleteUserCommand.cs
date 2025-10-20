@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Users.DeleteUser;
 
@@ -11,6 +12,6 @@ public class DeleteUserCommand : ICommand
 	public void Validate()
 	{
 		if (UserId == Guid.Empty)
-			throw new ArgumentNullException(nameof(UserId), "Informe o ID do usuário");
+			throw new ArgumentNullException(nameof(UserId), Messages.EnterUserId);
 	}
 }

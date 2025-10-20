@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users.ValueObjects;
 
 namespace Bug.BetterThanYesterday.Domain.Users.Entities;
@@ -33,10 +34,10 @@ public class User : Entity
 	public static User CreateNew(string name, string email)
 	{
 		if (string.IsNullOrWhiteSpace(name))
-			throw new ArgumentNullException(nameof(name), "Informe o nome do usuário");
+			throw new ArgumentNullException(nameof(name), Messages.EnterUserName);
 
 		if (string.IsNullOrWhiteSpace(email))
-			throw new ArgumentNullException(nameof(email), "Informe o e-mail do usuário");
+			throw new ArgumentNullException(nameof(email), Messages.EnterUserEmail);
 
 		return new User(name, email);
 	}
@@ -48,16 +49,16 @@ public class User : Entity
 		DateTime createdAt)
 	{
 		if (id == Guid.Empty)
-			throw new ArgumentNullException(nameof(id), "Informe o ID do usuário");
+			throw new ArgumentNullException(nameof(id), Messages.EnterUserId);
 
 		if (string.IsNullOrWhiteSpace(name))
-			throw new ArgumentNullException(nameof(name), "Informe o nome do usuário");
+			throw new ArgumentNullException(nameof(name), Messages.EnterUserName);
 
 		if (string.IsNullOrWhiteSpace(email))
-			throw new ArgumentNullException(nameof(email), "Informe o e-mail do usuário");
+			throw new ArgumentNullException(nameof(email), Messages.EnterUserEmail);
 
 		if (createdAt == DateTime.MinValue)
-			throw new ArgumentNullException(nameof(createdAt), "Informe a data de criação do usuário");
+			throw new ArgumentNullException(nameof(createdAt), Messages.EnterUserCreationDate);
 
 		return new User(
 			id,
@@ -69,7 +70,7 @@ public class User : Entity
 	public void UpdateName(string name)
 	{
 		if (string.IsNullOrWhiteSpace(name))
-			throw new ArgumentNullException(nameof(name), "Informe o nome do usuário");
+			throw new ArgumentNullException(nameof(name), Messages.EnterUserName);
 
 		Name = name;
 	}

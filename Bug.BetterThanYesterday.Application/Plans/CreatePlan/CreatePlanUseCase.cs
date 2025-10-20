@@ -2,6 +2,7 @@
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Plans.CreatePlan;
 
@@ -16,7 +17,7 @@ public class CreatePlanUseCase(
 		var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
 		if (habit is null)
-			return Result.Rejected("Hábito não encontrado");
+			return Result.Rejected(Messages.EnterHabitId);
 
 		var plan = Plan.CreateNew(
 			command.HabitId,
@@ -26,6 +27,6 @@ public class CreatePlanUseCase(
 			command.TypeId);
 
 		await planRepository.AddAsync(plan);
-		return Result.Success(plan.ToModel(), "Plano cadastrado com sucesso");
+		return Result.Success(plan.ToModel(), Messages.PlanSuccessfullyRegistered);
 	}
 }

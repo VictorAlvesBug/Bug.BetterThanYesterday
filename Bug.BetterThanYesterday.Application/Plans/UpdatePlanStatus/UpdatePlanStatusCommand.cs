@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Plans.UpdatePlanStatus;
 
@@ -16,9 +17,9 @@ public class UpdatePlanStatusCommand : ICommand
 	public void Validate()
 	{
 		if (PlanId == Guid.Empty)
-			throw new ArgumentNullException(nameof(PlanId), "Informe o ID do plano");
+			throw new ArgumentNullException(nameof(PlanId), Messages.EnterPlanId);
 
 		if (StatusId <= 0)
-			throw new ArgumentException("Informe o status do plano", nameof(StatusId));
+			throw new ArgumentException(Messages.EnterPlanStatus, nameof(StatusId));
 	}
 }

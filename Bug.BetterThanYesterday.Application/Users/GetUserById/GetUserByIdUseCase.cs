@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.Users.GetUserById;
@@ -12,7 +13,7 @@ public class GetUserByIdUseCase(IUserRepository userRepository)
 		var user = await userRepository.GetByIdAsync(command.UserId);
 
 		if (user is null)
-			return Result.Rejected("Usuário não encontrado");
+			return Result.Rejected(Messages.UserNotFound);
 
 		return Result.Success(user.ToModel());
 	}

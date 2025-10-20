@@ -1,6 +1,7 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.PlanParticipants;
 using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.PlanParticipants.GetPlanWithParticipantsByPlanId;
@@ -18,12 +19,12 @@ public sealed class GetPlanWithParticipantsByPlanIdUseCase(
         var plan = await planRepository.GetByIdAsync(command.PlanId);
 
         if (plan is null)
-            return Result.Rejected("Plano não encontrado");
+            return Result.Rejected(Messages.EnterPlanId);
 
         var planParticipants = await planParticipantRepository.ListByPlanIdAsync(command.PlanId);
 
         if (planParticipants.Count == 0)
-            return Result.Success(plan.ToPlanWithParticipantsModel(), "Nenhum participante encontrado para este plano");
+            return Result.Success(plan.ToPlanWithParticipantsModel(), Messages.PlanHasNoParticipants);
 
         var participantIds = planParticipants.Select(planParticipant => planParticipant.UserId).ToList();
 

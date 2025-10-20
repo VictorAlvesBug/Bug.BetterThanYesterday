@@ -3,7 +3,6 @@ using Bug.BetterThanYesterday.Application.PlanParticipants.AddUserToPlan;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
-using Bug.BetterThanYesterday.Domain.Plans.Entities;
 using Moq;
 using Xunit;
 

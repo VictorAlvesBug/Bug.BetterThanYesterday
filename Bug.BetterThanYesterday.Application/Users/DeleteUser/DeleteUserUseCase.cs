@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.Users.DeleteUser;
@@ -12,9 +13,9 @@ public class DeleteUserUseCase(IUserRepository userRepository)
 		var user = await userRepository.GetByIdAsync(command.UserId);
 
 		if (user is null)
-			return Result.Rejected("Usuário não encontrado");
+			return Result.Rejected(Messages.UserNotFound);
 
 		await userRepository.DeleteAsync(user);
-		return Result.Success("Usuário deletado com sucesso");
+		return Result.Success(Messages.UserSuccessfullyDeleted);
 	}
 }

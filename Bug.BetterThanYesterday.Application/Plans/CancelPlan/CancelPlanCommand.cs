@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Plans.CancelPlan;
 
@@ -11,6 +12,6 @@ public class CancelPlanCommand : ICommand
 	public void Validate()
 	{
 		if (PlanId == Guid.Empty)
-			throw new ArgumentNullException(nameof(PlanId), "Informe o ID do plano");
+			throw new ArgumentNullException(nameof(PlanId), Messages.EnterPlanId);
 	}
 }

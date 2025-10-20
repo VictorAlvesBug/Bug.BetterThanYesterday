@@ -3,6 +3,7 @@ using Bug.BetterThanYesterday.Domain.PlanParticipants;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.PlanParticipants.RemoveUserFromPlan;
@@ -20,24 +21,24 @@ public sealed class RemoveUserFromPlanUseCase(
         var plan = await planRepository.GetByIdAsync(command.PlanId);
 
         if (plan is null)
-            return Result.Rejected("Plano não encontrado");
+            return Result.Rejected(Messages.EnterPlanId);
 
         var user = await userRepository.GetByIdAsync(command.UserId);
 
         if (user is null)
-            return Result.Rejected("Usuário não encontrado");
+            return Result.Rejected(Messages.UserNotFound);
 
         var planParticipantId = PlanParticipant.BuildId(command.PlanId, command.UserId);
 
         var planParticipant = await planParticipantRepository.GetByIdAsync(planParticipantId);
 
         if (planParticipant is null)
-            return Result.Rejected("Usuário não está neste plano");
+            return Result.Rejected(Messages.UserIsNotInThePlan);
 
         var allowedPlanStatuses = new List<PlanStatus> { PlanStatus.NotStarted, PlanStatus.Running };
 
         if (!allowedPlanStatuses.Contains(plan.Status))
-            return Result.Rejected("O status atual do plano não permite a saída de participantes");
+            return Result.Rejected(Messages.UserCanOnlyBeRemovedFromNotStartedOrRunningPlans);
 
         try
         {
@@ -51,7 +52,7 @@ public sealed class RemoveUserFromPlanUseCase(
         await planParticipantRepository.UpdateAsync(planParticipant);
         return Result.Success(
             planParticipant.ToPlanParticipantDetailsModel(plan, user),
-            "Participante removido do plano com sucesso"
-        );
+            Messages.ParticipantSuccessfullyRemovedFromThePlan
+		);
     }
 }

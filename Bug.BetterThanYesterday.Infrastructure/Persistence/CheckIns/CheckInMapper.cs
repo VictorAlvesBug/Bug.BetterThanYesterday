@@ -11,6 +11,7 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 		PlanId = checkIn.PlanId,
 		UserId = checkIn.UserId,
 		Date = checkIn.Date.ToDateTime(TimeOnly.MinValue),
+		Index = checkIn.Index,
 		Title = checkIn.Title,
 		Description = checkIn.Description
 	};
@@ -20,6 +21,7 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 		document.PlanId,
 		document.UserId,
 		document.Date,
+		document.Index,
 		document.Title,
 		document.Description);
 }

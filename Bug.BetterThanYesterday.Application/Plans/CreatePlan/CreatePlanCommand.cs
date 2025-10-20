@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Plans.CreatePlan;
 
@@ -27,18 +28,18 @@ public class CreatePlanCommand : ICommand
 	public void Validate()
 	{
 		if (HabitId == Guid.Empty)
-			throw new ArgumentNullException(nameof(HabitId), "Informe o ID do hábito");
+			throw new ArgumentNullException(nameof(HabitId), Messages.EnterHabitId);
 
 		if (string.IsNullOrWhiteSpace(Description))
-			throw new ArgumentNullException(nameof(Description), "Informe a descrição do plano");
+			throw new ArgumentNullException(nameof(Description), Messages.EnterDescription);
 
 		if (StartsAt == DateTime.MinValue)
-			throw new ArgumentException("Informe a data inicial do plano", nameof(StartsAt));
+			throw new ArgumentException(Messages.EnterStartDate, nameof(StartsAt));
 
 		if (EndsAt == DateTime.MinValue)
-			throw new ArgumentException("Informe a data final do plano", nameof(EndsAt));
+			throw new ArgumentException(Messages.EnterPlanEndDate, nameof(EndsAt));
 
 		if (TypeId <= 0)
-			throw new ArgumentException("Informe o tipo do plano", nameof(TypeId));
+			throw new ArgumentException(Messages.EnterTypeId, nameof(TypeId));
 	}
 }

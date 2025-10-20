@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
 
@@ -16,9 +17,9 @@ public class UpdateHabitCommand : ICommand
 	public void Validate()
 	{
 		if (HabitId == Guid.Empty)
-			throw new ArgumentNullException(nameof(HabitId), "Informe o ID do hábito");
+			throw new ArgumentNullException(nameof(HabitId), Messages.HabitNotFound);
 
 		if (string.IsNullOrWhiteSpace(Name))
-			throw new ArgumentNullException(nameof(Name), "Informe o nome do hábito");
+			throw new ArgumentNullException(nameof(Name), Messages.EnterHabitName);
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Domain.Habits.Entities;
 
@@ -28,7 +29,7 @@ public class Habit : Entity
 	public static Habit CreateNew(string name)
 	{
 		if (string.IsNullOrWhiteSpace(name))
-			throw new ArgumentNullException(nameof(name), "Informe o nome do hábito");
+			throw new ArgumentNullException(nameof(name), Messages.EnterHabitName);
 		
 		return new Habit(name);
 	}
@@ -39,13 +40,13 @@ public class Habit : Entity
 		DateTime createdAt)
 	{
 		if (id == Guid.Empty)
-			throw new ArgumentNullException(nameof(id), "Informe o ID do hábito");
+			throw new ArgumentNullException(nameof(id), Messages.EnterHabitId);
 
 		if (string.IsNullOrWhiteSpace(name))
-			throw new ArgumentNullException(nameof(name), "Informe o nome do hábito");
+			throw new ArgumentNullException(nameof(name), Messages.EnterHabitName);
 
 		if (createdAt == DateTime.MinValue)
-			throw new ArgumentNullException(nameof(createdAt), "Informe a data de criação do hábito");
+			throw new ArgumentNullException(nameof(createdAt), Messages.EnterHabitCreationDate);
 
 		return new Habit(
 			id,
@@ -56,7 +57,7 @@ public class Habit : Entity
 	public void UpdateName(string name)
 	{
 		if (string.IsNullOrWhiteSpace(name))
-			throw new ArgumentNullException(nameof(name), "Informe o nome do hábito");
+			throw new ArgumentNullException(nameof(name), Messages.EnterHabitName);
 		Name = name;
 	}
 }

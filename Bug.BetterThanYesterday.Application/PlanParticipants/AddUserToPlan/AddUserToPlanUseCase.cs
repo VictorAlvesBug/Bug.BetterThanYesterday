@@ -1,4 +1,5 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.PlanParticipants;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.ValueObjects;
@@ -21,15 +22,15 @@ public sealed class AddUserToPlanUseCase(
         var plan = await planRepository.GetByIdAsync(command.PlanId);
 
         if (plan is null)
-            return Result.Rejected("Plano não encontrado");
+            return Result.Rejected(Messages.PlanNotFound);
 
         var user = await userRepository.GetByIdAsync(command.UserId);
 
         if (user is null)
-            return Result.Rejected("Usuário não encontrado");
+            return Result.Rejected(Messages.UserNotFound);
 
         if (plan.Status != PlanStatus.NotStarted)
-            return Result.Rejected("Apenas planos não iniciados podem receber novos participantes");
+            return Result.Rejected(Messages.OnlyNotStartedPlansCanReceiveNewParticipants);
 
         var planParticipantToAdd = PlanParticipant.CreateNew(command.PlanId, command.UserId);
 
@@ -42,7 +43,7 @@ public sealed class AddUserToPlanUseCase(
             await planParticipantRepository.AddAsync(planParticipantToAdd);
             return Result.Success(
                 planParticipantDetailsModel,
-                "Participante adicionado ao plano com sucesso"
+                Messages.ParticipantSuccessfullyAddedToThePlan
             );
         }
 
@@ -51,10 +52,10 @@ public sealed class AddUserToPlanUseCase(
             await planParticipantRepository.UpdateAsync(planParticipantToAdd);
             return Result.Success(
                 planParticipantDetailsModel,
-                "Participante readicionado ao plano com sucesso"
+                Messages.ParticipantSuccessfullyReaddedToThePlan
             );
         }
         
-        return Result.Rejected("Participante já adicionado ao plano");
+        return Result.Rejected(Messages.ParticipantAlreadyAddedToThePlan);
     }
 }

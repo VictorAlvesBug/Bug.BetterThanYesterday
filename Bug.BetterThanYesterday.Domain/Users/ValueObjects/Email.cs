@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Bug.BetterThanYesterday.Domain.Strings;
+using System.Text.RegularExpressions;
 
 namespace Bug.BetterThanYesterday.Domain.Users.ValueObjects;
 
@@ -14,14 +15,14 @@ public sealed record Email
 	public static Email Create(string value)
 	{
 		if (string.IsNullOrWhiteSpace(value))
-			throw new ArgumentNullException(nameof(Email), "Informe o e-mail do usuário");
+			throw new ArgumentNullException(nameof(Email), Messages.EnterUserEmail);
 
 		var regex = new Regex(@"^[a-z0-9+_.-]+@([a-z0-9-]+\.)+[a-z]{2,6}$");
 
 		value = value.Trim().ToLower();
 
 		if (!regex.IsMatch(value))
-			throw new ArgumentException(nameof(Email), "Informe um e-mail válido para o usuário");
+			throw new ArgumentException(nameof(Email), Messages.EnterValidEmail);
 
 		return new Email(value);
 	}

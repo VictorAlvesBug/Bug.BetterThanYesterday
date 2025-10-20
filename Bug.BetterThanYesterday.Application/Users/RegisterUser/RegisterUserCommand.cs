@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Users.RegisterUser;
 
@@ -18,9 +19,9 @@ public class RegisterUserCommand : ICommand
 	public void Validate()
 	{
 		if (string.IsNullOrWhiteSpace(Name))
-			throw new ArgumentNullException(nameof(Name), "Informe o nome do usuário");
+			throw new ArgumentNullException(nameof(Name), Messages.EnterUserName);
 
 		if (string.IsNullOrWhiteSpace(Email))
-			throw new ArgumentNullException(nameof(Email), "Informe o e-mail do usuário");
+			throw new ArgumentNullException(nameof(Email), Messages.EnterUserEmail);
 	}
 }

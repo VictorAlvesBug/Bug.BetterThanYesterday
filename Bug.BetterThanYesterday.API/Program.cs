@@ -57,7 +57,49 @@ app.Run();
 
 # Testes do UseCase
 
+## CheckIn
 
+- CheckInId (PlanId,UserId,Date,Index=0)
+- PlanId
+- UserId
+- Date
+- Index
+- Title
+- Description
+
+--> GetCheckInDetailsUseCase
+(planId,userId,date,index=0)
+- Valid
+- NotFoundCheckInId
+
+
+--> GetPlanWithCheckInsByPlanId
+(planId)
+- Valid
+- PlanWithoutCheckIns
+- NotFoundPlanId
+
+
+--> GetPlanUserWithCheckInsByPlanIdAndUserId
+(planId,userId)
+- Valid
+- PlanUserWithoutCheckIns
+- UserIsNotInThisPlan
+- NotFoundPlanId
+- NotFoundUserId
+
+
+--> AddCheckIn
+(planId,userId,date,index=0,title,description)
+- Valid
+- NotFoundPlanId
+- NotFoundUserId
+- DateOutOfAllowedRange
+- IndexOutOfAllowedRange
+- DuplicatedCheckIn
+- UserIsNotInThisPlan
+- PlanIsNotRunning
+- UserIsBlocked
 
 # Testes da Controller
 

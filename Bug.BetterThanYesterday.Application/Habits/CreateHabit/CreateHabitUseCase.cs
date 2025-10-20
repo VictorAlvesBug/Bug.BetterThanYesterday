@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
 
@@ -13,10 +14,10 @@ public sealed class CreateHabitUseCase(IHabitRepository habitRepository)
 		var alreadyExists = (await habitRepository.GetByNameAsync(command.Name)) is not null;
 
 		if (alreadyExists)
-			return Result.Rejected("Já existe um hábito cadastrado com esse nome");
+			return Result.Rejected(Messages.ThereIsAlreadyAHabitRegisteredWithThatName);
 
 		var habit = Habit.CreateNew(command.Name);
 		await habitRepository.AddAsync(habit);
-		return Result.Success(habit.ToModel(), "Hábito cadastrado com sucesso");
+		return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyRegistered);
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Plans.UpdatePlanStatus;
 
@@ -13,12 +14,12 @@ public class UpdatePlanStatusUseCase(IPlanRepository planRepository)
 		var plan = await planRepository.GetByIdAsync(command.PlanId);
 
 		if (plan is null)
-			return Result.Rejected("Plano não encontrado");
+			return Result.Rejected(Messages.EnterPlanId);
 
 		var newStatus = PlanStatus.FromId(command.StatusId);
 		plan.ChangeStatus(newStatus);
 
 		await planRepository.UpdateAsync(plan);
-		return Result.Success(plan.ToModel(), "Status do plano atualizado com sucesso");
+		return Result.Success(plan.ToModel(), Messages.PlanStatusSuccessfullyUpdated);
 	}
 }

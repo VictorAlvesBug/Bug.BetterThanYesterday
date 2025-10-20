@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Bug.BetterThanYesterday.Domain.Users.ValueObjects;
@@ -14,10 +15,10 @@ public class RegisterUserUseCase(IUserRepository userRepository)
 		var alreadyExists = (await userRepository.GetByEmailAsync(Email.Create(command.Email))) is not null;
 
 		if (alreadyExists)
-			return Result.Rejected("E-mail já cadastrado");
+			return Result.Rejected(Messages.EmailAlreadyRegistered);
 
 		var user = User.CreateNew(command.Name, command.Email);
 		await userRepository.AddAsync(user);
-		return Result.Success(user.ToModel(), "Usuário cadastrado com sucesso");
+		return Result.Success(user.ToModel(), Messages.UserSuccessfullyRegistered);
 	}
 }

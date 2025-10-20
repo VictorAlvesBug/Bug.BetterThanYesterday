@@ -1,5 +1,4 @@
 ﻿using Bug.BetterThanYesterday.Application.PlanParticipants;
-using Bug.BetterThanYesterday.Application.PlanParticipants.BlockUserInThePlan;
 using Bug.BetterThanYesterday.Application.PlanParticipants.UnblockUserInThePlan;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;

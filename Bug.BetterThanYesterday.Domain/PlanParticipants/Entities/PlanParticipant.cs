@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.Utils;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
 
@@ -42,10 +43,10 @@ public class PlanParticipant : Entity
 	public static Guid BuildId(Guid planId, Guid userId)
 	{
 		if (planId == Guid.Empty)
-			throw new ArgumentNullException(nameof(planId), "Informe o ID do plano");
+			throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
 		
 		if (userId == Guid.Empty)
-			throw new ArgumentNullException(nameof(userId), "Informe o ID do usuário");
+			throw new ArgumentNullException(nameof(userId), Messages.EnterUserId);
 
 		return planId.Combine(userId);
 	}
@@ -53,10 +54,10 @@ public class PlanParticipant : Entity
 	public static PlanParticipant CreateNew(Guid planId, Guid userId)
 	{
 		if (planId == Guid.Empty)
-			throw new ArgumentNullException(nameof(planId), "Informe o ID do plano");
+			throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
 		
 		if (userId == Guid.Empty)
-			throw new ArgumentNullException(nameof(userId), "Informe o ID do usuário");
+			throw new ArgumentNullException(nameof(userId), Messages.EnterUserId);
 
 		return new PlanParticipant(planId, userId);
 	}
@@ -70,19 +71,19 @@ public class PlanParticipant : Entity
 		int statusId)
 	{
 		if (id == Guid.Empty)
-			throw new ArgumentNullException(nameof(id), "Informe o ID do participante do plano");
+			throw new ArgumentNullException(nameof(id), Messages.EnterPlanParticipantId);
 
 		if (planId == Guid.Empty)
-			throw new ArgumentNullException(nameof(planId), "Informe o ID do plano");
+			throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
 
 		if (userId == Guid.Empty)
-			throw new ArgumentNullException(nameof(userId), "Informe o ID do usuário");
+			throw new ArgumentNullException(nameof(userId), Messages.EnterUserId);
 
 		if (joinedAt == DateTime.MinValue)
-			throw new ArgumentNullException(nameof(joinedAt), "Informe a data de inclusão do usuário no plano");
+			throw new ArgumentNullException(nameof(joinedAt), Messages.EnterPlanParticipantJoinedDate);
 
 		if (statusId <= 0)
-			throw new ArgumentException("O ID do status do participante deve ser maior que zero", nameof(statusId));
+			throw new ArgumentException(Messages.PlanParticipantStatusIdMustBeGreaterThanZero, nameof(statusId));
 
 		return new PlanParticipant(
 			id,
@@ -103,12 +104,12 @@ public class PlanParticipant : Entity
 		}
 
 		if (Status == PlanParticipantStatus.Left)
-			throw new InvalidOperationException("Este usuário já foi removido do plano");
+			throw new InvalidOperationException(Messages.UserIsNotInThePlanAnymore);
 
 		if (Status == PlanParticipantStatus.Blocked)
-			throw new InvalidOperationException("Este usuário não pode ser removido do plano, pois está bloqueado");
+			throw new InvalidOperationException(Messages.UserCannotBeRemovedFromThePlanAsHeIsBlocked);
 			
-		throw new InvalidOperationException("Alteração não mapeada para status atual");
+		throw new InvalidOperationException(Messages.ChangeNotMappedToCurrentStatus);
     }
 
 	public void MarkAsBlocked()
@@ -120,12 +121,12 @@ public class PlanParticipant : Entity
 		}
 
         if (Status == PlanParticipantStatus.Blocked)
-			throw new InvalidOperationException("Este participante já está bloqueado neste plano");
+			throw new InvalidOperationException(Messages.ParticipantAlreadyBlockedInThisPlan);
 
 		if (Status == PlanParticipantStatus.Left)
-			throw new InvalidOperationException("O usuário não está mais neste plano");
+			throw new InvalidOperationException(Messages.UserIsNotInThePlanAnymore);
 			
-		throw new InvalidOperationException("Alteração não mapeada para status atual");
+		throw new InvalidOperationException(Messages.ChangeNotMappedToCurrentStatus);
     }
 
 	public void MarkAsActive()
@@ -137,11 +138,11 @@ public class PlanParticipant : Entity
 		}
 
         if (Status == PlanParticipantStatus.Active)
-			throw new InvalidOperationException("Este participante já está desbloqueado neste plano");
+			throw new InvalidOperationException(Messages.UserIsAlreadyActive);
 
 		if (Status == PlanParticipantStatus.Left)
-			throw new InvalidOperationException("O usuário não está mais neste plano");
+			throw new InvalidOperationException(Messages.UserIsNotInThePlanAnymore);
 			
-		throw new InvalidOperationException("Alteração não mapeada para status atual");
+		throw new InvalidOperationException(Messages.ChangeNotMappedToCurrentStatus);
     }
 }

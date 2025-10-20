@@ -3,6 +3,7 @@ using Bug.BetterThanYesterday.Domain.PlanParticipants;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.PlanParticipants.UnblockUserInThePlan;
@@ -20,22 +21,22 @@ public sealed class UnblockUserInThePlanUseCase(
         var plan = await planRepository.GetByIdAsync(command.PlanId);
 
         if (plan is null)
-            return Result.Rejected("Plano não encontrado");
+            return Result.Rejected(Messages.EnterPlanId);
 
         var user = await userRepository.GetByIdAsync(command.UserId);
 
         if (user is null)
-            return Result.Rejected("Usuário não encontrado");
+            return Result.Rejected(Messages.UserNotFound);
 
         var planParticipantId = PlanParticipant.BuildId(command.PlanId, command.UserId);
 
         var planParticipant = await planParticipantRepository.GetByIdAsync(planParticipantId);
 
         if (planParticipant is null)
-            return Result.Rejected("Usuário não está neste plano");
+            return Result.Rejected(Messages.UserIsNotInThePlan);
 
         if (plan.Status != PlanStatus.Running)
-            return Result.Rejected("O status atual do plano não permite o desbloqueio desse participante");
+            return Result.Rejected(Messages.UserCanOnlyBeUnblockedInRunningPlans);
 
         try
         {
@@ -49,7 +50,7 @@ public sealed class UnblockUserInThePlanUseCase(
         await planParticipantRepository.UpdateAsync(planParticipant);
         return Result.Success(
             planParticipant.ToPlanParticipantDetailsModel(plan, user),
-            "Participante bloqueado com sucesso"
-        );
+            Messages.ParticipantSuccessfullyBlocked
+		);
     }
 }

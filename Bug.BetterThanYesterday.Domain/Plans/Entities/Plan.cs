@@ -1,5 +1,6 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Domain.Plans.Entities;
 
@@ -67,16 +68,16 @@ public sealed class Plan : Entity
 		int typeId)
 	{
 		if (habitId == Guid.Empty)
-			throw new ArgumentNullException(nameof(habitId), "Informe o ID do hábito");
+			throw new ArgumentNullException(nameof(habitId), Messages.EnterHabitId);
 
 		if (startsAt < DateTime.Today)
-			throw new ArgumentException("A data de início não pode ser anterior a hoje", nameof(startsAt));
+			throw new ArgumentException(Messages.StartDateCannotBeEarlierThanToday, nameof(startsAt));
 
 		if (endsAt <= startsAt)
-			throw new ArgumentException("A data de término deve ser após a data de início", nameof(endsAt));
+			throw new ArgumentException(Messages.EndDateCannotBeEarlierThanStartDate, nameof(endsAt));
 
 		if (typeId <= 0)
-			throw new ArgumentException("O ID do tipo de plano deve ser maior que zero", nameof(typeId));
+			throw new ArgumentException(Messages.PlanTypeIdMustBeGreaterThanZero, nameof(typeId));
 
 		return new Plan(habitId, description, startsAt, endsAt, typeId);
 	}
@@ -92,25 +93,25 @@ public sealed class Plan : Entity
 		DateTime createdAt)
 	{
 		if (id == Guid.Empty)
-			throw new ArgumentNullException(nameof(id), "Informe o ID do plano");
+			throw new ArgumentNullException(nameof(id), Messages.EnterPlanId);
 
 		if (habitId == Guid.Empty)
-			throw new ArgumentNullException(nameof(habitId), "Informe o ID do hábito");
+			throw new ArgumentNullException(nameof(habitId), Messages.EnterHabitId);
 
 		if (startsAt <= DateTime.MinValue)
-			throw new ArgumentException("Data de início do plano inválida", nameof(startsAt));
+			throw new ArgumentException(Messages.EnterStartDate, nameof(startsAt));
 
 		if (endsAt <= startsAt)
-			throw new ArgumentException("A data de término deve ser após a data de início", nameof(endsAt));
+			throw new ArgumentException(Messages.EndDateCannotBeEarlierThanStartDate, nameof(endsAt));
 
 		if (statusId <= 0)
-			throw new ArgumentException("O ID do status do plano deve ser maior que zero", nameof(statusId));
+			throw new ArgumentException(Messages.PlanStatusIdMustBeGreaterThanZero, nameof(statusId));
 
 		if (typeId <= 0)
-			throw new ArgumentException("O ID do tipo de plano deve ser maior que zero", nameof(typeId));
+			throw new ArgumentException(Messages.PlanTypeIdMustBeGreaterThanZero, nameof(typeId));
 
 		if (createdAt == DateTime.MinValue)
-			throw new ArgumentNullException(nameof(createdAt), "Informe a data de criação do plano");
+			throw new ArgumentNullException(nameof(createdAt), Messages.EnterPlanCreationDate);
 
 		return new Plan(
 			id,

@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
 
@@ -11,6 +12,6 @@ public class ListPlansByHabitIdCommand : ICommand
 	public void Validate()
 	{
 		if (HabitId == Guid.Empty)
-			throw new ArgumentNullException(nameof(HabitId), "Informe o ID do hábito");
+			throw new ArgumentNullException(nameof(HabitId), Messages.EnterHabitId);
 	}
 }
