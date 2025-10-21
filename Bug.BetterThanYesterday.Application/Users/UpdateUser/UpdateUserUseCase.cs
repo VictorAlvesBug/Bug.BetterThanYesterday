@@ -25,8 +25,15 @@ public class UpdateUserUseCase(IUserRepository userRepository)
 			return Result.Rejected(Messages.UserEmailAlreadyRegistered);
 		}
 
-		user.UpdateName(command.Name);
-		user.UpdateEmail(command.Email);
+		try
+		{
+			user.UpdateName(command.Name);
+			user.UpdateEmail(command.Email);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 
 		await userRepository.UpdateAsync(user);
 		return Result.Success(user.ToModel(), Messages.UserSuccessfullyUpdated);

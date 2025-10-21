@@ -10,7 +10,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanParticipantUseC
 public class GetPlanParticipantDetailsUseCaseTests : BasePlanParticipantUseCaseTests
 {
 	[Fact]
-	public async Task Test_GetPlanParticipantDetailsUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_GetPlanParticipantDetailsUseCase_PlanParticipantSuccessfullyFound_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<GetPlanParticipantDetailsUseCase>();
@@ -59,7 +59,7 @@ public class GetPlanParticipantDetailsUseCaseTests : BasePlanParticipantUseCaseT
 	}
 
 	[Fact]
-	public async Task Test_GetPlanParticipantDetailsUseCase_NotFoundPlanParticipantId_ShouldReturnRejected()
+	public async Task Test_GetPlanParticipantDetailsUseCase_PlanParticipantNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<GetPlanParticipantDetailsUseCase>();

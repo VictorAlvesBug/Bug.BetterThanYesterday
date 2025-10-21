@@ -13,7 +13,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanParticipantUseC
 public class RemoveUserFromPlanUseCaseTests : BasePlanParticipantUseCaseTests
 {
 	[Fact]
-	public async Task Test_RemoveUserFromPlanUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_RemoveUserFromPlanUseCase_ParticipantSuccessfullyRemovedFromThePlan_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RemoveUserFromPlanUseCase>();
@@ -65,7 +65,7 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_RemoveUserFromPlanUseCase_NotFoundPlanId_ShouldReturnRejected()
+	public async Task Test_RemoveUserFromPlanUseCase_PlanNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RemoveUserFromPlanUseCase>();
@@ -89,7 +89,7 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_RemoveUserFromPlanUseCase_NotFoundUserId_ShouldReturnRejected()
+	public async Task Test_RemoveUserFromPlanUseCase_UserNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RemoveUserFromPlanUseCase>();
@@ -161,7 +161,7 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_RemoveUserFromPlanUseCase_UserIsBlockedInThePlan_ShouldReturnRejected()
+	public async Task Test_RemoveUserFromPlanUseCase_ParticipantCannotBeRemovedFromThePlanAsHeIsBlocked_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RemoveUserFromPlanUseCase>();

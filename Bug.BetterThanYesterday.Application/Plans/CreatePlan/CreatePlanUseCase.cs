@@ -18,15 +18,21 @@ public class CreatePlanUseCase(
 
 		if (habit is null)
 			return Result.Rejected(Messages.HabitNotFound);
+		try
+		{
+			var plan = Plan.CreateNew(
+				command.HabitId,
+				command.Description,
+				command.StartsAt,
+				command.EndsAt,
+				command.TypeId);
 
-		var plan = Plan.CreateNew(
-			command.HabitId,
-			command.Description,
-			command.StartsAt,
-			command.EndsAt,
-			command.TypeId);
-
-		await planRepository.AddAsync(plan);
-		return Result.Success(plan.ToModel(), Messages.PlanSuccessfullyRegistered);
+			await planRepository.AddAsync(plan);
+			return Result.Success(plan.ToModel(), Messages.PlanSuccessfullyRegistered);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }

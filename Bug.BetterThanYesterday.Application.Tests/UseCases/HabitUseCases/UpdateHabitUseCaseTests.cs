@@ -11,7 +11,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.HabitUseCases;
 public class UpdateHabitUseCaseTests : BaseHabitUseCaseTests
 {
 	[Fact]
-	public async Task Test_UpdateHabitUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_UpdateHabitUseCase_HabitSuccessfullyUpdated_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
@@ -37,7 +37,7 @@ public class UpdateHabitUseCaseTests : BaseHabitUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateHabitUseCase_NotFoundHabitId_ShouldReturnRejected()
+	public async Task Test_UpdateHabitUseCase_HabitNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
@@ -57,15 +57,20 @@ public class UpdateHabitUseCaseTests : BaseHabitUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateHabitUseCase_EmptyName_ShouldThrowsException()
+	public async Task Test_UpdateHabitUseCase_EnterHabitName_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
 		var firstHabit = _mock.Habits[0];
 		var command = new UpdateHabitCommand(firstHabit.Id, string.Empty);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterHabitName, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
@@ -73,7 +78,7 @@ public class UpdateHabitUseCaseTests : BaseHabitUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateHabitUseCase_SameNameAndOtherId_ShouldReturnRejected()
+	public async Task Test_UpdateHabitUseCase_ThereIsAlreadyAHabitRegisteredWithThatName_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();
@@ -95,7 +100,7 @@ public class UpdateHabitUseCaseTests : BaseHabitUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateHabitUseCase_SameNameAndSameId_ShouldReturnSuccess()
+	public async Task Test_UpdateHabitUseCase_HabitWithSameNameSuccessfullyUpdated_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateHabitUseCase>();

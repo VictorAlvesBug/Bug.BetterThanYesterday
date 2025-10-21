@@ -18,13 +18,20 @@ public sealed class UpdateHabitUseCase(
 
 		var existingNameHabit = await habitRepository.GetByNameAsync(command.Name);
 
-		if (existingNameHabit is not null 
+		if (existingNameHabit is not null
 			&& existingNameHabit.Id != habit.Id)
 		{
 			return Result.Rejected(Messages.ThereIsAlreadyAHabitRegisteredWithThatName);
 		}
 
-		habit.UpdateName(command.Name);
+		try
+		{
+			habit.UpdateName(command.Name);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 
 		await habitRepository.UpdateAsync(habit);
 		return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyUpdated);

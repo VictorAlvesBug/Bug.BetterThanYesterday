@@ -12,7 +12,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 public class CancelPlanUseCaseTests : BasePlanUseCaseTests
 {
 	[Fact]
-	public async Task Test_CancelPlanUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_CancelPlanUseCase_PlanSuccessfullyCancelled_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CancelPlanUseCase>();
@@ -43,7 +43,7 @@ public class CancelPlanUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CancelPlanUseCase_NotFoundPlanId_ShouldReturnRejected()
+	public async Task Test_CancelPlanUseCase_PlanNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CancelPlanUseCase>();

@@ -9,7 +9,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.UserUseCases;
 public class DeleteUserUseCaseTests : BaseUserUseCaseTests
 {
 	[Fact]
-	public async Task Test_DeleteUserUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_DeleteUserUseCase_UserSuccessfullyDeleted_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteUserUseCase>();
@@ -29,7 +29,7 @@ public class DeleteUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_DeleteUserUseCase_NotFoundUserId_ShouldReturnRejected()
+	public async Task Test_DeleteUserUseCase_UserNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteUserUseCase>();

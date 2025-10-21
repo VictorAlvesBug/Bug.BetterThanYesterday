@@ -13,7 +13,7 @@ public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 	private readonly DateTime _today = DateTime.Today;
 
 	[Fact]
-	public async Task Test_CreateHabitUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_CreateHabitUseCase_HabitSuccessfullyRegistered_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreateHabitUseCase>();
@@ -38,21 +38,26 @@ public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CreateHabitUseCase_EmptyName_ShouldThrowsException()
+	public async Task Test_CreateHabitUseCase_EnterHabitName_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreateHabitUseCase>();
 		var command = new CreateHabitCommand(string.Empty);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterHabitName, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
 		_mock.HabitRepository.Verify(repo => repo.AddAsync(It.IsAny<Habit>()), Times.Never);
 	}
 
 	[Fact]
-	public async Task Test_CreateHabitUseCase_DuplicatedName_ShouldReturnRejected()
+	public async Task Test_CreateHabitUseCase_ThereIsAlreadyAHabitRegisteredWithThatName_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreateHabitUseCase>();

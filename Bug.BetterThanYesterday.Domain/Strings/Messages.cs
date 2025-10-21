@@ -6,7 +6,7 @@ public static class Messages
 	public const string CheckInNotFound = "Check-in não encontrado";
 	public const string CheckInSuccessfullyFound = "Check-in encontrado com sucesso";
 	public const string UserEmailAlreadyRegistered = "E-mail já cadastrado para outro usuário";
-	public const string EndDateCannotBeEarlierThanStartDate = "Data final não pode ser anterior à data inicial";
+	public const string EndDateMustBeLaterThanStartDate = "Data final deve ser posterior à data inicial";
 	public const string EnterCheckInDate = "Informe a data do check-in";
 	public const string EnterCheckInId = "Informe o ID do Check-in";
 	public const string EnterCheckInIndex = "Informe o índice do check-in";

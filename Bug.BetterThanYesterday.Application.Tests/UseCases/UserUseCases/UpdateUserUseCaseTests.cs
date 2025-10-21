@@ -10,7 +10,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.UserUseCases;
 public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 {
 	[Fact]
-	public async Task Test_UpdateUserUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_UpdateUserUseCase_UserSuccessfullyUpdated_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateUserUseCase>();
@@ -31,7 +31,7 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateUserUseCase_NotFoundUserId_ShouldReturnRejected()
+	public async Task Test_UpdateUserUseCase_UserNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateUserUseCase>();
@@ -51,15 +51,20 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateUserUseCase_EmptyNameAndEmail_ShouldThrowsException()
+	public async Task Test_UpdateUserUseCase_EnterUserNameOrEmail_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateUserUseCase>();
 		var firstUser = _mock.Users[0];
 		var command = new UpdateUserCommand(firstUser.Id, string.Empty, string.Empty);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterUserNameOrEmail, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Never);
@@ -67,7 +72,7 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateUserUseCase_SameEmailAndOtherId_ShouldReturnRejected()
+	public async Task Test_UpdateUserUseCase_UserEmailAlreadyRegistered_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateUserUseCase>();
@@ -89,7 +94,7 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateUserUseCase_SameEmailAndSameId_ShouldReturnSuccess()
+	public async Task Test_UpdateUserUseCase_UserWithSameEmailSuccessfullyUpdated_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateUserUseCase>();
@@ -110,15 +115,20 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdateUserUseCase_InvalidEmail_ShouldThrowsException()
+	public async Task Test_UpdateUserUseCase_EnterValidUserEmail_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdateUserUseCase>();
 		var firstUser = _mock.Users[0];
 		var command = new UpdateUserCommand(firstUser.Id, "Jane Doe", "invalid_email");
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterValidUserEmail, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Never);

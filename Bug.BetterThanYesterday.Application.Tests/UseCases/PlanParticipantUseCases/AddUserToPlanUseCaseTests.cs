@@ -14,7 +14,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 	private readonly DateTime _today = DateTime.Today;
 
 	[Fact]
-	public async Task Test_AddUserToPlanUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_AddUserToPlanUseCase_ParticipantSuccessfullyAddedToThePlan_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
@@ -59,7 +59,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_AddUserToPlanUseCase_NotFoundPlanId_ShouldReturnRejected()
+	public async Task Test_AddUserToPlanUseCase_PlanNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
@@ -85,7 +85,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_AddUserToPlanUseCase_NotFoundUserId_ShouldReturnRejected()
+	public async Task Test_AddUserToPlanUseCase_UserNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
@@ -111,7 +111,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_AddUserToPlanUseCase_UserIsAlreadyInThePlanWithActiveStatus_ShouldReturnRejected()
+	public async Task Test_AddUserToPlanUseCase_ActiveParticipantAlreadyAddedToThePlan_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
@@ -138,7 +138,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_AddUserToPlanUseCase_UserIsAlreadyInThePlanWithBlockedStatus_ShouldReturnRejected()
+	public async Task Test_AddUserToPlanUseCase_BlockedParticipantAlreadyAddedToThePlan_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
@@ -165,7 +165,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_AddUserToPlanUseCase_UserHasAlreadyBeenOnThisPlanBefore_ShouldReturnSuccess()
+	public async Task Test_AddUserToPlanUseCase_ParticipantSuccessfullyReaddedToThePlan_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();

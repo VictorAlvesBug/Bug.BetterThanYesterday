@@ -10,7 +10,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.HabitUseCases;
 public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 {
 	[Fact]
-	public async Task Test_DeleteHabitUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_DeleteHabitUseCase_HabitSuccessfullyDeleted_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteHabitUseCase>();
@@ -31,7 +31,7 @@ public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_DeleteHabitUseCase_NotFoundHabitId_ShouldReturnRejected()
+	public async Task Test_DeleteHabitUseCase_HabitNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteHabitUseCase>();
@@ -51,7 +51,7 @@ public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_DeleteHabitUseCase_NonCancelledPlansRelated_ShouldReturnRejected()
+	public async Task Test_DeleteHabitUseCase_HabitCannotBeRemovedAsItHasLinkedPlans_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteHabitUseCase>();

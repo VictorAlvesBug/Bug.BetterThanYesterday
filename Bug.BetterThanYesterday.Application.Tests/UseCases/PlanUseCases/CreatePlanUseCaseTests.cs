@@ -15,7 +15,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	private readonly DateTime _today = DateTime.Today;
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_CreatePlanUseCase_PlanSuccessfullyRegistered_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -50,7 +50,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_NotFoundHabitId_ShouldReturnRejected()
+	public async Task Test_CreatePlanUseCase_HabitNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -75,7 +75,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_EmptyStartsAt_ShouldThrowsException()
+	public async Task Test_CreatePlanUseCase_EnterPlanStartDate_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -88,15 +88,20 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 			PlanType.Private.Id
 		);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterPlanStartDate, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_StartsAtBeforeToday_ShouldThrowsException()
+	public async Task Test_CreatePlanUseCase_StartDateCannotBeEarlierThanToday_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -109,15 +114,20 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 			PlanType.Private.Id
 		);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.StartDateCannotBeEarlierThanToday, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_EmptyEndsAt_ShouldThrowsException()
+	public async Task Test_CreatePlanUseCase_EnterPlanEndDate_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -130,15 +140,20 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 			PlanType.Private.Id
 		);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterPlanEndDate, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_EndsAtBeforeStartsAt_ShouldThrowsException()
+	public async Task Test_CreatePlanUseCase_EndDateMustBeLaterThanStartDate_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -151,15 +166,20 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 			PlanType.Private.Id
 		);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EndDateMustBeLaterThanStartDate, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);
 	}
 
 	[Fact]
-	public async Task Test_CreatePlanUseCase_EmptyTypeId_ShouldThrowsException()
+	public async Task Test_CreatePlanUseCase_EnterPlanType_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
@@ -172,29 +192,13 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 			0
 		);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
 
-		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
-		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);
-	}
-
-	[Fact]
-	public async Task Test_CreatePlanUseCase_InvalidTypeId_ShouldThrowsException()
-	{
-		// Arrange
-		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
-		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
-		var command = new CreatePlanCommand(
-			habit.Id,
-			"Prepare a meal once a week",
-			new DateTime(_today.Year + 1, 01, 01),
-			new DateTime(_today.Year + 1, 12, 31),
-			-1
-		);
-
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentException>(async () => await useCase.HandleAsync(command));
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterPlanType, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);

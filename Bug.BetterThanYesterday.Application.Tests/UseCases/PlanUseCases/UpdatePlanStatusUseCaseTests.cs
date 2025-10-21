@@ -13,7 +13,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 public class UpdatePlanStatusUseCaseTests : BasePlanUseCaseTests
 {
 	[Fact]
-	public async Task Test_UpdatePlanStatusUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_UpdatePlanStatusUseCase_PlanStatusSuccessfullyUpdated_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdatePlanStatusUseCase>();
@@ -45,7 +45,7 @@ public class UpdatePlanStatusUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdatePlanStatusUseCase_NotFoundPlanId_ShouldReturnRejected()
+	public async Task Test_UpdatePlanStatusUseCase_PlanNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdatePlanStatusUseCase>();
@@ -64,45 +64,40 @@ public class UpdatePlanStatusUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_UpdatePlanStatusUseCase_EmptyStatusId_ShouldThrowsException()
+	public async Task Test_UpdatePlanStatusUseCase_EnterPlanStatus_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdatePlanStatusUseCase>();
 		var firstPlan = _mock.Plans[0];
 		var command = new UpdatePlanStatusCommand(firstPlan.Id, 0);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterPlanStatus, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.PlanRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Plan>()), Times.Never);
 	}
 
 	[Fact]
-	public async Task Test_UpdatePlanStatusUseCase_InvalidStatusId_ShouldThrowsException()
-	{
-		// Arrange
-		var useCase = _mocker.CreateInstance<UpdatePlanStatusUseCase>();
-		var firstPlan = _mock.Plans[0];
-		var command = new UpdatePlanStatusCommand(firstPlan.Id, -1);
-
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentException>(async () => await useCase.HandleAsync(command));
-
-		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
-		_mock.PlanRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Plan>()), Times.Never);
-	}
-
-	[Fact]
-	public async Task Test_UpdatePlanStatusUseCase_StatusIdNotAllowed_ShouldThrowsException()
+	public async Task Test_UpdatePlanStatusUseCase_StatusIdNotAllowed_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UpdatePlanStatusUseCase>();
 		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicCancelledPlanId3);
 		var command = new UpdatePlanStatusCommand(plan.Id, PlanStatus.Finished.Id);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<InvalidOperationException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Contains("Não é possível alterar o status", result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Plan>()), Times.Never);

@@ -13,7 +13,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanParticipantUseC
 public class BlockUserInThePlanUseCaseTests : BasePlanParticipantUseCaseTests
 {
 	[Fact]
-	public async Task Test_BlockUserInThePlanUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_BlockUserInThePlanUseCase_ParticipantSuccessfullyBlocked_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
@@ -65,7 +65,7 @@ public class BlockUserInThePlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_BlockUserInThePlanUseCase_NotFoundPlanId_ShouldReturnRejected()
+	public async Task Test_BlockUserInThePlanUseCase_PlanNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
@@ -89,7 +89,7 @@ public class BlockUserInThePlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_BlockUserInThePlanUseCase_NotFoundUserId_ShouldReturnRejected()
+	public async Task Test_BlockUserInThePlanUseCase_UserNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
@@ -161,7 +161,7 @@ public class BlockUserInThePlanUseCaseTests : BasePlanParticipantUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_BlockUserInThePlanUseCase_UserIsAlreadyBlocked_ShouldReturnRejected()
+	public async Task Test_BlockUserInThePlanUseCase_ParticipantAlreadyBlockedInThisPlan_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();

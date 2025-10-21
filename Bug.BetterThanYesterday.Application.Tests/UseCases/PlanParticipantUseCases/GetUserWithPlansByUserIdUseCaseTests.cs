@@ -11,7 +11,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanParticipantUseC
 public class GetUserWithPlansByUserIdUseCaseTests : BasePlanParticipantUseCaseTests
 {
 	[Fact]
-	public async Task Test_GetUserWithPlansByUserIdUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_GetUserWithPlansByUserIdUseCase_UserSuccessfullyFound_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<GetUserWithPlansByUserIdUseCase>();
@@ -53,7 +53,7 @@ public class GetUserWithPlansByUserIdUseCaseTests : BasePlanParticipantUseCaseTe
 	}
 
 	[Fact]
-	public async Task Test_GetUserWithPlansByUserIdUseCase_UserWithoutPlans_ShouldReturnSuccess()
+	public async Task Test_GetUserWithPlansByUserIdUseCase_UserHasNoPlans_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<GetUserWithPlansByUserIdUseCase>();
@@ -82,7 +82,7 @@ public class GetUserWithPlansByUserIdUseCaseTests : BasePlanParticipantUseCaseTe
 	}
 
 	[Fact]
-	public async Task Test_GetUserWithPlansByUserIdUseCase_NotFoundUserId_ShouldReturnRejected()
+	public async Task Test_GetUserWithPlansByUserIdUseCase_UserNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<GetUserWithPlansByUserIdUseCase>();

@@ -74,7 +74,7 @@ public sealed class Plan : Entity
 			throw new ArgumentException(Messages.StartDateCannotBeEarlierThanToday, nameof(startsAt));
 
 		if (endsAt <= startsAt)
-			throw new ArgumentException(Messages.EndDateCannotBeEarlierThanStartDate, nameof(endsAt));
+			throw new ArgumentException(Messages.EndDateMustBeLaterThanStartDate, nameof(endsAt));
 
 		if (typeId <= 0)
 			throw new ArgumentException(Messages.PlanTypeIdMustBeGreaterThanZero, nameof(typeId));
@@ -102,7 +102,7 @@ public sealed class Plan : Entity
 			throw new ArgumentException(Messages.EnterPlanStartDate, nameof(startsAt));
 
 		if (endsAt <= startsAt)
-			throw new ArgumentException(Messages.EndDateCannotBeEarlierThanStartDate, nameof(endsAt));
+			throw new ArgumentException(Messages.EndDateMustBeLaterThanStartDate, nameof(endsAt));
 
 		if (statusId <= 0)
 			throw new ArgumentException(Messages.PlanStatusIdMustBeGreaterThanZero, nameof(statusId));

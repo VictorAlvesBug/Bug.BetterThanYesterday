@@ -11,7 +11,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 public class ListPlansByHabitIdUseCaseTests : BasePlanUseCaseTests
 {
 	[Fact]
-	public async Task Test_ListPlansByHabitIdUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_ListPlansByHabitIdUseCase_PlansSuccessfullyFound_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<ListPlansByHabitIdUseCase>();
@@ -34,7 +34,7 @@ public class ListPlansByHabitIdUseCaseTests : BasePlanUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_ListPlansByHabitIdUseCase_NotFoundHabitId_ShouldReturnRejected()
+	public async Task Test_ListPlansByHabitIdUseCase_HabitNotFound_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<ListPlansByHabitIdUseCase>();

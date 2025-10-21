@@ -10,7 +10,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.UserUseCases;
 public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 {
 	[Fact]
-	public async Task Test_RegisterUserUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_RegisterUserUseCase_UserSuccessfullyRegistered_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
@@ -29,49 +29,64 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_RegisterUserUseCase_EmptyName_ShouldThrowsException()
+	public async Task Test_RegisterUserUseCase_EnterUserName_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
 		var command = new RegisterUserCommand(string.Empty, "jane.doe@email.com");
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterUserName, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Never);
 		_mock.UserRepository.Verify(repo => repo.AddAsync(It.IsAny<User>()), Times.Never);
 	}
 
 	[Fact]
-	public async Task Test_RegisterUserUseCase_EmptyEmail_ShouldThrowsException()
+	public async Task Test_RegisterUserUseCase_EnterUserEmail_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
 		var command = new RegisterUserCommand("Jane Doe", string.Empty);
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentNullException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterUserEmail, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Never);
 		_mock.UserRepository.Verify(repo => repo.AddAsync(It.IsAny<User>()), Times.Never);
 	}
 
 	[Fact]
-	public async Task Test_RegisterUserUseCase_InvalidEmail_ShouldThrowsException()
+	public async Task Test_RegisterUserUseCase_EnterValidUserEmail_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
 		var command = new RegisterUserCommand("Jane Doe", "invalid_email");
 
-		// Act & Assert
-		await Assert.ThrowsAsync<ArgumentException>(async () => await useCase.HandleAsync(command));
+		// Act
+		var result = await useCase.HandleAsync(command);
+
+		// Assert
+		Assert.NotNull(result);
+		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.EnterValidUserEmail, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Never);
 		_mock.UserRepository.Verify(repo => repo.AddAsync(It.IsAny<User>()), Times.Never);
 	}
 
 	[Fact]
-	public async Task Test_RegisterUserUseCase_DuplicatedEmail_ShouldReturnRejected()
+	public async Task Test_RegisterUserUseCase_UserEmailAlreadyRegistered_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();

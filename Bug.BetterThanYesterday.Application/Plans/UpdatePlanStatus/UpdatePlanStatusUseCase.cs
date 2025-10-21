@@ -15,9 +15,15 @@ public class UpdatePlanStatusUseCase(IPlanRepository planRepository)
 
 		if (plan is null)
 			return Result.Rejected(Messages.PlanNotFound);
-
-		var newStatus = PlanStatus.FromId(command.StatusId);
-		plan.ChangeStatus(newStatus);
+		try
+		{
+			var newStatus = PlanStatus.FromId(command.StatusId);
+			plan.ChangeStatus(newStatus);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 
 		await planRepository.UpdateAsync(plan);
 		return Result.Success(plan.ToModel(), Messages.PlanStatusSuccessfullyUpdated);

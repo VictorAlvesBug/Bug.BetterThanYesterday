@@ -10,7 +10,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.UseCases.HabitUseCases;
 public class ListAllHabitsUseCaseTests : BaseHabitUseCaseTests
 {
 	[Fact]
-	public async Task Test_ListAllHabitsUseCase_Valid_ShouldReturnSuccess()
+	public async Task Test_ListAllHabitsUseCase_HabitsSuccessfullyFound_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<ListAllHabitsUseCase>();

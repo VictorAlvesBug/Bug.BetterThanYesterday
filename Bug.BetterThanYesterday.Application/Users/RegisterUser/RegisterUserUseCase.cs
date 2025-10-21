@@ -17,8 +17,15 @@ public class RegisterUserUseCase(IUserRepository userRepository)
 		if (alreadyExists)
 			return Result.Rejected(Messages.UserEmailAlreadyRegistered);
 
-		var user = User.CreateNew(command.Name, command.Email);
-		await userRepository.AddAsync(user);
-		return Result.Success(user.ToModel(), Messages.UserSuccessfullyRegistered);
+		try
+		{
+			var user = User.CreateNew(command.Name, command.Email);
+			await userRepository.AddAsync(user);
+			return Result.Success(user.ToModel(), Messages.UserSuccessfullyRegistered);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }

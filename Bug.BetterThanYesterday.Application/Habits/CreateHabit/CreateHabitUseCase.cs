@@ -15,9 +15,16 @@ public sealed class CreateHabitUseCase(IHabitRepository habitRepository)
 
 		if (alreadyExists)
 			return Result.Rejected(Messages.ThereIsAlreadyAHabitRegisteredWithThatName);
-
-		var habit = Habit.CreateNew(command.Name);
-		await habitRepository.AddAsync(habit);
-		return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyRegistered);
+	
+		try
+		{
+			var habit = Habit.CreateNew(command.Name);
+			await habitRepository.AddAsync(habit);
+			return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyRegistered);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }
