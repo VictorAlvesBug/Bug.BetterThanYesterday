@@ -1,5 +1,6 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Plans.ListAllPlans;
 
@@ -10,6 +11,9 @@ public class ListAllPlansUseCase(IPlanRepository planRepository)
 	{
 		command.Validate();
 		var plans = (await planRepository.ListAllAsync()).Select(plan => plan.ToModel());
-		return Result.Success(plans);
+		return Result.Success(
+			plans,
+			Messages.PlansSuccessfullyFound
+		);
 	}
 }

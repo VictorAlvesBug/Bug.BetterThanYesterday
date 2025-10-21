@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.Habits;
 using Bug.BetterThanYesterday.Application.Habits.GetHabitById;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
 using Xunit;
 
@@ -22,6 +23,7 @@ public class GetHabitByIdUseCaseTests : BaseHabitUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.HabitSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<HabitModel>>(result).Data;
 		Assert.Equal(firstHabit.Id, resultData.HabitId);
@@ -44,6 +46,7 @@ public class GetHabitByIdUseCaseTests : BaseHabitUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.HabitNotFound, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 	}

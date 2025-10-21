@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.Habits;
 using Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
 using Xunit;
 
@@ -21,6 +22,7 @@ public class ListAllHabitsUseCaseTests : BaseHabitUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.HabitsSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<IEnumerable<HabitModel>>>(result).Data;
 		Assert.Equal(_mock.Habits.Count, resultData.Count());

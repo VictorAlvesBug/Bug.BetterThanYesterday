@@ -17,11 +17,14 @@ public class ListPlansByHabitIdUseCase(
 		var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
 		if (habit is null)
-			return Result.Rejected(Messages.EnterHabitId);
+			return Result.Rejected(Messages.HabitNotFound);
 
 		var plans = (await planRepository.ListByHabitIdAsync(command.HabitId))
 			.Select(habit => habit.ToModel());
 
-		return Result.Success(plans);
+		return Result.Success(
+			plans,
+			Messages.PlansSuccessfullyFound
+		);
 	}
 }

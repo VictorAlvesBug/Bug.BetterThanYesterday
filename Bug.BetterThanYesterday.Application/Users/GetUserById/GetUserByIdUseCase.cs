@@ -15,6 +15,9 @@ public class GetUserByIdUseCase(IUserRepository userRepository)
 		if (user is null)
 			return Result.Rejected(Messages.UserNotFound);
 
-		return Result.Success(user.ToModel());
+		return Result.Success(
+			user.ToModel(),
+			Messages.UserSuccessfullyFound
+		);
 	}
 }

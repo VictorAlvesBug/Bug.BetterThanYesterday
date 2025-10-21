@@ -22,6 +22,6 @@ public sealed class GetCheckInDetailsUseCase(
         if (checkIn is null)
             return Result.Rejected(Messages.CheckInNotFound);
 
-        return Result.Success(checkIn);
+        return Result.Success(checkIn, Messages.CheckInSuccessfullyFound);
     }
 }

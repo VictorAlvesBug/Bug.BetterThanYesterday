@@ -19,7 +19,7 @@ public sealed class GetPlanWithParticipantsByPlanIdUseCase(
         var plan = await planRepository.GetByIdAsync(command.PlanId);
 
         if (plan is null)
-            return Result.Rejected(Messages.EnterPlanId);
+            return Result.Rejected(Messages.PlanNotFound);
 
         var planParticipants = await planParticipantRepository.ListByPlanIdAsync(command.PlanId);
 
@@ -37,6 +37,9 @@ public sealed class GetPlanWithParticipantsByPlanIdUseCase(
             return Result.Rejected($"Usuários não encontrados para os IDs: {strNotFoundIds}");
         }
 
-        return Result.Success(plan.ToPlanWithParticipantsModel(participants));
+        return Result.Success(
+            plan.ToPlanWithParticipantsModel(participants),
+            Messages.PlanSuccessfullyFound
+        );
     }
 }

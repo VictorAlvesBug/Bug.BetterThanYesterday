@@ -35,6 +35,7 @@ public class Result : IResult
 	public bool IsSuccess() => Status == ResultStatus.Success;
 	public bool IsRejected() => Status == ResultStatus.Rejected;
 	public bool IsFailure() => Status == ResultStatus.Failure;
+	public string GetMessage() => Reason;
 }
 
 public sealed class Result<TData> : Result

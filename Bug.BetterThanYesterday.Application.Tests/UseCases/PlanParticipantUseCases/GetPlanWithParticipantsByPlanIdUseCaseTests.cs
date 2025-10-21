@@ -2,6 +2,7 @@
 using Bug.BetterThanYesterday.Application.PlanParticipants.GetPlanWithParticipantsByPlanId;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
 using Xunit;
 
@@ -36,6 +37,7 @@ public class GetPlanWithParticipantsByPlanIdUseCaseTests : BasePlanParticipantUs
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.PlanSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<PlanWithParticipantsModel>>(result).Data;
 		Assert.Equal(plan.Id, resultData.Plan.PlanId);
@@ -70,6 +72,7 @@ public class GetPlanWithParticipantsByPlanIdUseCaseTests : BasePlanParticipantUs
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.PlanHasNoParticipants, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<PlanWithParticipantsModel>>(result).Data;
 		Assert.Equal(plan.Id, resultData.Plan.PlanId);
@@ -103,6 +106,7 @@ public class GetPlanWithParticipantsByPlanIdUseCaseTests : BasePlanParticipantUs
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.PlanNotFound, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanParticipantRepository.Verify(repo => repo.ListByPlanIdAsync(It.IsAny<Guid>()), Times.Never);

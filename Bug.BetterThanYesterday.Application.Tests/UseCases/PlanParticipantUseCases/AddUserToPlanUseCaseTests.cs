@@ -3,6 +3,7 @@ using Bug.BetterThanYesterday.Application.PlanParticipants.AddUserToPlan;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
 using Xunit;
 
@@ -30,6 +31,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.ParticipantSuccessfullyAddedToThePlan, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<PlanParticipantDetailsModel>>(result).Data;
 		
@@ -73,6 +75,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.PlanNotFound, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
@@ -98,6 +101,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.UserNotFound, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -124,6 +128,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.ParticipantAlreadyAddedToThePlan, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -150,6 +155,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.ParticipantAlreadyAddedToThePlan, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -176,6 +182,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.ParticipantSuccessfullyReaddedToThePlan, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<PlanParticipantDetailsModel>>(result).Data;
 		
@@ -220,6 +227,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.OnlyNotStartedPlansCanReceiveNewParticipants, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -246,6 +254,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.OnlyNotStartedPlansCanReceiveNewParticipants, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -272,6 +281,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.OnlyNotStartedPlansCanReceiveNewParticipants, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

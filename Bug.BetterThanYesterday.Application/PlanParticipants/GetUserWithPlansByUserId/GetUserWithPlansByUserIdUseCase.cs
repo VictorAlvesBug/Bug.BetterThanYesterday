@@ -37,6 +37,8 @@ public sealed class GetUserWithPlansByUserIdUseCase(
             return Result.Rejected($"Planos não encontrados para os IDs: {strNotFoundIds}");
         }
 
-        return Result.Success(user.ToUserWithPlansModel(plans));
+        return Result.Success(
+            user.ToUserWithPlansModel(plans),
+            Messages.UserSuccessfullyFound);
     }
 }

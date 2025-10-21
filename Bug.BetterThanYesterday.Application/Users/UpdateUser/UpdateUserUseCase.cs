@@ -22,7 +22,7 @@ public class UpdateUserUseCase(IUserRepository userRepository)
 		if (existingEmailUser is not null
 			&& existingEmailUser.Id != user.Id)
 		{
-			return Result.Rejected(Messages.EmailAlreadyRegistered);
+			return Result.Rejected(Messages.UserEmailAlreadyRegistered);
 		}
 
 		user.UpdateName(command.Name);

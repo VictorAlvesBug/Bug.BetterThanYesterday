@@ -3,6 +3,7 @@ using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Moq;
 using Xunit;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 
@@ -21,6 +22,7 @@ public class ListAllPlansUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.PlansSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<IEnumerable<PlanModel>>>(result).Data;
 		Assert.Equal(_mock.Plans.Count, resultData.Count());

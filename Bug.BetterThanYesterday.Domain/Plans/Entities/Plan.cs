@@ -99,7 +99,7 @@ public sealed class Plan : Entity
 			throw new ArgumentNullException(nameof(habitId), Messages.EnterHabitId);
 
 		if (startsAt <= DateTime.MinValue)
-			throw new ArgumentException(Messages.EnterStartDate, nameof(startsAt));
+			throw new ArgumentException(Messages.EnterPlanStartDate, nameof(startsAt));
 
 		if (endsAt <= startsAt)
 			throw new ArgumentException(Messages.EndDateCannotBeEarlierThanStartDate, nameof(endsAt));

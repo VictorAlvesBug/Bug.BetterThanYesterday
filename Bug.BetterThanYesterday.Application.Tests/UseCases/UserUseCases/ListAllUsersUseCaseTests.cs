@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Users;
 using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
 using Xunit;
 
@@ -21,6 +22,7 @@ public class ListAllUsersUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.UsersSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<IEnumerable<UserModel>>>(result).Data;
 		Assert.Equal(_mock.Users.Count, resultData.Count());

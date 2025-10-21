@@ -6,6 +6,7 @@ using Xunit;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 
@@ -33,6 +34,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.PlanSuccessfullyRegistered, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<PlanModel>>(result).Data;
 		Assert.NotEqual(Guid.Empty, resultData.PlanId);
@@ -66,6 +68,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.HabitNotFound, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);

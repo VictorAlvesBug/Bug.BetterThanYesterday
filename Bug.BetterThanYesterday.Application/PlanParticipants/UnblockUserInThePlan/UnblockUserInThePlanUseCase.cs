@@ -21,7 +21,7 @@ public sealed class UnblockUserInThePlanUseCase(
         var plan = await planRepository.GetByIdAsync(command.PlanId);
 
         if (plan is null)
-            return Result.Rejected(Messages.EnterPlanId);
+            return Result.Rejected(Messages.PlanNotFound);
 
         var user = await userRepository.GetByIdAsync(command.UserId);
 
@@ -36,7 +36,7 @@ public sealed class UnblockUserInThePlanUseCase(
             return Result.Rejected(Messages.UserIsNotInThePlan);
 
         if (plan.Status != PlanStatus.Running)
-            return Result.Rejected(Messages.UserCanOnlyBeUnblockedInRunningPlans);
+            return Result.Rejected(Messages.ParticipantCanOnlyBeUnblockedInRunningPlans);
 
         try
         {
@@ -50,7 +50,7 @@ public sealed class UnblockUserInThePlanUseCase(
         await planParticipantRepository.UpdateAsync(planParticipant);
         return Result.Success(
             planParticipant.ToPlanParticipantDetailsModel(plan, user),
-            Messages.ParticipantSuccessfullyBlocked
+            Messages.ParticipantSuccessfullyUnblocked
 		);
     }
 }

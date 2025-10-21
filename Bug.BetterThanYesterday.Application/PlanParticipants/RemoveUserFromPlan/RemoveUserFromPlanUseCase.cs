@@ -21,7 +21,7 @@ public sealed class RemoveUserFromPlanUseCase(
         var plan = await planRepository.GetByIdAsync(command.PlanId);
 
         if (plan is null)
-            return Result.Rejected(Messages.EnterPlanId);
+            return Result.Rejected(Messages.PlanNotFound);
 
         var user = await userRepository.GetByIdAsync(command.UserId);
 
@@ -38,7 +38,7 @@ public sealed class RemoveUserFromPlanUseCase(
         var allowedPlanStatuses = new List<PlanStatus> { PlanStatus.NotStarted, PlanStatus.Running };
 
         if (!allowedPlanStatuses.Contains(plan.Status))
-            return Result.Rejected(Messages.UserCanOnlyBeRemovedFromNotStartedOrRunningPlans);
+            return Result.Rejected(Messages.ParticipantCanOnlyBeRemovedFromNotStartedOrRunningPlans);
 
         try
         {

@@ -107,7 +107,7 @@ public class PlanParticipant : Entity
 			throw new InvalidOperationException(Messages.UserIsNotInThePlanAnymore);
 
 		if (Status == PlanParticipantStatus.Blocked)
-			throw new InvalidOperationException(Messages.UserCannotBeRemovedFromThePlanAsHeIsBlocked);
+			throw new InvalidOperationException(Messages.ParticipantCannotBeRemovedFromThePlanAsHeIsBlocked);
 			
 		throw new InvalidOperationException(Messages.ChangeNotMappedToCurrentStatus);
     }
@@ -138,7 +138,7 @@ public class PlanParticipant : Entity
 		}
 
         if (Status == PlanParticipantStatus.Active)
-			throw new InvalidOperationException(Messages.UserIsAlreadyActive);
+			throw new InvalidOperationException(Messages.ParticipantIsAlreadyActiveInThePlan);
 
 		if (Status == PlanParticipantStatus.Left)
 			throw new InvalidOperationException(Messages.UserIsNotInThePlanAnymore);

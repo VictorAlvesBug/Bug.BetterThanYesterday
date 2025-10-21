@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Users;
 using Bug.BetterThanYesterday.Application.Users.GetUserById;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
 using Xunit;
 
@@ -22,6 +23,7 @@ public class GetUserByIdUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.UserSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<UserModel>>(result).Data;
 		Assert.Equal(firstUser.Id, resultData.UserId);
@@ -45,6 +47,7 @@ public class GetUserByIdUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.UserNotFound, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 	}

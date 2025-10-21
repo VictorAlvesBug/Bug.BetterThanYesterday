@@ -2,6 +2,7 @@
 using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
 using Xunit;
 
@@ -25,6 +26,7 @@ public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.HabitSuccessfullyRegistered, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<HabitModel>>(result).Data;
 		Assert.NotEqual(Guid.Empty, resultData.HabitId);
@@ -63,6 +65,7 @@ public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.ThereIsAlreadyAHabitRegisteredWithThatName, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
 		_mock.HabitRepository.Verify(repo => repo.AddAsync(It.IsAny<Habit>()), Times.Never);

@@ -17,7 +17,7 @@ public class CreatePlanUseCase(
 		var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
 		if (habit is null)
-			return Result.Rejected(Messages.EnterHabitId);
+			return Result.Rejected(Messages.HabitNotFound);
 
 		var plan = Plan.CreateNew(
 			command.HabitId,

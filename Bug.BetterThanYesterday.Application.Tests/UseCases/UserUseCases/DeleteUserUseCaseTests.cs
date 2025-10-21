@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.Users.DeleteUser;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Moq;
 using Xunit;
@@ -21,6 +22,7 @@ public class DeleteUserUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.UserSuccessfullyDeleted, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.DeleteAsync(It.IsAny<User>()), Times.Once);
@@ -39,6 +41,7 @@ public class DeleteUserUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.UserNotFound, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.DeleteAsync(It.IsAny<User>()), Times.Never);

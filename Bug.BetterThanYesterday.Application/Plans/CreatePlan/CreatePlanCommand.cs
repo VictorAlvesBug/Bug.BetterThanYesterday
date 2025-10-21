@@ -31,15 +31,15 @@ public class CreatePlanCommand : ICommand
 			throw new ArgumentNullException(nameof(HabitId), Messages.EnterHabitId);
 
 		if (string.IsNullOrWhiteSpace(Description))
-			throw new ArgumentNullException(nameof(Description), Messages.EnterDescription);
+			throw new ArgumentNullException(nameof(Description), Messages.EnterPlanDescription);
 
 		if (StartsAt == DateTime.MinValue)
-			throw new ArgumentException(Messages.EnterStartDate, nameof(StartsAt));
+			throw new ArgumentException(Messages.EnterPlanStartDate, nameof(StartsAt));
 
 		if (EndsAt == DateTime.MinValue)
 			throw new ArgumentException(Messages.EnterPlanEndDate, nameof(EndsAt));
 
 		if (TypeId <= 0)
-			throw new ArgumentException(Messages.EnterTypeId, nameof(TypeId));
+			throw new ArgumentException(Messages.EnterPlanType, nameof(TypeId));
 	}
 }

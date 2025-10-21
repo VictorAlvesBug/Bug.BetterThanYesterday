@@ -28,13 +28,16 @@ public sealed class GetPlanParticipantDetailsUseCase(
         var plan = await planRepository.GetByIdAsync(planParticipant.PlanId);
 
         if (plan is null)
-            return Result.Rejected(Messages.EnterPlanId);
+            return Result.Rejected(Messages.PlanNotFound);
 
         var user = await userRepository.GetByIdAsync(planParticipant.UserId);
 
         if (user is null)
             return Result.Rejected(Messages.UserNotFound);
 
-        return Result.Success(planParticipant.ToPlanParticipantDetailsModel(plan, user));
+        return Result.Success(
+            planParticipant.ToPlanParticipantDetailsModel(plan, user),
+            Messages.PlanParticipantSuccessfullyFound
+        );
     }
 }

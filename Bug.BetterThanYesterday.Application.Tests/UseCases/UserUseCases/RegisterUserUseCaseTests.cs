@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.Users.RegisterUser;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Bug.BetterThanYesterday.Domain.Users.ValueObjects;
 using Moq;
@@ -21,6 +22,7 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.UserSuccessfullyRegistered, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.AddAsync(It.IsAny<User>()), Times.Once);
@@ -82,6 +84,8 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.UserEmailAlreadyRegistered, result.GetMessage());
+
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.AddAsync(It.IsAny<User>()), Times.Never);
 	}

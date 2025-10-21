@@ -3,6 +3,7 @@ using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Moq;
 using Xunit;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 
@@ -22,6 +23,7 @@ public class GetPlanByIdUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.PlanSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<PlanModel>>(result).Data;
 		Assert.Equal(firstPlan.Id, resultData.PlanId);
@@ -51,6 +53,7 @@ public class GetPlanByIdUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
+		Assert.Equal(Messages.PlanNotFound, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 	}

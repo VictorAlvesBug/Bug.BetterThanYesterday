@@ -13,8 +13,11 @@ public class GetPlanByIdUseCase(IPlanRepository planRepository)
 		var plan = await planRepository.GetByIdAsync(command.PlanId);
 
 		if (plan is null)
-			return Result.Rejected(Messages.EnterPlanId);
+			return Result.Rejected(Messages.PlanNotFound);
 
-		return Result.Success(plan.ToModel());
+		return Result.Success(
+			plan.ToModel(),
+			Messages.PlanSuccessfullyFound
+		);
 	}
 }

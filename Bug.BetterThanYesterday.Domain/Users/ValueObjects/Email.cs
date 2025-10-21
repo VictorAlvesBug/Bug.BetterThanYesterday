@@ -22,7 +22,7 @@ public sealed record Email
 		value = value.Trim().ToLower();
 
 		if (!regex.IsMatch(value))
-			throw new ArgumentException(nameof(Email), Messages.EnterValidEmail);
+			throw new ArgumentException(nameof(Email), Messages.EnterValidUserEmail);
 
 		return new Email(value);
 	}

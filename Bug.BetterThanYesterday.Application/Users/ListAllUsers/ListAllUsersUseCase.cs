@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.Users.ListAllUsers;
@@ -10,6 +11,9 @@ public class ListAllUsersUseCase(IUserRepository userRepository)
 	{
 		command.Validate();
 		var users = (await userRepository.ListAllAsync()).Select(user => user.ToModel());
-		return Result.Success(users);
+		return Result.Success(
+			users,
+			Messages.UsersSuccessfullyFound
+		);
 	}
 }
