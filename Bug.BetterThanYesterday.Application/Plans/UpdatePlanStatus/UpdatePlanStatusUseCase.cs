@@ -10,22 +10,24 @@ public class UpdatePlanStatusUseCase(IPlanRepository planRepository)
 {
 	public async Task<IResult> HandleAsync(UpdatePlanStatusCommand command)
 	{
-		command.Validate();
-		var plan = await planRepository.GetByIdAsync(command.PlanId);
-
-		if (plan is null)
-			return Result.Rejected(Messages.PlanNotFound);
 		try
 		{
+			command.Validate();
+			
+			var plan = await planRepository.GetByIdAsync(command.PlanId);
+
+			if (plan is null)
+				return Result.Rejected(Messages.PlanNotFound);
+
 			var newStatus = PlanStatus.FromId(command.StatusId);
 			plan.ChangeStatus(newStatus);
+
+			await planRepository.UpdateAsync(plan);
+			return Result.Success(plan.ToModel(), Messages.PlanStatusSuccessfullyUpdated);
 		}
 		catch (Exception ex)
 		{
 			return Result.Rejected(ex.Message);
 		}
-
-		await planRepository.UpdateAsync(plan);
-		return Result.Success(plan.ToModel(), Messages.PlanStatusSuccessfullyUpdated);
 	}
 }

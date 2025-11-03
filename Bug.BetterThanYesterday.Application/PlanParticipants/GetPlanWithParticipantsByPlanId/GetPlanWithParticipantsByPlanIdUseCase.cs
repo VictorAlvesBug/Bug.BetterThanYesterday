@@ -14,32 +14,39 @@ public sealed class GetPlanWithParticipantsByPlanIdUseCase(
 {
     public async Task<IResult> HandleAsync(GetPlanWithParticipantsByPlanIdCommand command)
     {
-		command.Validate();
-
-        var plan = await planRepository.GetByIdAsync(command.PlanId);
-
-        if (plan is null)
-            return Result.Rejected(Messages.PlanNotFound);
-
-        var planParticipants = await planParticipantRepository.ListByPlanIdAsync(command.PlanId);
-
-        if (planParticipants.Count == 0)
-            return Result.Success(plan.ToPlanWithParticipantsModel(), Messages.PlanHasNoParticipants);
-
-        var participantIds = planParticipants.Select(planParticipant => planParticipant.UserId).ToList();
-
-        var participants = await userRepository.BatchGetByIdAsync(participantIds);
-
-        if (participantIds.Count > participants.Count)
+        try
         {
-            var notFoundIds = participantIds.Where(id => !participants.Any(p => p.Id == id));
-            var strNotFoundIds = string.Join(", ", notFoundIds);
-            return Result.Rejected($"Usuários não encontrados para os IDs: {strNotFoundIds}");
-        }
+            command.Validate();
+            
+            var plan = await planRepository.GetByIdAsync(command.PlanId);
 
-        return Result.Success(
-            plan.ToPlanWithParticipantsModel(participants),
-            Messages.PlanSuccessfullyFound
-        );
+            if (plan is null)
+                return Result.Rejected(Messages.PlanNotFound);
+
+            var planParticipants = await planParticipantRepository.ListByPlanIdAsync(command.PlanId);
+
+            if (planParticipants.Count == 0)
+                return Result.Success(plan.ToPlanWithParticipantsModel(), Messages.PlanHasNoParticipants);
+
+            var participantIds = planParticipants.Select(planParticipant => planParticipant.UserId).ToList();
+
+            var participants = await userRepository.BatchGetByIdAsync(participantIds);
+
+            if (participantIds.Count > participants.Count)
+            {
+                var notFoundIds = participantIds.Where(id => !participants.Any(p => p.Id == id));
+                var strNotFoundIds = string.Join(", ", notFoundIds);
+                return Result.Rejected($"Usuários não encontrados para os IDs: {strNotFoundIds}");
+            }
+
+            return Result.Success(
+                plan.ToPlanWithParticipantsModel(participants),
+                Messages.PlanSuccessfullyFound
+            );
+        }
+        catch (Exception ex)
+        {
+            return Result.Rejected(ex.Message);
+        }
     }
 }

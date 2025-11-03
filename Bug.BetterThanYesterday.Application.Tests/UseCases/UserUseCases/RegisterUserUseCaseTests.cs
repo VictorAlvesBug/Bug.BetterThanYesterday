@@ -41,7 +41,7 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EnterUserName, result.GetMessage());
+		Assert.Contains(Messages.EnterUserName, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Never);
 		_mock.UserRepository.Verify(repo => repo.AddAsync(It.IsAny<User>()), Times.Never);
@@ -60,7 +60,7 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EnterUserEmail, result.GetMessage());
+		Assert.Contains(Messages.EnterUserEmail, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Never);
 		_mock.UserRepository.Verify(repo => repo.AddAsync(It.IsAny<User>()), Times.Never);
@@ -79,7 +79,7 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EnterValidUserEmail, result.GetMessage());
+		Assert.Contains(Messages.EnterValidUserEmail, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Never);
 		_mock.UserRepository.Verify(repo => repo.AddAsync(It.IsAny<User>()), Times.Never);

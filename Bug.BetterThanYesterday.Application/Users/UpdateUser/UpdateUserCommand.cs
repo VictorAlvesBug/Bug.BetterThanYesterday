@@ -21,10 +21,7 @@ public class UpdateUserCommand : ICommand
 		if (UserId == Guid.Empty)
 			throw new ArgumentNullException(nameof(UserId), Messages.EnterUserId);
 
-		if (string.IsNullOrWhiteSpace(Name))
-			throw new ArgumentNullException(nameof(Name), Messages.EnterUserName);
-
-		if (string.IsNullOrWhiteSpace(Email))
-			throw new ArgumentNullException(nameof(Email), Messages.EnterUserEmail);
+		if (string.IsNullOrWhiteSpace(Name) && string.IsNullOrWhiteSpace(Email))
+			throw new ArgumentException(Messages.EnterUserNameOrEmail);
 	}
 }

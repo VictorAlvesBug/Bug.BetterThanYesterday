@@ -15,29 +15,37 @@ public sealed class GetPlanParticipantDetailsUseCase(
 {
     public async Task<IResult> HandleAsync(GetPlanParticipantDetailsCommand command)
     {
-        command.Validate();
-        var planParticipantId = PlanParticipant.BuildId(
-            command.PlanId,
-            command.UserId
-        );
-        var planParticipant = await planParticipantRepository.GetByIdAsync(planParticipantId);
+        try
+        {
+            command.Validate();
+            
+            var planParticipantId = PlanParticipant.BuildId(
+                command.PlanId,
+                command.UserId
+            );
+            var planParticipant = await planParticipantRepository.GetByIdAsync(planParticipantId);
 
-        if (planParticipant is null)
-            return Result.Rejected(Messages.PlanParticipantNotFound);
+            if (planParticipant is null)
+                return Result.Rejected(Messages.PlanParticipantNotFound);
 
-        var plan = await planRepository.GetByIdAsync(planParticipant.PlanId);
+            var plan = await planRepository.GetByIdAsync(planParticipant.PlanId);
 
-        if (plan is null)
-            return Result.Rejected(Messages.PlanNotFound);
+            if (plan is null)
+                return Result.Rejected(Messages.PlanNotFound);
 
-        var user = await userRepository.GetByIdAsync(planParticipant.UserId);
+            var user = await userRepository.GetByIdAsync(planParticipant.UserId);
 
-        if (user is null)
-            return Result.Rejected(Messages.UserNotFound);
+            if (user is null)
+                return Result.Rejected(Messages.UserNotFound);
 
-        return Result.Success(
-            planParticipant.ToPlanParticipantDetailsModel(plan, user),
-            Messages.PlanParticipantSuccessfullyFound
-        );
+            return Result.Success(
+                planParticipant.ToPlanParticipantDetailsModel(plan, user),
+                Messages.PlanParticipantSuccessfullyFound
+            );
+        }
+        catch (Exception ex)
+        {
+            return Result.Rejected(ex.Message);
+        }
     }
 }

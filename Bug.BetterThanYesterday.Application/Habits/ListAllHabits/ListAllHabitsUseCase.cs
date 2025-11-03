@@ -9,8 +9,16 @@ public sealed class ListAllHabitsUseCase(IHabitRepository habitRepository)
 {
 	public async Task<IResult> HandleAsync(ListAllHabitsCommand command)
 	{
-		command.Validate();
-		var habits = (await habitRepository.ListAllAsync()).Select(habit => habit.ToModel());
-		return Result.Success(habits, Messages.HabitsSuccessfullyFound);
+		try
+		{
+			command.Validate();
+
+			var habits = (await habitRepository.ListAllAsync()).Select(habit => habit.ToModel());
+			return Result.Success(habits, Messages.HabitsSuccessfullyFound);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }

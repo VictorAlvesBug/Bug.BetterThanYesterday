@@ -13,13 +13,15 @@ public class CreatePlanUseCase(
 {
 	public async Task<IResult> HandleAsync(CreatePlanCommand command)
 	{
-		command.Validate();
-		var habit = await habitRepository.GetByIdAsync(command.HabitId);
-
-		if (habit is null)
-			return Result.Rejected(Messages.HabitNotFound);
 		try
 		{
+			command.Validate();
+			
+			var habit = await habitRepository.GetByIdAsync(command.HabitId);
+
+			if (habit is null)
+				return Result.Rejected(Messages.HabitNotFound);
+
 			var plan = Plan.CreateNew(
 				command.HabitId,
 				command.Description,

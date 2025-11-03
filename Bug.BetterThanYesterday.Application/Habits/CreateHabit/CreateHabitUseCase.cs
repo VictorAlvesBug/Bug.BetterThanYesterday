@@ -10,14 +10,15 @@ public sealed class CreateHabitUseCase(IHabitRepository habitRepository)
 {
 	public async Task<IResult> HandleAsync(CreateHabitCommand command)
 	{
-		command.Validate();
-		var alreadyExists = (await habitRepository.GetByNameAsync(command.Name)) is not null;
-
-		if (alreadyExists)
-			return Result.Rejected(Messages.ThereIsAlreadyAHabitRegisteredWithThatName);
-	
 		try
 		{
+			command.Validate();
+
+			var alreadyExists = (await habitRepository.GetByNameAsync(command.Name)) is not null;
+
+			if (alreadyExists)
+				return Result.Rejected(Messages.ThereIsAlreadyAHabitRegisteredWithThatName);
+
 			var habit = Habit.CreateNew(command.Name);
 			await habitRepository.AddAsync(habit);
 			return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyRegistered);

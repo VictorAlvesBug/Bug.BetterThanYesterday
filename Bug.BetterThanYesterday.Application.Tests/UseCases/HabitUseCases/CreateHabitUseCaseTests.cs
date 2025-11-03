@@ -50,7 +50,7 @@ public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EnterHabitName, result.GetMessage());
+		Assert.Contains(Messages.EnterHabitName, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
 		_mock.HabitRepository.Verify(repo => repo.AddAsync(It.IsAny<Habit>()), Times.Never);

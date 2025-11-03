@@ -10,32 +10,32 @@ public class UpdateUserUseCase(IUserRepository userRepository)
 {
 	public async Task<IResult> HandleAsync(UpdateUserCommand command)
 	{
-		command.Validate();
-
-		var user = await userRepository.GetByIdAsync(command.UserId);
-
-		if (user is null)
-			return Result.Rejected(Messages.UserNotFound);
-
-		var existingEmailUser = await userRepository.GetByEmailAsync(Email.Create(command.Email));
-
-		if (existingEmailUser is not null
-			&& existingEmailUser.Id != user.Id)
-		{
-			return Result.Rejected(Messages.UserEmailAlreadyRegistered);
-		}
-
 		try
 		{
+			command.Validate();
+			
+			var user = await userRepository.GetByIdAsync(command.UserId);
+
+			if (user is null)
+				return Result.Rejected(Messages.UserNotFound);
+
+			var existingEmailUser = await userRepository.GetByEmailAsync(Email.Create(command.Email));
+
+			if (existingEmailUser is not null
+				&& existingEmailUser.Id != user.Id)
+			{
+				return Result.Rejected(Messages.UserEmailAlreadyRegistered);
+			}
+
 			user.UpdateName(command.Name);
 			user.UpdateEmail(command.Email);
+
+			await userRepository.UpdateAsync(user);
+			return Result.Success(user.ToModel(), Messages.UserSuccessfullyUpdated);
 		}
 		catch (Exception ex)
 		{
 			return Result.Rejected(ex.Message);
 		}
-
-		await userRepository.UpdateAsync(user);
-		return Result.Success(user.ToModel(), Messages.UserSuccessfullyUpdated);
 	}
 }

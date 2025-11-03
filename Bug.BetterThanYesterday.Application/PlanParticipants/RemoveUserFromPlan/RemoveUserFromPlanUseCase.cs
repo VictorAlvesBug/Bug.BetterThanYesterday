@@ -16,43 +16,43 @@ public sealed class RemoveUserFromPlanUseCase(
 {
     public async Task<IResult> HandleAsync(RemoveUserFromPlanCommand command)
     {
-        command.Validate();
-
-        var plan = await planRepository.GetByIdAsync(command.PlanId);
-
-        if (plan is null)
-            return Result.Rejected(Messages.PlanNotFound);
-
-        var user = await userRepository.GetByIdAsync(command.UserId);
-
-        if (user is null)
-            return Result.Rejected(Messages.UserNotFound);
-
-        var planParticipantId = PlanParticipant.BuildId(command.PlanId, command.UserId);
-
-        var planParticipant = await planParticipantRepository.GetByIdAsync(planParticipantId);
-
-        if (planParticipant is null)
-            return Result.Rejected(Messages.UserIsNotInThePlan);
-
-        var allowedPlanStatuses = new List<PlanStatus> { PlanStatus.NotStarted, PlanStatus.Running };
-
-        if (!allowedPlanStatuses.Contains(plan.Status))
-            return Result.Rejected(Messages.ParticipantCanOnlyBeRemovedFromNotStartedOrRunningPlans);
-
         try
         {
+            command.Validate();
+            
+            var plan = await planRepository.GetByIdAsync(command.PlanId);
+
+            if (plan is null)
+                return Result.Rejected(Messages.PlanNotFound);
+
+            var user = await userRepository.GetByIdAsync(command.UserId);
+
+            if (user is null)
+                return Result.Rejected(Messages.UserNotFound);
+
+            var planParticipantId = PlanParticipant.BuildId(command.PlanId, command.UserId);
+
+            var planParticipant = await planParticipantRepository.GetByIdAsync(planParticipantId);
+
+            if (planParticipant is null)
+                return Result.Rejected(Messages.UserIsNotInThePlan);
+
+            var allowedPlanStatuses = new List<PlanStatus> { PlanStatus.NotStarted, PlanStatus.Running };
+
+            if (!allowedPlanStatuses.Contains(plan.Status))
+                return Result.Rejected(Messages.ParticipantCanOnlyBeRemovedFromNotStartedOrRunningPlans);
+
             planParticipant.MarkAsLeft();
+
+            await planParticipantRepository.UpdateAsync(planParticipant);
+            return Result.Success(
+                planParticipant.ToPlanParticipantDetailsModel(plan, user),
+                Messages.ParticipantSuccessfullyRemovedFromThePlan
+            );
         }
         catch (Exception ex)
         {
             return Result.Rejected(ex.Message);
         }
-        
-        await planParticipantRepository.UpdateAsync(planParticipant);
-        return Result.Success(
-            planParticipant.ToPlanParticipantDetailsModel(plan, user),
-            Messages.ParticipantSuccessfullyRemovedFromThePlan
-		);
     }
 }

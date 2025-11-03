@@ -77,7 +77,7 @@ public class UpdatePlanStatusUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EnterPlanStatus, result.GetMessage());
+		Assert.Contains(Messages.EnterPlanStatus, result.GetMessage());
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.PlanRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Plan>()), Times.Never);

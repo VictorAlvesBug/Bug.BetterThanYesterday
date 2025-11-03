@@ -94,7 +94,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EnterPlanStartDate, result.GetMessage());
+		Assert.Contains(Messages.EnterPlanStartDate, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);
@@ -120,7 +120,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.StartDateCannotBeEarlierThanToday, result.GetMessage());
+		Assert.Contains(Messages.StartDateCannotBeEarlierThanToday, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);
@@ -146,7 +146,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EnterPlanEndDate, result.GetMessage());
+		Assert.Contains(Messages.EnterPlanEndDate, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);
@@ -172,7 +172,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EndDateMustBeLaterThanStartDate, result.GetMessage());
+		Assert.Contains(Messages.EndDateMustBeLaterThanStartDate, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);
@@ -198,7 +198,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EnterPlanType, result.GetMessage());
+		Assert.Contains(Messages.EnterPlanType, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.PlanRepository.Verify(repo => repo.AddAsync(It.IsAny<Plan>()), Times.Never);

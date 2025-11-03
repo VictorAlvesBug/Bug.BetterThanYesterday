@@ -9,15 +9,23 @@ public class GetPlanByIdUseCase(IPlanRepository planRepository)
 {
 	public async Task<IResult> HandleAsync(GetPlanByIdCommand command)
 	{
-		command.Validate();
-		var plan = await planRepository.GetByIdAsync(command.PlanId);
+		try
+		{
+			command.Validate();
+			
+			var plan = await planRepository.GetByIdAsync(command.PlanId);
 
-		if (plan is null)
-			return Result.Rejected(Messages.PlanNotFound);
+			if (plan is null)
+				return Result.Rejected(Messages.PlanNotFound);
 
-		return Result.Success(
-			plan.ToModel(),
-			Messages.PlanSuccessfullyFound
-		);
+			return Result.Success(
+				plan.ToModel(),
+				Messages.PlanSuccessfullyFound
+			);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }

@@ -12,19 +12,26 @@ public class ListPlansByHabitIdUseCase(
 {
 	public async Task<IResult> HandleAsync(ListPlansByHabitIdCommand command)
 	{
-		command.Validate();
+		try
+		{
+			command.Validate();
+			
+			var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
-		var habit = await habitRepository.GetByIdAsync(command.HabitId);
+			if (habit is null)
+				return Result.Rejected(Messages.HabitNotFound);
 
-		if (habit is null)
-			return Result.Rejected(Messages.HabitNotFound);
+			var plans = (await planRepository.ListByHabitIdAsync(command.HabitId))
+				.Select(habit => habit.ToModel());
 
-		var plans = (await planRepository.ListByHabitIdAsync(command.HabitId))
-			.Select(habit => habit.ToModel());
-
-		return Result.Success(
-			plans,
-			Messages.PlansSuccessfullyFound
-		);
+			return Result.Success(
+				plans,
+				Messages.PlansSuccessfullyFound
+			);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }

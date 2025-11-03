@@ -10,30 +10,31 @@ public sealed class UpdateHabitUseCase(
 {
 	public async Task<IResult> HandleAsync(UpdateHabitCommand command)
 	{
-		command.Validate();
-		var habit = await habitRepository.GetByIdAsync(command.HabitId);
-
-		if (habit is null)
-			return Result.Rejected(Messages.HabitNotFound);
-
-		var existingNameHabit = await habitRepository.GetByNameAsync(command.Name);
-
-		if (existingNameHabit is not null
-			&& existingNameHabit.Id != habit.Id)
-		{
-			return Result.Rejected(Messages.ThereIsAlreadyAHabitRegisteredWithThatName);
-		}
-
 		try
 		{
+			command.Validate();
+
+			var habit = await habitRepository.GetByIdAsync(command.HabitId);
+
+			if (habit is null)
+				return Result.Rejected(Messages.HabitNotFound);
+
+			var existingNameHabit = await habitRepository.GetByNameAsync(command.Name);
+
+			if (existingNameHabit is not null
+				&& existingNameHabit.Id != habit.Id)
+			{
+				return Result.Rejected(Messages.ThereIsAlreadyAHabitRegisteredWithThatName);
+			}
+
 			habit.UpdateName(command.Name);
+
+			await habitRepository.UpdateAsync(habit);
+			return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyUpdated);
 		}
 		catch (Exception ex)
 		{
 			return Result.Rejected(ex.Message);
 		}
-
-		await habitRepository.UpdateAsync(habit);
-		return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyUpdated);
 	}
 }

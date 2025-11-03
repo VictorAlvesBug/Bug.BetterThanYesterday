@@ -10,18 +10,25 @@ public sealed class GetCheckInDetailsUseCase(
 {
     public async Task<IResult> HandleAsync(GetCheckInDetailsCommand command)
     {
-        command.Validate();
+        try
+        {
+            command.Validate();
 
-        var checkIn = await checkInRepository.GetDetailsAsync(
-            command.PlanId,
-            command.UserId,
-            DateOnly.FromDateTime(command.Date),
-            command.Index
-        );
+            var checkIn = await checkInRepository.GetDetailsAsync(
+                command.PlanId,
+                command.UserId,
+                DateOnly.FromDateTime(command.Date),
+                command.Index
+            );
 
-        if (checkIn is null)
-            return Result.Rejected(Messages.CheckInNotFound);
+            if (checkIn is null)
+                return Result.Rejected(Messages.CheckInNotFound);
 
-        return Result.Success(checkIn, Messages.CheckInSuccessfullyFound);
+            return Result.Success(checkIn, Messages.CheckInSuccessfullyFound);
+        }
+        catch (Exception ex)
+        {
+            return Result.Rejected(ex.Message);
+        }
     }
 }

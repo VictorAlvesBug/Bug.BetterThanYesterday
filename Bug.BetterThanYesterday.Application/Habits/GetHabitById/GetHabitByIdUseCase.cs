@@ -9,12 +9,20 @@ public sealed class GetHabitByIdUseCase(IHabitRepository habitRepository)
 {
 	public async Task<IResult> HandleAsync(GetHabitByIdCommand command)
 	{
-		command.Validate();
-		var habit = await habitRepository.GetByIdAsync(command.HabitId);
+		try
+		{
+			command.Validate();
 
-		if (habit is null)
-			return Result.Rejected(Messages.HabitNotFound);
+			var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
-		return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyFound);
+			if (habit is null)
+				return Result.Rejected(Messages.HabitNotFound);
+
+			return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyFound);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }

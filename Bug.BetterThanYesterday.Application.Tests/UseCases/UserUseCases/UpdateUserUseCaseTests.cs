@@ -64,7 +64,7 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EnterUserNameOrEmail, result.GetMessage());
+		Assert.Contains(Messages.EnterUserNameOrEmail, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Never);
@@ -128,7 +128,7 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.EnterValidUserEmail, result.GetMessage());
+		Assert.Contains(Messages.EnterValidUserEmail, result.GetMessage());
 
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByEmailAsync(It.IsAny<Email>()), Times.Never);

@@ -10,15 +10,23 @@ public class CancelPlanUseCase(IPlanRepository planRepository)
 {
 	public async Task<IResult> HandleAsync(CancelPlanCommand command)
 	{
-		command.Validate();
-		var plan = await planRepository.GetByIdAsync(command.PlanId);
+		try
+		{
+			command.Validate();
+		
+			var plan = await planRepository.GetByIdAsync(command.PlanId);
 
-		if (plan is null)
-			return Result.Rejected(Messages.PlanNotFound);
+			if (plan is null)
+				return Result.Rejected(Messages.PlanNotFound);
 
-		plan.ChangeStatus(PlanStatus.Cancelled);
+			plan.ChangeStatus(PlanStatus.Cancelled);
 
-		await planRepository.UpdateAsync(plan);
-		return Result.Success(plan.ToModel(), Messages.PlanSuccessfullyCancelled);
+			await planRepository.UpdateAsync(plan);
+			return Result.Success(plan.ToModel(), Messages.PlanSuccessfullyCancelled);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }

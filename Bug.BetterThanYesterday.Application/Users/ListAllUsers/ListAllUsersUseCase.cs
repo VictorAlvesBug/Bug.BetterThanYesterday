@@ -9,11 +9,19 @@ public class ListAllUsersUseCase(IUserRepository userRepository)
 {
 	public async Task<IResult> HandleAsync(ListAllUsersCommand command)
 	{
-		command.Validate();
-		var users = (await userRepository.ListAllAsync()).Select(user => user.ToModel());
-		return Result.Success(
-			users,
-			Messages.UsersSuccessfullyFound
-		);
+		try
+		{
+			command.Validate();
+			
+			var users = (await userRepository.ListAllAsync()).Select(user => user.ToModel());
+			return Result.Success(
+				users,
+				Messages.UsersSuccessfullyFound
+			);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }

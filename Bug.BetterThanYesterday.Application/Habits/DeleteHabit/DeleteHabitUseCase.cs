@@ -12,16 +12,24 @@ public class DeleteHabitUseCase(
 {
 	public async Task<IResult> HandleAsync(DeleteHabitCommand command)
 	{
-		command.Validate();
-		var habit = await habitRepository.GetByIdAsync(command.HabitId);
+		try
+		{
+			command.Validate();
 
-		if (habit is null)
-			return Result.Rejected(Messages.HabitNotFound);
+			var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
-		if (!await habitDeletionPolicy.CanDeleteAsync(habit.Id))
-			return Result.Rejected(Messages.HabitCannotBeRemovedAsItHasLinkedPlans);
+			if (habit is null)
+				return Result.Rejected(Messages.HabitNotFound);
 
-		await habitRepository.DeleteAsync(habit);
-		return Result.Success(Messages.HabitSuccessfullyDeleted);
+			if (!await habitDeletionPolicy.CanDeleteAsync(habit.Id))
+				return Result.Rejected(Messages.HabitCannotBeRemovedAsItHasLinkedPlans);
+
+			await habitRepository.DeleteAsync(habit);
+			return Result.Success(Messages.HabitSuccessfullyDeleted);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }

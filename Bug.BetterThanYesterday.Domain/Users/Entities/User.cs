@@ -69,14 +69,13 @@ public class User : Entity
 
 	public void UpdateName(string name)
 	{
-		if (string.IsNullOrWhiteSpace(name))
-			throw new ArgumentNullException(nameof(name), Messages.EnterUserName);
-
-		Name = name;
+		if (!string.IsNullOrWhiteSpace(name))
+			Name = name;
 	}
 
 	public void UpdateEmail(string email)
 	{
-		Email = Email.Create(email);
+		if (!string.IsNullOrWhiteSpace(email))
+			Email = Email.Create(email);
 	}
 }

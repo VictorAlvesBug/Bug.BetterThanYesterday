@@ -9,13 +9,21 @@ public class DeleteUserUseCase(IUserRepository userRepository)
 {
 	public async Task<IResult> HandleAsync(DeleteUserCommand command)
 	{
-		command.Validate();
-		var user = await userRepository.GetByIdAsync(command.UserId);
+		try
+		{
+			command.Validate();
+			
+			var user = await userRepository.GetByIdAsync(command.UserId);
 
-		if (user is null)
-			return Result.Rejected(Messages.UserNotFound);
+			if (user is null)
+				return Result.Rejected(Messages.UserNotFound);
 
-		await userRepository.DeleteAsync(user);
-		return Result.Success(Messages.UserSuccessfullyDeleted);
+			await userRepository.DeleteAsync(user);
+			return Result.Success(Messages.UserSuccessfullyDeleted);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }

@@ -11,14 +11,15 @@ public class RegisterUserUseCase(IUserRepository userRepository)
 {
 	public async Task<IResult> HandleAsync(RegisterUserCommand command)
 	{
-		command.Validate();
-		var alreadyExists = (await userRepository.GetByEmailAsync(Email.Create(command.Email))) is not null;
-
-		if (alreadyExists)
-			return Result.Rejected(Messages.UserEmailAlreadyRegistered);
-
 		try
 		{
+			command.Validate();
+			
+			var alreadyExists = (await userRepository.GetByEmailAsync(Email.Create(command.Email))) is not null;
+
+			if (alreadyExists)
+				return Result.Rejected(Messages.UserEmailAlreadyRegistered);
+
 			var user = User.CreateNew(command.Name, command.Email);
 			await userRepository.AddAsync(user);
 			return Result.Success(user.ToModel(), Messages.UserSuccessfullyRegistered);

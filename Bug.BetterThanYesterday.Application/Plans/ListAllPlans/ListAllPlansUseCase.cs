@@ -9,11 +9,19 @@ public class ListAllPlansUseCase(IPlanRepository planRepository)
 {
 	public async Task<IResult> HandleAsync(ListAllPlansCommand command)
 	{
-		command.Validate();
-		var plans = (await planRepository.ListAllAsync()).Select(plan => plan.ToModel());
-		return Result.Success(
-			plans,
-			Messages.PlansSuccessfullyFound
-		);
+		try
+		{
+			command.Validate();
+			
+			var plans = (await planRepository.ListAllAsync()).Select(plan => plan.ToModel());
+			return Result.Success(
+				plans,
+				Messages.PlansSuccessfullyFound
+			);
+		}
+		catch (Exception ex)
+		{
+			return Result.Rejected(ex.Message);
+		}
 	}
 }
