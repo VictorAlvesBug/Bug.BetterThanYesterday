@@ -15,7 +15,7 @@ public static class PlanParticipantRepositoryMockFactory
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active, UserRepositoryMockFactory.UserId1),
 				PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active,
 				UserRepositoryMockFactory.UserId1,
-				new DateTime(2020, 01, 01),
+				DateTime.Today,
 				null,
 				PlanParticipantStatus.Active.Id
 			),

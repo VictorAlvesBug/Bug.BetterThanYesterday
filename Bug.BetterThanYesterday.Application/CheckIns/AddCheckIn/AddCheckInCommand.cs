@@ -9,7 +9,7 @@ public class AddCheckInCommand : ICommand
         Guid planId,
         Guid userId,
         DateTime date,
-        int index,
+        //int index,
         string title,
         string? description
     )
@@ -17,7 +17,7 @@ public class AddCheckInCommand : ICommand
         PlanId = planId;
         UserId = userId;
         Date = date;
-        Index = index;
+        //Index = index;
         Title = title;
         Description = description;
     }
@@ -25,7 +25,7 @@ public class AddCheckInCommand : ICommand
     public Guid PlanId { get; init; }
     public Guid UserId { get; init; }
     public DateTime Date { get; init; }
-    public int Index { get; init; }
+    //TODO Remover: public int Index { get; init; }
     public string Title { get; init; }
     public string? Description { get; init; }
     
@@ -40,8 +40,8 @@ public class AddCheckInCommand : ICommand
         if (Date == DateTime.MinValue)
             throw new ArgumentException(nameof(Date), Messages.EnterCheckInDate);
 
-        if (Index < 0)
-            throw new ArgumentException(nameof(Index), Messages.EnterCheckInIndex);
+        //if (Index < 0)
+        //    throw new ArgumentException(nameof(Index), Messages.EnterCheckInIndex);
 
         if (string.IsNullOrWhiteSpace(Title))
             throw new ArgumentException(nameof(Title), Messages.EnterCheckInTitle);

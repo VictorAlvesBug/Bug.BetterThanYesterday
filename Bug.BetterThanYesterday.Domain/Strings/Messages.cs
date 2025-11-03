@@ -1,79 +1,106 @@
+
+
 namespace Bug.BetterThanYesterday.Domain.Strings;
 
 public static class Messages
 {
-	public const string ChangeNotMappedToCurrentStatus = "Alteração não mapeada para status atual";
-	public const string CheckInNotFound = "Check-in não encontrado";
-	public const string CheckInSuccessfullyFound = "Check-in encontrado com sucesso";
-	public const string UserEmailAlreadyRegistered = "E-mail já cadastrado para outro usuário";
-	public const string EndDateMustBeLaterThanStartDate = "Data final deve ser posterior à data inicial";
-	public const string EnterCheckInDate = "Informe a data do check-in";
-	public const string EnterCheckInId = "Informe o ID do Check-in";
-	public const string EnterCheckInIndex = "Informe o índice do check-in";
-	public const string EnterCheckInTitle = "Informe o título do check-in";
-	public const string EnterHabitCreationDate = "Informe a data de criação do hábito";
-	public const string EnterHabitId = "Informe o ID do hábito";
-	public const string EnterHabitName = "Informe o nome do hábito";
-	public const string EnterPlanEndDate = "Informe a data final do plano";
-	public const string EnterPlanDescription = "Informe a descrição do plano";
-	public const string EnterPlanId = "Informe o ID do plano";
-	public const string EnterPlanParticipantId = "Informe o ID do participante no plano";
-	public const string EnterPlanParticipantJoinedDate = "Informe a data de inclusão do usuário no plano";
-	public const string EnterPlanCreationDate = "Informe a data de criação do plano";
-	public const string EnterPlanStatus = "Informe o status do plano";
-	public const string EnterPlanStartDate = "Informe a data inicial do plano";
-	public const string EnterPlanType = "Informe o tipo de plano";
-	public const string EnterUserEmail = "Informe o e-mail do usuário";
-	public const string EnterUserId = "Informe o ID do usuário";
-	public const string EnterUserName = "Informe o nome do usuário";
-	public const string EnterUserNameOrEmail = "Informe o nome ou o e-mail do usuário";
-	public const string EnterUserCreationDate = "Informe a data de criação do usuário";
-	public const string EnterValidUserEmail = "Informe um e-mail válido para o usuário";
-	public const string HabitCannotBeRemovedAsItHasLinkedPlans = "Hábito não pode ser removido, pois possui planos vinculados";
-	public const string HabitNotFound = "Hábito não encontrado";
-	public const string HabitSuccessfullyDeleted = "Hábito deletado com sucesso";
-	public const string HabitSuccessfullyFound = "Hábito encontrado com sucesso";
-	public const string HabitsSuccessfullyFound = "Hábitos encontrados com sucesso";
-	public const string HabitSuccessfullyRegistered = "Hábito cadastrado com sucesso";
-	public const string HabitSuccessfullyUpdated = "Hábito atualizado com sucesso";
-	public const string OnlyNotStartedPlansCanReceiveNewParticipants = "Apenas planos não iniciados podem receber novos participantes";
-	public const string OnlyValidGuidsCanBeCombined = "Apenas GUIDs válidos podem ser combinados";
-	public const string ParticipantAlreadyAddedToThePlan = "Participante já adicionado ao plano";
-	public const string ParticipantSuccessfullyAddedToThePlan = "Participante adicionado ao plano com sucesso";
-	public const string ParticipantSuccessfullyReaddedToThePlan = "Participante readicionado ao plano com sucesso";
-	public const string ParticipantSuccessfullyBlocked = "Participante bloqueado com sucesso";
-	public const string ParticipantSuccessfullyUnblocked = "Participante desbloqueado com sucesso";
-	public const string ParticipantSuccessfullyRemovedFromThePlan = "Participante removido do plano com sucesso";
-	public const string PlanHasNoParticipants = "Plano não possui participantes";
-	public const string PlanNotFound = "Plano não encontrado";
-	public const string PlanTypeIdMustBeGreaterThanZero = "O ID do tipo de plano deve ser maior que zero";
-	public const string PlanStatusIdMustBeGreaterThanZero = "O ID do status do plano deve ser maior que zero";
-	public const string PlanParticipantNotFound = "Participante não encontrado no plano";
-	public const string PlanParticipantStatusIdMustBeGreaterThanZero = "O ID do status do participante deve ser maior que zero";
-	public const string PlanStatusSuccessfullyUpdated = "Status do plano atualizado com sucesso";
-	public const string PlanSuccessfullyCancelled = "Plano cancelado com sucesso";
-	public const string PlanSuccessfullyFound = "Plano encontrado com sucesso";
-	public const string PlansSuccessfullyFound = "Planos encontrados com sucesso";
-	public const string PlanSuccessfullyRegistered = "Plano cadastrado com sucesso";
-	public const string PlanParticipantSuccessfullyFound = "Participante do plano encontrado com sucesso";
-	public const string StartDateCannotBeEarlierThanToday = "Data de início não pode ser anterior a hoje";
-	public const string ThereIsAlreadyAHabitRegisteredWithThatName = "Já existe um hábito cadastrado com esse nome";
-	public const string ParticipantAlreadyBlockedInThisPlan = "Este participante já está bloqueado neste plano";
-	public const string ParticipantCannotBeRemovedFromThePlanAsHeIsBlocked = "Este participante não pode ser removido do plano, pois está bloqueado";
-	public const string ParticipantCanOnlyBeBlockedInRunningPlans = "Participantes só podem ser bloqueados em planos em andamento";
-	public const string ParticipantCanOnlyBeRemovedFromNotStartedOrRunningPlans = "Participantes só podem ser removidos de planos não iniciados ou em andamento";
-	public const string ParticipantCanOnlyBeUnblockedInRunningPlans = "Participantes só podem ser desbloqueados em planos em andamento";
-	public const string ParticipantHasAlreadyBeenOnThisPlanBefore = "Participante já esteve neste plano antes";
-	public const string UserHasNoPlans = "Usuário não possui planos";
-	public const string ParticipantIsAlreadyBlockedInThePlan = "Participante já está bloqueado neste plano";
-	public const string ParticipantIsAlreadyActiveInThePlan = "Participante já está ativo neste plano";
-	public const string ParticipantIsBlockedInThePlan = "Participante está bloqueado neste plano";
-	public const string UserIsNotInThePlan = "Usuário não está no plano";
-	public const string UserIsNotInThePlanAnymore = "Usuário não está mais no plano";
-	public const string UserNotFound = "Usuário não encontrado";
-	public const string UserSuccessfullyDeleted = "Usuário deletado com sucesso";
-	public const string UserSuccessfullyFound = "Usuário encontrado com sucesso";
-	public const string UsersSuccessfullyFound = "Usuários encontrados com sucesso";
-	public const string UserSuccessfullyRegistered = "Usuário cadastrado com sucesso";
-	public const string UserSuccessfullyUpdated = "Usuário atualizado com sucesso";
+    #region Check-In Messages
+    public const string CheckInNotFound = "Check-in não encontrado";
+    public const string CheckInSuccessfullyFound = "Check-in encontrado com sucesso";
+    public const string CheckInsSuccessfullyFound = "Check-ins encontrados com sucesso";
+    public const string CheckInSuccessfullyRegistered = "Check-in cadastrado com sucesso";
+    public const string EnterCheckInDate = "Informe a data do check-in";
+    public const string EnterCheckInId = "Informe o ID do Check-in";
+    public const string EnterCheckInIndex = "Informe o índice do check-in";
+    public const string EnterCheckInTitle = "Informe o título do check-in";
+    public const string CheckInAlreadyExists = "Check-in já existe";
+    public const string PlanUserDateSuccessfullyFound = "Plano, usuário e data encontrados com sucesso";
+    public const string PlanUserSuccessfullyFound = "Plano e usuário encontrados com sucesso";
+    public const string OnlyRunningPlansCanReceiveNewCheckIns = "Apenas planos em execução podem receber novos check-ins";
+    public const string OnlyActiveParticipantsCanMakeCheckIns = "Apenas participantes ativos podem fazer check-ins";
+    public const string UserHasReachedTheMaximumNumberOfCheckInsForTheDay = "Usuário atingiu o número máximo de check-ins para o dia";
+    #endregion
+
+    #region Habit Messages
+    public const string EnterHabitCreationDate = "Informe a data de criação do hábito";
+    public const string EnterHabitId = "Informe o ID do hábito";
+    public const string EnterHabitName = "Informe o nome do hábito";
+    public const string HabitCannotBeRemovedAsItHasLinkedPlans = "Hábito não pode ser removido, pois possui planos vinculados";
+    public const string HabitNotFound = "Hábito não encontrado";
+    public const string HabitSuccessfullyDeleted = "Hábito deletado com sucesso";
+    public const string HabitSuccessfullyFound = "Hábito encontrado com sucesso";
+    public const string HabitsSuccessfullyFound = "Hábitos encontrados com sucesso";
+    public const string HabitSuccessfullyRegistered = "Hábito cadastrado com sucesso";
+    public const string HabitSuccessfullyUpdated = "Hábito atualizado com sucesso";
+    public const string ThereIsAlreadyAHabitRegisteredWithThatName = "Já existe um hábito cadastrado com esse nome";
+    #endregion
+
+    #region Plan Messages
+    public const string EnterPlanEndDate = "Informe a data final do plano";
+    public const string EnterPlanDescription = "Informe a descrição do plano";
+    public const string EnterPlanId = "Informe o ID do plano";
+    public const string EnterPlanCreationDate = "Informe a data de criação do plano";
+    public const string EnterPlanStatus = "Informe o status do plano";
+    public const string EnterPlanStartDate = "Informe a data inicial do plano";
+    public const string EnterPlanType = "Informe o tipo de plano";
+    public const string PlanHasNoParticipants = "Plano não possui participantes";
+    public const string PlanNotFound = "Plano não encontrado";
+    public const string PlanTypeIdMustBeGreaterThanZero = "O ID do tipo de plano deve ser maior que zero";
+    public const string PlanStatusIdMustBeGreaterThanZero = "O ID do status do plano deve ser maior que zero";
+    public const string PlanStatusSuccessfullyUpdated = "Status do plano atualizado com sucesso";
+    public const string PlanSuccessfullyCancelled = "Plano cancelado com sucesso";
+    public const string PlanSuccessfullyFound = "Plano encontrado com sucesso";
+    public const string PlansSuccessfullyFound = "Planos encontrados com sucesso";
+    public const string PlanSuccessfullyRegistered = "Plano cadastrado com sucesso";
+    #endregion
+
+    #region Plan Participant Messages
+    public const string EnterPlanParticipantId = "Informe o ID do participante no plano";
+    public const string EnterPlanParticipantJoinedDate = "Informe a data de inclusão do usuário no plano";
+    public const string OnlyNotStartedPlansCanReceiveNewParticipants = "Apenas planos não iniciados podem receber novos participantes";
+    public const string ParticipantAlreadyAddedToThePlan = "Participante já adicionado ao plano";
+    public const string ParticipantSuccessfullyAddedToThePlan = "Participante adicionado ao plano com sucesso";
+    public const string ParticipantSuccessfullyReaddedToThePlan = "Participante readicionado ao plano com sucesso";
+    public const string ParticipantSuccessfullyBlocked = "Participante bloqueado com sucesso";
+    public const string ParticipantSuccessfullyUnblocked = "Participante desbloqueado com sucesso";
+    public const string ParticipantSuccessfullyRemovedFromThePlan = "Participante removido do plano com sucesso";
+    public const string PlanParticipantNotFound = "Participante não encontrado no plano";
+    public const string PlanParticipantStatusIdMustBeGreaterThanZero = "O ID do status do participante deve ser maior que zero";
+    public const string PlanParticipantSuccessfullyFound = "Participante do plano encontrado com sucesso";
+    public const string ParticipantAlreadyBlockedInThisPlan = "Este participante já está bloqueado neste plano";
+    public const string ParticipantCannotBeRemovedFromThePlanAsHeIsBlocked = "Este participante não pode ser removido do plano, pois está bloqueado";
+    public const string ParticipantCanOnlyBeBlockedInRunningPlans = "Participantes só podem ser bloqueados em planos em andamento";
+    public const string ParticipantCanOnlyBeRemovedFromNotStartedOrRunningPlans = "Participantes só podem ser removidos de planos não iniciados ou em andamento";
+    public const string ParticipantCanOnlyBeUnblockedInRunningPlans = "Participantes só podem ser desbloqueados em planos em andamento";
+    public const string ParticipantHasAlreadyBeenOnThisPlanBefore = "Participante já esteve neste plano antes";
+    public const string ParticipantIsAlreadyBlockedInThePlan = "Participante já está bloqueado neste plano";
+    public const string ParticipantIsAlreadyActiveInThePlan = "Participante já está ativo neste plano";
+    public const string ParticipantIsBlockedInThePlan = "Participante está bloqueado neste plano";
+    public const string UserIsNotInThePlan = "Usuário não está no plano";
+    public const string UserIsNotInThePlanAnymore = "Usuário não está mais no plano";
+    public const string UserHasNoPlans = "Usuário não possui planos";
+    #endregion
+
+    #region User Messages
+    public const string UserEmailAlreadyRegistered = "E-mail já cadastrado para outro usuário";
+    public const string EnterUserEmail = "Informe o e-mail do usuário";
+    public const string EnterUserId = "Informe o ID do usuário";
+    public const string EnterUserName = "Informe o nome do usuário";
+    public const string EnterUserNameOrEmail = "Informe o nome ou o e-mail do usuário";
+    public const string EnterUserCreationDate = "Informe a data de criação do usuário";
+    public const string EnterValidUserEmail = "Informe um e-mail válido para o usuário";
+    public const string UserNotFound = "Usuário não encontrado";
+    public const string UserSuccessfullyDeleted = "Usuário deletado com sucesso";
+    public const string UserSuccessfullyFound = "Usuário encontrado com sucesso";
+    public const string UsersSuccessfullyFound = "Usuários encontrados com sucesso";
+    public const string UserSuccessfullyRegistered = "Usuário cadastrado com sucesso";
+    public const string UserSuccessfullyUpdated = "Usuário atualizado com sucesso";
+    #endregion
+
+    #region Other Messages
+    public const string ChangeNotMappedToCurrentStatus = "Alteração não mapeada para status atual";
+    public const string EndDateMustBeLaterThanStartDate = "Data final deve ser posterior à data inicial";
+    public const string OnlyValidGuidsCanBeCombined = "Apenas GUIDs válidos podem ser combinados";
+    public const string StartDateCannotBeEarlierThanToday = "Data de início não pode ser anterior a hoje";
+    #endregion
 }

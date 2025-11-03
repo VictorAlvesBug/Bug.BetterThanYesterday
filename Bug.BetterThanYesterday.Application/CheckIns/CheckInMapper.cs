@@ -1,4 +1,5 @@
-﻿using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
+﻿using Bug.BetterThanYesterday.Application.CheckIns.Models;
+using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 
 namespace Bug.BetterThanYesterday.Application.CheckIns;
 
