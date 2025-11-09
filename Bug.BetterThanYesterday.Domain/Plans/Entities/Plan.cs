@@ -134,4 +134,10 @@ public sealed class Plan : Entity
 
 		Status = newStatus;
 	}
+
+	public int GetMaxCheckInsPerDateAllowed()
+	{
+		// TODO implementar lógica para diferentes tipos de planos
+		return 1;
+	}
 }

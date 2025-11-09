@@ -53,12 +53,11 @@ public sealed class AddCheckInUseCase(
                 ? checkIns.Max(ci => ci.Index) + 1
                 : 1;
 
-            // TODO: Implementar limitação de quantidade de check-ins por dia, conforme max index permitido pelo plano
-            var maxIndexPerDateAllowed = 1; //plan.GetMaxCheckInsPerDateAllowed();
+            var maxIndexPerDateAllowed = plan.GetMaxCheckInsPerDateAllowed();
 
             List<PlanParticipantStatus> allowedPlanParticipantStatuses = [
                 PlanParticipantStatus.Active,
-                //PlanParticipantStatus.Blocked
+                PlanParticipantStatus.Blocked
             ];
 
             if (!allowedPlanParticipantStatuses.Contains(planParticipant.Status))

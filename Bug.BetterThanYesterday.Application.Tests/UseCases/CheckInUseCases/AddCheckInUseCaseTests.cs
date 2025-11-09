@@ -5,7 +5,10 @@ using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
+using Bug.BetterThanYesterday.Domain.PlanParticipants;
+using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
+using Bug.BetterThanYesterday.Domain.Users;
 using Moq;
 using Xunit;
 
@@ -43,13 +46,11 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         Assert.Equal(command.Title, resultData.Title);
         Assert.Equal(command.Description, resultData.Description);
 
-        _mocker.GetMock<ICheckInRepository>()
-            .Verify(x => x.AddAsync(It.Is<CheckIn>(c =>
-                c.PlanId == plan.Id &&
-                c.UserId == user.Id &&
-                c.Date == DateOnly.FromDateTime(command.Date) &&
-                c.Title == command.Title &&
-                c.Description == command.Description)), Times.Once);
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.PlanParticipantRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Once);
     }
 
     [Fact]
@@ -73,6 +74,12 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.PlanNotFound, result.GetMessage());
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        _mock.PlanParticipantRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Never);
+        _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Never);
     }
 
     [Fact]
@@ -96,6 +103,12 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.UserNotFound, result.GetMessage());
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.PlanParticipantRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Never);
+        _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Never);
     }
 
     [Fact]
@@ -120,5 +133,11 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.UserHasReachedTheMaximumNumberOfCheckInsForTheDay, result.GetMessage());
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.PlanParticipantRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Never);
     }
 }
