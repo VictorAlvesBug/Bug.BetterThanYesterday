@@ -43,8 +43,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         Assert.Equal(command.Title, resultData.Title);
         Assert.Equal(command.Description, resultData.Description);
 
-        _mocker.GetMock<ICheckInRepository>()
-            .Verify(x => x.AddAsync(It.Is<CheckIn>(c =>
+ _mock.CheckInRepository            .Verify(x => x.AddAsync(It.Is<CheckIn>(c =>
                 c.PlanId == plan.Id &&
                 c.UserId == user.Id &&
                 c.Date == DateOnly.FromDateTime(command.Date) &&
