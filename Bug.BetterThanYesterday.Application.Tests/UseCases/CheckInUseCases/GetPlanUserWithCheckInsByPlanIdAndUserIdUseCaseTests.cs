@@ -65,6 +65,10 @@ public class GetPlanUserWithCheckInsByPlanIdAndUserIdUseCaseTests : BaseCheckInU
 
             Assert.NotNull(resultCheckIn);
         }
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -82,6 +86,10 @@ public class GetPlanUserWithCheckInsByPlanIdAndUserIdUseCaseTests : BaseCheckInU
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.PlanNotFound, result.GetMessage());
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Never);
     }
 
     [Fact]
@@ -99,5 +107,9 @@ public class GetPlanUserWithCheckInsByPlanIdAndUserIdUseCaseTests : BaseCheckInU
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.UserNotFound, result.GetMessage());
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Never);
     }
 }

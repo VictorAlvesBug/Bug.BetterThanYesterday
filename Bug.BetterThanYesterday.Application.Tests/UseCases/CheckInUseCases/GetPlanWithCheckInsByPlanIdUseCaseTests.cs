@@ -57,6 +57,9 @@ public class GetPlanWithCheckInsByPlanIdUseCaseTests : BaseCheckInUseCaseTests
 
             Assert.NotNull(resultCheckIn);
         }
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -73,5 +76,8 @@ public class GetPlanWithCheckInsByPlanIdUseCaseTests : BaseCheckInUseCaseTests
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.PlanNotFound, result.GetMessage());
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAsync(It.IsAny<Guid>()), Times.Never);
     }
 }

@@ -41,6 +41,10 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         Assert.Equal(firstCheckIn.Index, resultData.Index);
         Assert.Equal(firstCheckIn.Title, resultData.Title);
         Assert.Equal(firstCheckIn.Description, resultData.Description);
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.GetDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -63,6 +67,10 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.PlanNotFound, result.GetMessage());
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        _mock.CheckInRepository.Verify(x => x.GetDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
@@ -85,6 +93,10 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.UserNotFound, result.GetMessage());
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.GetDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
@@ -108,5 +120,9 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.CheckInNotFound, result.GetMessage());
+
+        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.GetDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<int>()), Times.Once);
     }
 }
