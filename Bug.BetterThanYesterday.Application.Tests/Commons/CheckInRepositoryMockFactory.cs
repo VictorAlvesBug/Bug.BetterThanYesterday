@@ -18,8 +18,8 @@ public static class CheckInRepositoryMockFactory
                     CheckInId1,
                     PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active,
                     UserRepositoryMockFactory.UserId1,
-                    new DateTime(2025, 01, 05),
-                    0,
+                    DateTime.Today.AddDays(-1),
+                    1,
                     "Morning workout",
                     "Did 30 minutes of cardio"
                 ),
@@ -28,7 +28,7 @@ public static class CheckInRepositoryMockFactory
                     PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active,
                     UserRepositoryMockFactory.UserId2,
                     new DateTime(2025, 01, 05),
-                    0,
+                    1,
                     "Reading",
                     "Read 15 pages"
                 ),

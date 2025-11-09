@@ -49,9 +49,9 @@ public sealed class AddCheckInUseCase(
                 DateOnly.FromDateTime(command.Date)
             );
 
-            var maxIndexForDate = checkIns.Any()
-                ? checkIns.Max(ci => ci.Index)
-                : 0;
+            var nextIndex = checkIns.Any()
+                ? checkIns.Max(ci => ci.Index) + 1
+                : 1;
 
             // TODO: Implementar limitação de quantidade de check-ins por dia, conforme max index permitido pelo plano
             var maxIndexPerDateAllowed = 1; //plan.GetMaxCheckInsPerDateAllowed();
@@ -67,14 +67,14 @@ public sealed class AddCheckInUseCase(
             if (plan.Status != PlanStatus.Running)
                 return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);
 
-            if (maxIndexForDate > maxIndexPerDateAllowed)
+            if (nextIndex > maxIndexPerDateAllowed)
                 return Result.Rejected(Messages.UserHasReachedTheMaximumNumberOfCheckInsForTheDay);
                 
             var checkIn = CheckIn.CreateNew(
                 command.PlanId,
                 command.UserId,
                 command.Date,
-                maxIndexForDate + 1,
+                nextIndex,
                 command.Title,
                 command.Description);
 
