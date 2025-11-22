@@ -27,6 +27,17 @@ builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
 
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowLocalhost",
+		builder =>
+		{
+			builder.WithOrigins("http://localhost:5173") // URL do seu front local
+				.AllowAnyHeader()
+				.AllowAnyMethod();
+		});
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -41,6 +52,7 @@ if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
+    app.UseCors("AllowLocalhost");
 }
 
 app.UseHttpsRedirection();

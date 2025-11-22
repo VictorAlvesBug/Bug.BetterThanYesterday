@@ -4,10 +4,11 @@ namespace Bug.BetterThanYesterday.Application.Habits;
 
 public static class HabitMapper
 {
-	public static HabitModel ToModel(this Habit habit) => new()
+	public static HabitModel ToModel(this Habit habit, int plansCount = 0) => new()
 	{
 		HabitId = habit.Id,
 		Name = habit.Name,
-		CreatedAt = habit.CreatedAt.ToDateTime(TimeOnly.MinValue)
+		CreatedAt = habit.CreatedAt.ToDateTime(TimeOnly.MinValue),
+		PlansCount = plansCount
 	};
 }
