@@ -87,7 +87,7 @@ public class HabitsController(
 		var result = await deleteHabitUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
-			return NoContent();
+			return Ok(result);
 
 		if (result.IsRejected())
 			return BadRequest(result);
