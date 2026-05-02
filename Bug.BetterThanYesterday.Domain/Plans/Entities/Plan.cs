@@ -12,7 +12,6 @@ public sealed class Plan : Entity
 	public DateOnly EndsAt { get; set; }
 	public PlanStatus Status { get; set; }
 	public PlanType Type { get; set; }
-	public DateOnly CreatedAt { get; set; }
 
 	private Dictionary<PlanStatus, List<PlanStatus>> _allowedStatusChanges = new()
 	{

@@ -22,36 +22,66 @@ public static class UserRepositoryMockFactory
 				UserId1,
 				"Ana",
 				"ana@ex.com",
+				null,
+				"Ana",
+				"987654321",
+				"11987654321",
+				"PhoneNumber",
 				new DateTime(2023, 06, 20)
 			),
 			User.Restore(
 				UserId2,
 				"Bob",
 				"bob@ex.com",
+				null,
+				"Ana",
+				"987654321",
+				"11987654321",
+				"PhoneNumber",
 				new DateTime(2024, 01, 10)
 			),
 			User.Restore(
 				UserId3,
 				"Carl",
 				"carl@ex.com",
+				null,
+				"Ana",
+				"987654321",
+				"11987654321",
+				"PhoneNumber",
 				new DateTime(2020, 06, 20)
 			),
 			User.Restore(
 				UserId4,
 				"David",
 				"david@ex.com",
+				null,
+				"Ana",
+				"987654321",
+				"11987654321",
+				"PhoneNumber",
 				new DateTime(2020, 06, 20)
 			),
 			User.Restore(
 				UserId5,
 				"Ellie",
 				"ellie@ex.com",
+				null,
+				"Ana",
+				"987654321",
+				"11987654321",
+				"PhoneNumber",
 				new DateTime(2020, 06, 20)
 			),
 			User.Restore(
 				UserId6,
 				"Fred",
 				"fred@ex.com",
+				null,
+				"Ana",
+				"987654321",
+				"11987654321",
+				"PhoneNumber",
 				new DateTime(2020, 06, 20)
 			)
 		];

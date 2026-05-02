@@ -20,7 +20,8 @@ public class CheckIn : Entity
 		DateTime date,
 		int index,
 		string title,
-		string? description)
+		string? description,
+		DateTime createdAt)
 	{
 		Id = id;
 		PlanId = planId;
@@ -29,6 +30,7 @@ public class CheckIn : Entity
 		Index = index;
 		Title = title;
 		Description = description;
+		CreatedAt = DateOnly.FromDateTime(createdAt);
 	}
 
 	private CheckIn(
@@ -45,7 +47,8 @@ public class CheckIn : Entity
 			date,
 			index,
 			title,
-			description)
+			description,
+			createdAt: DateTime.Today)
 	{ }
 
 	public static CheckIn CreateNew(
@@ -81,7 +84,8 @@ public class CheckIn : Entity
 		DateTime date,
 		int index,
 		string title,
-		string? description)
+		string? description,
+		DateTime createdAt)
 	{
 		if (id == Guid.Empty)
 			throw new ArgumentNullException(nameof(id), Messages.EnterCheckInId);
@@ -100,6 +104,9 @@ public class CheckIn : Entity
 
 		if (string.IsNullOrWhiteSpace(title))
 			throw new ArgumentNullException(nameof(title), Messages.EnterCheckInTitle);
+		
+		if (createdAt == DateTime.MinValue)
+			throw new ArgumentNullException(nameof(createdAt), Messages.EnterCheckInCreateDate);
 
 		return new CheckIn(
 			id,
@@ -108,7 +115,8 @@ public class CheckIn : Entity
 			date,
 			index,
 			title,
-			description);
+			description,
+			createdAt);
 	}
 
 	public static Guid BuildId(Guid planId, Guid userId, DateTime date, int index = 0)

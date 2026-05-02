@@ -6,12 +6,14 @@ using Bug.BetterThanYesterday.Domain.PlanParticipants.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Users;
+using Bug.BetterThanYesterday.Domain.Habits;
 
 namespace Bug.BetterThanYesterday.Application.PlanParticipants.AddUserToPlan;
 
 public sealed class AddUserToPlanUseCase(
     IPlanParticipantRepository planParticipantRepository,
     IPlanRepository planRepository,
+    IHabitRepository habitRepository,
     IUserRepository userRepository)
     : IUseCase<AddUserToPlanCommand>
 {
@@ -26,6 +28,11 @@ public sealed class AddUserToPlanUseCase(
             if (plan is null)
                 return Result.Rejected(Messages.PlanNotFound);
 
+            var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+
+            if (habit is null)
+                return Result.Rejected(Messages.HabitNotFound);
+
             var user = await userRepository.GetByIdAsync(command.UserId);
 
             if (user is null)
@@ -36,7 +43,7 @@ public sealed class AddUserToPlanUseCase(
 
             var planParticipantToAdd = PlanParticipant.CreateNew(command.PlanId, command.UserId);
 
-            var planParticipantDetailsModel = planParticipantToAdd.ToPlanParticipantDetailsModel(plan, user);
+            var planParticipantDetailsModel = planParticipantToAdd.ToPlanParticipantDetailsModel(habit, plan, user);
 
             var existingPlanParticipant = await planParticipantRepository.GetByIdAsync(planParticipantToAdd.Id);
 

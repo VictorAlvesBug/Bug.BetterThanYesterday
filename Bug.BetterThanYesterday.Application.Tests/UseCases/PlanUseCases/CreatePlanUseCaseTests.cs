@@ -38,7 +38,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 
 		var resultData = Assert.IsType<Result<PlanModel>>(result).Data;
 		Assert.NotEqual(Guid.Empty, resultData.PlanId);
-		Assert.Equal(command.HabitId, resultData.HabitId);
+		Assert.Equal(command.HabitId, resultData.Habit.HabitId);
 		Assert.Equal(command.Description, resultData.Description);
 		Assert.Equal(command.StartsAt, resultData.StartsAt);
 		Assert.Equal(command.EndsAt, resultData.EndsAt);

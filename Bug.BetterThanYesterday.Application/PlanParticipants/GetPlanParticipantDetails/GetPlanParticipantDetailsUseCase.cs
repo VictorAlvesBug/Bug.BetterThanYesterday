@@ -1,4 +1,5 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.PlanParticipants;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
 using Bug.BetterThanYesterday.Domain.Plans;
@@ -10,6 +11,7 @@ namespace Bug.BetterThanYesterday.Application.PlanParticipants.GetPlanParticipan
 public sealed class GetPlanParticipantDetailsUseCase(
     IPlanParticipantRepository planParticipantRepository,
     IPlanRepository planRepository,
+    IHabitRepository habitRepository,
     IUserRepository userRepository)
     : IUseCase<GetPlanParticipantDetailsCommand>
 {
@@ -33,13 +35,18 @@ public sealed class GetPlanParticipantDetailsUseCase(
             if (plan is null)
                 return Result.Rejected(Messages.PlanNotFound);
 
+            var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+
+            if (habit is null)
+                return Result.Rejected(Messages.HabitNotFound);
+
             var user = await userRepository.GetByIdAsync(planParticipant.UserId);
 
             if (user is null)
                 return Result.Rejected(Messages.UserNotFound);
 
             return Result.Success(
-                planParticipant.ToPlanParticipantDetailsModel(plan, user),
+                planParticipant.ToPlanParticipantDetailsModel(habit, plan, user),
                 Messages.PlanParticipantSuccessfullyFound
             );
         }

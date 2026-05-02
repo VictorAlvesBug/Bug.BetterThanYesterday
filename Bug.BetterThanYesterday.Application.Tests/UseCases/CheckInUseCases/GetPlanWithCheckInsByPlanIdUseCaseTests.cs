@@ -31,7 +31,7 @@ public class GetPlanWithCheckInsByPlanIdUseCaseTests : BaseCheckInUseCaseTests
         Assert.Equal(checkIns.Count, resultData.CheckIns.Count);
 		
 		Assert.Equal(firstPlan.Id, resultData.Plan.PlanId);
-		Assert.Equal(firstPlan.HabitId, resultData.Plan.HabitId);
+		Assert.Equal(firstPlan.HabitId, resultData.Plan.Habit.HabitId);
 		Assert.Equal(firstPlan.Description, resultData.Plan.Description);
 		Assert.Equal(firstPlan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
 		Assert.Equal(firstPlan.EndsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.EndsAt);

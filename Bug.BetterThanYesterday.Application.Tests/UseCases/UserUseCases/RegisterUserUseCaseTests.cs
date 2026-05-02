@@ -14,7 +14,14 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
-		var command = new RegisterUserCommand("Jane Doe", "jane.doe@email.com");
+		var command = new RegisterUserCommand(
+			"Jane Doe", 
+			"jane.doe@email.com",
+			null,
+			"Jane",
+			"11987654321",
+			"11987654321",
+			"PhoneNumber");
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -33,7 +40,14 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
-		var command = new RegisterUserCommand(string.Empty, "jane.doe@email.com");
+		var command = new RegisterUserCommand(
+			string.Empty, 
+			"jane.doe@email.com",
+			null,
+			"Jane",
+			"11987654321",
+			"11987654321",
+			"PhoneNumber");
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -52,7 +66,14 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
-		var command = new RegisterUserCommand("Jane Doe", string.Empty);
+		var command = new RegisterUserCommand(
+			"Jane Doe", 
+			string.Empty,
+			null,
+			"Jane",
+			"11987654321",
+			"11987654321",
+			"PhoneNumber");
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -71,7 +92,14 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
-		var command = new RegisterUserCommand("Jane Doe", "invalid_email");
+		var command = new RegisterUserCommand(
+			"Jane Doe", 
+			"invalid_email",
+			null,
+			"Jane",
+			"11987654321",
+			"11987654321",
+			"PhoneNumber");
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -91,7 +119,14 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<RegisterUserUseCase>();
 		var firstUser = _mock.Users[0];
-		var command = new RegisterUserCommand("Other Name", firstUser.Email.Value);
+		var command = new RegisterUserCommand(
+			"Other Name", 
+			firstUser.Email.Value,
+			null,
+			"Jane",
+			"11987654321",
+			"11987654321",
+			"PhoneNumber");
 
 		// Act
 		var result = await useCase.HandleAsync(command);

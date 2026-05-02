@@ -1,4 +1,5 @@
-﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+﻿using Bug.BetterThanYesterday.Application.Habits;
+using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
@@ -22,7 +23,7 @@ public class ListPlansByHabitIdUseCase(
 				return Result.Rejected(Messages.HabitNotFound);
 
 			var plans = (await planRepository.ListByHabitIdAsync(command.HabitId))
-				.Select(habit => habit.ToModel());
+				.Select(plan => plan.ToModel(habit.ToModel()));
 
 			return Result.Success(
 				plans,

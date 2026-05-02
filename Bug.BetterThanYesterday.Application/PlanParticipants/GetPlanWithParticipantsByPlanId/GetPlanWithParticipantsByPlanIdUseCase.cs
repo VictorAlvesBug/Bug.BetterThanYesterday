@@ -1,4 +1,5 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.PlanParticipants;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
@@ -9,6 +10,7 @@ namespace Bug.BetterThanYesterday.Application.PlanParticipants.GetPlanWithPartic
 public sealed class GetPlanWithParticipantsByPlanIdUseCase(
     IPlanParticipantRepository planParticipantRepository,
     IPlanRepository planRepository,
+    IHabitRepository habitRepository,
     IUserRepository userRepository)
     : IUseCase<GetPlanWithParticipantsByPlanIdCommand>
 {
@@ -23,10 +25,15 @@ public sealed class GetPlanWithParticipantsByPlanIdUseCase(
             if (plan is null)
                 return Result.Rejected(Messages.PlanNotFound);
 
+            var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+
+            if (habit is null)
+                return Result.Rejected(Messages.HabitNotFound);
+
             var planParticipants = await planParticipantRepository.ListByPlanIdAsync(command.PlanId);
 
             if (planParticipants.Count == 0)
-                return Result.Success(plan.ToPlanWithParticipantsModel(), Messages.PlanHasNoParticipants);
+                return Result.Success(plan.ToPlanWithParticipantsModel(habit), Messages.PlanHasNoParticipants);
 
             var participantIds = planParticipants.Select(planParticipant => planParticipant.UserId).ToList();
 
@@ -40,7 +47,7 @@ public sealed class GetPlanWithParticipantsByPlanIdUseCase(
             }
 
             return Result.Success(
-                plan.ToPlanWithParticipantsModel(participants),
+                plan.ToPlanWithParticipantsModel(habit, participants),
                 Messages.PlanSuccessfullyFound
             );
         }

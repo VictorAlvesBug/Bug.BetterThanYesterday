@@ -6,7 +6,6 @@ namespace Bug.BetterThanYesterday.Domain.Habits.Entities;
 public class Habit : Entity
 {
 	public string Name { get; set; }
-	public DateOnly CreatedAt { get; set; }
 
 	private Habit(
 		Guid id,

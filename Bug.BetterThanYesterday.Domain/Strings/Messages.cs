@@ -13,6 +13,7 @@ public static class Messages
     public const string EnterCheckInId = "Informe o ID do Check-in";
     public const string EnterCheckInIndex = "Informe o índice do check-in";
     public const string EnterCheckInTitle = "Informe o título do check-in";
+    public const string EnterCheckInCreateDate = "Informe a data de criação do check-in";
     public const string CheckInAlreadyExists = "Check-in já existe";
     public const string PlanUserDateSuccessfullyFound = "Plano, usuário e data encontrados com sucesso";
     public const string PlanUserSuccessfullyFound = "Plano e usuário encontrados com sucesso";
@@ -66,6 +67,7 @@ public static class Messages
     public const string ParticipantSuccessfullyRemovedFromThePlan = "Participante removido do plano com sucesso";
     public const string PlanParticipantNotFound = "Participante não encontrado no plano";
     public const string PlanParticipantStatusIdMustBeGreaterThanZero = "O ID do status do participante deve ser maior que zero";
+    public const string EnterPlanParticipantCreateDate = "Informe a data de criação do membro do plano";
     public const string PlanParticipantSuccessfullyFound = "Participante do plano encontrado com sucesso";
     public const string ParticipantAlreadyBlockedInThisPlan = "Este participante já está bloqueado neste plano";
     public const string ParticipantCannotBeRemovedFromThePlanAsHeIsBlocked = "Este participante não pode ser removido do plano, pois está bloqueado";
@@ -83,10 +85,20 @@ public static class Messages
 
     #region User Messages
     public const string UserEmailAlreadyRegistered = "E-mail já cadastrado para outro usuário";
-    public const string EnterUserEmail = "Informe o e-mail do usuário";
-    public const string EnterUserId = "Informe o ID do usuário";
-    public const string EnterUserName = "Informe o nome do usuário";
-    public const string EnterUserNameOrEmail = "Informe o nome ou o e-mail do usuário";
+    public const string EnterUserEmail = "Informe seu e-mail";
+    public const string EnterUserId = "Informe o ID de usuário";
+    public const string EnterUserName = "Informe seu nome";
+    public const string EnterUserNameOrEmail = "Informe seu nome ou e-mail";
+    public const string EnterUserNickname = "Informe um nickname (apelido)";
+    public const string EnterUserPhoneNumber = "Informe seu número de celular";
+    public const string EnterValidUserPhoneNumber = "Informe um número de celular válido";
+    public const string EnterUserPixKey = "Informe sua chave PIX";
+    public const string EnterValidUserPixKey = "Informe uma chave PIX válida";
+    public const string EnterValidCpfTaxIdentification = "Informe um CPF válido";
+    public const string EnterValidCnpjTaxIdentification = "Informe um CNPJ válido";
+    public const string EnterValidTaxIdentification = "Informe um número de documento válido";
+    public const string EnterValidEVP = "Informe um endereço virtual de pagamento válido para a chave PIX";
+    public const string EnterUserPixKeyType = "Informe um tipo válido para a chave PIX";
     public const string EnterUserCreationDate = "Informe a data de criação do usuário";
     public const string EnterValidUserEmail = "Informe um e-mail válido para o usuário";
     public const string UserNotFound = "Usuário não encontrado";
@@ -102,5 +114,7 @@ public static class Messages
     public const string EndDateMustBeLaterThanStartDate = "Data final deve ser posterior à data inicial";
     public const string OnlyValidGuidsCanBeCombined = "Apenas GUIDs válidos podem ser combinados";
     public const string StartDateCannotBeEarlierThanToday = "Data de início não pode ser anterior a hoje";
+    public const string EnterPhoto = "Adicione uma foto";
+    public const string EnterValidPhoto = "Informe um caminho válido para a imagem";
     #endregion
 }

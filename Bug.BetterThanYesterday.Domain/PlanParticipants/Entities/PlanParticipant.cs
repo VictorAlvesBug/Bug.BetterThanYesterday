@@ -19,7 +19,8 @@ public class PlanParticipant : Entity
 		Guid userId,
 		DateTime joinedAt,
 		DateTime? leftAt,
-		int statusId)
+		int statusId,
+		DateTime createdAt)
 	{
 		Id = id;
 		PlanId = planId;
@@ -27,6 +28,7 @@ public class PlanParticipant : Entity
 		JoinedAt = DateOnly.FromDateTime(joinedAt);
 		LeftAt = leftAt is null ? null : DateOnly.FromDateTime(leftAt.Value);
 		Status = PlanParticipantStatus.FromId(statusId);
+		CreatedAt = DateOnly.FromDateTime(createdAt);
 	}
 
 	private PlanParticipant(Guid planId, Guid userId)
@@ -36,7 +38,8 @@ public class PlanParticipant : Entity
 		userId,
 		joinedAt: DateTime.Today,
 		leftAt: null,
-		statusId: PlanParticipantStatus.Active.Id)
+		statusId: PlanParticipantStatus.Active.Id,
+		createdAt: DateTime.Today)
 	{
 	}
 
@@ -68,7 +71,8 @@ public class PlanParticipant : Entity
 		Guid userId,
 		DateTime joinedAt,
 		DateTime? leftAt,
-		int statusId)
+		int statusId,
+		DateTime createdAt)
 	{
 		if (id == Guid.Empty)
 			throw new ArgumentNullException(nameof(id), Messages.EnterPlanParticipantId);
@@ -85,13 +89,17 @@ public class PlanParticipant : Entity
 		if (statusId <= 0)
 			throw new ArgumentException(Messages.PlanParticipantStatusIdMustBeGreaterThanZero, nameof(statusId));
 
+		if (createdAt == DateTime.MinValue)
+			throw new ArgumentNullException(nameof(createdAt), Messages.EnterPlanParticipantCreateDate);
+
 		return new PlanParticipant(
 			id,
 			planId,
 			userId,
 			joinedAt,
 			leftAt,
-			statusId);
+			statusId,
+			createdAt);
 	}
 
 	public void MarkAsLeft()

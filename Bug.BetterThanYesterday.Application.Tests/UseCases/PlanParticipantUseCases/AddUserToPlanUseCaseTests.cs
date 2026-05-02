@@ -36,7 +36,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		var resultData = Assert.IsType<Result<PlanParticipantDetailsModel>>(result).Data;
 		
 		Assert.Equal(plan.Id, resultData.Plan.PlanId);
-		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
+		Assert.Equal(plan.HabitId, resultData.Plan.Habit.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
 		Assert.Equal(plan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
 		Assert.Equal(plan.EndsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.EndsAt);
@@ -187,7 +187,7 @@ public class AddUserToPlanUseCaseTests : BasePlanParticipantUseCaseTests
 		var resultData = Assert.IsType<Result<PlanParticipantDetailsModel>>(result).Data;
 		
 		Assert.Equal(plan.Id, resultData.Plan.PlanId);
-		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
+		Assert.Equal(plan.HabitId, resultData.Plan.Habit.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
 		Assert.Equal(plan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
 		Assert.Equal(plan.EndsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.EndsAt);

@@ -1,4 +1,5 @@
-﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+﻿using Bug.BetterThanYesterday.Application.Habits;
+using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
@@ -30,7 +31,7 @@ public class CreatePlanUseCase(
 				command.TypeId);
 
 			await planRepository.AddAsync(plan);
-			return Result.Success(plan.ToModel(), Messages.PlanSuccessfullyRegistered);
+			return Result.Success(plan.ToModel(habit.ToModel()), Messages.PlanSuccessfullyRegistered);
 		}
 		catch (Exception ex)
 		{

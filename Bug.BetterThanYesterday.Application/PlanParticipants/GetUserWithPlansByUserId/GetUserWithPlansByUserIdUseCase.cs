@@ -1,4 +1,7 @@
+using Bug.BetterThanYesterday.Application.Habits;
+using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.PlanParticipants;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
@@ -9,6 +12,7 @@ namespace Bug.BetterThanYesterday.Application.PlanParticipants.GetUserWithPlansB
 public sealed class GetUserWithPlansByUserIdUseCase(
     IPlanParticipantRepository planParticipantRepository,
     IPlanRepository planRepository,
+    IHabitRepository habitRepository,
     IUserRepository userRepository)
     : IUseCase<GetUserWithPlansByUserIdCommand>
 {
@@ -39,8 +43,15 @@ public sealed class GetUserWithPlansByUserIdUseCase(
                 return Result.Rejected($"Planos não encontrados para os IDs: {strNotFoundIds}");
             }
 
+            var tasks = plans.Select(async plan => {
+                var habit = await habitRepository.GetByIdAsync(plan.HabitId) ?? throw new Exception(Messages.HabitNotFound);
+                return plan.ToModel(habit.ToModel());
+            }).ToList();
+
+            var planModels = (await Task.WhenAll(tasks)).ToList();
+
             return Result.Success(
-                user.ToUserWithPlansModel(plans),
+                user.ToUserWithPlansModel(planModels),
                 Messages.UserSuccessfullyFound);
         }
         catch (Exception ex)

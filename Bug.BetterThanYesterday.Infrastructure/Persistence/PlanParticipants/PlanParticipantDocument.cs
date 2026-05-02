@@ -14,4 +14,5 @@ public class PlanParticipantDocument : Document
 	public DateTime JoinedAt { get; set; }
 	public DateTime? LeftAt { get; set; }
 	public int StatusId { get; set; }
+	public DateTime CreatedAt { get; set; }
 }

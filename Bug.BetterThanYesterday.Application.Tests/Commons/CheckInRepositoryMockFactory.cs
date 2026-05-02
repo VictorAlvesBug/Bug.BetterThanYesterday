@@ -21,7 +21,8 @@ public static class CheckInRepositoryMockFactory
                     DateTime.Today.AddDays(-1),
                     1,
                     "Morning workout",
-                    "Did 30 minutes of cardio"
+                    "Did 30 minutes of cardio",
+                    DateTime.Today
                 ),
                 CheckIn.Restore(
                     CheckInId2,
@@ -30,7 +31,8 @@ public static class CheckInRepositoryMockFactory
                     new DateTime(2025, 01, 05),
                     1,
                     "Reading",
-                    "Read 15 pages"
+                    "Read 15 pages",
+                    DateTime.Today
                 ),
                 CheckIn.Restore(
                     CheckInId3,
@@ -39,7 +41,8 @@ public static class CheckInRepositoryMockFactory
                     new DateTime(2025, 10, 10),
                     1,
                     "Evening review",
-                    "Reviewed notes"
+                    "Reviewed notes",
+                    DateTime.Today
                 )
         };
 

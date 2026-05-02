@@ -1,6 +1,7 @@
 using Bug.BetterThanYesterday.Application.CheckIns.Models;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
+using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
@@ -10,6 +11,7 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.GetPlanUserDateWithCheckI
 public sealed class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCase(
     ICheckInRepository checkInRepository,
     IPlanRepository planRepository,
+    IHabitRepository habitRepository,
     IUserRepository userRepository)
     : IUseCase<GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateCommand>
 {
@@ -20,10 +22,17 @@ public sealed class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCase(
             command.Validate();
 
             var plan = await planRepository.GetByIdAsync(command.PlanId);
+            
             if (plan is null)
                 return Result.Rejected(Messages.PlanNotFound);
 
+            var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+
+            if (habit is null)
+                return Result.Rejected(Messages.HabitNotFound);
+
             var user = await userRepository.GetByIdAsync(command.UserId);
+            
             if (user is null)
                 return Result.Rejected(Messages.UserNotFound);
 
@@ -35,12 +44,12 @@ public sealed class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCase(
 
             if (!checkIns.Any())
                 return Result.Success(
-                    plan.ToPlanUserDateWithCheckInsModel(user, command.Date, []),
+                    plan.ToPlanUserDateWithCheckInsModel(habit, user, command.Date, []),
                     Messages.CheckInNotFound
                 );
 
             return Result.Success(
-                plan.ToPlanUserDateWithCheckInsModel(user, command.Date, checkIns.ToList()),
+                plan.ToPlanUserDateWithCheckInsModel(habit, user, command.Date, checkIns.ToList()),
                 Messages.CheckInsSuccessfullyFound
             );
         }

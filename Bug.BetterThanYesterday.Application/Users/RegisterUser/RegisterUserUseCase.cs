@@ -20,7 +20,17 @@ public class RegisterUserUseCase(IUserRepository userRepository)
 			if (alreadyExists)
 				return Result.Rejected(Messages.UserEmailAlreadyRegistered);
 
-			var user = User.CreateNew(command.Name, command.Email);
+			// TODO: Realizar PIX de teste para testar a chave
+
+			var user = User.CreateNew(
+				command.Name, 
+				command.Email, 
+				command.PhotoUrl, 
+				command.Nickname, 
+				command.PhoneNumber,
+				command.PixKey,
+				command.PixKeyType);
+
 			await userRepository.AddAsync(user);
 			return Result.Success(user.ToModel(), Messages.UserSuccessfullyRegistered);
 		}

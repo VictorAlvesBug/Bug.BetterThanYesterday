@@ -9,4 +9,5 @@ public class CheckInModel
     public required int Index { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
+    public required DateTime CreatedAt { get; set; }
 }

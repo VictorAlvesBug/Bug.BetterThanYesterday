@@ -17,7 +17,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId1,
 				DateTime.Today,
 				null,
-				PlanParticipantStatus.Active.Id
+				PlanParticipantStatus.Active.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left, UserRepositoryMockFactory.UserId1),
@@ -25,7 +26,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId1,
 				new DateTime(2020, 01, 01),
 				null,
-				PlanParticipantStatus.Active.Id
+				PlanParticipantStatus.Active.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left, UserRepositoryMockFactory.UserId2),
@@ -33,7 +35,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId2,
 				new DateTime(2020, 01, 01),
 				null,
-				PlanParticipantStatus.Blocked.Id
+				PlanParticipantStatus.Blocked.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left, UserRepositoryMockFactory.UserId3),
@@ -41,7 +44,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId3,
 				new DateTime(2020, 01, 01),
 				null,
-				PlanParticipantStatus.Left.Id
+				PlanParticipantStatus.Left.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked, UserRepositoryMockFactory.UserId2),
@@ -49,7 +53,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId2,
 				new DateTime(2020, 01, 01),
 				null,
-				PlanParticipantStatus.Left.Id
+				PlanParticipantStatus.Left.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2LeftAndUserId3Blocked, UserRepositoryMockFactory.UserId3),
@@ -57,7 +62,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId3,
 				new DateTime(2020, 01, 01),
 				null,
-				PlanParticipantStatus.Blocked.Id
+				PlanParticipantStatus.Blocked.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId5_WithUserId5Active, UserRepositoryMockFactory.UserId5),
@@ -65,7 +71,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId5,
 				new DateTime(2020, 01, 01),
 				null,
-				PlanParticipantStatus.Active.Id
+				PlanParticipantStatus.Active.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active, UserRepositoryMockFactory.UserId5),
@@ -73,7 +80,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId5,
 				new DateTime(2020, 01, 01),
 				null,
-				PlanParticipantStatus.Active.Id
+				PlanParticipantStatus.Active.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active, UserRepositoryMockFactory.UserId3),
@@ -81,7 +89,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId3,
 				new DateTime(2020, 01, 01),
 				null,
-				PlanParticipantStatus.Blocked.Id
+				PlanParticipantStatus.Blocked.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active, UserRepositoryMockFactory.UserId4),
@@ -89,7 +98,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId4,
 				new DateTime(2020, 01, 01),
 				new DateTime(2020, 01, 05),
-				PlanParticipantStatus.Left.Id
+				PlanParticipantStatus.Left.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active, UserRepositoryMockFactory.UserId5),
@@ -97,7 +107,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId5,
 				new DateTime(2020, 01, 01),
 				null,
-				PlanParticipantStatus.Active.Id
+				PlanParticipantStatus.Active.Id,
+				DateTime.Today
 			),
 			PlanParticipant.Restore(
 				PlanParticipant.BuildId(PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active, UserRepositoryMockFactory.UserId4),
@@ -105,7 +116,8 @@ public static class PlanParticipantRepositoryMockFactory
 				UserRepositoryMockFactory.UserId4,
 				new DateTime(2020, 01, 01),
 				null,
-				PlanParticipantStatus.Blocked.Id
+				PlanParticipantStatus.Blocked.Id,
+				DateTime.Today
 			),
 		];
 

@@ -29,7 +29,7 @@ public class CancelPlanUseCaseTests : BasePlanUseCaseTests
 
 		var resultData = Assert.IsType<Result<PlanModel>>(result).Data;
 		Assert.Equal(firstPlan.Id, resultData.PlanId);
-		Assert.Equal(firstPlan.HabitId, resultData.HabitId);
+		Assert.Equal(firstPlan.HabitId, resultData.Habit.HabitId);
 		Assert.Equal(firstPlan.Description, resultData.Description);
 		Assert.Equal(firstPlan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.StartsAt);
 		Assert.Equal(firstPlan.EndsAt.ToDateTime(TimeOnly.MinValue), resultData.EndsAt);

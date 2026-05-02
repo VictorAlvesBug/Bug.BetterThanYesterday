@@ -12,7 +12,8 @@ internal sealed class PlanParticipantMapper : IDocumentMapper<PlanParticipant, P
 		UserId = planParticipant.UserId,
 		JoinedAt = planParticipant.JoinedAt.ToDateTime(TimeOnly.MinValue),
 		LeftAt = planParticipant.LeftAt?.ToDateTime(TimeOnly.MinValue),
-		StatusId = planParticipant.Status.Id
+		StatusId = planParticipant.Status.Id,
+		CreatedAt = planParticipant.CreatedAt.ToDateTime(TimeOnly.MinValue)
 	};
 
 	public PlanParticipant ToDomain(PlanParticipantDocument document) => PlanParticipant.Restore(
@@ -21,6 +22,7 @@ internal sealed class PlanParticipantMapper : IDocumentMapper<PlanParticipant, P
 		document.UserId,
 		document.JoinedAt,
 		document.LeftAt,
-		document.StatusId
+		document.StatusId,
+		document.CreatedAt
 	);
 }

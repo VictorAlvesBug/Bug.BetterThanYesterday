@@ -1,4 +1,5 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.PlanParticipants;
 using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
 using Bug.BetterThanYesterday.Domain.Plans;
@@ -11,6 +12,7 @@ namespace Bug.BetterThanYesterday.Application.PlanParticipants.BlockUserInThePla
 public sealed class BlockUserInThePlanUseCase(
     IPlanParticipantRepository planParticipantRepository,
     IPlanRepository planRepository,
+    IHabitRepository habitRepository,
     IUserRepository userRepository)
     : IUseCase<BlockUserInThePlanCommand>
 {
@@ -24,6 +26,11 @@ public sealed class BlockUserInThePlanUseCase(
 
             if (plan is null)
                 return Result.Rejected(Messages.PlanNotFound);
+
+            var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+
+            if (habit is null)
+                return Result.Rejected(Messages.HabitNotFound);
 
             var user = await userRepository.GetByIdAsync(command.UserId);
 
@@ -44,7 +51,7 @@ public sealed class BlockUserInThePlanUseCase(
 
             await planParticipantRepository.UpdateAsync(planParticipant);
             return Result.Success(
-                planParticipant.ToPlanParticipantDetailsModel(plan, user),
+                planParticipant.ToPlanParticipantDetailsModel(habit, plan, user),
                 Messages.ParticipantSuccessfullyBlocked
             );
         }

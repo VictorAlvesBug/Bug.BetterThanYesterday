@@ -13,7 +13,8 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 		Date = checkIn.Date.ToDateTime(TimeOnly.MinValue),
 		Index = checkIn.Index,
 		Title = checkIn.Title,
-		Description = checkIn.Description
+		Description = checkIn.Description,
+		CreatedAt = checkIn.CreatedAt.ToDateTime(TimeOnly.MinValue)
 	};
 
 	public CheckIn ToDomain(CheckInDocument document) => CheckIn.Restore(
@@ -23,5 +24,6 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 		document.Date,
 		document.Index,
 		document.Title,
-		document.Description);
+		document.Description,
+		document.CreatedAt);
 }

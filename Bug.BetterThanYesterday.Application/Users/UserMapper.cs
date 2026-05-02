@@ -9,6 +9,11 @@ internal static class UserMapper
 		UserId = user.Id,
 		Name = user.Name,
 		Email = user.Email.Value,
+		PhotoUrl = user.Photo is null ? null : user.Photo.Value,
+		Nickname = user.Nickname,
+		PhoneNumber = user.PhoneNumber.Value,
+		PixKey = user.PixKey.Value,
+		PixKeyType = user.PixKey.GetPixKeyType(),
 		CreatedAt = user.CreatedAt.ToDateTime(TimeOnly.MinValue),
 	};
 }
