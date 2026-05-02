@@ -8,6 +8,6 @@ public static partial class AutoMockerExtensions
     // - AutoMockerExtensions.Users.cs
     // - AutoMockerExtensions.Habits.cs
     // - AutoMockerExtensions.Plans.cs
-    // - AutoMockerExtensions.PlanParticipants.cs
+    // - AutoMockerExtensions.PlanMembers.cs
     // - AutoMockerExtensions.CheckIns.cs
 }

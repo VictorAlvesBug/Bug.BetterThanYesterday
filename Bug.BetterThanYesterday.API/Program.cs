@@ -65,6 +65,19 @@ app.Run();
 
 /*
 
+######### TODO LIST #########
+
+DONE - Bloco A - Equalizar Entity, Document e Model de User do backend com User do frontend;
+TODO - Bloco B - Equalizar métodos do repositório de User do backend com frontend;
+TODO - Bloco C - Equalizar Entity, Document e Model de Habit do backend com Habit do frontend;
+TODO - Bloco C - Equalizar métodos do repositório de Habit do backend com frontend;
+TODO - Bloco D - Equalizar Entity, Document e Model de Plan do backend com Plan do frontend;
+TODO - Bloco E - Equalizar métodos do repositório de Plan do backend com frontend;
+TODO - Bloco F - Equalizar Entity, Document e Model de PlanMember do backend com PlanMember do frontend;
+TODO - Bloco G - Equalizar métodos do repositório de PlanMember do backend com frontend;
+TODO - Bloco H - Equalizar Entity, Document e Model de CheckIn do backend com CheckIn do frontend;
+TODO - Bloco I - Equalizar métodos do repositório de CheckIn do backend com frontend;
+
 ######### Cenários de teste #########
 
 # Testes do UseCase
@@ -303,7 +316,7 @@ plans (Collection)
 > Cancel
 
 
-plan_participants (Collection)
+plan_members (Collection)
 - Id (Ex: d1f8e8c2a4b14c3e9f0e4b5a6c7d8e9f)
 - PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
@@ -359,7 +372,7 @@ plans (Collection)
 - CreatedAt (Ex: 2024-01-01)
 
 
-plan_participants (Collection)
+plan_members (Collection)
 - Id (Ex: d1f8e8c2a4b14c3e9f0e4b5a6c7d8e9f)
 - PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
@@ -411,14 +424,14 @@ plans (Collection)
 - Type (Public,Private)
 - CreatedAt (Ex: 2024-01-01)
 - Totals (Updated with Change Stream)
-  - Participants (Ex: 10)
+  - Members (Ex: 10)
   - ComplianceCount (Ex: 45, Number of Checkins)
   - PenaltiesCount (Ex: 180)
   - PenaltiesValueCents (Ex: 90000)
   - RewardsPoolCents (Ex: 81000 // penalties - adminFee)
 
 
-plan_participants (Collection)
+plan_members (Collection)
 - Id (Ex: d1f8e8c2a4b14c3e9f0e4b5a6c7d8e9f)
 - PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
@@ -477,7 +490,7 @@ plans:
 - { status: 1, startsAt: 1 }
 - { type: 1 }
 
-plan_participants:
+plan_members:
 - { planId: 1, userId: 1 } (unique)
 - { userId: 1, status: 1 }
 

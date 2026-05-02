@@ -18,7 +18,7 @@ public static class Messages
     public const string PlanUserDateSuccessfullyFound = "Plano, usuário e data encontrados com sucesso";
     public const string PlanUserSuccessfullyFound = "Plano e usuário encontrados com sucesso";
     public const string OnlyRunningPlansCanReceiveNewCheckIns = "Apenas planos em execução podem receber novos check-ins";
-    public const string OnlyActiveParticipantsCanMakeCheckIns = "Apenas participantes ativos podem fazer check-ins";
+    public const string OnlyActiveMembersCanMakeCheckIns = "Apenas membros ativos podem fazer check-ins";
     public const string UserHasReachedTheMaximumNumberOfCheckInsForTheDay = "Usuário atingiu o número máximo de check-ins para o dia";
     #endregion
 
@@ -44,7 +44,7 @@ public static class Messages
     public const string EnterPlanStatus = "Informe o status do plano";
     public const string EnterPlanStartDate = "Informe a data inicial do plano";
     public const string EnterPlanType = "Informe o tipo de plano";
-    public const string PlanHasNoParticipants = "Plano não possui participantes";
+    public const string PlanHasNoMembers = "Plano não possui membros";
     public const string PlanNotFound = "Plano não encontrado";
     public const string PlanTypeIdMustBeGreaterThanZero = "O ID do tipo de plano deve ser maior que zero";
     public const string PlanStatusIdMustBeGreaterThanZero = "O ID do status do plano deve ser maior que zero";
@@ -55,29 +55,29 @@ public static class Messages
     public const string PlanSuccessfullyRegistered = "Plano cadastrado com sucesso";
     #endregion
 
-    #region Plan Participant Messages
-    public const string EnterPlanParticipantId = "Informe o ID do participante no plano";
-    public const string EnterPlanParticipantJoinedDate = "Informe a data de inclusão do usuário no plano";
-    public const string OnlyNotStartedPlansCanReceiveNewParticipants = "Apenas planos não iniciados podem receber novos participantes";
-    public const string ParticipantAlreadyAddedToThePlan = "Participante já adicionado ao plano";
-    public const string ParticipantSuccessfullyAddedToThePlan = "Participante adicionado ao plano com sucesso";
-    public const string ParticipantSuccessfullyReaddedToThePlan = "Participante readicionado ao plano com sucesso";
-    public const string ParticipantSuccessfullyBlocked = "Participante bloqueado com sucesso";
-    public const string ParticipantSuccessfullyUnblocked = "Participante desbloqueado com sucesso";
-    public const string ParticipantSuccessfullyRemovedFromThePlan = "Participante removido do plano com sucesso";
-    public const string PlanParticipantNotFound = "Participante não encontrado no plano";
-    public const string PlanParticipantStatusIdMustBeGreaterThanZero = "O ID do status do participante deve ser maior que zero";
-    public const string EnterPlanParticipantCreateDate = "Informe a data de criação do membro do plano";
-    public const string PlanParticipantSuccessfullyFound = "Participante do plano encontrado com sucesso";
-    public const string ParticipantAlreadyBlockedInThisPlan = "Este participante já está bloqueado neste plano";
-    public const string ParticipantCannotBeRemovedFromThePlanAsHeIsBlocked = "Este participante não pode ser removido do plano, pois está bloqueado";
-    public const string ParticipantCanOnlyBeBlockedInRunningPlans = "Participantes só podem ser bloqueados em planos em andamento";
-    public const string ParticipantCanOnlyBeRemovedFromNotStartedOrRunningPlans = "Participantes só podem ser removidos de planos não iniciados ou em andamento";
-    public const string ParticipantCanOnlyBeUnblockedInRunningPlans = "Participantes só podem ser desbloqueados em planos em andamento";
-    public const string ParticipantHasAlreadyBeenOnThisPlanBefore = "Participante já esteve neste plano antes";
-    public const string ParticipantIsAlreadyBlockedInThePlan = "Participante já está bloqueado neste plano";
-    public const string ParticipantIsAlreadyActiveInThePlan = "Participante já está ativo neste plano";
-    public const string ParticipantIsBlockedInThePlan = "Participante está bloqueado neste plano";
+    #region Plan Member Messages
+    public const string EnterPlanMemberId = "Informe o ID do membro no plano";
+    public const string EnterPlanMemberJoinedDate = "Informe a data de inclusão do usuário no plano";
+    public const string OnlyNotStartedPlansCanReceiveNewMembers = "Apenas planos não iniciados podem receber novos membros";
+    public const string MemberAlreadyAddedToThePlan = "Membro já adicionado ao plano";
+    public const string MemberSuccessfullyAddedToThePlan = "Membro adicionado ao plano com sucesso";
+    public const string MemberSuccessfullyReaddedToThePlan = "Membro readicionado ao plano com sucesso";
+    public const string MemberSuccessfullyBlocked = "Membro bloqueado com sucesso";
+    public const string MemberSuccessfullyUnblocked = "Membro desbloqueado com sucesso";
+    public const string MemberSuccessfullyRemovedFromThePlan = "Membro removido do plano com sucesso";
+    public const string PlanMemberNotFound = "Membro não encontrado no plano";
+    public const string PlanMemberStatusIdMustBeGreaterThanZero = "O ID do status do membro deve ser maior que zero";
+    public const string EnterPlanMemberCreateDate = "Informe a data de criação do membro do plano";
+    public const string PlanMemberSuccessfullyFound = "Membro do plano encontrado com sucesso";
+    public const string MemberAlreadyBlockedInThisPlan = "Este membro já está bloqueado neste plano";
+    public const string MemberCannotBeRemovedFromThePlanAsHeIsBlocked = "Este membro não pode ser removido do plano, pois está bloqueado";
+    public const string MemberCanOnlyBeBlockedInRunningPlans = "Membros só podem ser bloqueados em planos em andamento";
+    public const string MemberCanOnlyBeRemovedFromNotStartedOrRunningPlans = "Membros só podem ser removidos de planos não iniciados ou em andamento";
+    public const string MemberCanOnlyBeUnblockedInRunningPlans = "Membros só podem ser desbloqueados em planos em andamento";
+    public const string MemberHasAlreadyBeenOnThisPlanBefore = "Membro já esteve neste plano antes";
+    public const string MemberIsAlreadyBlockedInThePlan = "Membro já está bloqueado neste plano";
+    public const string MemberIsAlreadyActiveInThePlan = "Membro já está ativo neste plano";
+    public const string MemberIsBlockedInThePlan = "Membro está bloqueado neste plano";
     public const string UserIsNotInThePlan = "Usuário não está no plano";
     public const string UserIsNotInThePlanAnymore = "Usuário não está mais no plano";
     public const string UserHasNoPlans = "Usuário não possui planos";

@@ -1,9 +1,9 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
-using Bug.BetterThanYesterday.Domain.PlanParticipants;
-using Bug.BetterThanYesterday.Domain.PlanParticipants.Entities;
-using Bug.BetterThanYesterday.Domain.PlanParticipants.ValueObjects;
+using Bug.BetterThanYesterday.Domain.PlanMembers;
+using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
+using Bug.BetterThanYesterday.Domain.PlanMembers.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Strings;
@@ -15,7 +15,7 @@ public sealed class AddCheckInUseCase(
     ICheckInRepository checkInRepository,
     IPlanRepository planRepository,
     IUserRepository userRepository,
-    IPlanParticipantRepository planParticipantRepository)
+    IPlanMemberRepository planMemberRepository)
     : IUseCase<AddCheckInCommand>
 {
     public async Task<IResult> HandleAsync(AddCheckInCommand command)
@@ -34,14 +34,14 @@ public sealed class AddCheckInUseCase(
             if (user is null)
                 return Result.Rejected(Messages.UserNotFound);
 
-            var planParticipantId = PlanParticipant.BuildId(
+            var planMemberId = PlanMember.BuildId(
                 command.PlanId,
                 command.UserId
             );
-            var planParticipant = await planParticipantRepository.GetByIdAsync(planParticipantId);
+            var planMember = await planMemberRepository.GetByIdAsync(planMemberId);
 
-            if (planParticipant is null)
-                return Result.Rejected(Messages.PlanParticipantNotFound);
+            if (planMember is null)
+                return Result.Rejected(Messages.PlanMemberNotFound);
 
             var checkIns = await checkInRepository.ListByPlanIdAndUserIdAndDateAsync(
                 command.PlanId,
@@ -55,13 +55,13 @@ public sealed class AddCheckInUseCase(
 
             var maxIndexPerDateAllowed = plan.GetMaxCheckInsPerDateAllowed();
 
-            List<PlanParticipantStatus> allowedPlanParticipantStatuses = [
-                PlanParticipantStatus.Active,
-                PlanParticipantStatus.Blocked
+            List<PlanMemberStatus> allowedPlanMemberStatuses = [
+                PlanMemberStatus.Active,
+                PlanMemberStatus.Blocked
             ];
 
-            if (!allowedPlanParticipantStatuses.Contains(planParticipant.Status))
-                return Result.Rejected(Messages.OnlyActiveParticipantsCanMakeCheckIns);
+            if (!allowedPlanMemberStatuses.Contains(planMember.Status))
+                return Result.Rejected(Messages.OnlyActiveMembersCanMakeCheckIns);
 
             if (plan.Status != PlanStatus.Running)
                 return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);

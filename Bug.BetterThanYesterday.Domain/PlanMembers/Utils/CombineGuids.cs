@@ -1,0 +1,19 @@
+using Bug.BetterThanYesterday.Domain.Strings;
+using System.Security.Cryptography;
+
+namespace Bug.BetterThanYesterday.Domain.PlanMembers.Utils;
+
+public static class CombineGuids
+{
+    internal static Guid Combine(this Guid current, Guid other)
+    {
+        if(current == Guid.Empty || other == Guid.Empty)
+            throw new ArgumentException(Messages.OnlyValidGuidsCanBeCombined);
+
+        using var sha = SHA256.Create();
+        var guids = new List<Guid>{current, other};
+        var combinedBytes = guids.SelectMany(g => g.ToByteArray()).ToArray();
+        var hash = sha.ComputeHash(combinedBytes);
+        return new Guid(hash.Take(16).ToArray());
+    }
+}

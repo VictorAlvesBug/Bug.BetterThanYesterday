@@ -5,13 +5,9 @@ namespace Bug.BetterThanYesterday.Application.Tests.Extensions;
 
 public static partial class AutoMockerExtensions
 {
-    public static MockedValues SetupForCheckIns(this AutoMocker mocker, MockedValues? mockedValues = null)
+    public static MockedValues SetupForPlanMembers(this AutoMocker mocker, MockedValues? mockedValues = null)
     {
         mockedValues ??= new MockedValues();
-
-        (mockedValues.CheckInRepository, mockedValues.CheckIns) = CheckInRepositoryMockFactory.Create();
-        mocker.Use(mockedValues.CheckInRepository.Object);
-        mocker.Use(mockedValues.CheckIns);
 
         (mockedValues.PlanMemberRepository, mockedValues.PlanMembers) = PlanMemberRepositoryMockFactory.Create();
         mocker.Use(mockedValues.PlanMemberRepository.Object);
