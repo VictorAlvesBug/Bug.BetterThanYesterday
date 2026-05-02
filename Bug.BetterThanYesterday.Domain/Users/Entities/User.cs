@@ -38,7 +38,7 @@ public class User : Entity
 	private User(
 		string name,
 		string email,
-		string photoUrl,
+		string? photoUrl,
 		string nickname,
 		string phoneNumber,
 		string pixKey,
@@ -59,7 +59,7 @@ public class User : Entity
 	public static User CreateNew(
 		string name,
 		string email,
-		string photoUrl,
+		string? photoUrl,
 		string nickname,
 		string phoneNumber,
 		string pixKey,

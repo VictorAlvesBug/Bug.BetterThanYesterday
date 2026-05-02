@@ -1,33 +1,64 @@
-﻿namespace Bug.BetterThanYesterday.Domain.Commons;
+﻿using Bug.BetterThanYesterday.Domain.Extensions;
 
-public abstract class Enumeration : IComparable
+namespace Bug.BetterThanYesterday.Domain.Commons;
+
+public abstract class Enumeration<T> : IComparable
+	where T : Enumeration<T>
 {
-	public int Id { get; private set; }
-	public string Name { get; private set; }
+    public int Id { get; }
+    public string Name { get; }
 
-	protected Enumeration(int id, string name) => (Id, Name) = (id, name);
+    protected Enumeration(int id, string name)
+    {
+        Id = id;
+        Name = name;
+    }
 
-	public override string ToString() => Name;
-
-	public static IEnumerable<T> GetAll<T>() where T : Enumeration
+	public static T Get(string idOrName)
 	{
-		var fields = typeof(T).GetFields(
-			System.Reflection.BindingFlags.Public |
-			System.Reflection.BindingFlags.Static |
-			System.Reflection.BindingFlags.DeclaredOnly);
-		return fields.Select(f => f.GetValue(null)).Cast<T>();
+		if(int.TryParse(idOrName, out var id))
+			return Get(id);
+			
+		return GetByName(idOrName);
 	}
 
-	public override bool Equals(object? obj)
-	{
-		if (obj is not Enumeration otherValue)
-			return false;
+    public static T Get(int id)
+    {
+        var found = GetAll().FirstOrDefault(x => x.Id == id);
 
-		var typeMatches = GetType().Equals(obj.GetType());
-		var valueMatches = Id.Equals(otherValue.Id);
+        if (found is not null) return found;
 
-		return typeMatches && valueMatches;
-	}
+        throw new ArgumentException(
+            $"ID '{id}' inválido para {typeof(T).Name}. Use: {GetStringOptions()}"
+        );
+    }
 
-	public int CompareTo(object obj) => Id.CompareTo(((Enumeration)obj).Id);
+    public static IReadOnlyList<T> GetAll()
+    {
+        return typeof(T)
+            .GetFields(System.Reflection.BindingFlags.Public |
+                       System.Reflection.BindingFlags.Static |
+                       System.Reflection.BindingFlags.DeclaredOnly)
+            .Where(f => f.FieldType == typeof(T))
+            .Select(f => (T)f.GetValue(null)!)
+            .ToList();
+    }
+
+    public static string GetStringOptions()
+    {
+        return string.Join(", ", GetAll().Select(x => $"{x.Id}={x.Name}"));
+    }
+
+	public int CompareTo(object obj) => Id.CompareTo(((Enumeration<T>)obj).Id);
+
+    private static T GetByName(string name)
+    {
+        var found = GetAll().FirstOrDefault(x => x.Name == name);
+
+        if (found is not null) return found;
+
+        throw new ArgumentException(
+            $"Nome '{name}' inválido para {typeof(T).Name}. Use: {GetStringOptions()}"
+        );
+    }
 }

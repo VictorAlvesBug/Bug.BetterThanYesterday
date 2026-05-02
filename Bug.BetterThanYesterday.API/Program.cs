@@ -68,7 +68,7 @@ app.Run();
 ######### TODO LIST #########
 
 DONE - Bloco A - Equalizar Entity, Document e Model de User do backend com User do frontend;
-TODO - Bloco B - Equalizar métodos do repositório de User do backend com frontend;
+DONE - Bloco B - Equalizar métodos do repositório de User do backend com frontend;
 TODO - Bloco C - Equalizar Entity, Document e Model de Habit do backend com Habit do frontend;
 TODO - Bloco C - Equalizar métodos do repositório de Habit do backend com frontend;
 TODO - Bloco D - Equalizar Entity, Document e Model de Plan do backend com Plan do frontend;

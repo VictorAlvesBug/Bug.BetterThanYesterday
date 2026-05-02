@@ -32,9 +32,9 @@ public class GetCheckInDetailsCommand : ICommand
             throw new ArgumentNullException(nameof(UserId), Messages.UserNotFound);
 
         if (Date == DateTime.MinValue)
-            throw new ArgumentException(nameof(Date), Messages.EnterCheckInDate);
+            throw new ArgumentException(Messages.EnterCheckInDate, nameof(Date));
 
         if (Index < 0)
-            throw new ArgumentException(nameof(Index), Messages.EnterCheckInIndex);
+            throw new ArgumentException(Messages.EnterCheckInIndex, nameof(Index));
     }
 }

@@ -14,10 +14,7 @@ public class ListAllUsersUseCase(IUserRepository userRepository)
 			command.Validate();
 			
 			var users = (await userRepository.ListAllAsync()).Select(user => user.ToModel());
-			return Result.Success(
-				users,
-				Messages.UsersSuccessfullyFound
-			);
+			return Result.Success(users);
 		}
 		catch (Exception ex)
 		{

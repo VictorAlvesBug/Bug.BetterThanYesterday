@@ -22,7 +22,7 @@ public sealed record Photo
 		value = value.Trim().ToLower();
 
 		if (!regex.IsMatch(value))
-			throw new ArgumentException(nameof(Photo), Messages.EnterValidPhoto);
+			throw new ArgumentException(Messages.EnterValidPhoto, nameof(Photo));
 
 		return new Photo(value);
 	}

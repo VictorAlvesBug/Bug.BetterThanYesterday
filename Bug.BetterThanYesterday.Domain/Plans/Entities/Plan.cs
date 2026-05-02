@@ -36,8 +36,8 @@ public sealed class Plan : Entity
 		Description = description;
 		StartsAt = DateOnly.FromDateTime(startsAt);
 		EndsAt = DateOnly.FromDateTime(endsAt);
-		Status = PlanStatus.FromId(statusId);
-		Type = PlanType.FromId(typeId);
+		Status = PlanStatus.Get(statusId);
+		Type = PlanType.Get(typeId);
 		CreatedAt = DateOnly.FromDateTime(createdAt);
 	}
 

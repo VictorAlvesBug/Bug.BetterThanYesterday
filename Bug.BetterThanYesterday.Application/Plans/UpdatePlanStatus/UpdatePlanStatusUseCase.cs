@@ -28,7 +28,7 @@ public class UpdatePlanStatusUseCase(
 			if (habit is null)
 				return Result.Rejected(Messages.HabitNotFound);
 
-			var newStatus = PlanStatus.FromId(command.StatusId);
+			var newStatus = PlanStatus.Get(command.StatusId);
 			plan.ChangeStatus(newStatus);
 
 			await planRepository.UpdateAsync(plan);

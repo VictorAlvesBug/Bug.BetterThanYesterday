@@ -12,16 +12,23 @@ public sealed record TaxIdentification
 		Value = value;
 	}
 
-	public static TaxIdentification Create(string value)
+	public static bool TryCreate(string value, out TaxIdentification? taxIdentification, out string? errorMessage)
 	{
+		taxIdentification = null;
+		errorMessage = null;
+
 		if (value.Length == 11)
 		{
 			var cpfRegex = new Regex(@"^[0-9]{11}$");
 
 			if (!cpfRegex.IsMatch(value))
-				throw new ArgumentException(nameof(TaxIdentification), Messages.EnterValidCpfTaxIdentification);
+			{
+				errorMessage = Messages.EnterValidCpfTaxIdentification;
+				return false;
+			}
 
-			return new TaxIdentification(value);
+			taxIdentification = new TaxIdentification(value);
+			return true;
 		}
 
 
@@ -30,13 +37,17 @@ public sealed record TaxIdentification
 			var cnpjRegex = new Regex(@"^[0-9]{11}$");
 
 			if (!cnpjRegex.IsMatch(value))
-				throw new ArgumentException(nameof(TaxIdentification), Messages.EnterValidCnpjTaxIdentification);
+			{
+				errorMessage = Messages.EnterValidCnpjTaxIdentification;
+				return false;
+			}
 
-			return new TaxIdentification(value);
+			taxIdentification = new TaxIdentification(value);
+			return true;
 		}
-		
-		throw new ArgumentException(nameof(TaxIdentification), Messages.EnterValidTaxIdentification);
 
+		errorMessage = Messages.EnterValidTaxIdentification;
+		return false;
 	}
 
 	public override string ToString() => Value;

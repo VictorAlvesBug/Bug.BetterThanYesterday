@@ -15,17 +15,33 @@ public sealed record PhoneNumber
 
 	public static PhoneNumber Create(string value)
 	{
+		if (TryCreate(value, out PhoneNumber? phoneNumber, out string? errorMessage))
+			return phoneNumber!;
+
+		throw new ArgumentException(errorMessage, nameof(PhoneNumber));
+	}
+
+	public static bool TryCreate(string value, out PhoneNumber? phoneNumber, out string? errorMessage)
+	{
+		phoneNumber = null;
+		errorMessage = null;
+
 		if (string.IsNullOrWhiteSpace(value))
-			throw new ArgumentNullException(nameof(PhoneNumber), Messages.EnterUserPhoneNumber);
+		{
+			errorMessage = Messages.EnterUserPhoneNumber;
+			return false;
+		}
 
 		var regex = new Regex(@"^\d{2}(9\d{4}|\d{4})\d{4}$");
 
 		value = value.Trim().ToLower().OnlyDigits();
 
-		if (!regex.IsMatch(value))
-			throw new ArgumentException(nameof(PhoneNumber), Messages.EnterValidUserPhoneNumber);
-
-		return new PhoneNumber(value);
+		if (!regex.IsMatch(value)){
+			errorMessage = Messages.EnterValidUserPhoneNumber;
+			return false;
+}
+		phoneNumber = new PhoneNumber(value);
+		return true;
 	}
 
 	public override string ToString() => Value;

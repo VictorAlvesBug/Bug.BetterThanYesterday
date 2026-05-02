@@ -16,40 +16,48 @@ public sealed record PixKey
 		PixKeyType = pixKeyType;
 	}
 
-	public static PixKey Create(string value, string pixKeyTypeName)
+	public static PixKey Create(string value, string pixKeyTypeIdOrName)
 	{
 		if (string.IsNullOrWhiteSpace(value))
 			throw new ArgumentNullException(nameof(PixKey), Messages.EnterUserPixKey);
 
-		value = value.Trim().ToLower().OnlyDigits();
+		value = value.Trim().ToLower();
 
-		var pixKeyType = PixKeyType.FromName(pixKeyTypeName);
+		var pixKeyType = PixKeyType.Get(pixKeyTypeIdOrName);
 
 		if (pixKeyType == PixKeyType.TaxIdentification)
 		{
-			TaxIdentification.Create(value);
-			return new PixKey(value, pixKeyType);
+			if(TaxIdentification.TryCreate(value, out var _, out var TaxIdErrorMessage))
+				return new PixKey(value.OnlyDigits(), pixKeyType);
+
+			throw new ArgumentException(TaxIdErrorMessage, nameof(PixKey));
 		}
 
 		if (pixKeyType == PixKeyType.Email)
 		{
-			Email.Create(value);
-			return new PixKey(value, pixKeyType);
+			if(Email.TryCreate(value, out var _, out var emailErrorMessage))
+				return new PixKey(value, pixKeyType);
+
+			throw new ArgumentException(emailErrorMessage, nameof(PixKey));
 		}
 
 		if (pixKeyType == PixKeyType.PhoneNumber)
 		{
-			PhoneNumber.Create(value);
-			return new PixKey(value, pixKeyType);
+			if(PhoneNumber.TryCreate(value, out var _, out var phoneNumberErrorMessage))
+				return new PixKey(value.OnlyDigits(), pixKeyType);
+
+			throw new ArgumentException(phoneNumberErrorMessage, nameof(PixKey));
 		}
 
 		if (pixKeyType == PixKeyType.EVP)
 		{
-			EVP.Create(value);
-			return new PixKey(value, pixKeyType);
+			if(EVP.TryCreate(value, out var _, out var evpErrorMessage))
+				return new PixKey(value, pixKeyType);
+
+			throw new ArgumentException(evpErrorMessage, nameof(PixKey));
 		}
 			
-		throw new ArgumentException(nameof(PixKey), Messages.EnterValidUserPixKey);
+		throw new ArgumentException(Messages.EnterValidUserPixKey, nameof(PixKey));
 	}
 
 	public override string ToString() => Value;

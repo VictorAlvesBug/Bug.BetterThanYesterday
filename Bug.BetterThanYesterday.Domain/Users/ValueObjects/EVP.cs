@@ -14,12 +14,26 @@ public sealed record EVP
 
 	public static EVP Create(string value)
 	{
+		if (TryCreate(value, out EVP? evp, out string? errorMessage))
+			return evp!;
+
+		throw new ArgumentException(errorMessage, nameof(EVP));
+	}
+
+	public static bool TryCreate(string value, out EVP? evp, out string? errorMessage)
+	{
+		evp = null;
+		errorMessage = null;
+
 		var regex = new Regex(@"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$");
 
-			if (!regex.IsMatch(value))
-				throw new ArgumentException(nameof(EVP), Messages.EnterValidEVP);
-
-			return new EVP(value);
+		if (!regex.IsMatch(value))
+		{
+			errorMessage = Messages.EnterValidEVP;
+			return false;
+		}
+		evp = new EVP(value);
+		return true;
 
 	}
 
