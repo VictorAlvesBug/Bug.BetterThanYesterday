@@ -37,17 +37,19 @@ public static class Messages
     #endregion
 
     #region Plan Messages
+    public const string EnterOwnerId = "Informe o ID do criador do plano";
     public const string EnterPlanEndDate = "Informe a data final do plano";
     public const string EnterPlanDescription = "Informe a descrição do plano";
     public const string EnterPlanId = "Informe o ID do plano";
     public const string EnterPlanCreationDate = "Informe a data de criação do plano";
     public const string EnterPlanStatus = "Informe o status do plano";
     public const string EnterPlanStartDate = "Informe a data inicial do plano";
-    public const string EnterPlanType = "Informe o tipo de plano";
     public const string PlanHasNoMembers = "Plano não possui membros";
     public const string PlanNotFound = "Plano não encontrado";
-    public const string PlanTypeIdMustBeGreaterThanZero = "O ID do tipo de plano deve ser maior que zero";
-    public const string PlanStatusIdMustBeGreaterThanZero = "O ID do status do plano deve ser maior que zero";
+    public const string EnterPlanType = "Informe o tipo de plano";
+    public const string EnterValidPlanType = "Informe um tipo de plano válido";
+    public const string EnterValidDaysOffPerWeek = "Informe uma quantidade de folgas semanas válida";
+    public const string EnterValidPenaltyValue = "Informe um valor de penalidade válido";
     public const string PlanStatusSuccessfullyUpdated = "Status do plano atualizado com sucesso";
     public const string PlanSuccessfullyCancelled = "Plano cancelado com sucesso";
     public const string PlanSuccessfullyFound = "Plano encontrado com sucesso";

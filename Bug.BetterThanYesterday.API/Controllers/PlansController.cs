@@ -2,7 +2,6 @@
 using Bug.BetterThanYesterday.Application.Plans.CancelPlan;
 using Bug.BetterThanYesterday.Application.Plans.GetPlanById;
 using Bug.BetterThanYesterday.Application.Plans.ListAllPlans;
-using Bug.BetterThanYesterday.Application.Plans.UpdatePlanStatus;
 using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,6 @@ public class PlansController(
 	IUseCase<ListAllPlansCommand> listAllPlansUseCase,
 	IUseCase<GetPlanByIdCommand> getPlanByIdUseCase,
 	IUseCase<ListPlansByHabitIdCommand> listPlansByHabitIdUseCase,
-	IUseCase<UpdatePlanStatusCommand> updatePlanStatusUseCase,
 	IUseCase<CancelPlanCommand> cancelPlanUseCase)
 	: ControllerBase
 {
@@ -57,20 +55,6 @@ public class PlansController(
 			var data = ((Result<PlanModel>)result).Data;
 			return Created($"Plans/{data.PlanId}", result);
 		}
-
-		if (result.IsRejected())
-			return BadRequest(result);
-
-		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}
-
-	[HttpPut]
-	public async Task<IActionResult> UpdateStatus([FromBody] UpdatePlanStatusCommand command)
-	{
-		var result = await updatePlanStatusUseCase.HandleAsync(command);
-
-		if (result.IsSuccess())
-			return Ok(result);
 
 		if (result.IsRejected())
 			return BadRequest(result);

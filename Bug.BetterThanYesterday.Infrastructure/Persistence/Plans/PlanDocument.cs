@@ -7,10 +7,13 @@ namespace Bug.BetterThanYesterday.Infrastructure.Persistence.Plans;
 public class PlanDocument : Document
 {
 	[BsonRepresentation(BsonType.String)]
+	public Guid OwnerId { get; set; }
 	public Guid HabitId { get; set; }
 	public string? Description { get; set; }
 	public DateTime StartsAt { get; set; }
 	public DateTime EndsAt { get; set; }
-	public int StatusId { get; set; }
-	public int TypeId { get; set; }
+	public string Type { get; set; }
+	public int DaysOffPerWeek { get; set; }
+	public decimal PenaltyValue { get; set; }
+	public bool IsCancelled { get; set; }
 }
