@@ -23,7 +23,7 @@ public class ListPlansByHabitIdUseCase(
 				return Result.Rejected(Messages.HabitNotFound);
 
 			var plans = (await planRepository.ListByHabitIdAsync(command.HabitId))
-				.Select(plan => plan.ToModel(habit.ToModel()));
+				.Select(plan => plan.ToModel(habit));
 
 			return Result.Success(
 				plans,

@@ -12,18 +12,19 @@ namespace Bug.BetterThanYesterday.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class HabitsController(
-	IUseCase<CreateHabitCommand> createHabitUseCase,
-	IUseCase<ListAllHabitsCommand> listAllHabitsUseCase,
 	IUseCase<GetHabitByIdCommand> getHabitByIdUseCase,
+	IUseCase<ListHabitsByFilterCommand> listHabitsByFilterUseCase,
+	IUseCase<CreateHabitCommand> createHabitUseCase/*,
 	IUseCase<UpdateHabitCommand> updateHabitUseCase,
-	IUseCase<DeleteHabitCommand> deleteHabitUseCase)
+	IUseCase<DeleteHabitCommand> deleteHabitUseCase*/)
 	: ControllerBase
 {
-	[HttpGet]
-	public async Task<IActionResult> ListAll()
+
+	[HttpGet("{habitId}")]
+	public async Task<IActionResult> GetById(Guid habitId)
 	{
-		var command = new ListAllHabitsCommand();
-		var result = await listAllHabitsUseCase.HandleAsync(command);
+		var command = new GetHabitByIdCommand(habitId);
+		var result = await getHabitByIdUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
 			return Ok(result);
@@ -33,12 +34,10 @@ public class HabitsController(
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
-
-	[HttpGet("{habitId}")]
-	public async Task<IActionResult> GetById(Guid habitId)
+	[HttpGet]
+	public async Task<IActionResult> ListByFilter([FromQuery] ListHabitsByFilterCommand command)
 	{
-		var command = new GetHabitByIdCommand(habitId);
-		var result = await getHabitByIdUseCase.HandleAsync(command);
+		var result = await listHabitsByFilterUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
 			return Ok(result);
@@ -66,7 +65,7 @@ public class HabitsController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpPut]
+	/*[HttpPut]
 	public async Task<IActionResult> Update([FromBody] UpdateHabitCommand command)
 	{
 		var result = await updateHabitUseCase.HandleAsync(command);
@@ -78,9 +77,9 @@ public class HabitsController(
 			return BadRequest(result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}
+	}*/
 
-	[HttpDelete("{habitId}")]
+	/*[HttpDelete("{habitId}")]
 	public async Task<IActionResult> Delete(Guid habitId)
 	{
 		var command = new DeleteHabitCommand(habitId);
@@ -93,5 +92,5 @@ public class HabitsController(
 			return BadRequest(result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}
+	}*/
 }

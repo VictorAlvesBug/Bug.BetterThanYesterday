@@ -49,7 +49,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(plan.Status.Name, resultData.Plan.StatusName);
 		Assert.Equal(plan.Type.Id, resultData.Plan.TypeId);
 		Assert.Equal(plan.Type.Name, resultData.Plan.TypeName);
-		Assert.Equal(plan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.CreatedAt);
+		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
 		Assert.Equal(members.Count, resultData.Members.Count);
 
@@ -84,7 +84,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(plan.Status.Name, resultData.Plan.StatusName);
 		Assert.Equal(plan.Type.Id, resultData.Plan.TypeId);
 		Assert.Equal(plan.Type.Name, resultData.Plan.TypeName);
-		Assert.Equal(plan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.CreatedAt);
+		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
 		Assert.Empty(resultData.Members);
 

@@ -28,7 +28,7 @@ public class GetPlanByIdUseCase(
 				return Result.Rejected(Messages.HabitNotFound);
 
 			return Result.Success(
-				plan.ToModel(habit.ToModel()),
+				plan.ToModel(habit),
 				Messages.PlanSuccessfullyFound
 			);
 		}

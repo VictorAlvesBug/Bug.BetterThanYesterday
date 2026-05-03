@@ -1,10 +1,14 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Habits;
+using Bug.BetterThanYesterday.Domain.Plans;
 
 namespace Bug.BetterThanYesterday.Application.Habits.GetHabitById;
 
-public sealed class GetHabitByIdUseCase(IHabitRepository habitRepository)
+public sealed class GetHabitByIdUseCase(
+	IHabitRepository habitRepository,
+	IPlanRepository planRepository
+)
 	: IUseCase<GetHabitByIdCommand>
 {
 	public async Task<IResult> HandleAsync(GetHabitByIdCommand command)
@@ -18,7 +22,9 @@ public sealed class GetHabitByIdUseCase(IHabitRepository habitRepository)
 			if (habit is null)
 				return Result.Rejected(Messages.HabitNotFound);
 
-			return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyFound);
+			var plans = await planRepository.ListByHabitIdAsync(habit.Id);
+
+			return Result.Success(habit.ToModel(plans), Messages.HabitSuccessfullyFound);
 		}
 		catch (Exception ex)
 		{

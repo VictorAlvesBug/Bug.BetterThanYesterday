@@ -23,7 +23,7 @@ public static class CheckInMapperExtensions
         Index = checkIn.Index,
         Title = checkIn.Title,
         Description = checkIn.Description,
-        CreatedAt = checkIn.CreatedAt.ToDateTime(TimeOnly.MinValue)
+        CreatedAt = checkIn.CreatedAt
     };
 
     public static PlanWithCheckInsModel ToPlanWithCheckInsModel(
@@ -31,7 +31,7 @@ public static class CheckInMapperExtensions
         Habit habit,
         List<CheckIn> checkIns) => new()
     {
-        Plan = plan.ToModel(habit.ToModel()),
+        Plan = plan.ToModel(habit),
         CheckIns = checkIns.Select(x => x.ToCheckInModel()).ToList()
     };
 
@@ -41,7 +41,7 @@ public static class CheckInMapperExtensions
         User user,
         List<CheckIn> checkIns) => new()
     {
-        Plan = plan.ToModel(habit.ToModel()),
+        Plan = plan.ToModel(habit),
         User = user.ToModel(),
         CheckIns = checkIns.Select(x => x.ToCheckInModel()).ToList()
     };
@@ -53,7 +53,7 @@ public static class CheckInMapperExtensions
         DateTime date,
         List<CheckIn> checkIns) => new()
     {
-        Plan = plan.ToModel(habit.ToModel()),
+        Plan = plan.ToModel(habit),
         User = user.ToModel(),
         Date = date,
         CheckIns = checkIns.Select(x => x.ToCheckInModel()).ToList()

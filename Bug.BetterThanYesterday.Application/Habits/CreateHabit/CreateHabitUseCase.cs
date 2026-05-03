@@ -21,6 +21,7 @@ public sealed class CreateHabitUseCase(IHabitRepository habitRepository)
 
 			var habit = Habit.CreateNew(command.Name);
 			await habitRepository.AddAsync(habit);
+			
 			return Result.Success(habit.ToModel(), Messages.HabitSuccessfullyRegistered);
 		}
 		catch (Exception ex)

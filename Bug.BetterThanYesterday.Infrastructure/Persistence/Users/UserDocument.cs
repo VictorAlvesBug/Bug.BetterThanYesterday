@@ -11,5 +11,4 @@ public class UserDocument : Document
 	public string PhoneNumber { get; set; }
 	public string PixKey { get; set; }
 	public string PixKeyType { get; set; }
-	public DateTime CreatedAt { get; set; }
 }

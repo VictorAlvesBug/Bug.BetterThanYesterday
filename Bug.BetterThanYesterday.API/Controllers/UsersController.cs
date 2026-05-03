@@ -2,7 +2,6 @@
 using Bug.BetterThanYesterday.Application.Users;
 using Bug.BetterThanYesterday.Application.Users.DeleteUser;
 using Bug.BetterThanYesterday.Application.Users.GetUserById;
-using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
 using Bug.BetterThanYesterday.Application.Users.ListUsersByFilter;
 using Bug.BetterThanYesterday.Application.Users.RegisterUser;
 using Bug.BetterThanYesterday.Application.Users.UpdateUser;
@@ -13,29 +12,13 @@ namespace Bug.BetterThanYesterday.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController(
-	IUseCase<ListAllUsersCommand> listAllUsersUseCase,
 	IUseCase<GetUserByIdCommand> getUserByIdUseCase,
 	IUseCase<ListUsersByFilterCommand> listUsersByFilterUseCase,
-	IUseCase<RegisterUserCommand> registerUserUseCase,
+	IUseCase<RegisterUserCommand> registerUserUseCase/*,
 	IUseCase<UpdateUserCommand> updateUserUseCase,
-	IUseCase<DeleteUserCommand> deleteUserUseCase)
+	IUseCase<DeleteUserCommand> deleteUserUseCase*/)
 	: ControllerBase
 {
-	/*[HttpGet]
-	public async Task<IActionResult> ListAll()
-	{
-		var command = new ListAllUsersCommand();
-		var result = await listAllUsersUseCase.HandleAsync(command);
-		
-		if (result.IsSuccess())
-			return Ok(result);
-		
-		if(result.IsRejected())
-			return BadRequest(result);
-
-		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}*/
-
 	[HttpGet("{userId}")]
 	public async Task<IActionResult> GetById(Guid userId)
 	{

@@ -14,6 +14,6 @@ internal static class CheckInMapper
 		Index = checkIn.Index,
 		Title = checkIn.Title,
 		Description = checkIn.Description,
-		CreatedAt = checkIn.CreatedAt.ToDateTime(TimeOnly.MinValue)
+		CreatedAt = checkIn.CreatedAt
 	};
 }

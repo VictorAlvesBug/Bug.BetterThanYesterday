@@ -28,7 +28,7 @@ public class PlanMember : Entity
 		JoinedAt = DateOnly.FromDateTime(joinedAt);
 		LeftAt = leftAt is null ? null : DateOnly.FromDateTime(leftAt.Value);
 		Status = PlanMemberStatus.Get(statusId);
-		CreatedAt = DateOnly.FromDateTime(createdAt);
+		CreatedAt = createdAt;
 	}
 
 	private PlanMember(Guid planId, Guid userId)

@@ -44,12 +44,12 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(plan.Status.Name, resultData.Plan.StatusName);
 		Assert.Equal(plan.Type.Id, resultData.Plan.TypeId);
 		Assert.Equal(plan.Type.Name, resultData.Plan.TypeName);
-		Assert.Equal(plan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.CreatedAt);
+		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
 		Assert.Equal(user.Id, resultData.Member.UserId);
 		Assert.Equal(user.Name, resultData.Member.Name);
 		Assert.Equal(user.Email.Value, resultData.Member.Email);
-		Assert.Equal(user.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Member.CreatedAt);
+		Assert.Equal(user.CreatedAt, resultData.Member.CreatedAt);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -195,12 +195,12 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(plan.Status.Name, resultData.Plan.StatusName);
 		Assert.Equal(plan.Type.Id, resultData.Plan.TypeId);
 		Assert.Equal(plan.Type.Name, resultData.Plan.TypeName);
-		Assert.Equal(plan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.CreatedAt);
+		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
 		Assert.Equal(user.Id, resultData.Member.UserId);
 		Assert.Equal(user.Name, resultData.Member.Name);
 		Assert.Equal(user.Email.Value, resultData.Member.Email);
-		Assert.Equal(user.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Member.CreatedAt);
+		Assert.Equal(user.CreatedAt, resultData.Member.CreatedAt);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

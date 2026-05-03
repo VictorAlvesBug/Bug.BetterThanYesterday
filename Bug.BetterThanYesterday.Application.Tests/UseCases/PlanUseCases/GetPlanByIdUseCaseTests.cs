@@ -35,7 +35,7 @@ public class GetPlanByIdUseCaseTests : BasePlanUseCaseTests
 		Assert.Equal(firstPlan.Status.Name, resultData.StatusName);
 		Assert.Equal(firstPlan.Type.Id, resultData.TypeId);
 		Assert.Equal(firstPlan.Type.Name, resultData.TypeName);
-		Assert.Equal(firstPlan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.CreatedAt);
+		Assert.Equal(firstPlan.CreatedAt, resultData.CreatedAt);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 	}

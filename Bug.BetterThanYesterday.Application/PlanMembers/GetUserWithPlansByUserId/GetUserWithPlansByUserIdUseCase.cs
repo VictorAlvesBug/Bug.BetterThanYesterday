@@ -45,7 +45,7 @@ public sealed class GetUserWithPlansByUserIdUseCase(
 
             var tasks = plans.Select(async plan => {
                 var habit = await habitRepository.GetByIdAsync(plan.HabitId) ?? throw new Exception(Messages.HabitNotFound);
-                return plan.ToModel(habit.ToModel());
+                return plan.ToModel(habit);
             }).ToList();
 
             var planModels = (await Task.WhenAll(tasks)).ToList();

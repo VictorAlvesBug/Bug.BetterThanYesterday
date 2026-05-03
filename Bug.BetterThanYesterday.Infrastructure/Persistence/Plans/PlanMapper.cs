@@ -14,7 +14,7 @@ internal sealed class PlanMapper : IDocumentMapper<Plan, PlanDocument>
 		EndsAt = plan.EndsAt.ToDateTime(TimeOnly.MinValue),
 		StatusId = plan.Status.Id,
 		TypeId = plan.Type.Id,
-		CreatedAt = plan.CreatedAt.ToDateTime(TimeOnly.MinValue),
+		CreatedAt = plan.CreatedAt,
 	};
 
 	public Plan ToDomain(PlanDocument document) => Plan.Restore(

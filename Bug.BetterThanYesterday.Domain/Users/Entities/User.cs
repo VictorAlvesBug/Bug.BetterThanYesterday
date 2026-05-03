@@ -32,7 +32,7 @@ public class User : Entity
 		Nickname = nickname;
 		PhoneNumber = PhoneNumber.Create(phoneNumber);
 		PixKey = PixKey.Create(pixKey, pixKeyType);
-		CreatedAt = DateOnly.FromDateTime(createdAt);
+		CreatedAt = createdAt;
 	}
 
 	private User(

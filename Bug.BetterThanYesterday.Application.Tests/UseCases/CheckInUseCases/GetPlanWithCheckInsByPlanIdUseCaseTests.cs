@@ -39,7 +39,7 @@ public class GetPlanWithCheckInsByPlanIdUseCaseTests : BaseCheckInUseCaseTests
 		Assert.Equal(firstPlan.Status.Name, resultData.Plan.StatusName);
 		Assert.Equal(firstPlan.Type.Id, resultData.Plan.TypeId);
 		Assert.Equal(firstPlan.Type.Name, resultData.Plan.TypeName);
-		Assert.Equal(firstPlan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.CreatedAt);
+		Assert.Equal(firstPlan.CreatedAt, resultData.Plan.CreatedAt);
 
         var planCheckIns = _mock.CheckIns.Where(x => x.PlanId == firstPlan.Id).ToList();
         Assert.Equal(planCheckIns.Count, resultData.CheckIns.Count);

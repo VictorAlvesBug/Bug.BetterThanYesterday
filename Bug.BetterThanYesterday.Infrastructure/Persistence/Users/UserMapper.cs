@@ -15,7 +15,7 @@ internal sealed class UserMapper : IDocumentMapper<User, UserDocument>
 		PhoneNumber = user.PhoneNumber.Value,
 		PixKey = user.PixKey.Value,
 		PixKeyType = user.PixKey.GetPixKeyType(),
-		CreatedAt = user.CreatedAt.ToDateTime(TimeOnly.MinValue),
+		CreatedAt = user.CreatedAt,
 	};
 
 	public User ToDomain(UserDocument document) => User.Restore(

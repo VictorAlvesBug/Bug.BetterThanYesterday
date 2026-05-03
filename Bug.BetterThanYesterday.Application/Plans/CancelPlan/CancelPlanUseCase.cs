@@ -31,7 +31,7 @@ public class CancelPlanUseCase(
 			plan.ChangeStatus(PlanStatus.Cancelled);
 
 			await planRepository.UpdateAsync(plan);
-			return Result.Success(plan.ToModel(habit.ToModel()), Messages.PlanSuccessfullyCancelled);
+			return Result.Success(plan.ToModel(habit), Messages.PlanSuccessfullyCancelled);
 		}
 		catch (Exception ex)
 		{

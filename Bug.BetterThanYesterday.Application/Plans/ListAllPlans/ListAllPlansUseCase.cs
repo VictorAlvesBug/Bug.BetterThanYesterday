@@ -22,7 +22,7 @@ public class ListAllPlansUseCase(
 			var tasks = plans.Select(async plan =>
 			{
 				var habit = await habitRepository.GetByIdAsync(plan.HabitId) ?? throw new Exception(Messages.HabitNotFound);
-                return plan.ToModel(habit.ToModel());
+                return plan.ToModel(habit);
 			}).ToList();
 			
 			return Result.Success(

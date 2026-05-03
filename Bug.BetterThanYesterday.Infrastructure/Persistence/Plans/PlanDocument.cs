@@ -13,5 +13,4 @@ public class PlanDocument : Document
 	public DateTime EndsAt { get; set; }
 	public int StatusId { get; set; }
 	public int TypeId { get; set; }
-	public DateTime CreatedAt { get; set; }
 }

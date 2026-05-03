@@ -36,7 +36,7 @@ public class CancelPlanUseCaseTests : BasePlanUseCaseTests
 		Assert.Equal(firstPlan.Status, PlanStatus.Cancelled);
 		Assert.Equal(firstPlan.Type.Id, resultData.TypeId);
 		Assert.Equal(firstPlan.Type.Name, resultData.TypeName);
-		Assert.Equal(firstPlan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.CreatedAt);
+		Assert.Equal(firstPlan.CreatedAt, resultData.CreatedAt);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Plan>()), Times.Once);

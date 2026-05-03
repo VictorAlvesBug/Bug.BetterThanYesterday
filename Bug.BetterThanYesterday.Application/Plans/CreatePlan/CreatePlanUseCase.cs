@@ -31,7 +31,7 @@ public class CreatePlanUseCase(
 				command.TypeId);
 
 			await planRepository.AddAsync(plan);
-			return Result.Success(plan.ToModel(habit.ToModel()), Messages.PlanSuccessfullyRegistered);
+			return Result.Success(plan.ToModel(habit), Messages.PlanSuccessfullyRegistered);
 		}
 		catch (Exception ex)
 		{

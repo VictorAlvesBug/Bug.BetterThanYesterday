@@ -5,7 +5,8 @@ namespace Bug.BetterThanYesterday.Application.Plans;
 public class PlanModel
 {
 	public Guid PlanId { get; set; }
-	public HabitModel Habit { get; set; }
+	public Guid HabitId { get; set; }
+	public string HabitName { get; set; }
 	public string? Description { get; set; }
 	public DateTime StartsAt { get; set; }
 	public DateTime EndsAt { get; set; }

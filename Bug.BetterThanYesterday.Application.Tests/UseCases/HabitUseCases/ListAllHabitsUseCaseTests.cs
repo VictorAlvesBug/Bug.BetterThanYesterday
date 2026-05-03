@@ -14,7 +14,7 @@ public class ListAllHabitsUseCaseTests : BaseHabitUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<ListAllHabitsUseCase>();
-		var command = new ListAllHabitsCommand();
+		var command = new ListHabitsByFilterCommand();
 
 		// Act
 		var result = await useCase.HandleAsync(command);

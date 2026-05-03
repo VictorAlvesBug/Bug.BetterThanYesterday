@@ -2,7 +2,10 @@
 
 namespace Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
 
-public class ListAllHabitsCommand : ICommand
+public class ListHabitsByFilterCommand : ICommand
 {
-	public void Validate() { }
+	public string? Name { get; init; }
+	public void Validate()
+	{
+	}
 }

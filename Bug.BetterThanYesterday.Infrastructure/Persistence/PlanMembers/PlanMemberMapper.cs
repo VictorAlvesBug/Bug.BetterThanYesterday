@@ -13,7 +13,7 @@ internal sealed class PlanMemberMapper : IDocumentMapper<PlanMember, PlanMemberD
 		JoinedAt = planMember.JoinedAt.ToDateTime(TimeOnly.MinValue),
 		LeftAt = planMember.LeftAt?.ToDateTime(TimeOnly.MinValue),
 		StatusId = planMember.Status.Id,
-		CreatedAt = planMember.CreatedAt.ToDateTime(TimeOnly.MinValue)
+		CreatedAt = planMember.CreatedAt
 	};
 
 	public PlanMember ToDomain(PlanMemberDocument document) => PlanMember.Restore(

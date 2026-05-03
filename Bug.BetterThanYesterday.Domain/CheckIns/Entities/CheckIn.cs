@@ -30,7 +30,7 @@ public class CheckIn : Entity
 		Index = index;
 		Title = title;
 		Description = description;
-		CreatedAt = DateOnly.FromDateTime(createdAt);
+		CreatedAt = createdAt;
 	}
 
 	private CheckIn(

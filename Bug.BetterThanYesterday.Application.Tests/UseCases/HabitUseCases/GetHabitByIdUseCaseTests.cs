@@ -28,7 +28,7 @@ public class GetHabitByIdUseCaseTests : BaseHabitUseCaseTests
 		var resultData = Assert.IsType<Result<HabitModel>>(result).Data;
 		Assert.Equal(firstHabit.Id, resultData.HabitId);
 		Assert.Equal(firstHabit.Name, resultData.Name);
-		Assert.Equal(firstHabit.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.CreatedAt);
+		Assert.Equal(firstHabit.CreatedAt, resultData.CreatedAt);
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 	}

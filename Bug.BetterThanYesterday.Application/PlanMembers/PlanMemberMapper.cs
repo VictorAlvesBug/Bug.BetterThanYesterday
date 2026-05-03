@@ -21,7 +21,7 @@ internal static class PlanMemberMapper
 			LeftAt = planMember.LeftAt?.ToDateTime(TimeOnly.MinValue),
 			StatusId = planMember.Status.Id,
 			StatusName = planMember.Status.Name,
-			Plan = plan.ToModel(habit.ToModel()),
+			Plan = plan.ToModel(habit),
 			Member = member.ToModel(),
 		};
 
@@ -30,7 +30,7 @@ internal static class PlanMemberMapper
 		Habit habit,
 		List<User>? members = null) => new()
 		{
-			Plan = plan.ToModel(habit.ToModel()),
+			Plan = plan.ToModel(habit),
 			Members = members?.Select(member => member.ToModel()).ToList() ?? [],
 		};
 

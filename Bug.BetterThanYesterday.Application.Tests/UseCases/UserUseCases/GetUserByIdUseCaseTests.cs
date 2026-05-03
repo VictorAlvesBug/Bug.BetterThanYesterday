@@ -29,7 +29,7 @@ public class GetUserByIdUseCaseTests : BaseUserUseCaseTests
 		Assert.Equal(firstUser.Id, resultData.UserId);
 		Assert.Equal(firstUser.Name, resultData.Name);
 		Assert.Equal(firstUser.Email.Value, resultData.Email);
-		Assert.Equal(firstUser.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.CreatedAt);
+		Assert.Equal(firstUser.CreatedAt, resultData.CreatedAt);
 
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 	}

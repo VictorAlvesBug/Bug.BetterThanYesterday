@@ -14,7 +14,7 @@ public class Habit : Entity
 	{
 		Id = id;
 		Name = name;
-		CreatedAt = DateOnly.FromDateTime(createdAt);
+		CreatedAt = createdAt;
 	}
 
 	private Habit(string name)

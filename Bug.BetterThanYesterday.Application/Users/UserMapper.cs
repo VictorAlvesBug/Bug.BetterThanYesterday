@@ -14,6 +14,6 @@ internal static class UserMapper
 		PhoneNumber = user.PhoneNumber.Value,
 		PixKey = user.PixKey.Value,
 		PixKeyType = user.PixKey.GetPixKeyType(),
-		CreatedAt = user.CreatedAt.ToDateTime(TimeOnly.MinValue),
+		CreatedAt = user.CreatedAt
 	};
 }

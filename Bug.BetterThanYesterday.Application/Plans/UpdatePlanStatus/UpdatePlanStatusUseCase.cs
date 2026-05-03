@@ -32,7 +32,7 @@ public class UpdatePlanStatusUseCase(
 			plan.ChangeStatus(newStatus);
 
 			await planRepository.UpdateAsync(plan);
-			return Result.Success(plan.ToModel(habit.ToModel()), Messages.PlanStatusSuccessfullyUpdated);
+			return Result.Success(plan.ToModel(habit), Messages.PlanStatusSuccessfullyUpdated);
 		}
 		catch (Exception ex)
 		{

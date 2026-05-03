@@ -42,12 +42,12 @@ public class GetPlanUserWithCheckInsByPlanIdAndUserIdUseCaseTests : BaseCheckInU
 		Assert.Equal(firstPlan.Status.Name, resultData.Plan.StatusName);
 		Assert.Equal(firstPlan.Type.Id, resultData.Plan.TypeId);
 		Assert.Equal(firstPlan.Type.Name, resultData.Plan.TypeName);
-		Assert.Equal(firstPlan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.CreatedAt);
+		Assert.Equal(firstPlan.CreatedAt, resultData.Plan.CreatedAt);
 		
 		Assert.Equal(firstUser.Id, resultData.User.UserId);
 		Assert.Equal(firstUser.Name, resultData.User.Name);
 		Assert.Equal(firstUser.Email.Value, resultData.User.Email);
-		Assert.Equal(firstUser.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.User.CreatedAt);
+		Assert.Equal(firstUser.CreatedAt, resultData.User.CreatedAt);
 
         var userCheckIns = _mock.CheckIns.Where(x => x.PlanId == firstPlan.Id && x.UserId == firstUser.Id).ToList();
         Assert.Equal(userCheckIns.Count, resultData.CheckIns.Count);

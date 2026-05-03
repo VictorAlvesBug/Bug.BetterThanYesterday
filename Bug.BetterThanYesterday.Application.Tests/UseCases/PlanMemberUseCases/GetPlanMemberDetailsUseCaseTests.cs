@@ -46,12 +46,12 @@ public class GetPlanMemberDetailsUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(plan.Status.Name, resultData.Plan.StatusName);
 		Assert.Equal(plan.Type.Id, resultData.Plan.TypeId);
 		Assert.Equal(plan.Type.Name, resultData.Plan.TypeName);
-		Assert.Equal(plan.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.CreatedAt);
+		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
 		Assert.Equal(member.Id, resultData.Member.UserId);
 		Assert.Equal(member.Name, resultData.Member.Name);
 		Assert.Equal(member.Email.Value, resultData.Member.Email);
-		Assert.Equal(member.CreatedAt.ToDateTime(TimeOnly.MinValue), resultData.Member.CreatedAt);
+		Assert.Equal(member.CreatedAt, resultData.Member.CreatedAt);
 
 		_mock.PlanMemberRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
