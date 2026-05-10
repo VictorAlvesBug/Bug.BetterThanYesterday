@@ -46,7 +46,7 @@ public sealed class RemoveUserFromPlanUseCase(
 
             var allowedPlanStatuses = new List<PlanStatus> { PlanStatus.NotStarted, PlanStatus.Running };
 
-            if (!allowedPlanStatuses.Contains(plan.Status))
+            if (!allowedPlanStatuses.Contains(plan.GetStatus()))
                 return Result.Rejected(Messages.MemberCanOnlyBeRemovedFromNotStartedOrRunningPlans);
 
             planMember.MarkAsLeft();

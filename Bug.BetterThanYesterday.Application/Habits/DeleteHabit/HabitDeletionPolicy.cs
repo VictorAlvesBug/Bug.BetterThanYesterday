@@ -10,6 +10,6 @@ public class HabitDeletionPolicy(IPlanRepository planRepository)
 	public async Task<bool> CanDeleteAsync(Guid habitId)
 	{
 		var plans = await planRepository.ListByHabitIdAsync(habitId);
-		return !plans.Any(plan => plan.Status != PlanStatus.Cancelled);
+		return !plans.Any(plan => plan.GetStatus() != PlanStatus.Cancelled);
 	}
 }

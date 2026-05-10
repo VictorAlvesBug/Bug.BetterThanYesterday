@@ -63,7 +63,7 @@ public sealed class AddCheckInUseCase(
             if (!allowedPlanMemberStatuses.Contains(planMember.Status))
                 return Result.Rejected(Messages.OnlyActiveMembersCanMakeCheckIns);
 
-            if (plan.Status != PlanStatus.Running)
+            if (plan.GetStatus() != PlanStatus.Running)
                 return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);
 
             if (nextIndex > maxIndexPerDateAllowed)

@@ -2,6 +2,7 @@ using Bug.BetterThanYesterday.Application.CheckIns;
 using Bug.BetterThanYesterday.Application.CheckIns.GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDate;
 using Bug.BetterThanYesterday.Application.CheckIns.Models;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
 using Xunit;
@@ -42,14 +43,15 @@ public class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCaseTests : B
 		Assert.Equal(checkInDate.ToDateTime(TimeOnly.MinValue), resultData.Date);
 		
 		Assert.Equal(firstPlan.Id, resultData.Plan.PlanId);
-		Assert.Equal(firstPlan.HabitId, resultData.Plan.Habit.HabitId);
+		Assert.Equal(firstPlan.OwnerId, resultData.Plan.OwnerId);
+		Assert.Equal(firstPlan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(firstPlan.Description, resultData.Plan.Description);
 		Assert.Equal(firstPlan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
 		Assert.Equal(firstPlan.EndsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.EndsAt);
-		Assert.Equal(firstPlan.Status.Id, resultData.Plan.StatusId);
-		Assert.Equal(firstPlan.Status.Name, resultData.Plan.StatusName);
-		Assert.Equal(firstPlan.Type.Id, resultData.Plan.TypeId);
-		Assert.Equal(firstPlan.Type.Name, resultData.Plan.TypeName);
+		Assert.Equal(firstPlan.GetStatus(), PlanStatus.Get(resultData.Plan.Status));
+		Assert.Equal(firstPlan.Type, PlanType.Get(resultData.Plan.Type));
+		Assert.Equal(firstPlan.DaysOffPerWeek, resultData.Plan.DaysOffPerWeek);
+		Assert.Equal(firstPlan.PenaltyValue, resultData.Plan.PenaltyValue);
 		Assert.Equal(firstPlan.CreatedAt, resultData.Plan.CreatedAt);
 		
 		Assert.Equal(firstUser.Id, resultData.User.UserId);

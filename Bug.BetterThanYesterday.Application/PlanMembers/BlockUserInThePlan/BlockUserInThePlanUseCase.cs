@@ -44,7 +44,7 @@ public sealed class BlockUserInThePlanUseCase(
             if (planMember is null)
                 return Result.Rejected(Messages.UserIsNotInThePlan);
 
-            if (plan.Status != PlanStatus.Running)
+            if (plan.GetStatus() != PlanStatus.Running)
                 return Result.Rejected(Messages.MemberCanOnlyBeBlockedInRunningPlans);
 
             planMember.MarkAsBlocked();

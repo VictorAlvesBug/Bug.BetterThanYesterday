@@ -38,7 +38,7 @@ public sealed class AddUserToPlanUseCase(
             if (user is null)
                 return Result.Rejected(Messages.UserNotFound);
 
-            if (plan.Status != PlanStatus.NotStarted)
+            if (plan.GetStatus() != PlanStatus.NotStarted)
                 return Result.Rejected(Messages.OnlyNotStartedPlansCanReceiveNewMembers);
 
             var planMemberToAdd = PlanMember.CreateNew(command.PlanId, command.UserId);

@@ -28,14 +28,17 @@ public class CancelPlanUseCaseTests : BasePlanUseCaseTests
 		Assert.Equal(Messages.PlanSuccessfullyCancelled, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<PlanModel>>(result).Data;
+
 		Assert.Equal(firstPlan.Id, resultData.PlanId);
-		Assert.Equal(firstPlan.HabitId, resultData.Habit.HabitId);
+		Assert.Equal(firstPlan.OwnerId, resultData.OwnerId);
+		Assert.Equal(firstPlan.HabitId, resultData.HabitId);
 		Assert.Equal(firstPlan.Description, resultData.Description);
 		Assert.Equal(firstPlan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.StartsAt);
 		Assert.Equal(firstPlan.EndsAt.ToDateTime(TimeOnly.MinValue), resultData.EndsAt);
-		Assert.Equal(firstPlan.Status, PlanStatus.Cancelled);
-		Assert.Equal(firstPlan.Type.Id, resultData.TypeId);
-		Assert.Equal(firstPlan.Type.Name, resultData.TypeName);
+		Assert.Equal(firstPlan.GetStatus(), PlanStatus.Get(resultData.Status));
+		Assert.Equal(firstPlan.Type, PlanType.Get(resultData.Type));
+		Assert.Equal(firstPlan.DaysOffPerWeek, resultData.DaysOffPerWeek);
+		Assert.Equal(firstPlan.PenaltyValue, resultData.PenaltyValue);
 		Assert.Equal(firstPlan.CreatedAt, resultData.CreatedAt);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

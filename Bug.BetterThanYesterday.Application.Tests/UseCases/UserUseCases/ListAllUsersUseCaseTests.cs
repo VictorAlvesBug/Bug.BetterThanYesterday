@@ -1,20 +1,20 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Users;
-using Bug.BetterThanYesterday.Application.Users.ListAllUsers;
+using Bug.BetterThanYesterday.Application.Users.ListUsersByFilter;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
 using Xunit;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.UserUseCases;
 
-public class ListAllUsersUseCaseTests : BaseUserUseCaseTests
+public class ListUsersByFilterUseCaseTests : BaseUserUseCaseTests
 {
 	[Fact]
-	public async Task Test_ListAllUsersUseCase_UsersSuccessfullyFound_ShouldReturnSuccess()
+	public async Task Test_ListUsersByFilterUseCase_UsersSuccessfullyFound_ShouldReturnSuccess()
 	{
 		// Arrange
-		var useCase = _mocker.CreateInstance<ListAllUsersUseCase>();
-		var command = new ListAllUsersCommand();
+		var useCase = _mocker.CreateInstance<ListUsersByFilterUseCase>();
+		var command = new ListUsersByFilterCommand();
 
 		// Act
 		var result = await useCase.HandleAsync(command);

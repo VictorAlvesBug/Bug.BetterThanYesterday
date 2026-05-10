@@ -24,11 +24,14 @@ public class CreatePlanUseCase(
 				return Result.Rejected(Messages.HabitNotFound);
 
 			var plan = Plan.CreateNew(
+				command.OwnerId,
 				command.HabitId,
 				command.Description,
 				command.StartsAt,
 				command.EndsAt,
-				command.TypeId);
+				command.Type,
+				command.DaysOffPerWeek,
+				command.PenaltyValue);
 
 			await planRepository.AddAsync(plan);
 			return Result.Success(plan.ToModel(habit), Messages.PlanSuccessfullyRegistered);

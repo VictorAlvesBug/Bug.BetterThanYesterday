@@ -2,6 +2,7 @@
 using Bug.BetterThanYesterday.Application.PlanMembers.GetPlanWithMembersByPlanId;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
+using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
 using Xunit;
@@ -40,15 +41,17 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(Messages.PlanSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<PlanWithMembersModel>>(result).Data;
+
 		Assert.Equal(plan.Id, resultData.Plan.PlanId);
-		Assert.Equal(plan.HabitId, resultData.Plan.Habit.HabitId);
+		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
+		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
 		Assert.Equal(plan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
 		Assert.Equal(plan.EndsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.EndsAt);
-		Assert.Equal(plan.Status.Id, resultData.Plan.StatusId);
-		Assert.Equal(plan.Status.Name, resultData.Plan.StatusName);
-		Assert.Equal(plan.Type.Id, resultData.Plan.TypeId);
-		Assert.Equal(plan.Type.Name, resultData.Plan.TypeName);
+		Assert.Equal(plan.GetStatus(), PlanStatus.Get(resultData.Plan.Status));
+		Assert.Equal(plan.Type, PlanType.Get(resultData.Plan.Type));
+		Assert.Equal(plan.DaysOffPerWeek, resultData.Plan.DaysOffPerWeek);
+		Assert.Equal(plan.PenaltyValue, resultData.Plan.PenaltyValue);
 		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
 		Assert.Equal(members.Count, resultData.Members.Count);
@@ -75,15 +78,17 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(Messages.PlanHasNoMembers, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<PlanWithMembersModel>>(result).Data;
+
 		Assert.Equal(plan.Id, resultData.Plan.PlanId);
-		Assert.Equal(plan.HabitId, resultData.Plan.Habit.HabitId);
+		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
+		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
 		Assert.Equal(plan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
 		Assert.Equal(plan.EndsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.EndsAt);
-		Assert.Equal(plan.Status.Id, resultData.Plan.StatusId);
-		Assert.Equal(plan.Status.Name, resultData.Plan.StatusName);
-		Assert.Equal(plan.Type.Id, resultData.Plan.TypeId);
-		Assert.Equal(plan.Type.Name, resultData.Plan.TypeName);
+		Assert.Equal(plan.GetStatus(), PlanStatus.Get(resultData.Plan.Status));
+		Assert.Equal(plan.Type, PlanType.Get(resultData.Plan.Type));
+		Assert.Equal(plan.DaysOffPerWeek, resultData.Plan.DaysOffPerWeek);
+		Assert.Equal(plan.PenaltyValue, resultData.Plan.PenaltyValue);
 		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
 		Assert.Empty(resultData.Members);

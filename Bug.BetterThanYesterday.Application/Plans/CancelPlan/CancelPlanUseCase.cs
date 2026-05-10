@@ -28,7 +28,7 @@ public class CancelPlanUseCase(
 			if (habit is null)
 				return Result.Rejected(Messages.HabitNotFound);
 
-			plan.ChangeStatus(PlanStatus.Cancelled);
+			plan.Cancel();
 
 			await planRepository.UpdateAsync(plan);
 			return Result.Success(plan.ToModel(habit), Messages.PlanSuccessfullyCancelled);

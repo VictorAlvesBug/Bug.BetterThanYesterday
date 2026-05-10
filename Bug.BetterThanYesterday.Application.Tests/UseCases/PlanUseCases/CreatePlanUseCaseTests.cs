@@ -19,13 +19,17 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
+		var owner = _mock.Users.First();
 		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
+			owner.Id,
 			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year + 1, 01, 01),
 			new DateTime(_today.Year + 1, 12, 31),
-			PlanType.Private.Id
+			PlanType.Private.Name,
+			2,
+			10
 		);
 
 		// Act
@@ -38,11 +42,14 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 
 		var resultData = Assert.IsType<Result<PlanModel>>(result).Data;
 		Assert.NotEqual(Guid.Empty, resultData.PlanId);
-		Assert.Equal(command.HabitId, resultData.Habit.HabitId);
+		Assert.Equal(command.OwnerId, resultData.OwnerId);
+		Assert.Equal(command.HabitId, resultData.HabitId);
 		Assert.Equal(command.Description, resultData.Description);
 		Assert.Equal(command.StartsAt, resultData.StartsAt);
 		Assert.Equal(command.EndsAt, resultData.EndsAt);
-		Assert.Equal(command.TypeId, resultData.TypeId);
+		Assert.Equal(command.Type, resultData.Type);
+		Assert.Equal(command.DaysOffPerWeek, resultData.DaysOffPerWeek);
+		Assert.Equal(command.PenaltyValue, resultData.PenaltyValue);
 		Assert.Equal(_today, resultData.CreatedAt);
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -54,12 +61,16 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
+		var owner = _mock.Users.First();
 		var command = new CreatePlanCommand(
+			owner.Id,
 			Guid.NewGuid(),
 			"Prepare a meal once a week",
 			new DateTime(_today.Year + 1, 01, 01),
 			new DateTime(_today.Year + 1, 12, 31),
-			PlanType.Private.Id
+			PlanType.Private.Name,
+			2,
+			10
 		);
 
 		// Act
@@ -79,13 +90,17 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
+		var owner = _mock.Users.First();
 		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
+			owner.Id,
 			habit.Id,
 			"Prepare a meal once a week",
 			DateTime.MinValue,
 			new DateTime(_today.Year + 1, 12, 31),
-			PlanType.Private.Id
+			PlanType.Private.Name,
+			2,
+			10
 		);
 
 		// Act
@@ -105,13 +120,17 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
+		var owner = _mock.Users.First();
 		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
+			owner.Id,
 			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year - 1, 01, 01),
 			new DateTime(_today.Year + 1, 12, 31),
-			PlanType.Private.Id
+			PlanType.Private.Name,
+			2,
+			10
 		);
 
 		// Act
@@ -131,13 +150,17 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
+		var owner = _mock.Users.First();
 		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
+			owner.Id,
 			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year + 1, 01, 01),
 			DateTime.MinValue,
-			PlanType.Private.Id
+			PlanType.Private.Name,
+			2,
+			10
 		);
 
 		// Act
@@ -157,13 +180,17 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
+		var owner = _mock.Users.First();
 		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
+			owner.Id,
 			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year + 2, 01, 01),
 			new DateTime(_today.Year + 1, 12, 31),
-			PlanType.Private.Id
+			PlanType.Private.Name,
+			2,
+			10
 		);
 
 		// Act
@@ -183,13 +210,17 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
+		var owner = _mock.Users.First();
 		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
 		var command = new CreatePlanCommand(
+			owner.Id,
 			habit.Id,
 			"Prepare a meal once a week",
 			new DateTime(_today.Year + 1, 01, 01),
 			new DateTime(_today.Year + 1, 12, 31),
-			0
+			"Invalid planType",
+			2,
+			10
 		);
 
 		// Act
