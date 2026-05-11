@@ -1,4 +1,4 @@
-﻿using Bug.BetterThanYesterday.Application.Plans.ListAllPlans;
+﻿using Bug.BetterThanYesterday.Application.Plans.ListPlansByFilter;
 using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Moq;
@@ -7,14 +7,14 @@ using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 
-public class ListAllPlansUseCaseTests : BasePlanUseCaseTests
+public class ListPlansByFilterUseCaseTests : BasePlanUseCaseTests
 {
 	[Fact]
-	public async Task Test_ListAllPlansUseCase_PlansSuccessfullyFound_ShouldReturnSuccess()
+	public async Task Test_ListPlansByFilterUseCase_PlansSuccessfullyFound_ShouldReturnSuccess()
 	{
 		// Arrange
-		var useCase = _mocker.CreateInstance<ListAllPlansUseCase>();
-		var command = new ListAllPlansCommand();
+		var useCase = _mocker.CreateInstance<ListPlansByFilterUseCase>();
+		var command = new ListPlansByFilterCommand();
 
 		// Act
 		var result = await useCase.HandleAsync(command);

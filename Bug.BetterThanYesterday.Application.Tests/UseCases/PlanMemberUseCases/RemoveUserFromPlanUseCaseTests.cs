@@ -57,8 +57,7 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(planMember.Id, resultData.PlanMemberId);
 		Assert.Equal(planMember.JoinedAt.ToDateTime(TimeOnly.MinValue), resultData.JoinedAt);
 		Assert.Equal(DateTime.Today, resultData.LeftAt);
-		Assert.Equal(PlanMemberStatus.Left.Id, resultData.StatusId);
-		Assert.Equal(PlanMemberStatus.Left.Name, resultData.StatusName);
+		Assert.Equal(PlanMemberStatus.Left.Name, resultData.Status);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

@@ -1,5 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.Habits;
-using Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
+using Bug.BetterThanYesterday.Application.Habits.ListHabitsByFilter;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Moq;
@@ -7,13 +7,13 @@ using Xunit;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.HabitUseCases;
 
-public class ListAllHabitsUseCaseTests : BaseHabitUseCaseTests
+public class ListHabitsByFilterUseCaseTests : BaseHabitUseCaseTests
 {
 	[Fact]
-	public async Task Test_ListAllHabitsUseCase_HabitsSuccessfullyFound_ShouldReturnSuccess()
+	public async Task Test_ListHabitsByFilterUseCase_HabitsSuccessfullyFound_ShouldReturnSuccess()
 	{
 		// Arrange
-		var useCase = _mocker.CreateInstance<ListAllHabitsUseCase>();
+		var useCase = _mocker.CreateInstance<ListHabitsByFilterUseCase>();
 		var command = new ListHabitsByFilterCommand();
 
 		// Act

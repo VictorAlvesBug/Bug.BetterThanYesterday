@@ -56,7 +56,7 @@ public class PlanPlarticipantsController(
 	}
 
 	[HttpGet("Plans/{planId}/Members/{userId}")]
-	[HttpGet("Users/{userId}/Plans/{planId}")]
+	//[HttpGet("Users/{userId}/Plans/{planId}")]
 	public async Task<IActionResult> GetByPlanIdAndUserId(Guid planId, Guid userId)
 	{
 		var command = new GetPlanMemberDetailsCommand(planId, userId);
@@ -72,7 +72,7 @@ public class PlanPlarticipantsController(
 	}
 
 	[HttpPost("Plans/{planId}/Members/{userId}")]
-	[HttpPost("Users/{userId}/Plans/{planId}")]
+	//[HttpPost("Users/{userId}/Plans/{planId}")]
 	public async Task<IActionResult> AddUserToPlan(Guid planId, Guid userId)
 	{
 		var command = new AddUserToPlanCommand(planId, userId);
@@ -91,7 +91,7 @@ public class PlanPlarticipantsController(
 	}
 
 	[HttpDelete("Plans/{planId}/Members/{userId}")]
-	[HttpDelete("Users/{userId}/Plans/{planId}")]
+	//[HttpDelete("Users/{userId}/Plans/{planId}")]
 	public async Task<IActionResult> RemoveUserFromPlan(Guid planId, Guid userId)
 	{
 		var command = new RemoveUserFromPlanCommand(planId, userId);
@@ -107,7 +107,7 @@ public class PlanPlarticipantsController(
 	}
 
 	[HttpPost("Plans/{planId}/Members/{userId}/Block")]
-	[HttpPost("Users/{userId}/Plans/{planId}/Block")]
+	//[HttpPost("Users/{userId}/Plans/{planId}/Block")]
 	public async Task<IActionResult> BlockUserInThePlan(Guid planId, Guid userId)
 	{
 		var command = new BlockUserInThePlanCommand(planId, userId);
@@ -126,7 +126,7 @@ public class PlanPlarticipantsController(
 	}
 
 	[HttpDelete("Plans/{planId}/Members/{userId}/Block")]
-	[HttpDelete("Users/{userId}/Plans/{planId}/Block")]
+	//[HttpDelete("Users/{userId}/Plans/{planId}/Block")]
 	public async Task<IActionResult> UnblockUserInThePlan(Guid planId, Guid userId)
 	{
 		var command = new UnblockUserInThePlanCommand(planId, userId);

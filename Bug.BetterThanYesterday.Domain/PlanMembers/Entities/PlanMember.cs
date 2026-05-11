@@ -19,7 +19,7 @@ public class PlanMember : Entity
 		Guid userId,
 		DateTime joinedAt,
 		DateTime? leftAt,
-		int statusId,
+		string statusIdOrName,
 		DateTime createdAt)
 	{
 		Id = id;
@@ -27,7 +27,7 @@ public class PlanMember : Entity
 		UserId = userId;
 		JoinedAt = DateOnly.FromDateTime(joinedAt);
 		LeftAt = leftAt is null ? null : DateOnly.FromDateTime(leftAt.Value);
-		Status = PlanMemberStatus.Get(statusId);
+		Status = PlanMemberStatus.Get(statusIdOrName);
 		CreatedAt = createdAt;
 	}
 
@@ -38,7 +38,7 @@ public class PlanMember : Entity
 		userId,
 		joinedAt: DateTime.Today,
 		leftAt: null,
-		statusId: PlanMemberStatus.Active.Id,
+		statusIdOrName: PlanMemberStatus.Active.Name,
 		createdAt: DateTime.Today)
 	{
 	}
@@ -71,7 +71,7 @@ public class PlanMember : Entity
 		Guid userId,
 		DateTime joinedAt,
 		DateTime? leftAt,
-		int statusId,
+		string statusIdOrName,
 		DateTime createdAt)
 	{
 		if (id == Guid.Empty)
@@ -86,8 +86,8 @@ public class PlanMember : Entity
 		if (joinedAt == DateTime.MinValue)
 			throw new ArgumentNullException(nameof(joinedAt), Messages.EnterPlanMemberJoinedDate);
 
-		if (statusId <= 0)
-			throw new ArgumentException(Messages.PlanMemberStatusIdMustBeGreaterThanZero, nameof(statusId));
+		if (string.IsNullOrEmpty(statusIdOrName))
+			throw new ArgumentException(Messages.PlanMemberStatusIdMustBeGreaterThanZero, nameof(statusIdOrName));
 
 		if (createdAt == DateTime.MinValue)
 			throw new ArgumentNullException(nameof(createdAt), Messages.EnterPlanMemberCreateDate);
@@ -98,7 +98,7 @@ public class PlanMember : Entity
 			userId,
 			joinedAt,
 			leftAt,
-			statusId,
+			statusIdOrName,
 			createdAt);
 	}
 

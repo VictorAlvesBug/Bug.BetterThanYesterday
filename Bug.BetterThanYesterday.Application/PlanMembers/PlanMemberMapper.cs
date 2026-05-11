@@ -19,8 +19,7 @@ internal static class PlanMemberMapper
 			PlanMemberId = planMember.Id,
 			JoinedAt = planMember.JoinedAt.ToDateTime(TimeOnly.MinValue),
 			LeftAt = planMember.LeftAt?.ToDateTime(TimeOnly.MinValue),
-			StatusId = planMember.Status.Id,
-			StatusName = planMember.Status.Name,
+			Status = planMember.Status.Name,
 			Plan = plan.ToModel(habit),
 			Member = member.ToModel(),
 		};

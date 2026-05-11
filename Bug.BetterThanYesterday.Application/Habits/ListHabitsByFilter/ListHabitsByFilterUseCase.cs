@@ -3,9 +3,9 @@ using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
 
-namespace Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
+namespace Bug.BetterThanYesterday.Application.Habits.ListHabitsByFilter;
 
-public sealed class ListAllHabitsUseCase(
+public sealed class ListHabitsByFilterUseCase(
 	IHabitRepository habitRepository,
 	IPlanRepository planRepository
 	)

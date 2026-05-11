@@ -231,9 +231,9 @@ TODO - Bloco I - Equalizar métodos do repositório de CheckIn do backend com fron
 
 // Definir testes de 422 (recursos inválidos vindos do banco) de planos
  
- ## ListAllPlans()
- - Test_ListAllPlansUseCase_Valid_ShouldReturn200();
- - Test_ListAllPlansUseCase_InvalidOrMissingToken_ShouldReturn401();
+ ## ListPlansByFilter()
+ - Test_ListPlansByFilterUseCase_Valid_ShouldReturn200();
+ - Test_ListPlansByFilterUseCase_InvalidOrMissingToken_ShouldReturn401();
  
  ## GetPlanById(id)
  - Test_GetPlanByIdUseCase_Valid_ShouldReturn200();

@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Domain.Extensions;
+using Microsoft.VisualBasic;
 
 namespace Bug.BetterThanYesterday.Domain.Commons;
 
@@ -14,7 +15,7 @@ public abstract class Enumeration<T> : IComparable
         Name = name;
     }
 
-	public static T Get(string idOrName)
+	public static T Get(string? idOrName)
 	{
 		if(int.TryParse(idOrName, out var id))
 			return Get(id);
@@ -22,15 +23,29 @@ public abstract class Enumeration<T> : IComparable
 		return GetByName(idOrName);
 	}
 
+	public static bool TryGet(string? idOrName, out T? found, out string? errorMessage)
+	{
+		if(int.TryParse(idOrName, out var id))
+            return TryGet(id, out found, out errorMessage);
+			
+        return TryGetByName(idOrName, out found, out errorMessage);
+	}
+
     public static T Get(int id)
     {
-        var found = GetAll().FirstOrDefault(x => x.Id == id);
+        if(TryGet(id, out var found, out var errorMessage))
+            return found!;
 
-        if (found is not null) return found;
+        throw new ArgumentException(errorMessage);
+    }
 
-        throw new ArgumentException(
-            $"ID '{id}' inválido para {typeof(T).Name}. Use: {GetStringOptions()}"
-        );
+    public static bool TryGet(int id, out T? found, out string? errorMessage)
+    {
+        found = GetAll().FirstOrDefault(x => x.Id == id);
+        errorMessage = found is null
+            ? $"ID '{id}' inválido para {typeof(T).Name}. Use: {GetStringOptions()}"
+            : null;
+        return found is not null;
     }
 
     public static IReadOnlyList<T> GetAll()
@@ -49,16 +64,24 @@ public abstract class Enumeration<T> : IComparable
         return string.Join(", ", GetAll().Select(x => $"{x.Id}={x.Name}"));
     }
 
-	public int CompareTo(object obj) => Id.CompareTo(((Enumeration<T>)obj).Id);
-
-    private static T GetByName(string name)
+	public int CompareTo(object obj)
     {
-        var found = GetAll().FirstOrDefault(x => x.Name == name);
+        return ((Enumeration<T>)obj).Id;
+    }
 
-        if (found is not null) return found;
+    private static T GetByName(string? name)
+    {
+        if(TryGetByName(name, out var found, out var errorMessage))
+            return found!;
 
-        throw new ArgumentException(
-            $"Nome '{name}' inválido para {typeof(T).Name}. Use: {GetStringOptions()}"
-        );
+        throw new ArgumentException(errorMessage);
+    }
+    private static bool TryGetByName(string? name, out T? found, out string? errorMessage)
+    {
+        found = GetAll().FirstOrDefault(x => x.Name == name);
+        errorMessage = found is null 
+            ? $"Nome '{name}' inválido para {typeof(T).Name}. Use: {GetStringOptions()}"
+            : null;
+        return found is not null;
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.Plans.CreatePlan;
 using Bug.BetterThanYesterday.Application.Plans.CancelPlan;
 using Bug.BetterThanYesterday.Application.Plans.GetPlanById;
-using Bug.BetterThanYesterday.Application.Plans.ListAllPlans;
+using Bug.BetterThanYesterday.Application.Plans.ListPlansByFilter;
 using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Microsoft.AspNetCore.Mvc;
@@ -15,26 +15,31 @@ namespace Bug.BetterThanYesterday.API.Controllers;
 [ApiController]
 public class PlansController(
 	IUseCase<CreatePlanCommand> createPlanUseCase,
-	IUseCase<ListAllPlansCommand> listAllPlansUseCase,
-	IUseCase<GetPlanByIdCommand> getPlanByIdUseCase,
+	IUseCase<ListPlansByFilterCommand> listPlansByFilterUseCase,
+	IUseCase<GetPlanByIdCommand> getPlanByIdUseCase/*,
 	IUseCase<ListPlansByHabitIdCommand> listPlansByHabitIdUseCase,
-	IUseCase<CancelPlanCommand> cancelPlanUseCase)
+	IUseCase<CancelPlanCommand> cancelPlanUseCase*/)
 	: ControllerBase
 {
-	[HttpGet]
-	public async Task<IActionResult> List([FromQuery] Guid? habitId = null)
-	{
-		if (habitId is null || habitId == Guid.Empty)
-			return await ListAll();
-
-		return await ListByHabitId(habitId.Value);
-	}
-
 	[HttpGet("{planId}")]
 	public async Task<IActionResult> GetById(Guid planId)
 	{
 		var command = new GetPlanByIdCommand(planId);
 		var result = await getPlanByIdUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+			return Ok(result);
+
+		if (result.IsRejected())
+			return BadRequest(result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> ListByFilter([FromQuery] ListPlansByFilterCommand command)
+	{
+		var result = await listPlansByFilterUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
 			return Ok(result);
@@ -62,7 +67,7 @@ public class PlansController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpDelete("{planId}")]
+	/*[HttpDelete("{planId}")]
 	public async Task<IActionResult> Cancel(Guid planId)
 	{
 		var command = new CancelPlanCommand(planId);
@@ -75,23 +80,9 @@ public class PlansController(
 			return BadRequest(result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}
+	}*/
 
-	private async Task<IActionResult> ListAll()
-	{
-		var command = new ListAllPlansCommand();
-		var result = await listAllPlansUseCase.HandleAsync(command);
-
-		if (result.IsSuccess())
-			return Ok(result);
-
-		if (result.IsRejected())
-			return BadRequest(result);
-
-		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}
-
-	[HttpGet]
+	/*[HttpGet]
 	private async Task<IActionResult> ListByHabitId(Guid habitId)
 	{
 		var command = new ListPlansByHabitIdCommand(habitId);
@@ -104,5 +95,5 @@ public class PlansController(
 			return BadRequest(result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}
+	}*/
 }

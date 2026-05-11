@@ -2,7 +2,7 @@
 using Bug.BetterThanYesterday.Application.Habits.CreateHabit;
 using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
 using Bug.BetterThanYesterday.Application.Habits.GetHabitById;
-using Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
+using Bug.BetterThanYesterday.Application.Habits.ListHabitsByFilter;
 using Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Microsoft.AspNetCore.Mvc;

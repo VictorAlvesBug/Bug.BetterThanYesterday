@@ -4,10 +4,12 @@ using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
 using Bug.BetterThanYesterday.Domain.Strings;
+using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.Plans.CreatePlan;
 
 public class CreatePlanUseCase(
+	IUserRepository userRepository,
 	IPlanRepository planRepository,
 	IHabitRepository habitRepository)
 	: IUseCase<CreatePlanCommand>
@@ -17,6 +19,11 @@ public class CreatePlanUseCase(
 		try
 		{
 			command.Validate();
+			
+			var owner = await userRepository.GetByIdAsync(command.OwnerId);
+
+			if (owner is null)
+				return Result.Rejected(Messages.UserNotFound);
 			
 			var habit = await habitRepository.GetByIdAsync(command.HabitId);
 

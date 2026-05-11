@@ -57,8 +57,7 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(planMember.Id, resultData.PlanMemberId);
 		Assert.Equal(planMember.JoinedAt.ToDateTime(TimeOnly.MinValue), resultData.JoinedAt);
 		Assert.Null(resultData.LeftAt);
-		Assert.Equal(PlanMemberStatus.Blocked.Id, resultData.StatusId);
-		Assert.Equal(PlanMemberStatus.Blocked.Name, resultData.StatusName);
+		Assert.Equal(PlanMemberStatus.Blocked.Name, resultData.Status);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

@@ -8,8 +8,7 @@ public class PlanMemberDetailsModel
 	public Guid PlanMemberId { get; set; }
 	public DateTime JoinedAt { get; set; }
 	public DateTime? LeftAt { get; set; }
-	public int StatusId { get; set; }
-	public string StatusName { get; set; }
+	public string Status { get; set; }
 	public PlanModel Plan { get; set; }
 	public UserModel Member { get; set; }
 }

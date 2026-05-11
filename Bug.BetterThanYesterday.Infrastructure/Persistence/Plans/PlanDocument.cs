@@ -8,6 +8,8 @@ public class PlanDocument : Document
 {
 	[BsonRepresentation(BsonType.String)]
 	public Guid OwnerId { get; set; }
+	
+	[BsonRepresentation(BsonType.String)]
 	public Guid HabitId { get; set; }
 	public string? Description { get; set; }
 	public DateTime StartsAt { get; set; }

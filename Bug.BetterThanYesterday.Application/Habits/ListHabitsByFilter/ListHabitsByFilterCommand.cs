@@ -1,6 +1,6 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork;
 
-namespace Bug.BetterThanYesterday.Application.Habits.ListAllHabits;
+namespace Bug.BetterThanYesterday.Application.Habits.ListHabitsByFilter;
 
 public class ListHabitsByFilterCommand : ICommand
 {

@@ -4,6 +4,8 @@ namespace Bug.BetterThanYesterday.Domain.Strings;
 
 public static class Messages
 {
+    public const string GenericError = "Ops! Ocorreu um erro";
+
     #region Check-In Messages
     public const string CheckInNotFound = "Check-in não encontrado";
     public const string CheckInSuccessfullyFound = "Check-in encontrado com sucesso";
