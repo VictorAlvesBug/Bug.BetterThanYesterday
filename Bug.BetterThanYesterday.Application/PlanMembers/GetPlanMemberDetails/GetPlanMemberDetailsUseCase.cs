@@ -20,17 +20,8 @@ public sealed class GetPlanMemberDetailsUseCase(
         try
         {
             command.Validate();
-            
-            var planMemberId = PlanMember.BuildId(
-                command.PlanId,
-                command.UserId
-            );
-            var planMember = await planMemberRepository.GetByIdAsync(planMemberId);
 
-            if (planMember is null)
-                return Result.Rejected(Messages.PlanMemberNotFound);
-
-            var plan = await planRepository.GetByIdAsync(planMember.PlanId);
+            var plan = await planRepository.GetByIdAsync(command.PlanId);
 
             if (plan is null)
                 return Result.Rejected(Messages.PlanNotFound);
@@ -40,10 +31,19 @@ public sealed class GetPlanMemberDetailsUseCase(
             if (habit is null)
                 return Result.Rejected(Messages.HabitNotFound);
 
-            var user = await userRepository.GetByIdAsync(planMember.UserId);
+            var user = await userRepository.GetByIdAsync(command.UserId);
 
             if (user is null)
                 return Result.Rejected(Messages.UserNotFound);
+            
+            var planMemberId = PlanMember.BuildId(
+                command.PlanId,
+                command.UserId
+            );
+            var planMember = await planMemberRepository.GetByIdAsync(planMemberId);
+
+            if (planMember is null)
+                return Result.Rejected(Messages.PlanMemberNotFound);
 
             return Result.Success(
                 planMember.ToPlanMemberDetailsModel(habit, plan, user),

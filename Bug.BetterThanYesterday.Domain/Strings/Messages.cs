@@ -6,6 +6,10 @@ public static class Messages
 {
     public const string GenericError = "Ops! Ocorreu um erro";
 
+    #region Admin Settings
+    public const string EnterDaysAmountToMoveInTime = "Defina uma quantidade de dias para viajar no tempo";
+    #endregion
+
     #region Check-In Messages
     public const string CheckInNotFound = "Check-in não encontrado";
     public const string CheckInSuccessfullyFound = "Check-in encontrado com sucesso";

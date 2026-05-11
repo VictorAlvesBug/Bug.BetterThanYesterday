@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
+using Bug.BetterThanYesterday.Domain.Plans.Entities;
 
 namespace Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 
