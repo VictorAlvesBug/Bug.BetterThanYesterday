@@ -18,7 +18,7 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active);
+		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active);
 		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId5);
 		var planMemberId = PlanMember.BuildId(plan.Id, user.Id);
 		var planMember = _mock.PlanMembers.First(pp => pp.Id == planMemberId);
@@ -56,7 +56,6 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 
 		Assert.Equal(planMember.Id, resultData.PlanMemberId);
 		Assert.Equal(planMember.JoinedAt.ToDateTime(TimeOnly.MinValue), resultData.JoinedAt);
-		Assert.Null(resultData.LeftAt);
 		Assert.Equal(PlanMemberStatus.Blocked.Name, resultData.Status);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -95,7 +94,7 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active,
+			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
 			Guid.NewGuid()
 		);
 
@@ -119,7 +118,7 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active,
+			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
 			UserRepositoryMockFactory.UserId2
 		);
 
@@ -138,36 +137,12 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_BlockUserInThePlanUseCase_UserIsNotInThePlanAnymore_ShouldReturnRejected()
-	{
-		// Arrange
-		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
-		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active,
-			UserRepositoryMockFactory.UserId4
-		);
-
-		// Act
-		var result = await useCase.HandleAsync(command);
-
-		// Assert
-		Assert.NotNull(result);
-		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.UserIsNotInThePlanAnymore, result.GetMessage());
-
-		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.PlanMemberRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.PlanMemberRepository.Verify(repo => repo.UpdateAsync(It.IsAny<PlanMember>()), Times.Never);
-	}
-
-	[Fact]
 	public async Task Test_BlockUserInThePlanUseCase_MemberAlreadyBlockedInThisPlan_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active,
+			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
 			UserRepositoryMockFactory.UserId3
 		);
 
@@ -191,7 +166,7 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left,
+			PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
 			UserRepositoryMockFactory.UserId1
 		);
 

@@ -71,10 +71,10 @@ DONE - Bloco A - Equalizar Entity, Document e Model de User do backend com User 
 DONE - Bloco B - Equalizar métodos do repositório de User do backend com frontend;
 DONE - Bloco C - Equalizar Entity, Document e Model de Habit do backend com Habit do frontend;
 DONE - Bloco C - Equalizar métodos do repositório de Habit do backend com frontend;
-TODO - Bloco D - Equalizar Entity, Document e Model de Plan do backend com Plan do frontend;
-TODO - Bloco E - Equalizar métodos do repositório de Plan do backend com frontend;
-TODO - Bloco F - Equalizar Entity, Document e Model de PlanMember do backend com PlanMember do frontend;
-TODO - Bloco G - Equalizar métodos do repositório de PlanMember do backend com frontend;
+DONE - Bloco D - Equalizar Entity, Document e Model de Plan do backend com Plan do frontend;
+DONE - Bloco E - Equalizar métodos do repositório de Plan do backend com frontend;
+DONE - Bloco F - Equalizar Entity, Document e Model de PlanMember do backend com PlanMember do frontend;
+DONE - Bloco G - Equalizar métodos do repositório de PlanMember do backend com frontend;
 TODO - Bloco H - Equalizar Entity, Document e Model de CheckIn do backend com CheckIn do frontend;
 TODO - Bloco I - Equalizar métodos do repositório de CheckIn do backend com frontend;
 

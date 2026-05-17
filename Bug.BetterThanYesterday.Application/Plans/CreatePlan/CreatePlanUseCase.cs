@@ -41,7 +41,7 @@ public class CreatePlanUseCase(
 				command.PenaltyValue);
 
 			await planRepository.AddAsync(plan);
-			return Result.Success(plan.ToModel(habit), Messages.PlanSuccessfullyRegistered);
+			return Result.Success(plan.ToModel(habit, owner), Messages.PlanSuccessfullyRegistered);
 		}
 		catch (Exception ex)
 		{

@@ -1,6 +1,7 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
+using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
 using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
 using Bug.BetterThanYesterday.Domain.PlanMembers.ValueObjects;
@@ -14,6 +15,7 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 public sealed class AddCheckInUseCase(
     ICheckInRepository checkInRepository,
     IPlanRepository planRepository,
+    IHabitRepository habitRepository,
     IUserRepository userRepository,
     IPlanMemberRepository planMemberRepository)
     : IUseCase<AddCheckInCommand>
@@ -28,6 +30,11 @@ public sealed class AddCheckInUseCase(
 
             if (plan is null)
                 return Result.Rejected(Messages.PlanNotFound);
+
+            var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+
+            if (habit is null)
+                return Result.Rejected(Messages.HabitNotFound);
 
             var user = await userRepository.GetByIdAsync(command.UserId);
 
@@ -66,6 +73,9 @@ public sealed class AddCheckInUseCase(
             if (plan.GetStatus() != PlanStatus.Running)
                 return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);
 
+            if (command.Date < plan.StartsAt.ToDateTime(TimeOnly.MinValue) || command.Date > plan.EndsAt.ToDateTime(TimeOnly.MaxValue))
+                return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);
+
             if (nextIndex > maxIndexPerDateAllowed)
                 return Result.Rejected(Messages.UserHasReachedTheMaximumNumberOfCheckInsForTheDay);
                 
@@ -75,13 +85,14 @@ public sealed class AddCheckInUseCase(
                 command.Date,
                 nextIndex,
                 command.Title,
-                command.Description);
+                command.PhotoUrl);
 
             await checkInRepository.AddAsync(checkIn);
 
             return Result.Success(
-                checkIn.ToModel(),
-                Messages.CheckInSuccessfullyRegistered);
+                checkIn.ToModel(plan, habit, user),
+                Messages.CheckInSuccessfullyRegistered
+            );
         }
         catch (Exception ex)
         {

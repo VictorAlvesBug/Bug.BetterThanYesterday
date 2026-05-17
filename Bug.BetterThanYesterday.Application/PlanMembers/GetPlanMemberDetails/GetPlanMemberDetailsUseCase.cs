@@ -35,6 +35,13 @@ public sealed class GetPlanMemberDetailsUseCase(
 
             if (user is null)
                 return Result.Rejected(Messages.UserNotFound);
+
+            var owner = plan.OwnerId == user.Id
+                ? user
+                : (await userRepository.BatchGetByIdAsync([plan.OwnerId])).SingleOrDefault();
+
+            if (owner is null)
+                return Result.Rejected(Messages.UserNotFound);
             
             var planMemberId = PlanMember.BuildId(
                 command.PlanId,
@@ -46,7 +53,7 @@ public sealed class GetPlanMemberDetailsUseCase(
                 return Result.Rejected(Messages.PlanMemberNotFound);
 
             return Result.Success(
-                planMember.ToPlanMemberDetailsModel(habit, plan, user),
+                planMember.ToPlanMemberDetailsModel(habit, plan, owner, user),
                 Messages.PlanMemberSuccessfullyFound
             );
         }

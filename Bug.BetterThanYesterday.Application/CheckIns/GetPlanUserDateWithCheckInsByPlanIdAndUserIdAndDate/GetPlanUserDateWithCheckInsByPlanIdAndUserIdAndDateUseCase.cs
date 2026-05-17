@@ -36,6 +36,13 @@ public sealed class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCase(
             if (user is null)
                 return Result.Rejected(Messages.UserNotFound);
 
+            var owner = plan.OwnerId == user.Id
+                ? user
+                : (await userRepository.BatchGetByIdAsync([plan.OwnerId])).SingleOrDefault();
+
+            if (owner is null)
+                return Result.Rejected(Messages.UserNotFound);
+
             var checkIns = await checkInRepository.ListByPlanIdAndUserIdAndDateAsync(
                 command.PlanId,
                 command.UserId,
@@ -44,12 +51,12 @@ public sealed class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCase(
 
             if (!checkIns.Any())
                 return Result.Success(
-                    plan.ToPlanUserDateWithCheckInsModel(habit, user, command.Date, []),
+                    plan.ToPlanUserDateWithCheckInsModel(habit, owner, user, command.Date, []),
                     Messages.CheckInNotFound
                 );
 
             return Result.Success(
-                plan.ToPlanUserDateWithCheckInsModel(habit, user, command.Date, checkIns.ToList()),
+                plan.ToPlanUserDateWithCheckInsModel(habit, owner, user, command.Date, checkIns.ToList()),
                 Messages.CheckInsSuccessfullyFound
             );
         }

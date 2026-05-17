@@ -34,7 +34,6 @@ public class GetPlanMemberDetailsUseCaseTests : BasePlanMemberUseCaseTests
 		var resultData = Assert.IsType<Result<PlanMemberDetailsModel>>(result).Data;
 		Assert.Equal(firstPlanMember.Id, resultData.PlanMemberId);
 		Assert.Equal(firstPlanMember.JoinedAt.ToDateTime(TimeOnly.MinValue), resultData.JoinedAt);
-		Assert.Equal(firstPlanMember.LeftAt?.ToDateTime(TimeOnly.MinValue), resultData.LeftAt);
 		Assert.Equal(firstPlanMember.Status.Name, resultData.Status);
 		
 		Assert.Equal(plan.Id, resultData.Plan.PlanId);

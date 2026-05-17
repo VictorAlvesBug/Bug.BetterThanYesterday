@@ -10,7 +10,6 @@ public class PlanMember : Entity
 	public Guid PlanId { get; set; }
 	public Guid UserId { get; set; }
 	public DateOnly JoinedAt { get; set; }
-	public DateOnly? LeftAt { get; set; }
 	public PlanMemberStatus Status { get; set; }
 
 	private PlanMember(
@@ -18,7 +17,6 @@ public class PlanMember : Entity
 		Guid planId,
 		Guid userId,
 		DateTime joinedAt,
-		DateTime? leftAt,
 		string statusIdOrName,
 		DateTime createdAt)
 	{
@@ -26,7 +24,6 @@ public class PlanMember : Entity
 		PlanId = planId;
 		UserId = userId;
 		JoinedAt = DateOnly.FromDateTime(joinedAt);
-		LeftAt = leftAt is null ? null : DateOnly.FromDateTime(leftAt.Value);
 		Status = PlanMemberStatus.Get(statusIdOrName);
 		CreatedAt = createdAt;
 	}
@@ -37,9 +34,8 @@ public class PlanMember : Entity
 		planId,
 		userId,
 		joinedAt: DateTime.Today,
-		leftAt: null,
 		statusIdOrName: PlanMemberStatus.Active.Name,
-		createdAt: DateTime.Today)
+		createdAt: DateTime.Now)
 	{
 	}
 
@@ -70,7 +66,6 @@ public class PlanMember : Entity
 		Guid planId,
 		Guid userId,
 		DateTime joinedAt,
-		DateTime? leftAt,
 		string statusIdOrName,
 		DateTime createdAt)
 	{
@@ -97,28 +92,9 @@ public class PlanMember : Entity
 			planId,
 			userId,
 			joinedAt,
-			leftAt,
 			statusIdOrName,
 			createdAt);
 	}
-
-	public void MarkAsLeft()
-	{
-		if (Status == PlanMemberStatus.Active)
-		{
-			Status = PlanMemberStatus.Left;
-			LeftAt = DateOnly.FromDateTime(DateTime.Today);
-			return;
-		}
-
-		if (Status == PlanMemberStatus.Left)
-			throw new InvalidOperationException(Messages.UserIsNotInThePlanAnymore);
-
-		if (Status == PlanMemberStatus.Blocked)
-			throw new InvalidOperationException(Messages.MemberCannotBeRemovedFromThePlanAsHeIsBlocked);
-			
-		throw new InvalidOperationException(Messages.ChangeNotMappedToCurrentStatus);
-    }
 
 	public void MarkAsBlocked()
 	{
@@ -130,9 +106,6 @@ public class PlanMember : Entity
 
         if (Status == PlanMemberStatus.Blocked)
 			throw new InvalidOperationException(Messages.MemberAlreadyBlockedInThisPlan);
-
-		if (Status == PlanMemberStatus.Left)
-			throw new InvalidOperationException(Messages.UserIsNotInThePlanAnymore);
 			
 		throw new InvalidOperationException(Messages.ChangeNotMappedToCurrentStatus);
     }
@@ -147,9 +120,6 @@ public class PlanMember : Entity
 
         if (Status == PlanMemberStatus.Active)
 			throw new InvalidOperationException(Messages.MemberIsAlreadyActiveInThePlan);
-
-		if (Status == PlanMemberStatus.Left)
-			throw new InvalidOperationException(Messages.UserIsNotInThePlanAnymore);
 			
 		throw new InvalidOperationException(Messages.ChangeNotMappedToCurrentStatus);
     }

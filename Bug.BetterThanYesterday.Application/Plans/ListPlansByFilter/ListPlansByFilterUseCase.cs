@@ -6,7 +6,6 @@ using Bug.BetterThanYesterday.Domain.Plans.Entities;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
-using Bug.BetterThanYesterday.Infrastructure.Persistence.Users;
 
 namespace Bug.BetterThanYesterday.Application.Plans.ListPlansByFilter;
 
@@ -69,10 +68,20 @@ public class ListPlansByFilterUseCase(
 					.ToList();
 			}
 
+			var ownerIds = plans.Select(plan => plan.OwnerId).Distinct().ToList();
+			var owners = ownerIds.Count == 0
+				? []
+				: await userRepository.BatchGetByIdAsync(ownerIds);
+
+			if (ownerIds.Count > owners.Count)
+				return Result.Rejected(Messages.UserNotFound);
+
+			var ownersById = owners.ToDictionary(owner => owner.Id);
+
 			var tasks = plans.Select(async plan =>
 			{
 				var habit = await habitRepository.GetByIdAsync(plan.HabitId) ?? throw new Exception(Messages.HabitNotFound);
-				return plan.ToModel(habit);
+				return plan.ToModel(habit, ownersById[plan.OwnerId]);
 			}).ToList();
 
 			return Result.Success(

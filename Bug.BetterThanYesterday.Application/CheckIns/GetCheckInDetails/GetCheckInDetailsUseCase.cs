@@ -1,5 +1,6 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
+using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
@@ -9,6 +10,7 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.GetCheckInDetails;
 public sealed class GetCheckInDetailsUseCase(
     ICheckInRepository checkInRepository,
     IPlanRepository planRepository,
+    IHabitRepository habitRepository,
     IUserRepository userRepository)
     : IUseCase<GetCheckInDetailsCommand>
 {
@@ -21,6 +23,10 @@ public sealed class GetCheckInDetailsUseCase(
             var plan = await planRepository.GetByIdAsync(command.PlanId);
             if (plan is null)
                 return Result.Rejected(Messages.PlanNotFound);
+
+            var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+            if (habit is null)
+                return Result.Rejected(Messages.HabitNotFound);
 
             var user = await userRepository.GetByIdAsync(command.UserId);
             if (user is null)
@@ -36,7 +42,10 @@ public sealed class GetCheckInDetailsUseCase(
             if (checkIn is null)
                 return Result.Rejected(Messages.CheckInNotFound);
 
-            return Result.Success(checkIn.ToCheckInModel(), Messages.CheckInSuccessfullyFound);
+            return Result.Success(
+                checkIn.ToModel(plan, habit, user),
+                Messages.CheckInSuccessfullyFound
+            );
         }
         catch (Exception ex)
         {

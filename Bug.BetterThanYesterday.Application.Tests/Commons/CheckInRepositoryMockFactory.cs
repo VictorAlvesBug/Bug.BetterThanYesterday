@@ -1,5 +1,6 @@
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
+using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Moq;
 
 namespace Bug.BetterThanYesterday.Application.Tests.Commons;
@@ -22,6 +23,8 @@ public static class CheckInRepositoryMockFactory
                     1,
                     "Morning workout",
                     "Did 30 minutes of cardio",
+                    CheckInStatus.Pending.Name,
+                    [],
                     DateTime.Today
                 ),
                 CheckIn.Restore(
@@ -32,16 +35,20 @@ public static class CheckInRepositoryMockFactory
                     1,
                     "Reading",
                     "Read 15 pages",
+                    CheckInStatus.Pending.Name,
+                    [],
                     DateTime.Today
                 ),
                 CheckIn.Restore(
                     CheckInId3,
-                    PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4LeftAndUserId5Active,
+                    PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
                     UserRepositoryMockFactory.UserId3,
                     new DateTime(2025, 10, 10),
                     1,
                     "Evening review",
                     "Reviewed notes",
+                    CheckInStatus.Pending.Name,
+                    [],
                     DateTime.Today
                 )
         };

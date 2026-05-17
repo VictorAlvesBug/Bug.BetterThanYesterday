@@ -3,12 +3,14 @@ using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
+using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.Plans.GetPlanById;
 
 public class GetPlanByIdUseCase(
 	IPlanRepository planRepository,
-	IHabitRepository habitRepository)
+	IHabitRepository habitRepository,
+	IUserRepository userRepository)
 	: IUseCase<GetPlanByIdCommand>
 {
 	public async Task<IResult> HandleAsync(GetPlanByIdCommand command)
@@ -27,8 +29,13 @@ public class GetPlanByIdUseCase(
 			if (habit is null)
 				return Result.Rejected(Messages.HabitNotFound);
 
+			var owner = await userRepository.GetByIdAsync(plan.OwnerId);
+
+			if (owner is null)
+				return Result.Rejected(Messages.UserNotFound);
+
 			return Result.Success(
-				plan.ToModel(habit),
+				plan.ToModel(habit, owner),
 				Messages.PlanSuccessfullyFound
 			);
 		}

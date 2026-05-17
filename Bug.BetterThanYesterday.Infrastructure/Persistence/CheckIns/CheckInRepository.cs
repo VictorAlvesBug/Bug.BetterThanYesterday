@@ -18,7 +18,7 @@ public class CheckInRepository(
 			(await _collection.FindAsync(checkIn =>
 			checkIn.PlanId == planId
 			&& checkIn.UserId == userId
-			&& DateOnly.FromDateTime(checkIn.Date) == date
+			&& checkIn.Date == date.ToDateTime(TimeOnly.MinValue)
 			&& checkIn.Index == index))
 			.FirstOrDefault()
 		);
@@ -45,7 +45,7 @@ public class CheckInRepository(
 		return (await _collection.FindAsync(checkIn =>
 				checkIn.PlanId == planId 
 				&& checkIn.UserId == userId
-				&& DateOnly.FromDateTime(checkIn.Date) == date))
+				&& checkIn.Date == date.ToDateTime(TimeOnly.MinValue)))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
     }

@@ -40,7 +40,7 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         Assert.Equal(firstCheckIn.Date.ToDateTime(TimeOnly.MinValue), resultData.Date);
         Assert.Equal(firstCheckIn.Index, resultData.Index);
         Assert.Equal(firstCheckIn.Title, resultData.Title);
-        Assert.Equal(firstCheckIn.Description, resultData.Description);
+        Assert.Equal(firstCheckIn.PhotoUrl, resultData.PhotoUrl);
 
         _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

@@ -27,7 +27,7 @@ public class CreatePlanCommand : ICommand
 
 	public Guid OwnerId { get; init; }
 	public Guid HabitId { get; init; }
-	public string Description { get; init; }
+	public string? Description { get; init; }
 	public DateTime StartsAt { get; init; }
 	public DateTime EndsAt { get; init; }
 	public string Type { get; init; }
@@ -36,11 +36,11 @@ public class CreatePlanCommand : ICommand
 
 	public void Validate()
 	{
+		if (OwnerId == Guid.Empty)
+			throw new ArgumentNullException(nameof(OwnerId), Messages.EnterOwnerId);
+
 		if (HabitId == Guid.Empty)
 			throw new ArgumentNullException(nameof(HabitId), Messages.EnterHabitId);
-
-		if (string.IsNullOrWhiteSpace(Description))
-			throw new ArgumentNullException(nameof(Description), Messages.EnterPlanDescription);
 
 		if (StartsAt == DateTime.MinValue)
 			throw new ArgumentException(Messages.EnterPlanStartDate, nameof(StartsAt));

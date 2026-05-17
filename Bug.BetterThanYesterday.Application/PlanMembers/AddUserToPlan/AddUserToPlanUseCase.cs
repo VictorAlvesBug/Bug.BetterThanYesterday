@@ -38,12 +38,19 @@ public sealed class AddUserToPlanUseCase(
             if (user is null)
                 return Result.Rejected(Messages.UserNotFound);
 
+            var owner = plan.OwnerId == user.Id
+                ? user
+                : (await userRepository.BatchGetByIdAsync([plan.OwnerId])).SingleOrDefault();
+
+            if (owner is null)
+                return Result.Rejected(Messages.UserNotFound);
+
             if (plan.GetStatus() != PlanStatus.NotStarted)
                 return Result.Rejected(Messages.OnlyNotStartedPlansCanReceiveNewMembers);
 
             var planMemberToAdd = PlanMember.CreateNew(command.PlanId, command.UserId);
 
-            var planMemberDetailsModel = planMemberToAdd.ToPlanMemberDetailsModel(habit, plan, user);
+            var planMemberDetailsModel = planMemberToAdd.ToPlanMemberDetailsModel(habit, plan, owner, user);
 
             var existingPlanMember = await planMemberRepository.GetByIdAsync(planMemberToAdd.Id);
 
@@ -53,15 +60,6 @@ public sealed class AddUserToPlanUseCase(
                 return Result.Success(
                     planMemberDetailsModel,
                     Messages.MemberSuccessfullyAddedToThePlan
-                );
-            }
-
-            if (existingPlanMember.Status == PlanMemberStatus.Left)
-            {
-                await planMemberRepository.UpdateAsync(planMemberToAdd);
-                return Result.Success(
-                    planMemberDetailsModel,
-                    Messages.MemberSuccessfullyReaddedToThePlan
                 );
             }
 

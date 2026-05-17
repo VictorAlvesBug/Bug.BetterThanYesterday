@@ -14,5 +14,7 @@ public class CheckInDocument : Document
 	public DateTime Date { get; set; }
 	public int Index { get; set; }
 	public string Title { get; set; }
-	public string? Description { get; set; }
+	public string PhotoUrl { get; set; }
+	public string Status { get; set; }
+	public ReviewObject[] Reviews { get; set; }
 }

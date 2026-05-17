@@ -75,7 +75,7 @@ public class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCaseTests : B
                 x.Date == checkIn.Date.ToDateTime(TimeOnly.MinValue) &&
                 x.Index == checkIn.Index &&
                 x.Title == checkIn.Title &&
-                x.Description == checkIn.Description);
+                x.PhotoUrl == checkIn.PhotoUrl);
 
             Assert.NotNull(resultCheckIn);
         }

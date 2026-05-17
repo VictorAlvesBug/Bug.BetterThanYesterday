@@ -52,7 +52,7 @@ public class User : Entity
 			phoneNumber,
 			pixKey,
 			pixKeyType,
-			createdAt: DateTime.Today)
+			createdAt: DateTime.Now)
 	{
 	}
 

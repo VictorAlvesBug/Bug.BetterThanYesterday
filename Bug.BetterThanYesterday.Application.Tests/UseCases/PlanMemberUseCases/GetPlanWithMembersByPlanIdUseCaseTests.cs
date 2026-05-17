@@ -18,6 +18,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 		var useCase = _mocker.CreateInstance<GetPlanWithMembersByPlanIdUseCase>();
 		var planId = _mock.PlanMembers.First().PlanId;
 		var plan = _mock.Plans.First(plan => plan.Id == planId);
+		var owner = _mock.Users.First(user => user.Id == plan.OwnerId);
 		var members =
 			(
 				from
@@ -44,6 +45,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 
 		Assert.Equal(plan.Id, resultData.Plan.PlanId);
 		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
+		Assert.Equal(owner.Name, resultData.Plan.OwnerName);
 		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
 		Assert.Equal(plan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
@@ -67,6 +69,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<GetPlanWithMembersByPlanIdUseCase>();
 		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicCancelledPlanId3);
+		var owner = _mock.Users.First(user => user.Id == plan.OwnerId);
 		var command = new GetPlanWithMembersByPlanIdCommand(plan.Id);
 
 		// Act
@@ -81,6 +84,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 
 		Assert.Equal(plan.Id, resultData.Plan.PlanId);
 		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
+		Assert.Equal(owner.Name, resultData.Plan.OwnerName);
 		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
 		Assert.Equal(plan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);

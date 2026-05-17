@@ -37,6 +37,13 @@ public sealed class UnblockUserInThePlanUseCase(
             if (user is null)
                 return Result.Rejected(Messages.UserNotFound);
 
+            var owner = plan.OwnerId == user.Id
+                ? user
+                : (await userRepository.BatchGetByIdAsync([plan.OwnerId])).SingleOrDefault();
+
+            if (owner is null)
+                return Result.Rejected(Messages.UserNotFound);
+
             var planMemberId = PlanMember.BuildId(command.PlanId, command.UserId);
 
             var planMember = await planMemberRepository.GetByIdAsync(planMemberId);
@@ -51,7 +58,7 @@ public sealed class UnblockUserInThePlanUseCase(
 
             await planMemberRepository.UpdateAsync(planMember);
             return Result.Success(
-                planMember.ToPlanMemberDetailsModel(habit, plan, user),
+                planMember.ToPlanMemberDetailsModel(habit, plan, owner, user),
                 Messages.MemberSuccessfullyUnblocked
             );
         }

@@ -26,6 +26,12 @@ public static class Messages
     public const string OnlyRunningPlansCanReceiveNewCheckIns = "Apenas planos em execução podem receber novos check-ins";
     public const string OnlyActiveMembersCanMakeCheckIns = "Apenas membros ativos podem fazer check-ins";
     public const string UserHasReachedTheMaximumNumberOfCheckInsForTheDay = "Usuário atingiu o número máximo de check-ins para o dia";
+    public const string EnterCheckInStatus = "Informe o status do check-ins";
+    public const string EnterCheckInPhotoUrl = "Informe o URL da foto de evidência";
+    public const string EnterReviewerId = "Informe o ID do avaliador";
+    public const string InvalidReviewStatus = "Status de avaliação inválido";
+    public const string InvalidReviewDate = "Data da avaliação inválida";
+    public const string ProvidePlanIdInOrderToUseAlsoOtherFilters = "Forneça o ID do plano para utilizar os demais filtros";
     #endregion
 
     #region Habit Messages
@@ -45,7 +51,6 @@ public static class Messages
     #region Plan Messages
     public const string EnterOwnerId = "Informe o ID do criador do plano";
     public const string EnterPlanEndDate = "Informe a data final do plano";
-    public const string EnterPlanDescription = "Informe a descrição do plano";
     public const string EnterPlanId = "Informe o ID do plano";
     public const string EnterPlanCreationDate = "Informe a data de criação do plano";
     public const string EnterPlanStatus = "Informe o status do plano";
@@ -87,7 +92,6 @@ public static class Messages
     public const string MemberIsAlreadyActiveInThePlan = "Membro já está ativo neste plano";
     public const string MemberIsBlockedInThePlan = "Membro está bloqueado neste plano";
     public const string UserIsNotInThePlan = "Usuário não está no plano";
-    public const string UserIsNotInThePlanAnymore = "Usuário não está mais no plano";
     public const string UserHasNoPlans = "Usuário não possui planos";
     #endregion
 

@@ -2,12 +2,14 @@
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
+using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.Habits.ListHabitsByFilter;
 
 public sealed class ListHabitsByFilterUseCase(
 	IHabitRepository habitRepository,
-	IPlanRepository planRepository
+	IPlanRepository planRepository,
+	IUserRepository userRepository
 	)
 	: IUseCase<ListHabitsByFilterCommand>
 {
@@ -33,7 +35,15 @@ public sealed class ListHabitsByFilterUseCase(
 				habits.Select(async habit =>
 				{
 					var plans = await planRepository.ListByHabitIdAsync(habit.Id);
-					return habit.ToModel(plans);
+					var ownerIds = plans.Select(plan => plan.OwnerId).Distinct().ToList();
+					var owners = ownerIds.Count == 0
+						? []
+						: await userRepository.BatchGetByIdAsync(ownerIds);
+
+					if (ownerIds.Count > owners.Count)
+						throw new Exception(Messages.UserNotFound);
+
+					return habit.ToModel(plans, owners);
 				})
 			);
 

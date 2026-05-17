@@ -2,15 +2,17 @@
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Users.Entities;
 
 namespace Bug.BetterThanYesterday.Application.Plans;
 
 internal static class PlanMapper
 {
-	public static PlanModel ToModel(this Plan plan, Habit habit) => new()
+	public static PlanModel ToModel(this Plan plan, Habit habit, User owner) => new()
 	{
 		PlanId = plan.Id,
 		OwnerId = plan.OwnerId,
+		OwnerName = owner.Name,
 		HabitId = plan.HabitId,
 		HabitName = habit.Name,
 		Description = plan.Description,

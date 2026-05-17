@@ -19,6 +19,10 @@ public static partial class AutoMockerExtensions
         mocker.Use(mockedValues.PlanRepository.Object);
         mocker.Use(mockedValues.Plans);
 
+        (mockedValues.UserRepository, mockedValues.Users) = UserRepositoryMockFactory.Create();
+        mocker.Use(mockedValues.UserRepository.Object);
+        mocker.Use(mockedValues.Users);
+
         var habitDeletionPolicy = new HabitDeletionPolicy(mockedValues.PlanRepository.Object);
         mocker.Use<IHabitDeletionPolicy>(habitDeletionPolicy);
 

@@ -5,13 +5,13 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 
 public class AddCheckInCommand : ICommand
 {
-    public AddCheckInCommand(
+    /*public AddCheckInCommand(
         Guid planId,
         Guid userId,
         DateTime date,
         //int index,
         string title,
-        string? description
+        string photoUrl
     )
     {
         PlanId = planId;
@@ -19,16 +19,16 @@ public class AddCheckInCommand : ICommand
         Date = date;
         //Index = index;
         Title = title;
-        Description = description;
-    }
+        PhotoUrl = photoUrl;
+    }*/
     
-    public Guid PlanId { get; init; }
-    public Guid UserId { get; init; }
-    public DateTime Date { get; init; }
-    //TODO Remover: public int Index { get; init; }
-    public string Title { get; init; }
-    public string? Description { get; init; }
-    
+    public required Guid PlanId { get; init; }
+    public required Guid UserId { get; init; }
+    public required DateTime Date { get; init; }
+    //TODO Adicionar: public int Index { get; init; }
+    public required string Title { get; init; }
+    public required string PhotoUrl { get; init; }
+
     public void Validate()
     {
         if (PlanId == Guid.Empty)
@@ -45,5 +45,8 @@ public class AddCheckInCommand : ICommand
 
         if (string.IsNullOrWhiteSpace(Title))
             throw new ArgumentException(Messages.EnterCheckInTitle, nameof(Title));
+
+        if (string.IsNullOrWhiteSpace(PhotoUrl))
+            throw new ArgumentException(Messages.EnterCheckInPhotoUrl, nameof(PhotoUrl));
     }
 }

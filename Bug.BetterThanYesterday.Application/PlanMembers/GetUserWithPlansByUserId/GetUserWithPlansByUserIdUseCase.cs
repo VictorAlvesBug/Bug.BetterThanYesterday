@@ -43,9 +43,19 @@ public sealed class GetUserWithPlansByUserIdUseCase(
                 return Result.Rejected($"Planos não encontrados para os IDs: {strNotFoundIds}");
             }
 
+            var ownerIds = plans.Select(plan => plan.OwnerId).Distinct().ToList();
+            var owners = ownerIds.Count == 0
+                ? []
+                : await userRepository.BatchGetByIdAsync(ownerIds);
+
+            if (ownerIds.Count > owners.Count)
+                return Result.Rejected(Messages.UserNotFound);
+
+            var ownersById = owners.ToDictionary(owner => owner.Id);
+
             var tasks = plans.Select(async plan => {
                 var habit = await habitRepository.GetByIdAsync(plan.HabitId) ?? throw new Exception(Messages.HabitNotFound);
-                return plan.ToModel(habit);
+                return plan.ToModel(habit, ownersById[plan.OwnerId]);
             }).ToList();
 
             var planModels = (await Task.WhenAll(tasks)).ToList();

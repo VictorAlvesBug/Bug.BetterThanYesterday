@@ -18,7 +18,7 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RemoveUserFromPlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left);
+		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active);
 		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId1);
 		var planMemberId = PlanMember.BuildId(plan.Id, user.Id);
 		var planMember = _mock.PlanMembers.First(pp => pp.Id == planMemberId);
@@ -56,8 +56,6 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanMemberUseCaseTests
 
 		Assert.Equal(planMember.Id, resultData.PlanMemberId);
 		Assert.Equal(planMember.JoinedAt.ToDateTime(TimeOnly.MinValue), resultData.JoinedAt);
-		Assert.Equal(DateTime.Today, resultData.LeftAt);
-		Assert.Equal(PlanMemberStatus.Left.Name, resultData.Status);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -119,7 +117,7 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<RemoveUserFromPlanUseCase>();
 		var command = new RemoveUserFromPlanCommand(
-			PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left,
+			PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
 			UserRepositoryMockFactory.UserId4
 		);
 
@@ -138,36 +136,12 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanMemberUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_RemoveUserFromPlanUseCase_UserIsNotInThePlanAnymore_ShouldReturnRejected()
-	{
-		// Arrange
-		var useCase = _mocker.CreateInstance<RemoveUserFromPlanUseCase>();
-		var command = new RemoveUserFromPlanCommand(
-			PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left,
-			UserRepositoryMockFactory.UserId3
-		);
-
-		// Act
-		var result = await useCase.HandleAsync(command);
-
-		// Assert
-		Assert.NotNull(result);
-		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.UserIsNotInThePlanAnymore, result.GetMessage());
-
-		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.PlanMemberRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.PlanMemberRepository.Verify(repo => repo.UpdateAsync(It.IsAny<PlanMember>()), Times.Never);
-	}
-
-	[Fact]
 	public async Task Test_RemoveUserFromPlanUseCase_MemberCannotBeRemovedFromThePlanAsHeIsBlocked_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RemoveUserFromPlanUseCase>();
 		var command = new RemoveUserFromPlanCommand(
-			PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Left,
+			PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
 			UserRepositoryMockFactory.UserId2
 		);
 

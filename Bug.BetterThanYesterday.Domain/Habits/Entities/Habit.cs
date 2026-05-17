@@ -21,7 +21,7 @@ public class Habit : Entity
 		: this(
 			id: Guid.NewGuid(),
 			name,
-			createdAt: DateTime.Today)
+			createdAt: DateTime.Now)
 	{
 	}
 

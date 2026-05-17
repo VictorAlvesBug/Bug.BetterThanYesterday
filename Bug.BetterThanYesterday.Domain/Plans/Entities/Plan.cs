@@ -70,7 +70,7 @@ public sealed class Plan : Entity
 		daysOffPerWeek,
 		penaltyValue,
 		isCancelled: false,
-		createdAt: DateTime.Today)
+		createdAt: DateTime.Now)
 	{
 	}
 

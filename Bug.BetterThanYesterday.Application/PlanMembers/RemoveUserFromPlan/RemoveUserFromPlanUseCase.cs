@@ -37,6 +37,13 @@ public sealed class RemoveUserFromPlanUseCase(
             if (user is null)
                 return Result.Rejected(Messages.UserNotFound);
 
+            var owner = plan.OwnerId == user.Id
+                ? user
+                : (await userRepository.BatchGetByIdAsync([plan.OwnerId])).SingleOrDefault();
+
+            if (owner is null)
+                return Result.Rejected(Messages.UserNotFound);
+
             var planMemberId = PlanMember.BuildId(command.PlanId, command.UserId);
 
             var planMember = await planMemberRepository.GetByIdAsync(planMemberId);
@@ -49,11 +56,8 @@ public sealed class RemoveUserFromPlanUseCase(
             if (!allowedPlanStatuses.Contains(plan.GetStatus()))
                 return Result.Rejected(Messages.MemberCanOnlyBeRemovedFromNotStartedOrRunningPlans);
 
-            planMember.MarkAsLeft();
-
-            await planMemberRepository.UpdateAsync(planMember);
+            await planMemberRepository.DeleteAsync(planMember);
             return Result.Success(
-                planMember.ToPlanMemberDetailsModel(habit, plan, user),
                 Messages.MemberSuccessfullyRemovedFromThePlan
             );
         }

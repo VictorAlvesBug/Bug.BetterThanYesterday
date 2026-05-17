@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Commons;
 using Bug.BetterThanYesterday.Domain.Strings;
 
@@ -11,7 +12,9 @@ public class CheckIn : Entity
 	public DateOnly Date { get; set; }
 	public int Index { get; set; }
 	public string Title { get; set; }
-	public string? Description { get; set; }
+	public string PhotoUrl { get; set; }
+	public CheckInStatus Status { get; set; }
+	public Review[] Reviews { get; set; }
 
 	private CheckIn(
 		Guid id,
@@ -20,7 +23,9 @@ public class CheckIn : Entity
 		DateTime date,
 		int index,
 		string title,
-		string? description,
+		string photoUrl,
+		string status,
+		Review[] reviews,
 		DateTime createdAt)
 	{
 		Id = id;
@@ -29,7 +34,9 @@ public class CheckIn : Entity
 		Date = DateOnly.FromDateTime(date);
 		Index = index;
 		Title = title;
-		Description = description;
+		PhotoUrl = photoUrl;
+		Status = CheckInStatus.Get(status);
+		Reviews = reviews;
 		CreatedAt = createdAt;
 	}
 
@@ -39,7 +46,7 @@ public class CheckIn : Entity
 		DateTime date,
 		int index,
 		string title,
-		string? description)
+		string photoUrl)
 	: this(
 			id: BuildId(planId, userId, date, index),
 			planId,
@@ -47,8 +54,10 @@ public class CheckIn : Entity
 			date,
 			index,
 			title,
-			description,
-			createdAt: DateTime.Today)
+			photoUrl,
+			status: CheckInStatus.Pending.Name,
+			reviews: [],
+			createdAt: DateTime.Now)
 	{ }
 
 	public static CheckIn CreateNew(
@@ -57,7 +66,7 @@ public class CheckIn : Entity
 		DateTime date,
 		int index,
 		string title,
-		string? description)
+		string photoUrl)
 	{
 		if (planId == Guid.Empty)
 			throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
@@ -74,7 +83,10 @@ public class CheckIn : Entity
 		if (string.IsNullOrWhiteSpace(title))
 			throw new ArgumentNullException(nameof(title), Messages.EnterCheckInTitle);
 
-		return new CheckIn(planId, userId, date, index, title, description);
+		if (string.IsNullOrWhiteSpace(photoUrl))
+			throw new ArgumentNullException(nameof(photoUrl), Messages.EnterCheckInPhotoUrl);
+
+		return new CheckIn(planId, userId, date, index, title, photoUrl);
 	}
 
 	public static CheckIn Restore(
@@ -84,7 +96,9 @@ public class CheckIn : Entity
 		DateTime date,
 		int index,
 		string title,
-		string? description,
+		string photoUrl,
+		string status,
+		Review[] reviews,
 		DateTime createdAt)
 	{
 		if (id == Guid.Empty)
@@ -104,6 +118,12 @@ public class CheckIn : Entity
 
 		if (string.IsNullOrWhiteSpace(title))
 			throw new ArgumentNullException(nameof(title), Messages.EnterCheckInTitle);
+
+		if (string.IsNullOrWhiteSpace(photoUrl))
+			throw new ArgumentNullException(nameof(photoUrl), Messages.EnterCheckInPhotoUrl);
+
+		if (string.IsNullOrWhiteSpace(status))
+			throw new ArgumentNullException(nameof(status), Messages.EnterCheckInStatus);
 		
 		if (createdAt == DateTime.MinValue)
 			throw new ArgumentNullException(nameof(createdAt), Messages.EnterCheckInCreateDate);
@@ -115,7 +135,9 @@ public class CheckIn : Entity
 			date,
 			index,
 			title,
-			description,
+			photoUrl,
+			status,
+			reviews,
 			createdAt);
 	}
 

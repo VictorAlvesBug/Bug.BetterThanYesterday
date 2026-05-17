@@ -38,7 +38,6 @@ public sealed class MoveInTimeUseCase(
 			foreach (var planMember in planMembers)
 			{
 				planMember.JoinedAt = planMember.JoinedAt.AddDays(daysToAdd);
-				planMember.LeftAt = planMember.LeftAt?.AddDays(daysToAdd);
 				planMember.CreatedAt = planMember.CreatedAt.AddDays(daysToAdd);
 
 				await planMemberRepository.UpdateAsync(planMember);

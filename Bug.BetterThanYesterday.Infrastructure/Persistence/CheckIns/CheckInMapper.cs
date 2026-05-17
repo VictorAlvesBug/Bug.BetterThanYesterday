@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
+using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
 
 namespace Bug.BetterThanYesterday.Infrastructure.Persistence.CheckIns;
@@ -13,17 +14,37 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 		Date = checkIn.Date.ToDateTime(TimeOnly.MinValue),
 		Index = checkIn.Index,
 		Title = checkIn.Title,
-		Description = checkIn.Description,
+		PhotoUrl = checkIn.PhotoUrl,
+		Status = checkIn.Status.Name,
+		Reviews = checkIn.Reviews.Select(review => new ReviewObject()
+		{
+			ReviewerId = review.ReviewerId,
+			Status = review.Status.Name,
+			Date = review.Date
+		}).ToArray(),
 		CreatedAt = checkIn.CreatedAt
 	};
 
-	public CheckIn ToDomain(CheckInDocument document) => CheckIn.Restore(
+	public CheckIn ToDomain(CheckInDocument document)
+	{
+		var reviews = document.Reviews
+			.Select(review =>
+				Review.Create(
+					review.ReviewerId,
+					review.Status,
+					review.Date))
+			.ToArray();
+
+		return CheckIn.Restore(
 		document.Id,
 		document.PlanId,
 		document.UserId,
 		document.Date,
 		document.Index,
 		document.Title,
-		document.Description,
+		document.PhotoUrl,
+		document.Status,
+		reviews,
 		document.CreatedAt);
+	}
 }

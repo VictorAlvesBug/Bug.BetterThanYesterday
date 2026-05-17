@@ -23,13 +23,14 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
         var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active);
         var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId1);
-        var command = new AddCheckInCommand(
-            plan.Id,
-            user.Id,
-            DateTime.Today,
-            "Test Title",
-            "Test Description"
-        );
+        var command = new AddCheckInCommand
+        {
+            PlanId = plan.Id,
+            UserId = user.Id,
+            Date = DateTime.Today,
+            Title = "Test Title",
+            PhotoUrl = "Test Description"
+        };
 
         // Act
         var result = await useCase.HandleAsync(command);
@@ -44,7 +45,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         Assert.Equal(user.Id, resultData.UserId);
         Assert.Equal(command.Date, resultData.Date);
         Assert.Equal(command.Title, resultData.Title);
-        Assert.Equal(command.Description, resultData.Description);
+        Assert.Equal(command.PhotoUrl, resultData.PhotoUrl);
 
         _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -59,13 +60,14 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         // Arrange
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
         var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId1);
-        var command = new AddCheckInCommand(
-            Guid.NewGuid(),
-            user.Id,
-            DateTime.Today,
-            "Test Title",
-            "Test Description"
-        );
+        var command = new AddCheckInCommand
+        {
+            PlanId = Guid.NewGuid(),
+            UserId = user.Id,
+            Date = DateTime.Today,
+            Title = "Test Title",
+            PhotoUrl = "Test Description"
+        };
 
         // Act
         var result = await useCase.HandleAsync(command);
@@ -88,13 +90,14 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         // Arrange
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
         var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active);
-        var command = new AddCheckInCommand(
-            plan.Id,
-            Guid.NewGuid(),
-            DateTime.Today,
-            "Test Title",
-            "Test Description"
-        );
+        var command = new AddCheckInCommand
+        {
+            PlanId = plan.Id,
+            UserId = Guid.NewGuid(),
+            Date = DateTime.Today,
+            Title = "Test Title",
+            PhotoUrl = "Test Description"
+        };
 
         // Act
         var result = await useCase.HandleAsync(command);
@@ -117,14 +120,14 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         // Arrange
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
         var existingCheckIn = _mock.CheckIns.First(checkIn => checkIn.Id == CheckInRepositoryMockFactory.CheckInId1);
-        var command = new AddCheckInCommand(
-            existingCheckIn.PlanId,
-            existingCheckIn.UserId,
-            existingCheckIn.Date.ToDateTime(TimeOnly.MinValue),
-            //existingCheckIn.Index,
-            "Test Title",
-            "Test Description"
-        );
+        var command = new AddCheckInCommand
+        {
+            PlanId = existingCheckIn.PlanId,
+            UserId = existingCheckIn.UserId,
+            Date = existingCheckIn.Date.ToDateTime(TimeOnly.MinValue),
+            Title = "Test Title",
+            PhotoUrl = "Test Description"
+        };
 
         // Act
         var result = await useCase.HandleAsync(command);

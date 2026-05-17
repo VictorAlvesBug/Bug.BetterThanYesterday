@@ -5,11 +5,6 @@ namespace Bug.BetterThanYesterday.Application.AdminSettings.MoveInTime;
 
 public class MoveInTimeCommand : ICommand
 {
-	public MoveInTimeCommand(int daysAmount)
-	{
-		DaysAmount = daysAmount;
-	}
-
 	public int DaysAmount { get; init; }
 
 	public void Validate()

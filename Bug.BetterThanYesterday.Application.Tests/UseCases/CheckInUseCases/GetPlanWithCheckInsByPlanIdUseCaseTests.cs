@@ -17,6 +17,7 @@ public class GetPlanWithCheckInsByPlanIdUseCaseTests : BaseCheckInUseCaseTests
         // Arrange
         var useCase = _mocker.CreateInstance<GetPlanWithCheckInsByPlanIdUseCase>();
         var firstPlan = _mock.Plans[0];
+        var owner = _mock.Users.First(user => user.Id == firstPlan.OwnerId);
         var checkIns = _mock.CheckIns.Where(x => x.PlanId == firstPlan.Id).ToList();
         var command = new GetPlanWithCheckInsByPlanIdCommand(firstPlan.Id);
 
@@ -33,6 +34,7 @@ public class GetPlanWithCheckInsByPlanIdUseCaseTests : BaseCheckInUseCaseTests
 		
 		Assert.Equal(firstPlan.Id, resultData.Plan.PlanId);
 		Assert.Equal(firstPlan.OwnerId, resultData.Plan.OwnerId);
+		Assert.Equal(owner.Name, resultData.Plan.OwnerName);
 		Assert.Equal(firstPlan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(firstPlan.Description, resultData.Plan.Description);
 		Assert.Equal(firstPlan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
@@ -55,7 +57,7 @@ public class GetPlanWithCheckInsByPlanIdUseCaseTests : BaseCheckInUseCaseTests
                 x.Date == checkIn.Date.ToDateTime(TimeOnly.MinValue) &&
                 x.Index == checkIn.Index &&
                 x.Title == checkIn.Title &&
-                x.Description == checkIn.Description);
+                x.PhotoUrl == checkIn.PhotoUrl);
 
             Assert.NotNull(resultCheckIn);
         }

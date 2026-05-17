@@ -4,12 +4,14 @@ using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Strings;
+using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.Plans.CancelPlan;
 
 public class CancelPlanUseCase(
 	IPlanRepository planRepository,
-	IHabitRepository habitRepository)
+	IHabitRepository habitRepository,
+	IUserRepository userRepository)
 	: IUseCase<CancelPlanCommand>
 {
 	public async Task<IResult> HandleAsync(CancelPlanCommand command)
@@ -28,10 +30,15 @@ public class CancelPlanUseCase(
 			if (habit is null)
 				return Result.Rejected(Messages.HabitNotFound);
 
+			var owner = await userRepository.GetByIdAsync(plan.OwnerId);
+
+			if (owner is null)
+				return Result.Rejected(Messages.UserNotFound);
+
 			plan.Cancel();
 
 			await planRepository.UpdateAsync(plan);
-			return Result.Success(plan.ToModel(habit), Messages.PlanSuccessfullyCancelled);
+			return Result.Success(plan.ToModel(habit, owner), Messages.PlanSuccessfullyCancelled);
 		}
 		catch (Exception ex)
 		{

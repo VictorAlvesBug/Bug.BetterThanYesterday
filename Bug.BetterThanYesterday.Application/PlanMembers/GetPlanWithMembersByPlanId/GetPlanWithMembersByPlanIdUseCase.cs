@@ -30,10 +30,15 @@ public sealed class GetPlanWithMembersByPlanIdUseCase(
             if (habit is null)
                 return Result.Rejected(Messages.HabitNotFound);
 
+            var owner = await userRepository.GetByIdAsync(plan.OwnerId);
+
+            if (owner is null)
+                return Result.Rejected(Messages.UserNotFound);
+
             var planMembers = await planMemberRepository.ListByPlanIdAsync(command.PlanId);
 
             if (planMembers.Count == 0)
-                return Result.Success(plan.ToPlanWithMembersModel(habit), Messages.PlanHasNoMembers);
+                return Result.Success(plan.ToPlanWithMembersModel(habit, owner), Messages.PlanHasNoMembers);
 
             var memberIds = planMembers.Select(planMember => planMember.UserId).ToList();
 
@@ -47,7 +52,7 @@ public sealed class GetPlanWithMembersByPlanIdUseCase(
             }
 
             return Result.Success(
-                plan.ToPlanWithMembersModel(habit, members),
+                plan.ToPlanWithMembersModel(habit, owner, members),
                 Messages.PlanSuccessfullyFound
             );
         }
