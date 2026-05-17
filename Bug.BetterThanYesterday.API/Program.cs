@@ -65,18 +65,209 @@ app.Run();
 
 /*
 
-######### TODO LIST #########
+######### TODO - End-to-end tests to implement via CursorAI #########
 
-DONE - Bloco A - Equalizar Entity, Document e Model de User do backend com User do frontend;
-DONE - Bloco B - Equalizar métodos do repositório de User do backend com frontend;
-DONE - Bloco C - Equalizar Entity, Document e Model de Habit do backend com Habit do frontend;
-DONE - Bloco C - Equalizar métodos do repositório de Habit do backend com frontend;
-DONE - Bloco D - Equalizar Entity, Document e Model de Plan do backend com Plan do frontend;
-DONE - Bloco E - Equalizar métodos do repositório de Plan do backend com frontend;
-DONE - Bloco F - Equalizar Entity, Document e Model de PlanMember do backend com PlanMember do frontend;
-DONE - Bloco G - Equalizar métodos do repositório de PlanMember do backend com frontend;
-TODO - Bloco H - Equalizar Entity, Document e Model de CheckIn do backend com CheckIn do frontend;
-TODO - Bloco I - Equalizar métodos do repositório de CheckIn do backend com frontend;
+- GetHabitById with a non-guid habitId
+- GetHabitById with a valid guid, but not registered
+- GetHabitById with a registered habitId
+- ListHabitsByFilter without any parameter
+- ListHabitsByFilter with a non-registered name
+- ListHabitsByFilter with a registered name
+- AddHabit with an empty body
+- AddHabit with an white-space name
+- AddHabit with an valid name
+- GetUserById with a non-guid userId
+- GetUserById with a valid guid, but not registered
+- GetUserById with a registered userId
+- ListUsersByFilter without any parameter
+- ListUsersByFilter with an invalid email
+- ListUsersByFilter with a non-registered email
+- ListUsersByFilter with a registered email
+- AddUser with an empty body
+- AddUser without name
+- AddUser with an white-space name
+- AddUser without email
+- AddUser with an white-space email
+- AddUser with an invalid email
+- AddUser without nickname
+- AddUser with an white-space nickname
+- AddUser without phone number
+- AddUser with an white-space phone number
+- AddUser with an invalid phone number
+- AddUser without pix key type
+- AddUser with an invalid numeric pix key type
+- AddUser with an invalid text pix key type
+- AddUser without pix key
+- AddUser with an invalid pix key
+- AddUser with valid fields
+- GetPlanById with a non-guid planId
+- GetPlanById with a valid guid, but not registered
+- GetPlanById with a registered planId
+- ListPlansByFilter without any parameter
+- ListPlansByFilter with non-guid ownerId
+- ListPlansByFilter with non-registered ownerId
+- ListPlansByFilter with registered ownerId that has no plans
+- ListPlansByFilter with registered ownerId that has plans
+- ListPlansByFilter with non-guid habitId
+- ListPlansByFilter with non-registered habitId
+- ListPlansByFilter with registered habitId that has no plans
+- ListPlansByFilter with registered habitId that has plans
+- ListPlansByFilter with an invalid numeric status
+- ListPlansByFilter with an invalid text status
+- ListPlansByFilter with an invalid numeric type
+- ListPlansByFilter with an invalid text type
+- ListPlansByFilter with all field valid
+- AddPlan with an empty body
+- AddPlan without ownerId
+- AddPlan with an non-guid ownerId
+- AddPlan with an non-registered ownerId
+- AddPlan with an registered ownerId
+- AddPlan without habitId
+- AddPlan with an non-guid habitId
+- AddPlan with an non-registered habitId
+- AddPlan with an registered habitId
+- AddPlan without a description
+- AddPlan with a description
+- AddPlan without startsAt
+- AddPlan with startsAt before today
+- AddPlan without endsAt
+- AddPlan with endsAt before startsAt
+- AddPlan with endsAt before today
+- AddPlan without type
+- AddPlan with invalid numeric type
+- AddPlan with invalid text type
+- AddPlan with all field valid
+- GetPlanMemberDetails with a non-guid planId
+- GetPlanMemberDetails with a non-registered planId
+- GetPlanMemberDetails with a registered, but without members planId
+- GetPlanMemberDetails with a non-guid userId
+- GetPlanMemberDetails with a non-registered userId
+- GetPlanMemberDetails with a registered, but without plans userId
+- GetPlanMemberDetails with registered planId and userId related
+- GetPlanWithMembersByPlanId with a non-guid planId
+- GetPlanWithMembersByPlanId with a non-registered planId
+- GetPlanWithMembersByPlanId with a registered, but without members planId
+- GetPlanWithMembersByPlanId with a registered, and with members planId
+- GetUserWithPlansByUserId with a non-guid userId
+- GetUserWithPlansByUserId with a non-registered userId
+- GetUserWithPlansByUserId with a registered, but without plans userId
+- GetUserWithPlansByUserId with a registered, and with plans userId
+- AddUserToPlan with a non-guid planId
+- AddUserToPlan with a non-registered planId
+- AddUserToPlan with a non-guid userId
+- AddUserToPlan with a non-registered userId
+- AddUserToPlan with registered planId and userId, not related yet
+- AddUserToPlan with registered planId and userId, already related
+- AddUserToPlan with registered planId and userId, and not-started plan
+- AddUserToPlan with registered planId and userId, and running plan
+- AddUserToPlan with registered planId and userId, and finished plan
+- AddUserToPlan with registered planId and userId, and cancelled plan
+- RemoveUserFromPlan with a non-guid planId
+- RemoveUserFromPlan with a non-registered planId
+- RemoveUserFromPlan with a non-guid userId
+- RemoveUserFromPlan with a non-registered userId
+- RemoveUserFromPlan with registered planId and userId, not related
+- RemoveUserFromPlan with registered planId and userId related and active
+- RemoveUserFromPlan with registered planId and userId related and blocked
+- RemoveUserFromPlan with registered planId and userId, and not-started plan
+- RemoveUserFromPlan with registered planId and userId, and running plan
+- RemoveUserFromPlan with registered planId and userId, and finished plan
+- RemoveUserFromPlan with registered planId and userId, and cancelled plan
+- BlockUserInThePlan with a non-guid planId
+- BlockUserInThePlan with a non-registered planId
+- BlockUserInThePlan with a non-guid userId
+- BlockUserInThePlan with a non-registered userId
+- BlockUserInThePlan with registered planId and userId, not related
+- BlockUserInThePlan with registered planId and userId related and active
+- BlockUserInThePlan with registered planId and userId related and blocked
+- BlockUserInThePlan with registered planId and userId, and not-started plan
+- BlockUserInThePlan with registered planId and userId, and running plan
+- BlockUserInThePlan with registered planId and userId, and finished plan
+- BlockUserInThePlan with registered planId and userId, and cancelled plan
+- UnblockUserInThePlan with a non-guid planId
+- UnblockUserInThePlan with a non-registered planId
+- UnblockUserInThePlan with a non-guid userId
+- UnblockUserInThePlan with a non-registered userId
+- UnblockUserInThePlan with registered planId and userId, not related
+- UnblockUserInThePlan with registered planId and userId related and active
+- UnblockUserInThePlan with registered planId and userId related and blocked
+- UnblockUserInThePlan with registered planId and userId, and not-started plan
+- UnblockUserInThePlan with registered planId and userId, and running plan
+- UnblockUserInThePlan with registered planId and userId, and finished plan
+- UnblockUserInThePlan with registered planId and userId, and cancelled plan
+- GetCheckInById with a non-guid checkIn
+- GetCheckInById with a valid guid, but not registered
+- GetCheckInById with a registered checkIn
+- ListCheckInsByFilter with a non-guid planId
+- ListCheckInsByFilter with a non-registered planId
+- ListCheckInsByFilter with a registered planId, without any checkIns related
+- ListCheckInsByFilter with a registered planId, with checkIns related
+- ListCheckInsByFilter only with userId
+- ListCheckInsByFilter only with date
+- ListCheckInsByFilter only with status
+- ListCheckInsByFilter with a registered planId and non-guid userId
+- ListCheckInsByFilter with a registered planId and non-registered userId
+- ListCheckInsByFilter with a registered planId and registered userId, but not related
+- ListCheckInsByFilter with a registered planId and registered userId, related via planMembers, but with no checkIns
+- ListCheckInsByFilter with a registered planId and registered userId, related and with some checkIns
+- ListCheckInsByFilter with a registered planId and date
+- ListCheckInsByFilter with a registered planId and invalid numeric status
+- ListCheckInsByFilter with a registered planId and invalid text status
+- ListCheckInsByFilter with a registered planId and valid numberic status
+- ListCheckInsByFilter with a registered planId and valid text status
+- AddCheckIn with empty body
+- AddCheckIn without planId
+- AddCheckIn with non-guid planId
+- AddCheckIn with non-registered planId
+- AddCheckIn with registered planId
+- AddCheckIn without userId
+- AddCheckIn with non-guid userId
+- AddCheckIn with non-registered userId
+- AddCheckIn with registered userId
+- AddCheckIn without title
+- AddCheckIn with white space title
+- AddCheckIn without photoUrl
+- AddCheckIn with empty photoUrl
+- AddCheckIn without date
+- AddCheckIn with planId and userId not related via planMembers
+- AddCheckIn with user blocked in the plan
+- AddCheckIn with date before yesterday
+- AddCheckIn with date after today
+- AddCheckIn with date before plan startsAt
+- AddCheckIn with date after plan endsAt
+- AddCheckIn with not-started plan
+- AddCheckIn with running plan
+- AddCheckIn with finished plan
+- AddCheckIn with cancelled plan
+- AddCheckIn with same fields already registered
+
+
+
+- ReviewCheckIn with empty body
+- ReviewCheckIn without checkInId
+- ReviewCheckIn with non-guid checkInId
+- ReviewCheckIn with non-registered checkInId
+- ReviewCheckIn with registered checkInId
+- ReviewCheckIn without reviewerId
+- ReviewCheckIn with non-guid reviewerId
+- ReviewCheckIn with non-registered reviewerId
+- ReviewCheckIn with registered reviewerId, not related with the plan
+- ReviewCheckIn with registered reviewerId, related with the plan
+- ReviewCheckIn with registered reviewerId, to his own checkIn
+- ReviewCheckIn without status
+- ReviewCheckIn with invalid numeric status
+- ReviewCheckIn with invalid text status
+- ReviewCheckIn with valid numeric status
+- ReviewCheckIn with valid text status
+- ReviewCheckIn without date
+- ReviewCheckIn with date before checkIn createdAt
+- ReviewCheckIn with date after checkIn date+1
+- ReviewCheckIn for checkIn from a not-started plan
+- ReviewCheckIn for checkIn from a running plan
+- ReviewCheckIn for checkIn from a finished plan
+- ReviewCheckIn for checkIn from a cancelled plan
+- ReviewCheckIn for checkIn already reviewed by this reviewer
+- ReviewCheckIn for a non-pending checkIn
 
 ######### Cenários de teste #########
 
