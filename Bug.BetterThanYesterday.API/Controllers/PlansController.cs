@@ -31,7 +31,7 @@ public class PlansController(
 			return Ok(result);
 
 		if (result.IsRejected())
-			return BadRequest(result);
+			return NotFound(result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}

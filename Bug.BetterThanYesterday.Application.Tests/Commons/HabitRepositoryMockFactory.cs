@@ -1,4 +1,5 @@
-﻿using Bug.BetterThanYesterday.Domain.Habits;
+﻿using Bug.BetterThanYesterday.Application.Mocks;
+using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
 using Moq;
 
@@ -6,36 +7,9 @@ namespace Bug.BetterThanYesterday.Application.Tests.Commons;
 
 public static class HabitRepositoryMockFactory
 {
-	public static readonly Guid HabitId1 = Guid.Parse("0160269d-1e78-4ca2-b100-ee42805b5c1e");
-	public static readonly Guid HabitId2 = Guid.Parse("f523e101-d4b9-453e-8669-c9e8a6918544");
-	public static readonly Guid HabitId3 = Guid.Parse("f8cfc6a0-7304-41bb-985e-a3ce9c955bde");
-	public static readonly Guid HabitId4 = Guid.Parse("809e7984-9eba-460e-be7d-955e229f7dce");
-
 	public static (Mock<IHabitRepository> repo, List<Habit> data) Create()
 	{
-		List<Habit> habits =
-		[
-			Habit.Restore(
-				HabitId1,
-				"Workout",
-				new DateTime(1999, 01, 10)
-			),
-			Habit.Restore(
-				HabitId2,
-				"Reading",
-				new DateTime(1967, 06, 20)
-			),
-			Habit.Restore(
-				HabitId3,
-				"Studying",
-				new DateTime(2005, 04, 02)
-			),
-			Habit.Restore(
-				HabitId4,
-				"Cooking",
-				new DateTime(1991, 01, 16)
-			)
-		];
+		List<Habit> habits = MockData.MockHabits;
 
 		var habitRepository = new Mock<IHabitRepository>();
 

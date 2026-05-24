@@ -7,6 +7,7 @@ using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.Strings;
+using Bug.BetterThanYesterday.Application.Mocks;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 
@@ -20,7 +21,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
 		var owner = _mock.Users.First();
-		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
+		var habit = _mock.Habits.First(habit => habit.Id == MockData.HabitId4);
 		var command = new CreatePlanCommand(
 			owner.Id,
 			habit.Id,
@@ -91,7 +92,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
 		var owner = _mock.Users.First();
-		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
+		var habit = _mock.Habits.First(habit => habit.Id == MockData.HabitId4);
 		var command = new CreatePlanCommand(
 			owner.Id,
 			habit.Id,
@@ -121,7 +122,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
 		var owner = _mock.Users.First();
-		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
+		var habit = _mock.Habits.First(habit => habit.Id == MockData.HabitId4);
 		var command = new CreatePlanCommand(
 			owner.Id,
 			habit.Id,
@@ -151,7 +152,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
 		var owner = _mock.Users.First();
-		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
+		var habit = _mock.Habits.First(habit => habit.Id == MockData.HabitId4);
 		var command = new CreatePlanCommand(
 			owner.Id,
 			habit.Id,
@@ -181,7 +182,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
 		var owner = _mock.Users.First();
-		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
+		var habit = _mock.Habits.First(habit => habit.Id == MockData.HabitId4);
 		var command = new CreatePlanCommand(
 			owner.Id,
 			habit.Id,
@@ -211,7 +212,7 @@ public class CreatePlanUseCaseTests : BasePlanUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<CreatePlanUseCase>();
 		var owner = _mock.Users.First();
-		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
+		var habit = _mock.Habits.First(habit => habit.Id == MockData.HabitId4);
 		var command = new CreatePlanCommand(
 			owner.Id,
 			habit.Id,

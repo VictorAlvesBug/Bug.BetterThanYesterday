@@ -1,4 +1,5 @@
-﻿using Bug.BetterThanYesterday.Application.PlanMembers;
+﻿using Bug.BetterThanYesterday.Application.Mocks;
+using Bug.BetterThanYesterday.Application.PlanMembers;
 using Bug.BetterThanYesterday.Application.PlanMembers.AddUserToPlan;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
@@ -19,8 +20,8 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active);
-		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId4);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active);
+		var user = _mock.Users.First(user => user.Id == MockData.UserId4);
 		var command = new AddUserToPlanCommand(
 			plan.Id,
 			user.Id
@@ -65,7 +66,7 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
-		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId3);
+		var user = _mock.Users.First(user => user.Id == MockData.UserId3);
 		var command = new AddUserToPlanCommand(
 			Guid.NewGuid(),
 			user.Id
@@ -91,7 +92,7 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicCancelledPlanId3);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicCancelledPlanId3);
 		var command = new AddUserToPlanCommand(
 			plan.Id,
 			Guid.NewGuid()
@@ -117,8 +118,8 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active);
-		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId1);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active);
+		var user = _mock.Users.First(user => user.Id == MockData.UserId1);
 		var command = new AddUserToPlanCommand(
 			plan.Id,
 			user.Id
@@ -144,8 +145,8 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active);
-		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId2);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active);
+		var user = _mock.Users.First(user => user.Id == MockData.UserId2);
 		var command = new AddUserToPlanCommand(
 			plan.Id,
 			user.Id
@@ -171,8 +172,8 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active);
-		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId3);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active);
+		var user = _mock.Users.First(user => user.Id == MockData.UserId3);
 		var command = new AddUserToPlanCommand(
 			plan.Id,
 			user.Id
@@ -217,8 +218,8 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active);
-		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId3);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId1_WithUserId1Active);
+		var user = _mock.Users.First(user => user.Id == MockData.UserId3);
 		var command = new AddUserToPlanCommand(
 			plan.Id,
 			user.Id
@@ -244,8 +245,8 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked);
-		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId1);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked);
+		var user = _mock.Users.First(user => user.Id == MockData.UserId1);
 		var command = new AddUserToPlanCommand(
 			plan.Id,
 			user.Id
@@ -271,8 +272,8 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<AddUserToPlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicCancelledPlanId3);
-		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId1);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicCancelledPlanId3);
+		var user = _mock.Users.First(user => user.Id == MockData.UserId1);
 		var command = new AddUserToPlanCommand(
 			plan.Id,
 			user.Id

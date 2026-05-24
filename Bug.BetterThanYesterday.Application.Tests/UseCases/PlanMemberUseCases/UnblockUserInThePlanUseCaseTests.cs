@@ -1,4 +1,5 @@
-﻿using Bug.BetterThanYesterday.Application.PlanMembers;
+﻿using Bug.BetterThanYesterday.Application.Mocks;
+using Bug.BetterThanYesterday.Application.PlanMembers;
 using Bug.BetterThanYesterday.Application.PlanMembers.UnblockUserInThePlan;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
@@ -18,8 +19,8 @@ public class UnblockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<UnblockUserInThePlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active);
-		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId3);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active);
+		var user = _mock.Users.First(user => user.Id == MockData.UserId3);
 		var planMemberId = PlanMember.BuildId(plan.Id, user.Id);
 		var planMember = _mock.PlanMembers.First(pp => pp.Id == planMemberId);
 		var command = new UnblockUserInThePlanCommand(
@@ -71,7 +72,7 @@ public class UnblockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		var useCase = _mocker.CreateInstance<UnblockUserInThePlanUseCase>();
 		var command = new UnblockUserInThePlanCommand(
 			Guid.NewGuid(),
-			UserRepositoryMockFactory.UserId3
+			MockData.UserId3
 		);
 
 		// Act
@@ -94,7 +95,7 @@ public class UnblockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<UnblockUserInThePlanUseCase>();
 		var command = new UnblockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+			MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
 			Guid.NewGuid()
 		);
 
@@ -118,8 +119,8 @@ public class UnblockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<UnblockUserInThePlanUseCase>();
 		var command = new UnblockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
-			UserRepositoryMockFactory.UserId2
+			MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+			MockData.UserId2
 		);
 
 		// Act
@@ -142,8 +143,8 @@ public class UnblockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<UnblockUserInThePlanUseCase>();
 		var command = new UnblockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
-			UserRepositoryMockFactory.UserId5
+			MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+			MockData.UserId5
 		);
 
 		// Act
@@ -166,8 +167,8 @@ public class UnblockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<UnblockUserInThePlanUseCase>();
 		var command = new UnblockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
-			UserRepositoryMockFactory.UserId2
+			MockData.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
+			MockData.UserId2
 		);
 
 		// Act
@@ -190,8 +191,8 @@ public class UnblockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<UnblockUserInThePlanUseCase>();
 		var command = new UnblockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked,
-			UserRepositoryMockFactory.UserId3
+			MockData.PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked,
+			MockData.UserId3
 		);
 
 		// Act
@@ -214,8 +215,8 @@ public class UnblockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<UnblockUserInThePlanUseCase>();
 		var command = new UnblockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
-			UserRepositoryMockFactory.UserId4
+			MockData.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
+			MockData.UserId4
 		);
 
 		// Act

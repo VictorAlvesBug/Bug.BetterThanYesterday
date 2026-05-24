@@ -2,6 +2,7 @@
 using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
 using Bug.BetterThanYesterday.Domain.PlanMembers.ValueObjects;
+using Bug.BetterThanYesterday.Application.Mocks;
 
 namespace Bug.BetterThanYesterday.Application.Tests.Commons;
 
@@ -9,117 +10,7 @@ public static class PlanMemberRepositoryMockFactory
 {
 	public static (Mock<IPlanMemberRepository> repo, List<PlanMember> data) Create()
 	{
-		List<PlanMember> planMembers =
-		[
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active, UserRepositoryMockFactory.UserId1),
-				PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active,
-				UserRepositoryMockFactory.UserId1,
-				DateTime.Today,
-				null,
-				PlanMemberStatus.Active.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active, UserRepositoryMockFactory.UserId1),
-				PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
-				UserRepositoryMockFactory.UserId1,
-				new DateTime(2020, 01, 01),
-				null,
-				PlanMemberStatus.Active.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active, UserRepositoryMockFactory.UserId2),
-				PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
-				UserRepositoryMockFactory.UserId2,
-				new DateTime(2020, 01, 01),
-				null,
-				PlanMemberStatus.Blocked.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active, UserRepositoryMockFactory.UserId3),
-				PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
-				UserRepositoryMockFactory.UserId3,
-				new DateTime(2020, 01, 01),
-				null,
-				PlanMemberStatus.Active.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked, UserRepositoryMockFactory.UserId2),
-				PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked,
-				UserRepositoryMockFactory.UserId2,
-				new DateTime(2020, 01, 01),
-				null,
-				PlanMemberStatus.Active.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked, UserRepositoryMockFactory.UserId3),
-				PlanRepositoryMockFactory.PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked,
-				UserRepositoryMockFactory.UserId3,
-				new DateTime(2020, 01, 01),
-				null,
-				PlanMemberStatus.Blocked.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PrivateFinishedPlanId5_WithUserId5Active, UserRepositoryMockFactory.UserId5),
-				PlanRepositoryMockFactory.PrivateFinishedPlanId5_WithUserId5Active,
-				UserRepositoryMockFactory.UserId5,
-				new DateTime(2020, 01, 01),
-				null,
-				PlanMemberStatus.Active.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active, UserRepositoryMockFactory.UserId5),
-				PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
-				UserRepositoryMockFactory.UserId5,
-				new DateTime(2020, 01, 01),
-				null,
-				PlanMemberStatus.Active.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active, UserRepositoryMockFactory.UserId3),
-				PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
-				UserRepositoryMockFactory.UserId3,
-				new DateTime(2020, 01, 01),
-				null,
-				PlanMemberStatus.Blocked.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active, UserRepositoryMockFactory.UserId4),
-				PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
-				UserRepositoryMockFactory.UserId4,
-				new DateTime(2020, 01, 01),
-				new DateTime(2020, 01, 05),
-				PlanMemberStatus.Active.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active, UserRepositoryMockFactory.UserId5),
-				PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
-				UserRepositoryMockFactory.UserId5,
-				new DateTime(2020, 01, 01),
-				null,
-				PlanMemberStatus.Active.Name,
-				DateTime.Today
-			),
-			PlanMember.Restore(
-				PlanMember.BuildId(PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active, UserRepositoryMockFactory.UserId4),
-				PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
-				UserRepositoryMockFactory.UserId4,
-				new DateTime(2020, 01, 01),
-				null,
-				PlanMemberStatus.Blocked.Name,
-				DateTime.Today
-			),
-		];
+		List<PlanMember> planMembers = MockData.MockPlanMembers;
 
 		var planMemberRepository = new Mock<IPlanMemberRepository>();
 

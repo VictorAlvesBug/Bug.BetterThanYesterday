@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
+using Bug.BetterThanYesterday.Application.Mocks;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
 using Bug.BetterThanYesterday.Domain.Strings;
@@ -14,7 +15,7 @@ public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteHabitUseCase>();
-		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId4);
+		var habit = _mock.Habits.First(habit => habit.Id == MockData.HabitId4);
 		var command = new DeleteHabitCommand(habit.Id);
 
 		// Act
@@ -55,7 +56,7 @@ public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteHabitUseCase>();
-		var habit = _mock.Habits.First(habit => habit.Id == HabitRepositoryMockFactory.HabitId3);
+		var habit = _mock.Habits.First(habit => habit.Id == MockData.HabitId3);
 		var command = new DeleteHabitCommand(habit.Id);
 
 		// Act

@@ -1,4 +1,5 @@
-﻿using Bug.BetterThanYesterday.Application.PlanMembers;
+﻿using Bug.BetterThanYesterday.Application.Mocks;
+using Bug.BetterThanYesterday.Application.PlanMembers;
 using Bug.BetterThanYesterday.Application.PlanMembers.BlockUserInThePlan;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
@@ -18,8 +19,8 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active);
-		var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId5);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active);
+		var user = _mock.Users.First(user => user.Id == MockData.UserId5);
 		var planMemberId = PlanMember.BuildId(plan.Id, user.Id);
 		var planMember = _mock.PlanMembers.First(pp => pp.Id == planMemberId);
 		var command = new BlockUserInThePlanCommand(
@@ -71,7 +72,7 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
 			Guid.NewGuid(),
-			UserRepositoryMockFactory.UserId1
+			MockData.UserId1
 		);
 
 		// Act
@@ -94,7 +95,7 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+			MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
 			Guid.NewGuid()
 		);
 
@@ -118,8 +119,8 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
-			UserRepositoryMockFactory.UserId2
+			MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+			MockData.UserId2
 		);
 
 		// Act
@@ -142,8 +143,8 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
-			UserRepositoryMockFactory.UserId3
+			MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+			MockData.UserId3
 		);
 
 		// Act
@@ -166,8 +167,8 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
-			UserRepositoryMockFactory.UserId1
+			MockData.PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
+			MockData.UserId1
 		);
 
 		// Act
@@ -190,8 +191,8 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PrivateFinishedPlanId5_WithUserId5Active,
-			UserRepositoryMockFactory.UserId5
+			MockData.PrivateFinishedPlanId5_WithUserId5Active,
+			MockData.UserId5
 		);
 
 		// Act
@@ -214,8 +215,8 @@ public class BlockUserInThePlanUseCaseTests : BasePlanMemberUseCaseTests
 		// Arrange
 		var useCase = _mocker.CreateInstance<BlockUserInThePlanUseCase>();
 		var command = new BlockUserInThePlanCommand(
-			PlanRepositoryMockFactory.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
-			UserRepositoryMockFactory.UserId5
+			MockData.PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
+			MockData.UserId5
 		);
 
 		// Act

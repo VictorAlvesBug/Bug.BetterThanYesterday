@@ -1,6 +1,7 @@
 using Bug.BetterThanYesterday.Application.CheckIns;
 using Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 using Bug.BetterThanYesterday.Application.CheckIns.Models;
+using Bug.BetterThanYesterday.Application.Mocks;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.CheckIns;
@@ -21,8 +22,8 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
     {
         // Arrange
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
-        var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active);
-        var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId1);
+        var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId1_WithUserId1Active);
+        var user = _mock.Users.First(user => user.Id == MockData.UserId1);
         var command = new AddCheckInCommand
         {
             PlanId = plan.Id,
@@ -59,7 +60,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
     {
         // Arrange
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
-        var user = _mock.Users.First(user => user.Id == UserRepositoryMockFactory.UserId1);
+        var user = _mock.Users.First(user => user.Id == MockData.UserId1);
         var command = new AddCheckInCommand
         {
             PlanId = Guid.NewGuid(),
@@ -89,7 +90,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
     {
         // Arrange
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
-        var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active);
+        var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId1_WithUserId1Active);
         var command = new AddCheckInCommand
         {
             PlanId = plan.Id,
@@ -119,7 +120,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
     {
         // Arrange
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
-        var existingCheckIn = _mock.CheckIns.First(checkIn => checkIn.Id == CheckInRepositoryMockFactory.CheckInId1);
+        var existingCheckIn = _mock.CheckIns.First(checkIn => checkIn.Id == MockData.CheckInId1);
         var command = new AddCheckInCommand
         {
             PlanId = existingCheckIn.PlanId,

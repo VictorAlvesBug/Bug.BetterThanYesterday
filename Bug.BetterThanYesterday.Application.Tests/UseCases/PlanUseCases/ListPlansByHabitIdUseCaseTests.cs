@@ -5,6 +5,7 @@ using Moq;
 using Xunit;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.Strings;
+using Bug.BetterThanYesterday.Application.Mocks;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.PlanUseCases;
 
@@ -15,7 +16,7 @@ public class ListPlansByHabitIdUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<ListPlansByHabitIdUseCase>();
-		var habit = _mock.Habits.First(h => h.Id == HabitRepositoryMockFactory.HabitId3);
+		var habit = _mock.Habits.First(h => h.Id == MockData.HabitId3);
 		var command = new ListPlansByHabitIdCommand(habit.Id);
 
 		// Act

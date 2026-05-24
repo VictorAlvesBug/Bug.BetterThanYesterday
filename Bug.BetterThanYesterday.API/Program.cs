@@ -52,7 +52,7 @@ if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
-    app.UseCors("AllowLocalhost");
+	app.UseCors("AllowLocalhost");
 }
 
 app.UseHttpsRedirection();

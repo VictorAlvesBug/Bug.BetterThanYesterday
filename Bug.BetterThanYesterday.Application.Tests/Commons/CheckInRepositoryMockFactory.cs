@@ -1,3 +1,4 @@
+using Bug.BetterThanYesterday.Application.Mocks;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
@@ -7,51 +8,9 @@ namespace Bug.BetterThanYesterday.Application.Tests.Commons;
 
 public static class CheckInRepositoryMockFactory
 {
-    public static readonly Guid CheckInId1 = Guid.Parse("d7c9f9d3-2b77-4c2c-a8d1-9b6f2b3d1a11");
-    public static readonly Guid CheckInId2 = Guid.Parse("a13b9c7f-5f9a-4a2e-8b2c-3d1f4e5a2b22");
-    public static readonly Guid CheckInId3 = Guid.Parse("c2f3b7e8-6d8f-4b1a-9c3d-7f2a1b4c3d33");
-
     public static (Mock<ICheckInRepository> repo, List<CheckIn> data) Create()
     {
-        var checkIns = new List<CheckIn>
-        {
-                CheckIn.Restore(
-                    CheckInId1,
-                    PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active,
-                    UserRepositoryMockFactory.UserId1,
-                    DateTime.Today.AddDays(-1),
-                    1,
-                    "Morning workout",
-                    "Did 30 minutes of cardio",
-                    CheckInStatus.Pending.Name,
-                    [],
-                    DateTime.Today
-                ),
-                CheckIn.Restore(
-                    CheckInId2,
-                    PlanRepositoryMockFactory.PublicRunningPlanId1_WithUserId1Active,
-                    UserRepositoryMockFactory.UserId2,
-                    new DateTime(2025, 01, 05),
-                    1,
-                    "Reading",
-                    "Read 15 pages",
-                    CheckInStatus.Pending.Name,
-                    [],
-                    DateTime.Today
-                ),
-                CheckIn.Restore(
-                    CheckInId3,
-                    PlanRepositoryMockFactory.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
-                    UserRepositoryMockFactory.UserId3,
-                    new DateTime(2025, 10, 10),
-                    1,
-                    "Evening review",
-                    "Reviewed notes",
-                    CheckInStatus.Pending.Name,
-                    [],
-                    DateTime.Today
-                )
-        };
+        var checkIns = MockData.MockCheckIns;
 
         var checkInRepository = new Mock<ICheckInRepository>();
 

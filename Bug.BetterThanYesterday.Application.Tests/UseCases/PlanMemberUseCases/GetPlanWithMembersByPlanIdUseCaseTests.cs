@@ -1,4 +1,5 @@
-﻿using Bug.BetterThanYesterday.Application.PlanMembers;
+﻿using Bug.BetterThanYesterday.Application.Mocks;
+using Bug.BetterThanYesterday.Application.PlanMembers;
 using Bug.BetterThanYesterday.Application.PlanMembers.GetPlanWithMembersByPlanId;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
@@ -68,7 +69,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<GetPlanWithMembersByPlanIdUseCase>();
-		var plan = _mock.Plans.First(plan => plan.Id == PlanRepositoryMockFactory.PublicCancelledPlanId3);
+		var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicCancelledPlanId3);
 		var owner = _mock.Users.First(user => user.Id == plan.OwnerId);
 		var command = new GetPlanWithMembersByPlanIdCommand(plan.Id);
 
