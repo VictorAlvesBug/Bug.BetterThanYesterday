@@ -23,17 +23,17 @@ public class CancelPlanUseCase(
 			var plan = await planRepository.GetByIdAsync(command.PlanId);
 
 			if (plan is null)
-				return Result.Rejected(Messages.PlanNotFound);
+				return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
 
 			var habit = await habitRepository.GetByIdAsync(plan.HabitId);
 
 			if (habit is null)
-				return Result.Rejected(Messages.HabitNotFound);
+				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
 			var owner = await userRepository.GetByIdAsync(plan.OwnerId);
 
 			if (owner is null)
-				return Result.Rejected(Messages.UserNotFound);
+				return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
 			plan.Cancel();
 

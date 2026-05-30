@@ -19,7 +19,7 @@ public class DeleteHabitUseCase(
 			var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
 			if (habit is null)
-				return Result.Rejected(Messages.HabitNotFound);
+				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
 			if (!await habitDeletionPolicy.CanDeleteAsync(habit.Id))
 				return Result.Rejected(Messages.HabitCannotBeRemovedAsItHasLinkedPlans);

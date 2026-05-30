@@ -29,17 +29,17 @@ public sealed class AddCheckInUseCase(
             var plan = await planRepository.GetByIdAsync(command.PlanId);
 
             if (plan is null)
-                return Result.Rejected(Messages.PlanNotFound);
+                return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
 
             var habit = await habitRepository.GetByIdAsync(plan.HabitId);
 
             if (habit is null)
-                return Result.Rejected(Messages.HabitNotFound);
+                return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
             var user = await userRepository.GetByIdAsync(command.UserId);
 
             if (user is null)
-                return Result.Rejected(Messages.UserNotFound);
+                return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
             var planMemberId = PlanMember.BuildId(
                 command.PlanId,
@@ -48,7 +48,7 @@ public sealed class AddCheckInUseCase(
             var planMember = await planMemberRepository.GetByIdAsync(planMemberId);
 
             if (planMember is null)
-                return Result.Rejected(Messages.PlanMemberNotFound);
+                return Result.Rejected(Messages.PlanMemberNotFound, RejectionType.NotFound);
 
             var checkIns = await checkInRepository.ListByPlanIdAndUserIdAndDateAsync(
                 command.PlanId,

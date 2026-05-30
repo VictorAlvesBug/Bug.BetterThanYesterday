@@ -33,7 +33,7 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 					review.ReviewerId,
 					review.Status,
 					review.Date))
-			.ToArray();
+			.ToList();
 
 		return CheckIn.Restore(
 		document.Id,

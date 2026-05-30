@@ -16,13 +16,7 @@ public sealed class Plan : Entity
 	public decimal PenaltyValue { get; set; }
 	public bool IsCancelled { get; set; }
 
-	private Dictionary<PlanStatus, List<PlanStatus>> _allowedStatusChanges = new()
-	{
-		{ PlanStatus.NotStarted, new List<PlanStatus> { PlanStatus.Running, PlanStatus.Cancelled } },
-		{ PlanStatus.Running, new List<PlanStatus> { PlanStatus.Finished, PlanStatus.Cancelled } },
-		{ PlanStatus.Finished, new List<PlanStatus>() },
-		{ PlanStatus.Cancelled, new List<PlanStatus>() }
-	};
+	public int CheckInReviewWindowInDays = 1;
 
 	private Plan(
 		Guid id,

@@ -17,7 +17,7 @@ public sealed class UpdateHabitUseCase(
 			var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
 			if (habit is null)
-				return Result.Rejected(Messages.HabitNotFound);
+				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
 			var existingNameHabit = await habitRepository.GetByNameAsync(command.Name);
 

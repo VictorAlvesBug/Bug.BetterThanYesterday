@@ -22,7 +22,7 @@ public class ListPlansByHabitIdUseCase(
 			var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
 			if (habit is null)
-				return Result.Rejected(Messages.HabitNotFound);
+				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
 			var plans = await planRepository.ListByHabitIdAsync(command.HabitId);
 			var ownerIds = plans.Select(plan => plan.OwnerId).Distinct().ToList();
@@ -31,7 +31,7 @@ public class ListPlansByHabitIdUseCase(
 				: await userRepository.BatchGetByIdAsync(ownerIds);
 
 			if (ownerIds.Count > owners.Count)
-				return Result.Rejected(Messages.UserNotFound);
+				return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
 			var ownersById = owners.ToDictionary(owner => owner.Id);
 			var planModels = plans.Select(plan => plan.ToModel(habit, ownersById[plan.OwnerId]));

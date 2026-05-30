@@ -3,6 +3,7 @@ using Bug.BetterThanYesterday.API.Tests.RouteTestCases;
 using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Newtonsoft.Json;
+using System.Text;
 using Xunit;
 
 namespace Bug.BetterThanYesterday.API.Tests
@@ -15,6 +16,8 @@ namespace Bug.BetterThanYesterday.API.Tests
 		{
 			TestCases.SetUpNotFoundTestCases();
 
+			TestCases.CheckForDuplicatedRoutes();
+
 			foreach (var testCase in TestCases.Routes)
 				yield return new object[] { testCase };
 		}
@@ -24,22 +27,26 @@ namespace Bug.BetterThanYesterday.API.Tests
 		public async Task Route_Should_Return_Expected_Result(Route testCase)
 		{
 			//await PersistMockDataAsync();
+			var testCaseNameToDebug = "RemoveUserFromPlan_WhenUserIsNotRelated_ShouldReturnNotFoundOrBadRequest";
 
-			Console.WriteLine($"Running: {testCase.Name}");
-			Console.WriteLine($"({testCase.Method}) {testCase.Path}");
+			if (testCase.Name == testCaseNameToDebug)
+			{
+				Console.WriteLine("Debugging...");
+			}
 
 			var request = new HttpRequestMessage
 			{
 				Method = testCase.Method,
 				RequestUri = new Uri($"http://localhost:5018/api/{testCase.Path}"),
-				Headers = { { "accept", "*/*" }, }
+				Headers = {
+					{ "accept", "*/*" }, 
+				}
 			};
-				
-			if (testCase.Body is not null)
+
+			if (testCase.Method != HttpMethod.Get && testCase.Body is not null)
 			{
 				var jsonBody = JsonConvert.SerializeObject(testCase.Body);
-				Console.WriteLine($"Body: {jsonBody}");
-				request.Content = new StringContent(jsonBody);
+				request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 			}
 
 			using var response = await _client.SendAsync(request);

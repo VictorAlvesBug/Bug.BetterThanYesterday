@@ -28,7 +28,7 @@ public class ListPlansByFilterUseCase(
 				var owner = await userRepository.GetByIdAsync(command.OwnerId.Value);
 
 				if (owner is null)
-					return Result.Rejected(Messages.UserNotFound);
+					return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
 				plans = await planRepository.ListByOwnerIdAsync(command.OwnerId.Value);
 			}
@@ -42,7 +42,7 @@ public class ListPlansByFilterUseCase(
 				var habit = await habitRepository.GetByIdAsync(command.HabitId.Value);
 
 				if (habit is null)
-					return Result.Rejected(Messages.HabitNotFound);
+					return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
 				plans = plans.Where(plan => plan.HabitId == command.HabitId.Value).ToList();
 				//plans = await planRepository.ListByHabitIdAsync(command.HabitId.Value);
@@ -74,7 +74,7 @@ public class ListPlansByFilterUseCase(
 				: await userRepository.BatchGetByIdAsync(ownerIds);
 
 			if (ownerIds.Count > owners.Count)
-				return Result.Rejected(Messages.UserNotFound);
+				return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
 			var ownersById = owners.ToDictionary(owner => owner.Id);
 

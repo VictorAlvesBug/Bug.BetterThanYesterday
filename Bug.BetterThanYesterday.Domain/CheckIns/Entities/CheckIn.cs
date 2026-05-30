@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Commons;
+using Bug.BetterThanYesterday.Domain.Plans.Entities;
 using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Domain.CheckIns.Entities;
@@ -14,7 +15,7 @@ public class CheckIn : Entity
 	public string Title { get; set; }
 	public string PhotoUrl { get; set; }
 	public CheckInStatus Status { get; set; }
-	public Review[] Reviews { get; set; }
+	public List<Review> Reviews { get; set; }
 
 	private CheckIn(
 		Guid id,
@@ -25,7 +26,7 @@ public class CheckIn : Entity
 		string title,
 		string photoUrl,
 		string status,
-		Review[] reviews,
+		List<Review> reviews,
 		DateTime createdAt)
 	{
 		Id = id;
@@ -98,7 +99,7 @@ public class CheckIn : Entity
 		string title,
 		string photoUrl,
 		string status,
-		Review[] reviews,
+		List<Review> reviews,
 		DateTime createdAt)
 	{
 		if (id == Guid.Empty)
@@ -124,7 +125,7 @@ public class CheckIn : Entity
 
 		if (string.IsNullOrWhiteSpace(status))
 			throw new ArgumentNullException(nameof(status), Messages.EnterCheckInStatus);
-		
+
 		if (createdAt == DateTime.MinValue)
 			throw new ArgumentNullException(nameof(createdAt), Messages.EnterCheckInCreateDate);
 
@@ -145,7 +146,7 @@ public class CheckIn : Entity
 	{
 		if (planId == Guid.Empty)
 			throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
-		
+
 		if (userId == Guid.Empty)
 			throw new ArgumentNullException(nameof(userId), Messages.EnterUserId);
 
@@ -161,7 +162,35 @@ public class CheckIn : Entity
 		bytes.AddRange(userId.ToByteArray());
 		bytes.AddRange(BitConverter.GetBytes(date.Date.ToBinary()));
 		bytes.AddRange(BitConverter.GetBytes(index));
-        var hash = sha.ComputeHash(bytes.ToArray());
-        return new Guid(hash.Take(16).ToArray());
+		var hash = sha.ComputeHash(bytes.ToArray());
+		return new Guid(hash.Take(16).ToArray());
+	}
+
+	public void AddReview(Review review)
+	{
+		Reviews.Add(review);
+	}
+
+	public bool IsReviewWindowOpen(int reviewWindowInDays)
+	{
+		return DateTime.Now <= Date.ToDateTime(TimeOnly.MinValue).AddDays(reviewWindowInDays);
+	}
+
+	// TODO: Testar, pois nunca foi utilizado
+	public void ConsolidateReviewsIntoStatus(int planMemberCount, int reviewWindowInDays)
+	{
+		if (IsReviewWindowOpen(reviewWindowInDays))
+			return;
+
+		var rejections = Reviews.Count(review => review.Status == CheckInStatus.Rejected);
+		var validations = Reviews.Count(review => review.Status == CheckInStatus.Validated);
+
+		if (rejections > planMemberCount / 2 || rejections > Reviews.Count / 2)
+		{
+			Status = CheckInStatus.Rejected;
+			return;
+		}
+
+		Status = CheckInStatus.Validated;
 	}
 }

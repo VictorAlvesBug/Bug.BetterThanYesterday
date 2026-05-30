@@ -27,22 +27,22 @@ public sealed class GetCheckInByIdUseCase(
 			var checkIn = await checkInRepository.GetByIdAsync(command.CheckInId);
 
 			if (checkIn is null)
-				return Result.Rejected(Messages.CheckInNotFound);
+				return Result.Rejected(Messages.CheckInNotFound, RejectionType.NotFound);
 
 			var plan = await planRepository.GetByIdAsync(checkIn.PlanId);
 
 			if (plan is null)
-				return Result.Rejected(Messages.PlanNotFound);
+				return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
 
 			var habit = await habitRepository.GetByIdAsync(plan.HabitId);
 
 			if (habit is null)
-				return Result.Rejected(Messages.HabitNotFound);
+				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
 			var user = await userRepository.GetByIdAsync(checkIn.UserId);
 
 			if (user is null)
-				return Result.Rejected(Messages.UserNotFound);
+				return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
 			return Result.Success(
                 await checkIn.ToModelAsync(

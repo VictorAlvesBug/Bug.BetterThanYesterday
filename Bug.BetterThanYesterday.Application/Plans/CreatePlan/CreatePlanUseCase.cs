@@ -23,12 +23,12 @@ public class CreatePlanUseCase(
 			var owner = await userRepository.GetByIdAsync(command.OwnerId);
 
 			if (owner is null)
-				return Result.Rejected(Messages.UserNotFound);
+				return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 			
 			var habit = await habitRepository.GetByIdAsync(command.HabitId);
 
 			if (habit is null)
-				return Result.Rejected(Messages.HabitNotFound);
+				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
 			var plan = Plan.CreateNew(
 				command.OwnerId,

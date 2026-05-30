@@ -22,15 +22,15 @@ public sealed class GetCheckInDetailsUseCase(
 
             var plan = await planRepository.GetByIdAsync(command.PlanId);
             if (plan is null)
-                return Result.Rejected(Messages.PlanNotFound);
+                return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
 
             var habit = await habitRepository.GetByIdAsync(plan.HabitId);
             if (habit is null)
-                return Result.Rejected(Messages.HabitNotFound);
+                return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
             var user = await userRepository.GetByIdAsync(command.UserId);
             if (user is null)
-                return Result.Rejected(Messages.UserNotFound);
+                return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
             var checkIn = await checkInRepository.GetDetailsAsync(
                 command.PlanId,
@@ -40,7 +40,7 @@ public sealed class GetCheckInDetailsUseCase(
             );
 
             if (checkIn is null)
-                return Result.Rejected(Messages.CheckInNotFound);
+                return Result.Rejected(Messages.CheckInNotFound, RejectionType.NotFound);
 
             return Result.Success(
                 checkIn.ToModel(plan, habit, user),

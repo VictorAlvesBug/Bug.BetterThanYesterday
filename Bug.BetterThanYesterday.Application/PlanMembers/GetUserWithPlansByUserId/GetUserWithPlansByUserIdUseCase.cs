@@ -25,7 +25,7 @@ public sealed class GetUserWithPlansByUserIdUseCase(
             var user = await userRepository.GetByIdAsync(command.UserId);
 
             if (user is null)
-                return Result.Rejected(Messages.UserNotFound);
+                return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
             var planMembers = await planMemberRepository.ListByUserIdAsync(command.UserId);
 
@@ -49,7 +49,7 @@ public sealed class GetUserWithPlansByUserIdUseCase(
                 : await userRepository.BatchGetByIdAsync(ownerIds);
 
             if (ownerIds.Count > owners.Count)
-                return Result.Rejected(Messages.UserNotFound);
+                return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
             var ownersById = owners.ToDictionary(owner => owner.Id);
 

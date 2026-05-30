@@ -17,7 +17,7 @@ public class UpdateUserUseCase(IUserRepository userRepository)
 			var user = await userRepository.GetByIdAsync(command.UserId);
 
 			if (user is null)
-				return Result.Rejected(Messages.UserNotFound);
+				return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
 			var existingEmailUser = await userRepository.GetByEmailAsync(Email.Create(command.Email));
 

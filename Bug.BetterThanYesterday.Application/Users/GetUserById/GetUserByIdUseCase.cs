@@ -16,7 +16,7 @@ public class GetUserByIdUseCase(IUserRepository userRepository)
 			var user = await userRepository.GetByIdAsync(command.UserId);
 
 			if (user is null)
-				return Result.Rejected(Messages.UserNotFound);
+				return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
 			return Result.Success(
 				user.ToModel(),

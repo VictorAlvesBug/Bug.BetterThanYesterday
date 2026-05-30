@@ -31,8 +31,8 @@ public class CreatePlanCommand : ICommand
 	public DateTime StartsAt { get; init; }
 	public DateTime EndsAt { get; init; }
 	public string Type { get; init; }
-	public int DaysOffPerWeek { get; set; }
-	public decimal PenaltyValue { get; set; }
+	public int DaysOffPerWeek { get; init; }
+	public decimal PenaltyValue { get; init; }
 
 	public void Validate()
 	{

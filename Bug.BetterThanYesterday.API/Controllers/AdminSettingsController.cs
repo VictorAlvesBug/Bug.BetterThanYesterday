@@ -26,7 +26,7 @@ public class AdminSettingsController(
 		}
 
 		if (result.IsRejected())
-			return BadRequest(result);
+			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
@@ -42,7 +42,7 @@ public class AdminSettingsController(
 		}
 
 		if (result.IsRejected())
-			return BadRequest(result);
+			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
@@ -58,7 +58,7 @@ public class AdminSettingsController(
 		}
 
 		if (result.IsRejected())
-			return BadRequest(result);
+			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}

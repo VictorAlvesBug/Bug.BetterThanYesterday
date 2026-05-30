@@ -42,7 +42,7 @@ public class CheckInsController(
 			return Ok(result);
 
 		if (result.IsRejected())
-			return BadRequest(result);
+			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
@@ -59,7 +59,7 @@ public class CheckInsController(
 		}
 
 		if (result.IsRejected())
-			return BadRequest(result);
+			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}

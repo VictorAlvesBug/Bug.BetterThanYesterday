@@ -1,5 +1,7 @@
 
 
+using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
+
 namespace Bug.BetterThanYesterday.Domain.Strings;
 
 public static class Messages
@@ -113,16 +115,21 @@ public static class Messages
     public const string EnterUserPixKeyType = "Informe um tipo válido para a chave PIX";
     public const string EnterUserCreationDate = "Informe a data de criação do usuário";
     public const string EnterValidUserEmail = "Informe um e-mail válido para o usuário";
-    public const string UserNotFound = "Usuário não encontrado";
-    public const string UserSuccessfullyDeleted = "Usuário deletado com sucesso";
+	public const string UserNotFound = "Usuário não encontrado";
+	public const string CheckInOwnerNotFound = "Criador do check-in não encontrado";
+	public const string UserSuccessfullyDeleted = "Usuário deletado com sucesso";
     public const string UserSuccessfullyFound = "Usuário encontrado com sucesso";
     public const string UsersSuccessfullyFound = "Usuários encontrados com sucesso";
     public const string UserSuccessfullyRegistered = "Usuário cadastrado com sucesso";
     public const string UserSuccessfullyUpdated = "Usuário atualizado com sucesso";
     #endregion
 
-    #region Other Messages
-    public const string ChangeNotMappedToCurrentStatus = "Alteração não mapeada para status atual";
+    #region Review CheckIn Messages
+    public const string CheckInReviewWindowHasAlreadyClosed = "O Período de revisão do check-in já foi encerrado";
+	#endregion
+
+	#region Other Messages
+	public const string ChangeNotMappedToCurrentStatus = "Alteração não mapeada para status atual";
     public const string EndDateMustBeLaterThanStartDate = "Data final deve ser posterior à data inicial";
     public const string OnlyValidGuidsCanBeCombined = "Apenas GUIDs válidos podem ser combinados";
     public const string StartDateCannotBeEarlierThanToday = "Data de início não pode ser anterior a hoje";

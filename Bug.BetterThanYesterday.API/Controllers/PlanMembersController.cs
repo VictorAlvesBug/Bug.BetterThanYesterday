@@ -85,7 +85,7 @@ public class PlanPlarticipantsController(
 		}
 
 		if (result.IsRejected())
-			return BadRequest(result);
+			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
@@ -101,7 +101,7 @@ public class PlanPlarticipantsController(
 			return NoContent();
 
 		if (result.IsRejected())
-			return BadRequest(result);
+			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
@@ -120,7 +120,7 @@ public class PlanPlarticipantsController(
 		}
 
 		if (result.IsRejected())
-			return BadRequest(result);
+			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
@@ -136,7 +136,7 @@ public class PlanPlarticipantsController(
 			return Ok(result);
 
 		if (result.IsRejected())
-			return BadRequest(result);
+			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}

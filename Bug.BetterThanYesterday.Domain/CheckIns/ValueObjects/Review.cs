@@ -55,7 +55,7 @@ public sealed record Review
 			return false;
 		}
 
-		if (statusVO!.IsValidAsReviewStatus() == false)
+		if (!statusVO!.IsValidAsReviewStatus())
 		{
 			errorMessage = Messages.InvalidReviewStatus;
 			return false;

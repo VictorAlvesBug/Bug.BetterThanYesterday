@@ -53,7 +53,7 @@ public sealed class ListCheckInsByFilterUseCase(
             var plan = await planRepository.GetByIdAsync(command.PlanId.Value);
 
             if (plan is null)
-                return Result.Rejected(Messages.PlanNotFound);
+                return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
 
             checkIns = await checkInRepository.ListByPlanIdAsync(command.PlanId.Value);
 
@@ -62,7 +62,7 @@ public sealed class ListCheckInsByFilterUseCase(
                 var user = await userRepository.GetByIdAsync(command.UserId.Value);
 
                 if (user is null)
-                    return Result.Rejected(Messages.UserNotFound);
+                    return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
                 var planMemberId = PlanMember.BuildId(
                     command.PlanId.Value,
@@ -71,7 +71,7 @@ public sealed class ListCheckInsByFilterUseCase(
                 var planMember = await planMemberRepository.GetByIdAsync(planMemberId);
 
                 if (planMember is null)
-                    return Result.Rejected(Messages.PlanMemberNotFound);
+                    return Result.Rejected(Messages.PlanMemberNotFound, RejectionType.NotFound);
 
                 checkIns = checkIns.Where(checkIn => checkIn.UserId == command.UserId.Value).ToList();
             }

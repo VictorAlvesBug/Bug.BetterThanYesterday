@@ -2,9 +2,9 @@
 
 public interface IResult
 {
-
 	bool IsSuccess();
 	bool IsRejected();
 	bool IsFailure();
 	string GetMessage();
+	int GetStatusCode();
 }

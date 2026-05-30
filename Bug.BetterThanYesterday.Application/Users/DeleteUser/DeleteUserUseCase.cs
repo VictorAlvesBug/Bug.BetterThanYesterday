@@ -16,7 +16,7 @@ public class DeleteUserUseCase(IUserRepository userRepository)
 			var user = await userRepository.GetByIdAsync(command.UserId);
 
 			if (user is null)
-				return Result.Rejected(Messages.UserNotFound);
+				return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
 			await userRepository.DeleteAsync(user);
 			return Result.Success(Messages.UserSuccessfullyDeleted);
