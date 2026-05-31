@@ -15,6 +15,7 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
         public HttpMethod Method { get; set; }
         public string Path { get; set; }
         public object? Body { get; set; }
+		public bool NeedsToResetMocksAfter { get; set; } = false;
         public int ExpectedStatusCode { get; set; }
         public string ExpectedMessageContains { get; set; }
 

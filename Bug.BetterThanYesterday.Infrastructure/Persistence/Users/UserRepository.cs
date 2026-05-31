@@ -15,7 +15,7 @@ public class UserRepository(
 {
 	public async Task<User?> GetByEmailAsync(Email email)
 	{
-		var document = (await _collection.FindAsync(user => user.Email == email.Value)).FirstOrDefault();
+		var document = (await _collection.FindAsync(userDoc => userDoc.Email == email.Value)).FirstOrDefault();
 		return document is null ? null : _mapper.ToDomain(document);
 	}
 }

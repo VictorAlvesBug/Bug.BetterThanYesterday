@@ -14,7 +14,7 @@ public class HabitRepository(
 {
 	public async Task<Habit?> GetByNameAsync(string name)
 	{
-		var document = (await _collection.FindAsync(user => user.Name == name)).FirstOrDefault();
+		var document = (await _collection.FindAsync(habitDoc => habitDoc.Name == name)).FirstOrDefault();
 		return document is null ? null : _mapper.ToDomain(document);
 	}
 }

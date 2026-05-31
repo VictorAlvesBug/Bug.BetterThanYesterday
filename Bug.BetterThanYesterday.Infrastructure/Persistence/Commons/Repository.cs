@@ -23,9 +23,24 @@ public class Repository<TEntity, TDocument> : IRepository<TEntity>
 		await _collection.InsertOneAsync(_mapper.ToDocument(entity));
 	}
 
+	public async Task ReplaceAsync(TEntity entity)
+	{
+		await _collection.ReplaceOneAsync(
+			filter: doc => doc.Id == entity.Id, 
+			replacement: _mapper.ToDocument(entity),
+			options: new ReplaceOptions { IsUpsert = true }
+		);
+	}
+
 	public async Task DeleteAsync(TEntity entity)
 	{
-		await _collection.DeleteOneAsync(u => u.Id == entity.Id);
+		await _collection.DeleteOneAsync(doc => doc.Id == entity.Id);
+	}
+
+	public async Task DeleteManyAsync(List<TEntity> entities)
+	{
+		var idsToDelete = entities.Select(entity => entity.Id).ToHashSet();
+		await _collection.DeleteManyAsync(doc => idsToDelete.Contains(doc.Id));
 	}
 
 	public async Task<List<TEntity>> ListAllAsync()
@@ -36,7 +51,7 @@ public class Repository<TEntity, TDocument> : IRepository<TEntity>
 
 	public async Task<TEntity?> GetByIdAsync(Guid id)
 	{
-		var document = (await _collection.FindAsync(entity => entity.Id == id)).FirstOrDefault();
+		var document = (await _collection.FindAsync(doc => doc.Id == id)).FirstOrDefault();
 		return document is null ? null : _mapper.ToDomain(document);
 	}
 
@@ -46,7 +61,7 @@ public class Repository<TEntity, TDocument> : IRepository<TEntity>
 
 		foreach(var chunk in ids.Chunk(1000))
         {
-			var filter = Builders<TDocument>.Filter.In(entity => entity.Id, chunk);
+			var filter = Builders<TDocument>.Filter.In(doc => doc.Id, chunk);
 			documents.AddRange((await _collection.FindAsync(filter)).ToList());
         }
 
@@ -55,6 +70,6 @@ public class Repository<TEntity, TDocument> : IRepository<TEntity>
 
 	public async Task UpdateAsync(TEntity entity)
 	{
-		await _collection.ReplaceOneAsync(u => u.Id == entity.Id, _mapper.ToDocument(entity));
+		await _collection.ReplaceOneAsync(doc => doc.Id == entity.Id, _mapper.ToDocument(entity));
 	}
 }

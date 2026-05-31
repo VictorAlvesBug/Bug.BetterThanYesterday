@@ -15,37 +15,37 @@ public class CheckInRepository(
     public async Task<CheckIn> GetDetailsAsync(Guid planId, Guid userId, DateOnly date, int index = 0)
     {
 		return mapper.ToDomain(
-			(await _collection.FindAsync(checkIn =>
-			checkIn.PlanId == planId
-			&& checkIn.UserId == userId
-			&& checkIn.Date == date.ToDateTime(TimeOnly.MinValue)
-			&& checkIn.Index == index))
+			(await _collection.FindAsync(checkInDoc =>
+			checkInDoc.PlanId == planId
+			&& checkInDoc.UserId == userId
+			&& checkInDoc.Date == date.ToDateTime(TimeOnly.MinValue)
+			&& checkInDoc.Index == index))
 			.FirstOrDefault()
 		);
     }
 
 	public async Task<List<CheckIn>> ListByPlanIdAsync(Guid planId)
 	{
-		return (await _collection.FindAsync(checkIn => checkIn.PlanId == planId))
+		return (await _collection.FindAsync(checkInDoc => checkInDoc.PlanId == planId))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
 	}
 
 	public async Task<List<CheckIn>> ListByPlanIdAndUserIdAsync(Guid planId, Guid userId)
 	{
-		return (await _collection.FindAsync(checkIn =>
-				checkIn.PlanId == planId 
-				&& checkIn.UserId == userId))
+		return (await _collection.FindAsync(checkInDoc =>
+				checkInDoc.PlanId == planId 
+				&& checkInDoc.UserId == userId))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
 	}
 
     public async Task<List<CheckIn>> ListByPlanIdAndUserIdAndDateAsync(Guid planId, Guid userId, DateOnly date)
     {
-		return (await _collection.FindAsync(checkIn =>
-				checkIn.PlanId == planId 
-				&& checkIn.UserId == userId
-				&& checkIn.Date == date.ToDateTime(TimeOnly.MinValue)))
+		return (await _collection.FindAsync(checkInDoc =>
+				checkInDoc.PlanId == planId 
+				&& checkInDoc.UserId == userId
+				&& checkInDoc.Date == date.ToDateTime(TimeOnly.MinValue)))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
     }

@@ -31,7 +31,7 @@ public class AdminSettingsController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpPost("PersistMockData")]
+	[HttpPut("PersistMockData")]
 	public async Task<IActionResult> PersistMockData()
 	{
 		var result = await persistMockDataUseCase.HandleAsync(new PersistMockDataCommand());
@@ -47,7 +47,7 @@ public class AdminSettingsController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpPost("DeleteMockData")]
+	[HttpDelete("DeleteMockData")]
 	public async Task<IActionResult> DeleteMockData()
 	{
 		var result = await deleteMockDataUseCase.HandleAsync(new DeleteMockDataCommand());

@@ -25,30 +25,16 @@ public sealed class DeleteMockDataUseCase(
 		{
 			command.Validate();
 
-			foreach(var habit in MockData.MockHabits)
+			var tasks = new List<Task>
 			{
-				await habitRepository.DeleteAsync(habit);
-			}
+				habitRepository.DeleteManyAsync(MockData.MockHabits),
+				userRepository.DeleteManyAsync(MockData.MockUsers),
+				planRepository.DeleteManyAsync(MockData.MockPlans),
+				planMemberRepository.DeleteManyAsync(MockData.MockPlanMembers),
+				checkInRepository.DeleteManyAsync(MockData.MockCheckIns),
+			};
 
-			foreach(var user in MockData.MockUsers)
-			{
-				await userRepository.DeleteAsync(user);
-			}
-
-			foreach(var plan in MockData.MockPlans)
-			{
-				await planRepository.DeleteAsync(plan);
-			}
-
-			foreach(var planMember in MockData.MockPlanMembers)
-			{
-				await planMemberRepository.DeleteAsync(planMember);
-			}
-
-			foreach(var checkIn in MockData.MockCheckIns)
-			{
-				await checkInRepository.DeleteAsync(checkIn);
-			}
+			await Task.WhenAll(tasks);
 
 			return Result.Success($"Dados mockados deletedos com sucesso");
 		}

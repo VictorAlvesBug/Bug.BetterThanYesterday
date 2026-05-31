@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Bug.BetterThanYesterday.Domain.Extensions
 {
-    public static class ObjectExtensions
+	public static class ObjectExtensions
 	{
 		public static string ToJson<T>(this T obj)
 		{
@@ -23,20 +23,20 @@ namespace Bug.BetterThanYesterday.Domain.Extensions
 		}
 
 		public static T Copy<T>(this T obj)
-        {
-            if(obj == null)
-                throw new ArgumentNullException(nameof(obj));
+		{
+			if (obj == null)
+				throw new ArgumentNullException(nameof(obj));
 
-            var json = obj.ToJson();
-            var copiedObj = json.Deserialize<T>();
+			var json = obj.ToJson();
+			var copiedObj = json.Deserialize<T>();
 
-            if (copiedObj == null)
-                throw new Exception($"Não foi possível copiar o objeto do tipo '{typeof(T).Name}'. Objeto serializado: {json}");
+			if (copiedObj == null)
+				throw new Exception($"Não foi possível copiar o objeto do tipo '{typeof(T).Name}'. Objeto serializado: {json}");
 
-            return copiedObj!;
-        }
+			return copiedObj!;
+		}
 
-        public static string ToQueryString<T>(this T obj)
+		public static string ToQueryString<T>(this T obj)
 		{
 			if (obj == null)
 				throw new ArgumentNullException(nameof(obj));
@@ -48,11 +48,18 @@ namespace Bug.BetterThanYesterday.Domain.Extensions
 				.Select(p =>
 				{
 					var key = Uri.EscapeDataString(p.Name);
-					var value = p.GetValue(obj)?.ToString() ?? "";
+
+					var value = p.GetValue(obj)?.ToString() ?? string.Empty;
+
+					if (p.PropertyType == typeof(DateTime))
+						value = ((DateTime)p.GetValue(obj)).ToString("yyyy-MM-dd");
+					else if (p.PropertyType == typeof(DateTime?))
+						value = ((DateTime?)p.GetValue(obj))?.ToString("yyyy-MM-dd") ?? string.Empty;
+
 					return $"{key}={Uri.EscapeDataString(value)}";
 				});
 
 			return string.Join("&", parts);
 		}
-    }
+	}
 }

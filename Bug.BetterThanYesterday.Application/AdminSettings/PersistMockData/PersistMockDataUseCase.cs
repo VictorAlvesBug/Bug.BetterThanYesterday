@@ -25,30 +25,31 @@ public sealed class PersistMockDataUseCase(
 		{
 			command.Validate();
 
-			foreach(var habit in MockData.MockHabits)
+			var tasks = new List<Task>
 			{
-				await habitRepository.AddAsync(habit);
-			}
+				Parallel.ForEachAsync(
+					MockData.MockHabits,
+					async (habit, _) => await habitRepository.ReplaceAsync(habit)
+				),
+				Parallel.ForEachAsync(
+					MockData.MockUsers,
+					async (user, _) => await userRepository.ReplaceAsync(user)
+				),
+				Parallel.ForEachAsync(
+					MockData.MockPlans,
+					async (plan, _) => await planRepository.ReplaceAsync(plan)
+				),
+				Parallel.ForEachAsync(
+					MockData.MockPlanMembers,
+					async (planMember, _) => await planMemberRepository.ReplaceAsync(planMember)
+				),
+				Parallel.ForEachAsync(
+					MockData.MockCheckIns,
+					async (checkIn, _) => await checkInRepository.ReplaceAsync(checkIn)
+				),
+			};
 
-			foreach(var user in MockData.MockUsers)
-			{
-				await userRepository.AddAsync(user);
-			}
-
-			foreach(var plan in MockData.MockPlans)
-			{
-				await planRepository.AddAsync(plan);
-			}
-
-			foreach(var planMember in MockData.MockPlanMembers)
-			{
-				await planMemberRepository.AddAsync(planMember);
-			}
-
-			foreach(var checkIn in MockData.MockCheckIns)
-			{
-				await checkInRepository.AddAsync(checkIn);
-			}
+			await Task.WhenAll(tasks);
 
 			return Result.Success($"Dados mockados persistidos com sucesso");
 		}
