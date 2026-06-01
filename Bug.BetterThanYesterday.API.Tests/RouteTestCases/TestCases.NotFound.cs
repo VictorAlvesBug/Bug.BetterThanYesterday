@@ -1,14 +1,35 @@
 ﻿using Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
+using Bug.BetterThanYesterday.Application.CheckIns.GetCheckInById;
+using Bug.BetterThanYesterday.Application.CheckIns.GetCheckInDetails;
+using Bug.BetterThanYesterday.Application.CheckIns.GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDate;
+using Bug.BetterThanYesterday.Application.CheckIns.GetPlanUserWithCheckInsByPlanIdAndUserId;
+using Bug.BetterThanYesterday.Application.CheckIns.GetPlanWithCheckInsByPlanId;
 using Bug.BetterThanYesterday.Application.CheckIns.ListCheckInsByFilter;
+using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
+using Bug.BetterThanYesterday.Application.Habits.GetHabitById;
+using Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
 using Bug.BetterThanYesterday.Application.Mocks;
+using Bug.BetterThanYesterday.Application.PlanMembers.AddUserToPlan;
+using Bug.BetterThanYesterday.Application.PlanMembers.BlockUserInThePlan;
 using Bug.BetterThanYesterday.Application.PlanMembers.GetPlanMemberDetails;
+using Bug.BetterThanYesterday.Application.PlanMembers.GetPlanWithMembersByPlanId;
+using Bug.BetterThanYesterday.Application.PlanMembers.GetUserWithPlansByUserId;
+using Bug.BetterThanYesterday.Application.PlanMembers.RemoveUserFromPlan;
+using Bug.BetterThanYesterday.Application.PlanMembers.UnblockUserInThePlan;
+using Bug.BetterThanYesterday.Application.Plans.CancelPlan;
 using Bug.BetterThanYesterday.Application.Plans.CreatePlan;
+using Bug.BetterThanYesterday.Application.Plans.GetPlanById;
 using Bug.BetterThanYesterday.Application.Plans.ListPlansByFilter;
+using Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
+using Bug.BetterThanYesterday.Application.Users.DeleteUser;
+using Bug.BetterThanYesterday.Application.Users.GetUserById;
+using Bug.BetterThanYesterday.Application.Users.UpdateUser;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Extensions;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Microsoft.AspNetCore.Http;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace Bug.BetterThanYesterday.API.Tests.RouteTestCases;
 
@@ -16,6 +37,36 @@ public partial class TestCases
 {
 	public static void SetUpNotFoundTestCases()
 	{
+		var baseAddCheckInCommand = new AddCheckInCommand
+		{
+			PlanId = MockData.PublicRunningPlanId1_WithUserId1Active,
+			UserId = MockData.UserId1,
+			Date = DateTime.Today,
+			Title = "Mock Title",
+			PhotoUrl = "Mock Url"
+		};
+
+		var baseListCheckInsByFilterCommand = new ListCheckInsByFilterCommand
+		{
+			PlanId = MockData.PublicRunningPlanId1_WithUserId1Active,
+			UserId = MockData.UserId1,
+			Date = DateTime.Today,
+			Status = CheckInStatus.Pending.Name,
+		};
+
+		/*var baseReviewCheckInCommand = new ReviewCheckInCommand
+		{
+			CheckInId = MockData.CheckInId4,
+			ReviewerId = MockData.UserId5,
+			Date = DateTime.Now,
+			Status = CheckInStatus.Rejected.Name
+		};*/
+
+		/*var baseUpdateHabitCommand = new UpdateHabitCommand(
+			habitId: MockData.HabitId1,
+			name: "Mock Name"
+		);*/
+
 		var baseCreatePlanCommand = new CreatePlanCommand(
 			ownerId: MockData.UserId1,
 			habitId: MockData.HabitId1,
@@ -35,32 +86,283 @@ public partial class TestCases
 			Type = PlanType.Private.Name,
 		};
 
-		var baseListCheckInsByFilterCommand = new ListCheckInsByFilterCommand
-		{
-			PlanId = MockData.PublicRunningPlanId1_WithUserId1Active,
-			UserId = MockData.UserId1,
-			Date = DateTime.Today,
-			Status = CheckInStatus.Pending.Name,
-		};
-
-		var baseAddCheckInCommand = new AddCheckInCommand
-		{
-			PlanId = MockData.PublicRunningPlanId1_WithUserId1Active,
-			UserId = MockData.UserId1,
-			Date = DateTime.Today,
-			Title = "Mock Title",
-			PhotoUrl = "Mock Url"
-		};
-
-		var baseReviewCheckInCommand = new ReviewCheckInCommand
-		{
-			CheckInId = MockData.CheckInId4,
-			ReviewerId = MockData.UserId5,
-			Date = DateTime.Now,
-			Status = CheckInStatus.Rejected.Name
-		};
+		/*var baseUpdateUserCommand = new UpdateUserCommand(
+			userId: MockData.UserId1,
+			name: "Mock Name",
+			email: "mock@email.com"
+		);*/
 
 		Routes.AddRange([
+			new()
+			{
+				Name = "AddCheckIn_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"CheckIns",
+				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
+					.With(command => command.PlanId, MockData.PlanId0)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "AddCheckIn_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns",
+				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
+					.With(command => command.PlanId, MockData.PlanId0_WithNonExistingHabitIdRelated)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "AddCheckIn_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"CheckIns",
+				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
+					.With(command => command.UserId, MockData.UserId0)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "AddCheckIn_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns",
+				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
+					.With(command => command.PlanId, MockData.PublicRunningPlanId1_WithUserId1Active)
+					.With(command => command.UserId, MockData.UserId2)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetCheckInById_WhenCheckInDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns/{MockData.CheckInId0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetCheckInById_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns/{MockData.CheckInId0_WithNonExistingPlanIdRelated}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetCheckInById_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns/{MockData.CheckInId0_WithNonExistingHabitIdRelated}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetCheckInById_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns/{MockData.CheckInId0_WithNonExistingOwnerIdRelated}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			/*new()
+			{
+				Name = "GetCheckInDetails_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetCheckInDetails_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetCheckInDetails_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetCheckInDetails_WhenCheckInDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDate_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDate_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDate_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDate_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanUserWithCheckInsByPlanIdAndUserId_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanUserWithCheckInsByPlanIdAndUserId_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanUserWithCheckInsByPlanIdAndUserId_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanUserWithCheckInsByPlanIdAndUserId_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanWithCheckInsByPlanId_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanWithCheckInsByPlanId_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanWithCheckInsByPlanId_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},*/
+			new()
+			{
+				Name = "ListCheckInsByFilter_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(baseListCheckInsByFilterCommand)
+					.With(command => command.PlanId, MockData.PlanId0)
+					.Build()
+					.ToQueryString()}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "ListCheckInsByFilter_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(baseListCheckInsByFilterCommand)
+					.With(command => command.UserId, MockData.UserId0)
+					.Build()}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "ListCheckInsByFilter_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(baseListCheckInsByFilterCommand)
+					.With(command => command.PlanId, MockData.PublicRunningPlanId1_WithUserId1Active)
+					.With(command => command.UserId, MockData.UserId2)
+					.Build()}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			/*new()
+			{
+				Name = "ReviewCheckIn_WhenCheckInDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"CheckIns/{MockData.CheckInId4}/Reviews",
+				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "ReviewCheckIn_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns/{MockData.CheckInId4}/Reviews",
+				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+					.With(command => command.ReviewerId, MockData.UserId0)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "ReviewCheckIn_WhenCheckInOwnerDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns",
+				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+					.With(command => command.CheckInId, MockData.CheckInId0_WithNonExistingOwnerIdRelated)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "ReviewCheckIn_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns",
+				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+					.With(command => command.CheckInId, MockData.CheckInId0_WithNonExistingPlanIdRelated)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "ReviewCheckIn_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns",
+				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+					.With(command => command.CheckInId, MockData.CheckInId0_WithNonExistingHabitIdRelated)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "ReviewCheckIn_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"CheckIns",
+				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+					.With(command => command.CheckInId, MockData.CheckInId1)
+					.With(command => command.ReviewerId, MockData.UserId2)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "DeleteHabit_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Habits?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},*/
 			new()
 			{
 				Name = "GetHabitById_WhenHabitDoesNotExist_ShouldReturnNotFound",
@@ -70,9 +372,263 @@ public partial class TestCases
 			},
 			new()
 			{
-				Name = "GetUserById_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Name = "GetHabitById_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"Users/{MockData.UserId0}",
+				Path = $"Habits/{MockData.HabitId0_WithNonExistingPlanIdRelated}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			/*new()
+			{
+				Name = "UpdateHabit_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Habits",
+				Body = new MockBuilder<UpdateHabitCommand>(baseUpdateHabitCommand)
+					.With(command => command.HabitId, MockData.HabitId0)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},*/
+			new()
+			{
+				Name = "AddUserToPlan_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans/{MockData.PlanId0}/Members/{MockData.UserId1}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "AddUserToPlan_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingHabitIdRelated}/Members/{MockData.UserId1}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "AddUserToPlan_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "AddUserToPlan_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingOwnerIdRelated}/Members/{MockData.UserId1}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "BlockUserInThePlan_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans/{MockData.PlanId0}/Members/{MockData.UserId1}/Block",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "BlockUserInThePlan_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingHabitIdRelated}/Members/{MockData.UserId1}/Block",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "BlockUserInThePlan_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId0}/Block",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "BlockUserInThePlan_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingOwnerIdRelated}/Members/{MockData.UserId1}/Block",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "BlockUserInThePlan_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId2}/Block",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanMemberDetails_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Plans/{MockData.PlanId0}/Members/{MockData.UserId1}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanMemberDetails_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingHabitIdRelated}/Members/{MockData.UserId1}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanMemberDetails_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanMemberDetails_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingOwnerIdRelated}/Members/{MockData.UserId1}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanMemberDetails_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId2}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanWithMembersByPlanId_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Plans/{MockData.PlanId0}/Members",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanWithMembersByPlanId_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingHabitIdRelated}/Members",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanWithMembersByPlanId_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingOwnerIdRelated}/Members",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetUserWithPlansByUserId_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Users/{MockData.UserId0}/Plans",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetUserWithPlansByUserId_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Users/{MockData.UserId0}/Plans",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "RemoveUserFromPlan_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans/{MockData.PlanId0}/Members/{MockData.UserId1}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "RemoveUserFromPlan_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingHabitIdRelated}/Members/{MockData.UserId1}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "RemoveUserFromPlan_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "RemoveUserFromPlan_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingOwnerIdRelated}/Members/{MockData.UserId1}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "RemoveUserFromPlan_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId2}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "UnblockUserInThePlan_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans/{MockData.PlanId0}/Members/{MockData.UserId1}/Block",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "UnblockUserInThePlan_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingHabitIdRelated}/Members/{MockData.UserId1}/Block",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "UnblockUserInThePlan_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId0}/Block",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "UnblockUserInThePlan_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingOwnerIdRelated}/Members/{MockData.UserId1}/Block",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "UnblockUserInThePlan_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId2}/Block",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			/*new()
+			{
+				Name = "CancelPlan_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "CancelPlan_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "CancelPlan_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Delete,
+				Path = $"Plans?{0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},*/
+			new()
+			{
+				Name = "CreatePlan_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans",
+				Body = new MockBuilder<CreatePlanCommand>(baseCreatePlanCommand)
+					.With(command => command.OwnerId, MockData.UserId0)
+					.Build(),
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "CreatePlan_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Post,
+				Path = $"Plans",
+				Body = new MockBuilder<CreatePlanCommand>(baseCreatePlanCommand)
+					.With(command => command.HabitId, MockData.HabitId0)
+					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
 			new()
@@ -80,6 +636,20 @@ public partial class TestCases
 				Name = "GetPlanById_WhenPlanDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
 				Path = $"Plans/{MockData.PlanId0}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanById_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingHabitIdRelated}",
+				ExpectedStatusCode = StatusCodes.Status404NotFound
+			},
+			new()
+			{
+				Name = "GetPlanById_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
+				Path = $"Plans/{MockData.PlanId0_WithNonExistingOwnerIdRelated}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
 			new()
@@ -104,171 +674,49 @@ public partial class TestCases
 			},
 			new()
 			{
-				Name = "AddPlan_WhenOwnerDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Post,
+				Name = "ListPlansByFilter_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Method = HttpMethod.Get,
 				Path = $"Plans",
-				Body = new MockBuilder<CreatePlanCommand>(baseCreatePlanCommand)
-					.With(command => command.OwnerId, MockData.UserId0)
-					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
-			new()
+			/*new()
 			{
-				Name = "AddPlan_WhenHabitDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Post,
-				Path = $"Plans",
-				Body = new MockBuilder<CreatePlanCommand>(baseCreatePlanCommand)
-					.With(command => command.HabitId, MockData.HabitId0)
-					.Build(),
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "GetPlanMemberDetails_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Name = "ListPlansByHabitId_WhenHabitDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"Plans/{MockData.PlanId0}/Members/{MockData.UserId1}",
+				Path = $"Plans?{0}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
 			new()
 			{
-				Name = "GetPlanMemberDetails_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Name = "ListPlansByHabitId_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId0}",
+				Path = $"Plans?{0}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
 			new()
 			{
-				Name = "GetPlanWithMembersByPlanId_WhenPlanDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
-				Path = $"Plans/{MockData.PlanId0}/Members",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "GetUserWithPlansByUserId_WhenUserDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
-				Path = $"Users/{MockData.UserId0}/Plans",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "AddUserToPlan_WhenPlanDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Post,
-				Path = $"Plans/{MockData.PlanId0}/Members/{MockData.UserId1}",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "AddUserToPlan_WhenUserDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Post,
-				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId0}",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "RemoveUserFromPlan_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Name = "DeleteUser_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Delete,
-				Path = $"Plans/{MockData.PlanId0}/Members/{MockData.UserId1}",
+				Path = $"Users?{0}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
+			},*/
 			new()
 			{
-				Name = "RemoveUserFromPlan_WhenUserDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Delete,
-				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId0}",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "RemoveUserFromPlan_WhenUserIsNotRelated_ShouldReturnNotFoundOrBadRequest",
-				Method = HttpMethod.Delete,
-				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId2}",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "BlockUserInPlan_WhenPlanDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Post,
-				Path = $"Plans/{MockData.PlanId0}/Members/{MockData.UserId1}/Block",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "BlockUserInPlan_WhenUserDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Post,
-				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId0}/Block",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "UnblockUserInPlan_WhenPlanDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Delete,
-				Path = $"Plans/{MockData.PlanId0}/Members/{MockData.UserId1}/Block",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "UnblockUserInPlan_WhenUserDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Delete,
-				Path = $"Plans/{MockData.PublicRunningPlanId1_WithUserId1Active}/Members/{MockData.UserId0}/Block",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "GetCheckInById_WhenCheckInDoesNotExist_ShouldReturnNotFound",
+				Name = "GetUserById_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"CheckIns/{MockData.CheckInId0}",
+				Path = $"Users/{MockData.UserId0}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
-			new()
+			/*new()
 			{
-				Name = "ListCheckInsByFilter_WhenPlanDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
-				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(baseListCheckInsByFilterCommand)
-					.With(command => command.PlanId, MockData.PlanId0)
-					.Build()
-					.ToQueryString()}",
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "AddCheckIn_WhenPlanDoesNotExist_ShouldReturnNotFound",
+				Name = "UpdateUser_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
-				Path = $"CheckIns",
-				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
-					.With(command => command.PlanId, MockData.PlanId0)
-					.Build(),
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "AddCheckIn_WhenUserDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Post,
-				Path = $"CheckIns",
-				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
+				Path = $"Users",
+				Body = new MockBuilder<UpdateUserCommand>(baseUpdateUserCommand)
 					.With(command => command.UserId, MockData.UserId0)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "ReviewCheckIn_WhenCheckInDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Post,
-				Path = $"CheckIns/{MockData.CheckInId4}/Reviews",
-				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
-					.Build(),
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
-			new()
-			{
-				Name = "ReviewCheckIn_WhenReviewerDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
-				Path = $"CheckIns/{MockData.CheckInId4}/Reviews",
-				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
-					.With(command => command.ReviewerId, MockData.UserId0)
-					.Build(),
-				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
+			}*/
 		]);
 	}
 }

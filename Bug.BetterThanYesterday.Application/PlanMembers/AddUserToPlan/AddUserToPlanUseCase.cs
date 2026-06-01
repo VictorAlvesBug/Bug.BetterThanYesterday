@@ -40,7 +40,7 @@ public sealed class AddUserToPlanUseCase(
 
             var owner = plan.OwnerId == user.Id
                 ? user
-                : (await userRepository.BatchGetByIdAsync([plan.OwnerId])).SingleOrDefault();
+                : await userRepository.GetByIdAsync(plan.OwnerId);
 
             if (owner is null)
                 return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);

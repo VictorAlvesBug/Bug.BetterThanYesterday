@@ -17,6 +17,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 	{
 
 		public static readonly Guid HabitId0 = Guid.Parse("02acffc2-ce9c-408a-840e-748ddb787904");
+		public static readonly Guid HabitId0_WithNonExistingPlanIdRelated = Guid.Parse("f3c7d661-30b5-4ceb-a5da-57e2db41f0b1");
 		public static readonly Guid HabitId1 = Guid.Parse("0160269d-1e78-4ca2-b100-ee42805b5c1e");
 		public static readonly Guid HabitId2 = Guid.Parse("f523e101-d4b9-453e-8669-c9e8a6918544");
 		public static readonly Guid HabitId3 = Guid.Parse("f8cfc6a0-7304-41bb-985e-a3ce9c955bde");
@@ -31,6 +32,8 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 		public static readonly Guid UserId6 = Guid.Parse("7cbe7e0c-61d0-4934-8482-cf17d4b0854f");
 
 		public static readonly Guid PlanId0 = Guid.Parse("3bb93e8e78354ea1ba95e1877d037273");
+		public static readonly Guid PlanId0_WithNonExistingHabitIdRelated = Guid.Parse("599bcca6-768e-45e1-b3f1-a2a3cb5456b5");
+		public static readonly Guid PlanId0_WithNonExistingOwnerIdRelated = Guid.Parse("c5fdaa82-dbfa-4c99-9671-96d25dac46ab");
 		public static readonly Guid PublicRunningPlanId1_WithUserId1Active = Guid.Parse("40c8f170-b8b8-4e41-ac37-816750808650");
 		public static readonly Guid PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active = Guid.Parse("a7f73852-db21-4791-94b0-1bcb55b0b496");
 		public static readonly Guid PublicCancelledPlanId3 = Guid.Parse("bea8b9e8-5588-460e-bd5d-ae1c042bc166");
@@ -39,21 +42,27 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 		public static readonly Guid PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active = Guid.Parse("fb4e4d61-d64f-4dba-814b-c5e157776c15");
 		public static readonly Guid PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active = Guid.Parse("5f63f6bc-bd97-47e7-b3d1-cb4eb64d9b26");
 
-		public static readonly Guid PlanMemberId0 = PlanMember.BuildId(PlanId0, UserId0);
-		public static readonly Guid PlanMemberId1 = PlanMember.BuildId(PublicRunningPlanId1_WithUserId1Active, UserId1);
-		public static readonly Guid PlanMemberId2 = PlanMember.BuildId(PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active, UserId1);
-		public static readonly Guid PlanMemberId3 = PlanMember.BuildId(PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active, UserId2);
-		public static readonly Guid PlanMemberId4 = PlanMember.BuildId(PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active, UserId3);
-		public static readonly Guid PlanMemberId5 = PlanMember.BuildId(PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked, UserId2);
-		public static readonly Guid PlanMemberId6 = PlanMember.BuildId(PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked, UserId3);
-		public static readonly Guid PlanMemberId7 = PlanMember.BuildId(PrivateFinishedPlanId5_WithUserId5Active, UserId5);
-		public static readonly Guid PlanMemberId8 = PlanMember.BuildId(PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active, UserId5);
-		public static readonly Guid PlanMemberId9 = PlanMember.BuildId(PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active, UserId3);
-		public static readonly Guid PlanMemberId10 = PlanMember.BuildId(PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active, UserId4);
-		public static readonly Guid PlanMemberId11 = PlanMember.BuildId(PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active, UserId5);
-		public static readonly Guid PlanMemberId12 = PlanMember.BuildId(PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active, UserId4);
+		public static readonly Guid PlanMemberId0_PlanId0AndUserId0Relation = PlanMember.BuildId(PlanId0, UserId0);
+		public static readonly Guid PlanMemberId0_PlanId0AndHabitId0AndUserId1Relation = PlanMember.BuildId(PlanId0_WithNonExistingHabitIdRelated, UserId1);
+		public static readonly Guid PlanMemberId0_PlanId0AndOwnerId0AndUserId1Relation = PlanMember.BuildId(PlanId0_WithNonExistingOwnerIdRelated, UserId1);
+		public static readonly Guid PlanMemberId1_PlanId1AndUserId1Relation = PlanMember.BuildId(PublicRunningPlanId1_WithUserId1Active, UserId1);
+		public static readonly Guid PlanMemberId2_PlanId2AndUserId1Relation = PlanMember.BuildId(PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active, UserId1);
+		public static readonly Guid PlanMemberId3_PlanId2AndUserId2Relation = PlanMember.BuildId(PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active, UserId2);
+		public static readonly Guid PlanMemberId4_PlanId2AndUserId3Relation = PlanMember.BuildId(PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active, UserId3);
+		public static readonly Guid PlanMemberId5_PlanId4AndUserId2Relation = PlanMember.BuildId(PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked, UserId2);
+		public static readonly Guid PlanMemberId6_PlanId4AndUserId3Relation = PlanMember.BuildId(PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked, UserId3);
+		public static readonly Guid PlanMemberId7_PlanId5AndUserId5Relation = PlanMember.BuildId(PrivateFinishedPlanId5_WithUserId5Active, UserId5);
+		public static readonly Guid PlanMemberId8_PlanId6AndUserId5Relation = PlanMember.BuildId(PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active, UserId5);
+		public static readonly Guid PlanMemberId9_PlanId7AndUserId3Relation = PlanMember.BuildId(PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active, UserId3);
+		public static readonly Guid PlanMemberId10_PlanId7AndUserId4Relation = PlanMember.BuildId(PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active, UserId4);
+		public static readonly Guid PlanMemberId11_PlanId7AndUserId5Relation = PlanMember.BuildId(PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active, UserId5);
+		public static readonly Guid PlanMemberId12_PlanId6AndUserId4Relation = PlanMember.BuildId(PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active, UserId4);
 
 		public static readonly Guid CheckInId0 = Guid.Parse("c3c23a92-9e71-454d-bf12-71d3d4f95b06");
+		public static readonly Guid CheckInId0_WithNonExistingOwnerIdRelated = Guid.Parse("2924e1c0-27a1-4eaf-9ff0-cb0e1d85bf44");
+		public static readonly Guid CheckInId0_WithNonExistingPlanOwnerIdRelated = Guid.Parse("339f7fac-d0fc-4d3e-9ea7-60e019342a6d");
+		public static readonly Guid CheckInId0_WithNonExistingPlanIdRelated = Guid.Parse("bc9900e4-3722-43d6-ab4b-57d38ee3129a");
+		public static readonly Guid CheckInId0_WithNonExistingHabitIdRelated = Guid.Parse("5e4d2f8f-2a4a-4ad6-98ba-dde6bc7c6e8f");
 		public static readonly Guid CheckInId1 = Guid.Parse("d7c9f9d3-2b77-4c2c-a8d1-9b6f2b3d1a11");
 		public static readonly Guid CheckInId2 = Guid.Parse("a13b9c7f-5f9a-4a2e-8b2c-3d1f4e5a2b22");
 		public static readonly Guid CheckInId3 = Guid.Parse("c2f3b7e8-6d8f-4b1a-9c3d-7f2a1b4c3d33");
@@ -61,6 +70,11 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 
 
 		public static readonly List<Habit> MockHabits = [
+			Habit.Restore(
+				HabitId0_WithNonExistingPlanIdRelated,
+				"Without valid plan",
+				new DateTime(1999, 01, 10)
+			),
 			Habit.Restore(
 				HabitId1,
 				"Workout",
@@ -243,12 +257,51 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				penaltyValue: 10,
 				isCancelled: false,
 				new DateTime(2021, 10, 05)
+			),
+			Plan.Restore(
+				PlanId0_WithNonExistingHabitIdRelated,
+				UserId1,
+				HabitId0,
+				"Existing plan with non-existing habit related",
+				new DateTime(2025, 01, 01),
+				new DateTime(DateTime.Today.Year, 12, 31),
+				PlanType.Public.Name,
+				daysOffPerWeek: 2,
+				penaltyValue: 10,
+				isCancelled: false,
+				new DateTime(2021, 10, 05)
+			),
+			Plan.Restore(
+				PlanId0_WithNonExistingOwnerIdRelated,
+				UserId0,
+				HabitId1,
+				"Existing plan with non-existing owner related",
+				new DateTime(2025, 01, 01),
+				new DateTime(DateTime.Today.Year, 12, 31),
+				PlanType.Public.Name,
+				daysOffPerWeek: 2,
+				penaltyValue: 10,
+				isCancelled: false,
+				new DateTime(2021, 10, 05)
+			),
+			Plan.Restore(
+				PlanId0,
+				UserId1,
+				HabitId0_WithNonExistingPlanIdRelated,
+				"Existing plan with non-existing owner related",
+				new DateTime(2025, 01, 01),
+				new DateTime(DateTime.Today.Year, 12, 31),
+				PlanType.Public.Name,
+				daysOffPerWeek: 2,
+				penaltyValue: 10,
+				isCancelled: false,
+				new DateTime(2021, 10, 05)
 			)
 		];
 
 		public static readonly List<PlanMember> MockPlanMembers = [
 			PlanMember.Restore(
-				PlanMemberId1,
+				PlanMemberId1_PlanId1AndUserId1Relation,
 				PublicRunningPlanId1_WithUserId1Active,
 				UserId1,
 				DateTime.Today,
@@ -256,7 +309,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId2,
+				PlanMemberId2_PlanId2AndUserId1Relation,
 				PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
 				UserId1,
 				new DateTime(2020, 01, 01),
@@ -264,7 +317,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId3,
+				PlanMemberId3_PlanId2AndUserId2Relation,
 				PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
 				UserId2,
 				new DateTime(2020, 01, 01),
@@ -272,7 +325,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId4,
+				PlanMemberId4_PlanId2AndUserId3Relation,
 				PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
 				UserId3,
 				new DateTime(2020, 01, 01),
@@ -280,7 +333,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId5,
+				PlanMemberId5_PlanId4AndUserId2Relation,
 				PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked,
 				UserId2,
 				new DateTime(2020, 01, 01),
@@ -288,7 +341,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId6,
+				PlanMemberId6_PlanId4AndUserId3Relation,
 				PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked,
 				UserId3,
 				new DateTime(2020, 01, 01),
@@ -296,7 +349,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId7,
+				PlanMemberId7_PlanId5AndUserId5Relation,
 				PrivateFinishedPlanId5_WithUserId5Active,
 				UserId5,
 				new DateTime(2020, 01, 01),
@@ -304,7 +357,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId8,
+				PlanMemberId8_PlanId6AndUserId5Relation,
 				PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
 				UserId5,
 				new DateTime(2020, 01, 01),
@@ -312,7 +365,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId9,
+				PlanMemberId9_PlanId7AndUserId3Relation,
 				PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
 				UserId3,
 				new DateTime(2020, 01, 01),
@@ -320,7 +373,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId10,
+				PlanMemberId10_PlanId7AndUserId4Relation,
 				PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
 				UserId4,
 				new DateTime(2020, 01, 01),
@@ -328,7 +381,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId11,
+				PlanMemberId11_PlanId7AndUserId5Relation,
 				PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
 				UserId5,
 				new DateTime(2020, 01, 01),
@@ -336,9 +389,25 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
-				PlanMemberId12,
+				PlanMemberId12_PlanId6AndUserId4Relation,
 				PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
 				UserId4,
+				new DateTime(2020, 01, 01),
+				PlanMemberStatus.Blocked.Name,
+				DateTime.Today
+			),
+			PlanMember.Restore(
+				PlanMemberId0_PlanId0AndHabitId0AndUserId1Relation,
+				PlanId0_WithNonExistingHabitIdRelated,
+				UserId1,
+				new DateTime(2020, 01, 01),
+				PlanMemberStatus.Blocked.Name,
+				DateTime.Today
+			),
+			PlanMember.Restore(
+				PlanMemberId0_PlanId0AndOwnerId0AndUserId1Relation,
+				PlanId0_WithNonExistingOwnerIdRelated,
+				UserId1,
 				new DateTime(2020, 01, 01),
 				PlanMemberStatus.Blocked.Name,
 				DateTime.Today
@@ -347,53 +416,101 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 
 		public static readonly List<CheckIn> MockCheckIns = [
 			CheckIn.Restore(
-					CheckInId1,
-					PublicRunningPlanId1_WithUserId1Active,
-					UserId1,
-					DateTime.Today.AddDays(-1),
-					1,
-					"Morning workout",
-					"Did 30 minutes of cardio",
-					CheckInStatus.Pending.Name,
-					[],
-					DateTime.Today
-				),
-				CheckIn.Restore(
-					CheckInId2,
-					PublicRunningPlanId1_WithUserId1Active,
-					UserId2,
-					new DateTime(2025, 01, 05),
-					1,
-					"Reading",
-					"Read 15 pages",
-					CheckInStatus.Pending.Name,
-					[],
-					DateTime.Today
-				),
-				CheckIn.Restore(
-					CheckInId3,
-					PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
-					UserId3,
-					new DateTime(2025, 10, 10),
-					1,
-					"Evening review",
-					"Reviewed notes",
-					CheckInStatus.Pending.Name,
-					[],
-					DateTime.Today
-				),
-				CheckIn.Restore(
-					CheckInId4,
-					PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
-					UserId4,
-					new DateTime(2025, 10, 10),
-					1,
-					"Evening review",
-					"Reviewed notes",
-					CheckInStatus.Pending.Name,
-					[],
-					DateTime.Today
-				)
+				CheckInId1,
+				PublicRunningPlanId1_WithUserId1Active,
+				UserId1,
+				DateTime.Today.AddDays(-1),
+				1,
+				"Morning workout",
+				"photoUrl",
+				CheckInStatus.Pending.Name,
+				[],
+				DateTime.Today
+			),
+			CheckIn.Restore(
+				CheckInId2,
+				PublicRunningPlanId1_WithUserId1Active,
+				UserId2,
+				new DateTime(2025, 01, 05),
+				1,
+				"Reading",
+				"photoUrl",
+				CheckInStatus.Pending.Name,
+				[],
+				DateTime.Today
+			),
+			CheckIn.Restore(
+				CheckInId3,
+				PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+				UserId3,
+				new DateTime(2025, 10, 10),
+				1,
+				"Evening review",
+				"photoUrl",
+				CheckInStatus.Pending.Name,
+				[],
+				DateTime.Today
+			),
+			CheckIn.Restore(
+				CheckInId4,
+				PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+				UserId4,
+				new DateTime(2025, 10, 10),
+				1,
+				"Without Creativity",
+				"photoUrl",
+				CheckInStatus.Pending.Name,
+				[],
+				DateTime.Today
+			),
+			CheckIn.Restore(
+				CheckInId0_WithNonExistingOwnerIdRelated,
+				PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+				UserId0,
+				new DateTime(2025, 10, 10),
+				1,
+				"Other CheckIn",
+				"photoUrl",
+				CheckInStatus.Pending.Name,
+				[],
+				DateTime.Today
+			),
+			CheckIn.Restore(
+				CheckInId0_WithNonExistingPlanIdRelated,
+				PlanId0,
+				UserId1,
+				new DateTime(2025, 10, 10),
+				1,
+				"Error, because I don't have a valid plan related",
+				"photoUrl",
+				CheckInStatus.Pending.Name,
+				[],
+				DateTime.Today
+			),
+			CheckIn.Restore(
+				CheckInId0_WithNonExistingHabitIdRelated,
+				PlanId0_WithNonExistingHabitIdRelated,
+				UserId1,
+				new DateTime(2025, 10, 10),
+				1,
+				"Error, because I don't have a valid habit (through plan) related",
+				"photoUrl",
+				CheckInStatus.Pending.Name,
+				[],
+				DateTime.Today
+			),
+			CheckIn.Restore(
+				CheckInId0_WithNonExistingOwnerIdRelated,
+				PlanId0_WithNonExistingOwnerIdRelated,
+				UserId1,
+				new DateTime(2025, 10, 10),
+				1,
+				"Error, because I don't have a valid habit (through plan) related",
+				"photoUrl",
+				CheckInStatus.Pending.Name,
+				[],
+				DateTime.Today
+			)
 		];
 	}
 }
