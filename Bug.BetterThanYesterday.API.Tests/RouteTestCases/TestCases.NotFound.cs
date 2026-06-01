@@ -106,7 +106,7 @@ public partial class TestCases
 			new()
 			{
 				Name = "AddCheckIn_WhenHabitDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
+				Method = HttpMethod.Post,
 				Path = $"CheckIns",
 				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
 					.With(command => command.PlanId, MockData.PlanId0_WithNonExistingHabitIdRelated)
@@ -126,7 +126,7 @@ public partial class TestCases
 			new()
 			{
 				Name = "AddCheckIn_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
+				Method = HttpMethod.Post,
 				Path = $"CheckIns",
 				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
 					.With(command => command.PlanId, MockData.PublicRunningPlanId1_WithUserId1Active)
@@ -283,7 +283,8 @@ public partial class TestCases
 				Method = HttpMethod.Get,
 				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(baseListCheckInsByFilterCommand)
 					.With(command => command.UserId, MockData.UserId0)
-					.Build()}",
+					.Build()
+					.ToQueryString()}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
 			new()
@@ -293,7 +294,8 @@ public partial class TestCases
 				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(baseListCheckInsByFilterCommand)
 					.With(command => command.PlanId, MockData.PublicRunningPlanId1_WithUserId1Active)
 					.With(command => command.UserId, MockData.UserId2)
-					.Build()}",
+					.Build()
+					.ToQueryString()}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
 			/*new()
@@ -308,7 +310,7 @@ public partial class TestCases
 			new()
 			{
 				Name = "ReviewCheckIn_WhenUserDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
+				Method = HttpMethod.Post,
 				Path = $"CheckIns/{MockData.CheckInId4}/Reviews",
 				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
 					.With(command => command.ReviewerId, MockData.UserId0)
@@ -318,7 +320,7 @@ public partial class TestCases
 			new()
 			{
 				Name = "ReviewCheckIn_WhenCheckInOwnerDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
+				Method = HttpMethod.Post,
 				Path = $"CheckIns",
 				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
 					.With(command => command.CheckInId, MockData.CheckInId0_WithNonExistingOwnerIdRelated)
@@ -328,7 +330,7 @@ public partial class TestCases
 			new()
 			{
 				Name = "ReviewCheckIn_WhenPlanDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
+				Method = HttpMethod.Post,
 				Path = $"CheckIns",
 				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
 					.With(command => command.CheckInId, MockData.CheckInId0_WithNonExistingPlanIdRelated)
@@ -338,7 +340,7 @@ public partial class TestCases
 			new()
 			{
 				Name = "ReviewCheckIn_WhenHabitDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
+				Method = HttpMethod.Post,
 				Path = $"CheckIns",
 				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
 					.With(command => command.CheckInId, MockData.CheckInId0_WithNonExistingHabitIdRelated)
@@ -348,7 +350,7 @@ public partial class TestCases
 			new()
 			{
 				Name = "ReviewCheckIn_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
+				Method = HttpMethod.Post,
 				Path = $"CheckIns",
 				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
 					.With(command => command.CheckInId, MockData.CheckInId1)
@@ -359,7 +361,7 @@ public partial class TestCases
 			new()
 			{
 				Name = "DeleteHabit_WhenHabitDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
+				Method = HttpMethod.Delete,
 				Path = $"Habits?{0}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},*/
@@ -380,7 +382,7 @@ public partial class TestCases
 			/*new()
 			{
 				Name = "UpdateHabit_WhenHabitDoesNotExist_ShouldReturnNotFound",
-				Method = HttpMethod.Get,
+				Method = HttpMethod.Post,
 				Path = $"Habits",
 				Body = new MockBuilder<UpdateHabitCommand>(baseUpdateHabitCommand)
 					.With(command => command.HabitId, MockData.HabitId0)
@@ -517,7 +519,7 @@ public partial class TestCases
 			{
 				Name = "GetUserWithPlansByUserId_WhenOwnerDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"Users/{MockData.UserId0}/Plans",
+				Path = $"Users/{MockData.UserId1}/Plans",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
 			new()

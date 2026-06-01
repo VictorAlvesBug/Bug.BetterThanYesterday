@@ -25,7 +25,7 @@ namespace Bug.BetterThanYesterday.API.Tests
 		{
 			try
 			{
-				var testCaseNameToDebug = "";
+				var testCaseNameToDebug = "GetCheckInById_WhenPlanDoesNotExist_ShouldReturnNotFound";
 
 				if (testCase.Name == testCaseNameToDebug)
 				{

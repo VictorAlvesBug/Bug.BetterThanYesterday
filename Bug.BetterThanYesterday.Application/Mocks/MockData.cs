@@ -24,6 +24,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 		public static readonly Guid HabitId4 = Guid.Parse("809e7984-9eba-460e-be7d-955e229f7dce");
 
 		public static readonly Guid UserId0 = Guid.Parse("52e253c0-fa75-4ae5-bf6f-02f9f4b7b853");
+		public static readonly Guid UserId0_WithPlanId0AndOwnerId0 = Guid.Parse("1a6d6c1a-ecce-49e9-a02c-e5ea68fb8a92");
 		public static readonly Guid UserId1 = Guid.Parse("57b8652a-81ad-46af-b50b-e1de389250da");
 		public static readonly Guid UserId2 = Guid.Parse("814fbb49-66e1-4d51-a69e-bf1eb6d8fc4a");
 		public static readonly Guid UserId3 = Guid.Parse("cc16329d-cbfc-4ef3-95bb-1b031179005f");
@@ -72,27 +73,27 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 		public static readonly List<Habit> MockHabits = [
 			Habit.Restore(
 				HabitId0_WithNonExistingPlanIdRelated,
-				"Without valid plan",
+				"(Mock) Without valid plan",
 				new DateTime(1999, 01, 10)
 			),
 			Habit.Restore(
 				HabitId1,
-				"Workout",
+				"(Mock) Workout",
 				new DateTime(1999, 01, 10)
 			),
 			Habit.Restore(
 				HabitId2,
-				"Reading",
+				"(Mock) Reading",
 				new DateTime(1967, 06, 20)
 			),
 			Habit.Restore(
 				HabitId3,
-				"Studying",
+				"(Mock) Studying",
 				new DateTime(2005, 04, 02)
 			),
 			Habit.Restore(
 				HabitId4,
-				"Cooking",
+				"(Mock) Cooking",
 				new DateTime(1991, 01, 16)
 			)
 		];
@@ -100,7 +101,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 		public static readonly List<User> MockUsers = [
 			User.Restore(
 				UserId1,
-				"Ana",
+				"(Mock) Ana",
 				"ana@ex.com",
 				null,
 				"Ana",
@@ -111,7 +112,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			),
 			User.Restore(
 				UserId2,
-				"Bob",
+				"(Mock) Bob",
 				"bob@ex.com",
 				null,
 				"Ana",
@@ -122,7 +123,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			),
 			User.Restore(
 				UserId3,
-				"Carl",
+				"(Mock) Carl",
 				"carl@ex.com",
 				null,
 				"Ana",
@@ -133,7 +134,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			),
 			User.Restore(
 				UserId4,
-				"David",
+				"(Mock) David",
 				"david@ex.com",
 				null,
 				"Ana",
@@ -144,7 +145,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			),
 			User.Restore(
 				UserId5,
-				"Ellie",
+				"(Mock) Ellie",
 				"ellie@ex.com",
 				null,
 				"Ana",
@@ -155,7 +156,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			),
 			User.Restore(
 				UserId6,
-				"Fred",
+				"(Mock) Fred",
 				"fred@ex.com",
 				null,
 				"Ana",
@@ -171,7 +172,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PublicRunningPlanId1_WithUserId1Active,
 				UserId1,
 				HabitId1,
-				"Workout 5 times a week",
+				"(Mock) Workout 5 times a week",
 				new DateTime(2025, 01, 01),
 				new DateTime(DateTime.Today.Year, 12, 31),
 				PlanType.Public.Name,
@@ -184,7 +185,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
 				UserId1,
 				HabitId2,
-				"Reading 15 pages everyday",
+				"(Mock) Reading 15 pages everyday",
 				new DateTime(2026, 01, 01),
 				new DateTime(2026, 12, 31),
 				PlanType.Private.Name,
@@ -197,7 +198,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PublicCancelledPlanId3,
 				UserId1,
 				HabitId3,
-				"Studying AWS every weekend",
+				"(Mock) Studying AWS every weekend",
 				new DateTime(2025, 01, 01),
 				new DateTime(2025, 12, 31),
 				PlanType.Public.Name,
@@ -210,7 +211,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked,
 				UserId1,
 				HabitId3,
-				"Studying React every weekend",
+				"(Mock) Studying React every weekend",
 				new DateTime(2024, 01, 01),
 				new DateTime(2024, 12, 31),
 				PlanType.Private.Name,
@@ -223,7 +224,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PrivateFinishedPlanId5_WithUserId5Active,
 				UserId1,
 				HabitId3,
-				"Studying English every weekend",
+				"(Mock) Studying English every weekend",
 				new DateTime(2024, 01, 01),
 				new DateTime(2024, 12, 31),
 				PlanType.Private.Name,
@@ -236,7 +237,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
 				UserId1,
 				HabitId3,
-				"Studying Math every weekend",
+				"(Mock) Studying Math every weekend",
 				new DateTime(2024, 01, 01),
 				new DateTime(2024, 12, 31),
 				PlanType.Public.Name,
@@ -249,7 +250,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
 				UserId1,
 				HabitId3,
-				"Studying Anatomy every weekend",
+				"(Mock) Studying Anatomy every weekend",
 				new DateTime(2025, 01, 01),
 				new DateTime(DateTime.Today.Year, 12, 31),
 				PlanType.Public.Name,
@@ -262,7 +263,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PlanId0_WithNonExistingHabitIdRelated,
 				UserId1,
 				HabitId0,
-				"Existing plan with non-existing habit related",
+				"(Mock) Existing plan with non-existing habit related",
 				new DateTime(2025, 01, 01),
 				new DateTime(DateTime.Today.Year, 12, 31),
 				PlanType.Public.Name,
@@ -274,21 +275,8 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			Plan.Restore(
 				PlanId0_WithNonExistingOwnerIdRelated,
 				UserId0,
-				HabitId1,
-				"Existing plan with non-existing owner related",
-				new DateTime(2025, 01, 01),
-				new DateTime(DateTime.Today.Year, 12, 31),
-				PlanType.Public.Name,
-				daysOffPerWeek: 2,
-				penaltyValue: 10,
-				isCancelled: false,
-				new DateTime(2021, 10, 05)
-			),
-			Plan.Restore(
-				PlanId0,
-				UserId1,
 				HabitId0_WithNonExistingPlanIdRelated,
-				"Existing plan with non-existing owner related",
+				"(Mock) Existing plan with non-existing owner related",
 				new DateTime(2025, 01, 01),
 				new DateTime(DateTime.Today.Year, 12, 31),
 				PlanType.Public.Name,
@@ -421,7 +409,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId1,
 				DateTime.Today.AddDays(-1),
 				1,
-				"Morning workout",
+				"(Mock) Morning workout",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -433,7 +421,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId2,
 				new DateTime(2025, 01, 05),
 				1,
-				"Reading",
+				"(Mock) Reading",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -445,7 +433,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId3,
 				new DateTime(2025, 10, 10),
 				1,
-				"Evening review",
+				"(Mock) Evening review",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -457,7 +445,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId4,
 				new DateTime(2025, 10, 10),
 				1,
-				"Without Creativity",
+				"(Mock) Without Creativity",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -469,7 +457,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId0,
 				new DateTime(2025, 10, 10),
 				1,
-				"Other CheckIn",
+				"(Mock) Other CheckIn",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -481,7 +469,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId1,
 				new DateTime(2025, 10, 10),
 				1,
-				"Error, because I don't have a valid plan related",
+				"(Mock) Error, because I don't have a valid plan related",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -493,7 +481,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId1,
 				new DateTime(2025, 10, 10),
 				1,
-				"Error, because I don't have a valid habit (through plan) related",
+				"(Mock) Error, because I don't have a valid habit (through plan) related",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -505,7 +493,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId1,
 				new DateTime(2025, 10, 10),
 				1,
-				"Error, because I don't have a valid habit (through plan) related",
+				"(Mock) Error, because I don't have a valid habit (through plan) related",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
