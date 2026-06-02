@@ -18,31 +18,6 @@ public class Repository<TEntity, TDocument> : IRepository<TEntity>
 		_mapper = mapper;
 	}
 
-	public async Task AddAsync(TEntity entity)
-	{
-		await _collection.InsertOneAsync(_mapper.ToDocument(entity));
-	}
-
-	public async Task ReplaceAsync(TEntity entity)
-	{
-		await _collection.ReplaceOneAsync(
-			filter: doc => doc.Id == entity.Id, 
-			replacement: _mapper.ToDocument(entity),
-			options: new ReplaceOptions { IsUpsert = true }
-		);
-	}
-
-	public async Task DeleteAsync(TEntity entity)
-	{
-		await _collection.DeleteOneAsync(doc => doc.Id == entity.Id);
-	}
-
-	public async Task DeleteManyAsync(List<TEntity> entities)
-	{
-		var idsToDelete = entities.Select(entity => entity.Id).ToHashSet();
-		await _collection.DeleteManyAsync(doc => idsToDelete.Contains(doc.Id));
-	}
-
 	public async Task<List<TEntity>> ListAllAsync()
 	{
 		var documents = (await _collection.FindAsync(_ => true)).ToList();
@@ -59,17 +34,48 @@ public class Repository<TEntity, TDocument> : IRepository<TEntity>
 	{
 		var documents = new List<TDocument>();
 
-		foreach(var chunk in ids.Chunk(1000))
-        {
+		foreach (var chunk in ids.Chunk(1000))
+		{
 			var filter = Builders<TDocument>.Filter.In(doc => doc.Id, chunk);
 			documents.AddRange((await _collection.FindAsync(filter)).ToList());
-        }
+		}
 
 		return documents.ConvertAll(_mapper.ToDomain);
+	}
+
+	public async Task AddAsync(TEntity entity)
+	{
+		await _collection.InsertOneAsync(_mapper.ToDocument(entity));
+	}
+
+	public async Task ReplaceAsync(TEntity entity)
+	{
+		await _collection.ReplaceOneAsync(
+			filter: doc => doc.Id == entity.Id, 
+			replacement: _mapper.ToDocument(entity),
+			options: new ReplaceOptions { IsUpsert = true }
+		);
 	}
 
 	public async Task UpdateAsync(TEntity entity)
 	{
 		await _collection.ReplaceOneAsync(doc => doc.Id == entity.Id, _mapper.ToDocument(entity));
+	}
+
+	public async Task DeleteAsync(TEntity entity)
+	{
+		await _collection.DeleteOneAsync(doc => doc.Id == entity.Id);
+	}
+
+	public async Task DeleteManyAsync(List<TEntity> entities)
+	{
+		var idsToDelete = entities.Select(entity => entity.Id).ToHashSet();
+		await _collection.DeleteManyAsync(doc => idsToDelete.Contains(doc.Id));
+	}
+
+	public async Task DeleteAllAsync()
+	{
+		var filter = Builders<TDocument>.Filter.Empty;
+		await _collection.DeleteManyAsync(filter);
 	}
 }

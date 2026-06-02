@@ -27,11 +27,11 @@ public sealed class DeleteMockDataUseCase(
 
 			var tasks = new List<Task>
 			{
-				habitRepository.DeleteManyAsync(MockData.MockHabits),
-				userRepository.DeleteManyAsync(MockData.MockUsers),
-				planRepository.DeleteManyAsync(MockData.MockPlans),
-				planMemberRepository.DeleteManyAsync(MockData.MockPlanMembers),
-				checkInRepository.DeleteManyAsync(MockData.MockCheckIns),
+				habitRepository.DeleteAllAsync(),
+				userRepository.DeleteAllAsync(),
+				planRepository.DeleteAllAsync(),
+				planMemberRepository.DeleteAllAsync(),
+				checkInRepository.DeleteAllAsync(),
 			};
 
 			await Task.WhenAll(tasks);

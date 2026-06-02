@@ -10,4 +10,5 @@ public interface IRepository<TEntity> where TEntity : Entity
 	Task UpdateAsync(TEntity entity);
 	Task DeleteAsync(TEntity entity);
 	Task DeleteManyAsync(List<TEntity> entities);
+	Task DeleteAllAsync();
 }
