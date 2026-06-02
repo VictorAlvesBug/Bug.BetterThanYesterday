@@ -15,7 +15,8 @@ public class AdminSettingsController(
 	IUseCase<DeleteMockDataCommand> deleteMockDataUseCase)
 	: ControllerBase
 {
-	[HttpPatch("MoveInTime")]
+	[HttpPatch(nameof(MoveInTime))]
+	[HttpPatch($"~/testapi/[controller]/{nameof(MoveInTime)}")]
 	public async Task<IActionResult> MoveInTime([FromBody] MoveInTimeCommand command)
 	{
 		var result = await moveInTimeUseCase.HandleAsync(command);
@@ -31,7 +32,7 @@ public class AdminSettingsController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpPut("PersistMockData")]
+	[HttpPut($"~/testapi/[controller]/{nameof(PersistMockData)}")]
 	public async Task<IActionResult> PersistMockData()
 	{
 		var result = await persistMockDataUseCase.HandleAsync(new PersistMockDataCommand());
@@ -47,7 +48,7 @@ public class AdminSettingsController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpDelete("DeleteMockData")]
+	[HttpDelete($"~/testapi/[controller]/{nameof(DeleteMockData)}")]
 	public async Task<IActionResult> DeleteMockData()
 	{
 		var result = await deleteMockDataUseCase.HandleAsync(new DeleteMockDataCommand());

@@ -4,6 +4,7 @@ namespace Bug.BetterThanYesterday.Infrastructure.Configurations;
 
 public class DatabaseConfig : IDatabaseConfig
 {
-	public string DatabaseName { get; set; }
 	public string ConnectionString { get; set; }
+	public string DatabaseName { get; set; }
+	public string TestDatabaseName { get; set; }
 }

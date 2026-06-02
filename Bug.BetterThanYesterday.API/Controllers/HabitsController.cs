@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Bug.BetterThanYesterday.API.Controllers;
 
 [Route("api/[controller]")]
+[Route("testapi/[controller]")]
 [ApiController]
 public class HabitsController(
 	IUseCase<GetHabitByIdCommand> getHabitByIdUseCase,

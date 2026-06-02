@@ -12,6 +12,7 @@ using Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
 namespace Bug.BetterThanYesterday.API.Controllers;
 
 [Route("api/[controller]")]
+[Route("testapi/[controller]")]
 [ApiController]
 public class PlansController(
 	IUseCase<CreatePlanCommand> createPlanUseCase,

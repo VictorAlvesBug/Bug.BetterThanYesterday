@@ -11,6 +11,7 @@ using Bug.BetterThanYesterday.Application.CheckIns.Models;
 namespace Bug.BetterThanYesterday.API.Controllers;
 
 [Route("api/[controller]")]
+[Route("testapi/[controller]")]
 [ApiController]
 public class CheckInsController(
 	IUseCase<AddCheckInCommand> addCheckInUseCase,

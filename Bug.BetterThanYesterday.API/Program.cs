@@ -8,17 +8,30 @@ using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.Configure<DatabaseConfig>(
-	builder.Configuration.GetSection(nameof(DatabaseConfig)));
-builder.Services.AddSingleton<IDatabaseConfig>(sp =>
-	sp.GetRequiredService<IOptions<DatabaseConfig>>().Value);
+builder.Configuration.GetSection(nameof(DatabaseConfig)));
 
 builder.Services.AddSingleton(sp =>
 {
 	var dbConfig = sp.GetRequiredService<IOptions<DatabaseConfig>>().Value;
-	var client = (IMongoClient)new MongoClient(dbConfig.ConnectionString);
-	return client.GetDatabase(dbConfig.DatabaseName);
+	return (IMongoClient)new MongoClient(dbConfig.ConnectionString);
+});
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IMongoDatabase>(sp =>
+{
+	var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
+	var client = sp.GetRequiredService<IMongoClient>();
+	var dbConfig = sp.GetRequiredService<IOptions<DatabaseConfig>>().Value;
+
+	var path = httpContextAccessor.HttpContext?.Request.Path.Value ?? string.Empty;
+
+	var databaseName = path.StartsWith("/testapi", StringComparison.OrdinalIgnoreCase)
+		? dbConfig.TestDatabaseName
+		: dbConfig.DatabaseName;
+
+	return client.GetDatabase(databaseName);
 });
 
 //builder.Services.AddTransient<IMiddleware, ExceptionHandlingMiddleware>();
