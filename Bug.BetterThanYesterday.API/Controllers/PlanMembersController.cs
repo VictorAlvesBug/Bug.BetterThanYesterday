@@ -14,7 +14,7 @@ using Bug.BetterThanYesterday.Application.PlanMembers;
 namespace Bug.BetterThanYesterday.API.Controllers;
 
 [Route("api")]
-[Route("testapi/[controller]")]
+[Route("testapi")]
 [ApiController]
 public class PlanPlarticipantsController(
 	IUseCase<GetPlanMemberDetailsCommand> getPlanMemberDetailsUseCase,
