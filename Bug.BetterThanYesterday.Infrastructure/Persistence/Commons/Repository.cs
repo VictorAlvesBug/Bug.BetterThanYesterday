@@ -1,4 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
+using Bug.BetterThanYesterday.Domain.Extensions;
 using MongoDB.Driver;
 
 namespace Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
@@ -48,13 +49,10 @@ public class Repository<TEntity, TDocument> : IRepository<TEntity>
 		await _collection.InsertOneAsync(_mapper.ToDocument(entity));
 	}
 
-	public async Task ReplaceAsync(TEntity entity)
+	public async Task InsertJsonAsync(string json)
 	{
-		await _collection.ReplaceOneAsync(
-			filter: doc => doc.Id == entity.Id, 
-			replacement: _mapper.ToDocument(entity),
-			options: new ReplaceOptions { IsUpsert = true }
-		);
+		var docs = json.Deserialize<List<TDocument>>();
+		await _collection.InsertManyAsync(docs);
 	}
 
 	public async Task UpdateAsync(TEntity entity)

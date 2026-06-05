@@ -12,7 +12,8 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
     public class Route
     {
         public string Name { get; set; }
-        public HttpMethod Method { get; set; }
+		public MocksCollection MocksSetUp { get; set; } = new MocksCollection();
+		public HttpMethod Method { get; set; }
         public string Path { get; set; }
         public object? Body { get; set; }
 		public bool NeedsToResetMocksAfter { get; set; } = false;
@@ -25,7 +26,7 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 
 			sbCurl.AppendLine($"\n{Name}");
 			sbCurl.AppendLine($@"curl --request {Method.Method} \");
-			sbCurl.AppendLine($@" --url http://localhost:5018/api/{Path} \");
+			sbCurl.AppendLine($@" --url http://localhost:5018/testapi/{Path} \");
 			sbCurl.AppendLine($@" --header 'accept: */*' \");
 
 			if (Method != HttpMethod.Get && Body is not null)

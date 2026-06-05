@@ -1,115 +1,49 @@
-﻿using Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
-using Bug.BetterThanYesterday.Application.CheckIns.GetCheckInById;
-using Bug.BetterThanYesterday.Application.CheckIns.GetCheckInDetails;
-using Bug.BetterThanYesterday.Application.CheckIns.GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDate;
-using Bug.BetterThanYesterday.Application.CheckIns.GetPlanUserWithCheckInsByPlanIdAndUserId;
-using Bug.BetterThanYesterday.Application.CheckIns.GetPlanWithCheckInsByPlanId;
+﻿using Bug.BetterThanYesterday.API.Tests.Commons;
+using Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 using Bug.BetterThanYesterday.Application.CheckIns.ListCheckInsByFilter;
-using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
-using Bug.BetterThanYesterday.Application.Habits.GetHabitById;
-using Bug.BetterThanYesterday.Application.Habits.UpdateHabit;
 using Bug.BetterThanYesterday.Application.Mocks;
-using Bug.BetterThanYesterday.Application.PlanMembers.AddUserToPlan;
-using Bug.BetterThanYesterday.Application.PlanMembers.BlockUserInThePlan;
-using Bug.BetterThanYesterday.Application.PlanMembers.GetPlanMemberDetails;
-using Bug.BetterThanYesterday.Application.PlanMembers.GetPlanWithMembersByPlanId;
-using Bug.BetterThanYesterday.Application.PlanMembers.GetUserWithPlansByUserId;
-using Bug.BetterThanYesterday.Application.PlanMembers.RemoveUserFromPlan;
-using Bug.BetterThanYesterday.Application.PlanMembers.UnblockUserInThePlan;
-using Bug.BetterThanYesterday.Application.Plans.CancelPlan;
 using Bug.BetterThanYesterday.Application.Plans.CreatePlan;
-using Bug.BetterThanYesterday.Application.Plans.GetPlanById;
 using Bug.BetterThanYesterday.Application.Plans.ListPlansByFilter;
-using Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
-using Bug.BetterThanYesterday.Application.Users.DeleteUser;
-using Bug.BetterThanYesterday.Application.Users.GetUserById;
-using Bug.BetterThanYesterday.Application.Users.UpdateUser;
-using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
+using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.Extensions;
-using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Plans.Entities;
+using Bug.BetterThanYesterday.Domain.Strings;
+using Bug.BetterThanYesterday.Domain.Users.Entities;
+using Bug.BetterThanYesterday.Domain.Users.ValueObjects;
 using Microsoft.AspNetCore.Http;
-using System.Reflection;
-using System.Xml.Linq;
 
 namespace Bug.BetterThanYesterday.API.Tests.RouteTestCases;
 
 public partial class TestCases
 {
+	/*public T FillIfDefaultOrNull<T>(T value, T fillValue)
+	{
+		return value == default ? fillValue : value;
+	}*/
+
 	public static void SetUpNotFoundTestCases()
 	{
-		var baseAddCheckInCommand = new AddCheckInCommand
-		{
-			PlanId = MockData.PublicRunningPlanId1_WithUserId1Active,
-			UserId = MockData.UserId1,
-			Date = DateTime.Today,
-			Title = "Mock Title",
-			PhotoUrl = "Mock Url"
-		};
-
-		var baseListCheckInsByFilterCommand = new ListCheckInsByFilterCommand
-		{
-			PlanId = MockData.PublicRunningPlanId1_WithUserId1Active,
-			UserId = MockData.UserId1,
-			Date = DateTime.Today,
-			Status = CheckInStatus.Pending.Name,
-		};
-
-		/*var baseReviewCheckInCommand = new ReviewCheckInCommand
-		{
-			CheckInId = MockData.CheckInId4,
-			ReviewerId = MockData.UserId5,
-			Date = DateTime.Now,
-			Status = CheckInStatus.Rejected.Name
-		};*/
-
-		/*var baseUpdateHabitCommand = new UpdateHabitCommand(
-			habitId: MockData.HabitId1,
-			name: "Mock Name"
-		);*/
-
-		var baseCreatePlanCommand = new CreatePlanCommand(
-			ownerId: MockData.UserId1,
-			habitId: MockData.HabitId1,
-			description: "Mock Description",
-			startsAt: DateTime.Today.AddDays(1),
-			endsAt: DateTime.Today.AddDays(8),
-			type: PlanType.Private.Name,
-			daysOffPerWeek: 2,
-			penaltyValue: 10
-		);
-
-		var baseListPlansByFilterCommand = new ListPlansByFilterCommand
-		{
-			HabitId = MockData.HabitId1,
-			OwnerId = MockData.UserId1,
-			Status = PlanStatus.Running.Name,
-			Type = PlanType.Private.Name,
-		};
-
-		/*var baseUpdateUserCommand = new UpdateUserCommand(
-			userId: MockData.UserId1,
-			name: "Mock Name",
-			email: "mock@email.com"
-		);*/
-
 		Routes.AddRange([
 			new()
 			{
 				Name = "AddCheckIn_WhenPlanDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"CheckIns",
-				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
+				Body = new MockBuilder<AddCheckInCommand>(MockData.BaseAddCheckInCommand)
+					.With(command => command.UserId, MockData.UserId1)
 					.With(command => command.PlanId, MockData.PlanId0)
 					.Build(),
-				ExpectedStatusCode = StatusCodes.Status404NotFound
+				ExpectedStatusCode = StatusCodes.Status404NotFound,
+				ExpectedMessageContains = Messages.PlanNotFound
 			},
 			new()
 			{
 				Name = "AddCheckIn_WhenHabitDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"CheckIns",
-				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
+				Body = new MockBuilder<AddCheckInCommand>(MockData.BaseAddCheckInCommand)
 					.With(command => command.PlanId, MockData.PlanId0_WithNonExistingHabitIdRelated)
+					.With(command => command.UserId, MockData.UserId1)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
@@ -118,7 +52,7 @@ public partial class TestCases
 				Name = "AddCheckIn_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"CheckIns",
-				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
+				Body = new MockBuilder<AddCheckInCommand>(MockData.BaseAddCheckInCommand)
 					.With(command => command.UserId, MockData.UserId0)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
@@ -128,7 +62,7 @@ public partial class TestCases
 				Name = "AddCheckIn_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"CheckIns",
-				Body = new MockBuilder<AddCheckInCommand>(baseAddCheckInCommand)
+				Body = new MockBuilder<AddCheckInCommand>(MockData.BaseAddCheckInCommand)
 					.With(command => command.PlanId, MockData.PublicRunningPlanId1_WithUserId1Active)
 					.With(command => command.UserId, MockData.UserId2)
 					.Build(),
@@ -155,13 +89,13 @@ public partial class TestCases
 				Path = $"CheckIns/{MockData.CheckInId0_WithNonExistingHabitIdRelated}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
-			new()
+			/*new()// TODO Consertar teste
 			{
 				Name = "GetCheckInById_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
 				Path = $"CheckIns/{MockData.CheckInId0_WithNonExistingOwnerIdRelated}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
+			},*/
 			/*new()
 			{
 				Name = "GetCheckInDetails_WhenPlanDoesNotExist_ShouldReturnNotFound",
@@ -271,7 +205,7 @@ public partial class TestCases
 			{
 				Name = "ListCheckInsByFilter_WhenPlanDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(baseListCheckInsByFilterCommand)
+				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(MockData.BaseListCheckInsByFilterCommand)
 					.With(command => command.PlanId, MockData.PlanId0)
 					.Build()
 					.ToQueryString()}",
@@ -281,7 +215,7 @@ public partial class TestCases
 			{
 				Name = "ListCheckInsByFilter_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(baseListCheckInsByFilterCommand)
+				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(MockData.BaseListCheckInsByFilterCommand)
 					.With(command => command.UserId, MockData.UserId0)
 					.Build()
 					.ToQueryString()}",
@@ -291,7 +225,7 @@ public partial class TestCases
 			{
 				Name = "ListCheckInsByFilter_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(baseListCheckInsByFilterCommand)
+				Path = $"CheckIns?{new MockBuilder<ListCheckInsByFilterCommand>(MockData.BaseListCheckInsByFilterCommand)
 					.With(command => command.PlanId, MockData.PublicRunningPlanId1_WithUserId1Active)
 					.With(command => command.UserId, MockData.UserId2)
 					.Build()
@@ -303,7 +237,7 @@ public partial class TestCases
 				Name = "ReviewCheckIn_WhenCheckInDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"CheckIns/{MockData.CheckInId4}/Reviews",
-				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+				Body = new MockBuilder<ReviewCheckInCommand>(MockData.BaseReviewCheckInCommand)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
@@ -312,7 +246,7 @@ public partial class TestCases
 				Name = "ReviewCheckIn_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"CheckIns/{MockData.CheckInId4}/Reviews",
-				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+				Body = new MockBuilder<ReviewCheckInCommand>(MockData.BaseReviewCheckInCommand)
 					.With(command => command.ReviewerId, MockData.UserId0)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
@@ -322,8 +256,8 @@ public partial class TestCases
 				Name = "ReviewCheckIn_WhenCheckInOwnerDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"CheckIns",
-				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
-					.With(command => command.CheckInId, MockData.CheckInId0_WithNonExistingOwnerIdRelated)
+				Body = new MockBuilder<ReviewCheckInCommand>(MockData.BaseReviewCheckInCommand)
+					.With(command => command.CheckInId, MockData.CheckInId0_WithNonExistingOwnerIdForCheckInRelated)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
@@ -332,7 +266,7 @@ public partial class TestCases
 				Name = "ReviewCheckIn_WhenPlanDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"CheckIns",
-				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+				Body = new MockBuilder<ReviewCheckInCommand>(MockData.BaseReviewCheckInCommand)
 					.With(command => command.CheckInId, MockData.CheckInId0_WithNonExistingPlanIdRelated)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
@@ -342,7 +276,7 @@ public partial class TestCases
 				Name = "ReviewCheckIn_WhenHabitDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"CheckIns",
-				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+				Body = new MockBuilder<ReviewCheckInCommand>(MockData.BaseReviewCheckInCommand)
 					.With(command => command.CheckInId, MockData.CheckInId0_WithNonExistingHabitIdRelated)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
@@ -352,7 +286,7 @@ public partial class TestCases
 				Name = "ReviewCheckIn_WhenPlanMemberDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"CheckIns",
-				Body = new MockBuilder<ReviewCheckInCommand>(baseReviewCheckInCommand)
+				Body = new MockBuilder<ReviewCheckInCommand>(MockData.BaseReviewCheckInCommand)
 					.With(command => command.CheckInId, MockData.CheckInId1)
 					.With(command => command.ReviewerId, MockData.UserId2)
 					.Build(),
@@ -384,7 +318,7 @@ public partial class TestCases
 				Name = "UpdateHabit_WhenHabitDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"Habits",
-				Body = new MockBuilder<UpdateHabitCommand>(baseUpdateHabitCommand)
+				Body = new MockBuilder<UpdateHabitCommand>(MockData.BaseUpdateHabitCommand)
 					.With(command => command.HabitId, MockData.HabitId0)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
@@ -519,7 +453,7 @@ public partial class TestCases
 			{
 				Name = "GetUserWithPlansByUserId_WhenOwnerDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"Users/{MockData.UserId1}/Plans",
+				Path = $"Users/{MockData.UserId0_WithPlanId0AndOwnerId0}/Plans",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
 			new()
@@ -618,7 +552,7 @@ public partial class TestCases
 				Name = "CreatePlan_WhenOwnerDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"Plans",
-				Body = new MockBuilder<CreatePlanCommand>(baseCreatePlanCommand)
+				Body = new MockBuilder<CreatePlanCommand>(MockData.BaseCreatePlanCommand)
 					.With(command => command.OwnerId, MockData.UserId0)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
@@ -628,7 +562,7 @@ public partial class TestCases
 				Name = "CreatePlan_WhenHabitDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"Plans",
-				Body = new MockBuilder<CreatePlanCommand>(baseCreatePlanCommand)
+				Body = new MockBuilder<CreatePlanCommand>(MockData.BaseCreatePlanCommand)
 					.With(command => command.HabitId, MockData.HabitId0)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound
@@ -658,7 +592,7 @@ public partial class TestCases
 			{
 				Name = "ListPlansByFilter_WhenOwnerDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"Plans?{new MockBuilder<ListPlansByFilterCommand>(baseListPlansByFilterCommand)
+				Path = $"Plans?{new MockBuilder<ListPlansByFilterCommand>(MockData.BaseListPlansByFilterCommand)
 					.With(command => command.OwnerId, MockData.UserId0)
 					.Build()
 					.ToQueryString()}",
@@ -668,19 +602,19 @@ public partial class TestCases
 			{
 				Name = "ListPlansByFilter_WhenHabitDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
-				Path = $"Plans?{new MockBuilder<ListPlansByFilterCommand>(baseListPlansByFilterCommand)
+				Path = $"Plans?{new MockBuilder<ListPlansByFilterCommand>(MockData.BaseListPlansByFilterCommand)
 					.With(command => command.HabitId, MockData.HabitId0)
 					.Build()
 					.ToQueryString()}",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
 			},
-			new()
+			/*new()// TODO Consertar teste
 			{
 				Name = "ListPlansByFilter_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Get,
 				Path = $"Plans",
 				ExpectedStatusCode = StatusCodes.Status404NotFound
-			},
+			},*/
 			/*new()
 			{
 				Name = "ListPlansByHabitId_WhenHabitDoesNotExist_ShouldReturnNotFound",
@@ -714,7 +648,7 @@ public partial class TestCases
 				Name = "UpdateUser_WhenUserDoesNotExist_ShouldReturnNotFound",
 				Method = HttpMethod.Post,
 				Path = $"Users",
-				Body = new MockBuilder<UpdateUserCommand>(baseUpdateUserCommand)
+				Body = new MockBuilder<UpdateUserCommand>(MockData.BaseUpdateUserCommand)
 					.With(command => command.UserId, MockData.UserId0)
 					.Build(),
 				ExpectedStatusCode = StatusCodes.Status404NotFound

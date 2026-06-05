@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bug.BetterThanYesterday.API\Bug.BetterThanYesterday.API.csproj" />
+    <ProjectReference Include="..\Bug.BetterThanYesterday.Application\Bug.BetterThanYesterday.Application.csproj" />
+    <ProjectReference Include="..\Bug.BetterThanYesterday.Infrastructure\Bug.BetterThanYesterday.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

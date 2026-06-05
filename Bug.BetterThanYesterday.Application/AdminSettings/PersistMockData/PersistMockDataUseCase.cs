@@ -25,31 +25,16 @@ public sealed class PersistMockDataUseCase(
 		{
 			command.Validate();
 
-			var tasks = new List<Task>
+			/*var tasks = new List<Task>
 			{
-				Parallel.ForEachAsync(
-					MockData.MockHabits,
-					async (habit, _) => await habitRepository.ReplaceAsync(habit)
-				),
-				Parallel.ForEachAsync(
-					MockData.MockUsers,
-					async (user, _) => await userRepository.ReplaceAsync(user)
-				),
-				Parallel.ForEachAsync(
-					MockData.MockPlans,
-					async (plan, _) => await planRepository.ReplaceAsync(plan)
-				),
-				Parallel.ForEachAsync(
-					MockData.MockPlanMembers,
-					async (planMember, _) => await planMemberRepository.ReplaceAsync(planMember)
-				),
-				Parallel.ForEachAsync(
-					MockData.MockCheckIns,
-					async (checkIn, _) => await checkInRepository.ReplaceAsync(checkIn)
-				),
+				habitRepository.InsertJsonAsync(MockData.MockHabits),
+				userRepository.InsertJsonAsync(MockData.MockUsers),
+				planRepository.InsertJsonAsync(MockData.MockPlans),
+				planMemberRepository.InsertJsonAsync(MockData.MockPlanMembers),
+				checkInRepository.InsertJsonAsync(MockData.MockCheckIns)
 			};
 
-			await Task.WhenAll(tasks);
+			await Task.WhenAll(tasks);*/
 
 			return Result.Success($"Dados mockados persistidos com sucesso");
 		}

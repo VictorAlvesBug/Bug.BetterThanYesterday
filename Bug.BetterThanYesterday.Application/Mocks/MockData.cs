@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
+using Bug.BetterThanYesterday.Application.CheckIns.ListCheckInsByFilter;
+using Bug.BetterThanYesterday.Application.Plans.CreatePlan;
+using Bug.BetterThanYesterday.Application.Plans.ListPlansByFilter;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
@@ -15,6 +15,8 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 {
 	public class MockData
 	{
+
+		#region Mock Ids
 
 		public static readonly Guid HabitId0 = Guid.Parse("02acffc2-ce9c-408a-840e-748ddb787904");
 		public static readonly Guid HabitId0_WithNonExistingPlanIdRelated = Guid.Parse("f3c7d661-30b5-4ceb-a5da-57e2db41f0b1");
@@ -69,42 +71,47 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 		public static readonly Guid CheckInId3 = Guid.Parse("c2f3b7e8-6d8f-4b1a-9c3d-7f2a1b4c3d33");
 		public static readonly Guid CheckInId4 = Guid.Parse("c0834a21-9158-4658-b833-2655a974cc17");
 
+		#endregion
 
-		public static readonly List<Habit> MockHabits = [
+		#region Mock Data
+
+		public static readonly List<Habit> MockHabits =
+		[
 			Habit.Restore(
 				HabitId0_WithNonExistingPlanIdRelated,
-				"(Mock) Without valid plan",
+				$"Habit {HabitId0_WithNonExistingPlanIdRelated}",
 				new DateTime(1999, 01, 10)
 			),
 			Habit.Restore(
 				HabitId1,
-				"(Mock) Workout",
+				$"Habit {HabitId1}",
 				new DateTime(1999, 01, 10)
 			),
 			Habit.Restore(
 				HabitId2,
-				"(Mock) Reading",
+				$"Habit {HabitId2}",
 				new DateTime(1967, 06, 20)
 			),
 			Habit.Restore(
 				HabitId3,
-				"(Mock) Studying",
+				$"Habit {HabitId3}",
 				new DateTime(2005, 04, 02)
 			),
 			Habit.Restore(
 				HabitId4,
-				"(Mock) Cooking",
+				$"Habit {HabitId4}",
 				new DateTime(1991, 01, 16)
 			)
 		];
 
-		public static readonly List<User> MockUsers = [
+		public static readonly List<User> MockUsers =
+		[
 			User.Restore(
-				UserId1,
-				"(Mock) Ana",
-				"ana@ex.com",
+			UserId1,
+				$"User {UserId1}",
+				$"{UserId1.ToString()[..4]}@ex.com",
 				null,
-				"Ana",
+				$"User {UserId1} Nickname",
 				"11987654321",
 				"11987654321",
 				"PhoneNumber",
@@ -112,10 +119,10 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			),
 			User.Restore(
 				UserId2,
-				"(Mock) Bob",
-				"bob@ex.com",
+				$"User {UserId2}",
+				$"{UserId2.ToString()[..4]}@ex.com",
 				null,
-				"Ana",
+				$"User {UserId2} Nickname",
 				"11987654321",
 				"11987654321",
 				"PhoneNumber",
@@ -123,10 +130,10 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			),
 			User.Restore(
 				UserId3,
-				"(Mock) Carl",
-				"carl@ex.com",
+				$"User {UserId3}",
+				$"{UserId3.ToString()[..4]}@ex.com",
 				null,
-				"Ana",
+				$"User {UserId3} Nickname",
 				"11987654321",
 				"11987654321",
 				"PhoneNumber",
@@ -134,10 +141,10 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			),
 			User.Restore(
 				UserId4,
-				"(Mock) David",
-				"david@ex.com",
+				$"User {UserId4}",
+				$"{UserId4.ToString()[..4]}@ex.com",
 				null,
-				"Ana",
+				$"User {UserId4} Nickname",
 				"11987654321",
 				"11987654321",
 				"PhoneNumber",
@@ -145,10 +152,10 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			),
 			User.Restore(
 				UserId5,
-				"(Mock) Ellie",
-				"ellie@ex.com",
+				$"User {UserId5}",
+				$"{UserId5.ToString()[..4]}@ex.com",
 				null,
-				"Ana",
+				$"User {UserId5} Nickname",
 				"11987654321",
 				"11987654321",
 				"PhoneNumber",
@@ -156,10 +163,10 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			),
 			User.Restore(
 				UserId6,
-				"(Mock) Fred",
-				"fred@ex.com",
+				$"User {UserId6}",
+				$"{UserId6.ToString()[..4]}@ex.com",
 				null,
-				"Ana",
+				$"User {UserId6} Nickname",
 				"11987654321",
 				"11987654321",
 				"PhoneNumber",
@@ -167,12 +174,13 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			)
 		];
 
-		public static readonly List<Plan> MockPlans = [
+		public static readonly List<Plan> MockPlans =
+		[
 			Plan.Restore(
 				PublicRunningPlanId1_WithUserId1Active,
 				UserId1,
 				HabitId1,
-				"(Mock) Workout 5 times a week",
+				$"Plan {PublicRunningPlanId1_WithUserId1Active}",
 				new DateTime(2025, 01, 01),
 				new DateTime(DateTime.Today.Year, 12, 31),
 				PlanType.Public.Name,
@@ -185,7 +193,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
 				UserId1,
 				HabitId2,
-				"(Mock) Reading 15 pages everyday",
+				$"Plan {PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active}",
 				new DateTime(2026, 01, 01),
 				new DateTime(2026, 12, 31),
 				PlanType.Private.Name,
@@ -198,7 +206,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PublicCancelledPlanId3,
 				UserId1,
 				HabitId3,
-				"(Mock) Studying AWS every weekend",
+				$"Plan {PublicCancelledPlanId3}",
 				new DateTime(2025, 01, 01),
 				new DateTime(2025, 12, 31),
 				PlanType.Public.Name,
@@ -211,7 +219,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked,
 				UserId1,
 				HabitId3,
-				"(Mock) Studying React every weekend",
+				$"Plan {PrivateFinishedPlanId4_WithUserId2ActiveAndUserId3Blocked}",
 				new DateTime(2024, 01, 01),
 				new DateTime(2024, 12, 31),
 				PlanType.Private.Name,
@@ -224,7 +232,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PrivateFinishedPlanId5_WithUserId5Active,
 				UserId1,
 				HabitId3,
-				"(Mock) Studying English every weekend",
+				$"Plan {PrivateFinishedPlanId5_WithUserId5Active}",
 				new DateTime(2024, 01, 01),
 				new DateTime(2024, 12, 31),
 				PlanType.Private.Name,
@@ -237,7 +245,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active,
 				UserId1,
 				HabitId3,
-				"(Mock) Studying Math every weekend",
+				$"Plan {PublicCancelledPlanId6_WithUserId4BlockedAndUserId5Active}",
 				new DateTime(2024, 01, 01),
 				new DateTime(2024, 12, 31),
 				PlanType.Public.Name,
@@ -250,7 +258,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
 				UserId1,
 				HabitId3,
-				"(Mock) Studying Anatomy every weekend",
+				$"Plan {PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active}",
 				new DateTime(2025, 01, 01),
 				new DateTime(DateTime.Today.Year, 12, 31),
 				PlanType.Public.Name,
@@ -263,7 +271,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PlanId0_WithNonExistingHabitIdRelated,
 				UserId1,
 				HabitId0,
-				"(Mock) Existing plan with non-existing habit related",
+				$"Plan {PlanId0_WithNonExistingHabitIdRelated}",
 				new DateTime(2025, 01, 01),
 				new DateTime(DateTime.Today.Year, 12, 31),
 				PlanType.Public.Name,
@@ -276,7 +284,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				PlanId0_WithNonExistingOwnerIdRelated,
 				UserId0,
 				HabitId0_WithNonExistingPlanIdRelated,
-				"(Mock) Existing plan with non-existing owner related",
+				$"Plan {PlanId0_WithNonExistingOwnerIdRelated}",
 				new DateTime(2025, 01, 01),
 				new DateTime(DateTime.Today.Year, 12, 31),
 				PlanType.Public.Name,
@@ -409,7 +417,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId1,
 				DateTime.Today.AddDays(-1),
 				1,
-				"(Mock) Morning workout",
+				$"CheckIn {CheckInId1}",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -421,7 +429,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId2,
 				new DateTime(2025, 01, 05),
 				1,
-				"(Mock) Reading",
+				$"CheckIn {CheckInId2}",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -433,7 +441,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId3,
 				new DateTime(2025, 10, 10),
 				1,
-				"(Mock) Evening review",
+				$"CheckIn {CheckInId3}",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -445,7 +453,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId4,
 				new DateTime(2025, 10, 10),
 				1,
-				"(Mock) Without Creativity",
+				$"CheckIn {CheckInId4}",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -457,7 +465,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId0,
 				new DateTime(2025, 10, 10),
 				1,
-				"(Mock) Other CheckIn",
+				$"CheckIn {CheckInId0_WithNonExistingOwnerIdRelated}",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -469,7 +477,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId1,
 				new DateTime(2025, 10, 10),
 				1,
-				"(Mock) Error, because I don't have a valid plan related",
+				$"CheckIn {CheckInId0_WithNonExistingPlanIdRelated}",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -481,7 +489,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId1,
 				new DateTime(2025, 10, 10),
 				1,
-				"(Mock) Error, because I don't have a valid habit (through plan) related",
+				$"CheckIn {CheckInId0_WithNonExistingHabitIdRelated}",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
@@ -493,12 +501,74 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				UserId1,
 				new DateTime(2025, 10, 10),
 				1,
-				"(Mock) Error, because I don't have a valid habit (through plan) related",
+				$"CheckIn {CheckInId0_WithNonExistingOwnerIdRelated}",
 				"photoUrl",
 				CheckInStatus.Pending.Name,
 				[],
 				DateTime.Today
 			)
 		];
+
+		#endregion
+
+		#region Mock Commands
+
+		public static readonly AddCheckInCommand BaseAddCheckInCommand = new AddCheckInCommand
+		{
+			PlanId = PublicRunningPlanId1_WithUserId1Active,
+			UserId = UserId1,
+			Date = DateTime.Today,
+			Title = "Mock Title",
+			PhotoUrl = "Mock Url"
+		};
+
+		public static readonly ListCheckInsByFilterCommand BaseListCheckInsByFilterCommand = new ListCheckInsByFilterCommand
+		{
+			PlanId = PublicRunningPlanId1_WithUserId1Active,
+			UserId = UserId1,
+			Date = DateTime.Today,
+			Status = CheckInStatus.Pending.Name,
+		};
+
+		/*public static readonly ReviewCheckInCommand BaseReviewCheckInCommand = new ReviewCheckInCommand
+		{
+			CheckInId = CheckInId4,
+			ReviewerId = UserId5,
+			Date = DateTime.Now,
+			Status = CheckInStatus.Rejected.Name
+		};*/
+
+		/*public static readonly UpdateHabitCommand BaseUpdateHabitCommand = new UpdateHabitCommand(
+			habitId: HabitId1,
+			name: "Mock Name"
+		);*/
+
+		public static readonly CreatePlanCommand BaseCreatePlanCommand = new CreatePlanCommand(
+				ownerId: UserId1,
+				habitId: HabitId1,
+				description: "Mock Description",
+				startsAt: DateTime.Today.AddDays(1),
+				endsAt: DateTime.Today.AddDays(8),
+				type: PlanType.Private.Name,
+				daysOffPerWeek: 2,
+				penaltyValue: 10
+			);
+
+		public static readonly ListPlansByFilterCommand BaseListPlansByFilterCommand = new ListPlansByFilterCommand
+		{
+			HabitId = HabitId1,
+			OwnerId = UserId1,
+			Status = PlanStatus.Running.Name,
+			Type = PlanType.Private.Name,
+		};
+
+		/*public static readonly UpdateUserCommand BaseUpdateUserCommand = new UpdateUserCommand(
+			userId: UserId1,
+			name: "Mock Name",
+			email: "mock@email.com"
+		);*/
+
+		#endregion
+
 	}
 }
