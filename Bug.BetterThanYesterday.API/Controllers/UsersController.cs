@@ -57,7 +57,7 @@ public class UsersController(
 		if (result.IsSuccess())
 		{
 			var data = ((Result<UserModel>)result).Data;
-			return Created($"Users/{data.UserId}", result);
+			return Created($"Users/{data.Id}", result);
 		}
 
 		if (result.IsRejected())

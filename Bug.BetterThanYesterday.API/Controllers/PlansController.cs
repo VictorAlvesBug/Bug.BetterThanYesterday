@@ -59,7 +59,7 @@ public class PlansController(
 		if (result.IsSuccess())
 		{
 			var data = ((Result<PlanModel>)result).Data;
-			return Created($"Plans/{data.PlanId}", result);
+			return Created($"Plans/{data.Id}", result);
 		}
 
 		if (result.IsRejected())

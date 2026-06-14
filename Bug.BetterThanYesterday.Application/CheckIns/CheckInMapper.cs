@@ -18,7 +18,7 @@ internal static class CheckInMapper
 		Habit habit,
 		User user) => new()
 		{
-			CheckInId = checkIn.Id,
+			Id = checkIn.Id,
 			PlanId = checkIn.PlanId,
 			PlanName = plan.Description ?? habit.Name,
 			UserId = checkIn.UserId,

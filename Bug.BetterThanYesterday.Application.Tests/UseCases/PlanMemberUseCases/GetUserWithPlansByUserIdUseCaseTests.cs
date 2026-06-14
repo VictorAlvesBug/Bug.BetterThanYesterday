@@ -41,7 +41,7 @@ public class GetUserWithPlansByUserIdUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(Messages.UserSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<UserWithPlansModel>>(result).Data;
-		Assert.Equal(user.Id, resultData.User.UserId);
+		Assert.Equal(user.Id, resultData.User.Id);
 		Assert.Equal(user.Name, resultData.User.Name);
 		Assert.Equal(user.Email.Value, resultData.User.Email);
 		Assert.Equal(user.CreatedAt, resultData.User.CreatedAt);
@@ -70,7 +70,7 @@ public class GetUserWithPlansByUserIdUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(Messages.UserHasNoPlans, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<UserWithPlansModel>>(result).Data;
-		Assert.Equal(user.Id, resultData.User.UserId);
+		Assert.Equal(user.Id, resultData.User.Id);
 		Assert.Equal(user.Name, resultData.User.Name);
 		Assert.Equal(user.Email.Value, resultData.User.Email);
 		Assert.Equal(user.CreatedAt, resultData.User.CreatedAt);

@@ -4,7 +4,7 @@ namespace Bug.BetterThanYesterday.Application.Plans;
 
 public class PlanModel
 {
-	public Guid PlanId { get; set; }
+	public Guid Id { get; set; }
 	public Guid OwnerId { get; set; }
 	public string OwnerName { get; set; }
 	public Guid HabitId { get; set; }

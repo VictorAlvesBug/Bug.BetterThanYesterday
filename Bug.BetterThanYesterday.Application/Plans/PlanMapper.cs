@@ -10,7 +10,7 @@ internal static class PlanMapper
 {
 	public static PlanModel ToModel(this Plan plan, Habit habit, User owner) => new()
 	{
-		PlanId = plan.Id,
+		Id = plan.Id,
 		OwnerId = plan.OwnerId,
 		OwnerName = owner.Name,
 		HabitId = plan.HabitId,

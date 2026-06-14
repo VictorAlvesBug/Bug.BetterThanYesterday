@@ -42,7 +42,7 @@ public class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCaseTests : B
         
 		Assert.Equal(checkInDate.ToDateTime(TimeOnly.MinValue), resultData.Date);
 		
-		Assert.Equal(firstPlan.Id, resultData.Plan.PlanId);
+		Assert.Equal(firstPlan.Id, resultData.Plan.Id);
 		Assert.Equal(firstPlan.OwnerId, resultData.Plan.OwnerId);
 		Assert.Equal(firstPlan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(firstPlan.Description, resultData.Plan.Description);
@@ -54,7 +54,7 @@ public class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCaseTests : B
 		Assert.Equal(firstPlan.PenaltyValue, resultData.Plan.PenaltyValue);
 		Assert.Equal(firstPlan.CreatedAt, resultData.Plan.CreatedAt);
 		
-		Assert.Equal(firstUser.Id, resultData.User.UserId);
+		Assert.Equal(firstUser.Id, resultData.User.Id);
 		Assert.Equal(firstUser.Name, resultData.User.Name);
 		Assert.Equal(firstUser.Email.Value, resultData.User.Email);
 		Assert.Equal(firstUser.CreatedAt, resultData.User.CreatedAt);
@@ -69,7 +69,7 @@ public class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCaseTests : B
         foreach (var checkIn in dateCheckIns)
         {
             var resultCheckIn = resultData.CheckIns.FirstOrDefault(x => 
-                x.CheckInId == checkIn.Id &&
+                x.Id == checkIn.Id &&
                 x.PlanId == checkIn.PlanId &&
                 x.UserId == checkIn.UserId &&
                 x.Date == checkIn.Date.ToDateTime(TimeOnly.MinValue) &&

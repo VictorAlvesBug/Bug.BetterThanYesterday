@@ -26,7 +26,7 @@ public class GetUserByIdUseCaseTests : BaseUserUseCaseTests
 		Assert.Equal(Messages.UserSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<UserModel>>(result).Data;
-		Assert.Equal(firstUser.Id, resultData.UserId);
+		Assert.Equal(firstUser.Id, resultData.Id);
 		Assert.Equal(firstUser.Name, resultData.Name);
 		Assert.Equal(firstUser.Email.Value, resultData.Email);
 		Assert.Equal(firstUser.CreatedAt, resultData.CreatedAt);

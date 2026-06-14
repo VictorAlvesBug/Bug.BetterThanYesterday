@@ -20,7 +20,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 		var planId = _mock.PlanMembers.First().PlanId;
 		var plan = _mock.Plans.First(plan => plan.Id == planId);
 		var owner = _mock.Users.First(user => user.Id == plan.OwnerId);
-		var members =
+		var users =
 			(
 				from
 					planMember in _mock.PlanMembers
@@ -44,7 +44,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 
 		var resultData = Assert.IsType<Result<PlanWithMembersModel>>(result).Data;
 
-		Assert.Equal(plan.Id, resultData.Plan.PlanId);
+		Assert.Equal(plan.Id, resultData.Plan.Id);
 		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
 		Assert.Equal(owner.Name, resultData.Plan.OwnerName);
 		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
@@ -57,7 +57,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(plan.PenaltyValue, resultData.Plan.PenaltyValue);
 		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
-		Assert.Equal(members.Count, resultData.Members.Count);
+		Assert.Equal(users.Count, resultData.Users.Count);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanMemberRepository.Verify(repo => repo.ListByPlanIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -83,7 +83,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 
 		var resultData = Assert.IsType<Result<PlanWithMembersModel>>(result).Data;
 
-		Assert.Equal(plan.Id, resultData.Plan.PlanId);
+		Assert.Equal(plan.Id, resultData.Plan.Id);
 		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
 		Assert.Equal(owner.Name, resultData.Plan.OwnerName);
 		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
@@ -96,7 +96,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(plan.PenaltyValue, resultData.Plan.PenaltyValue);
 		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
-		Assert.Empty(resultData.Members);
+		Assert.Empty(resultData.Users);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanMemberRepository.Verify(repo => repo.ListByPlanIdAsync(It.IsAny<Guid>()), Times.Once);

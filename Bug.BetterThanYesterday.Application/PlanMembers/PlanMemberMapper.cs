@@ -15,23 +15,23 @@ internal static class PlanMemberMapper
 		Habit habit,
 		Plan plan,
 		User owner,
-		User member) => new()
+		User user) => new()
 		{
-			PlanMemberId = planMember.Id,
+			Id = planMember.Id,
 			JoinedAt = planMember.JoinedAt.ToDateTime(TimeOnly.MinValue),
 			Status = planMember.Status.Name,
 			Plan = plan.ToModel(habit, owner),
-			Member = member.ToModel(),
+			User = user.ToModel(),
 		};
 
 	public static PlanWithMembersModel ToPlanWithMembersModel(
 		this Plan plan,
 		Habit habit,
 		User owner,
-		List<User>? members = null) => new()
+		List<User>? users = null) => new()
 		{
 			Plan = plan.ToModel(habit, owner),
-			Members = members?.Select(member => member.ToModel()).ToList() ?? [],
+			Users = users?.Select(user => user.ToModel()).ToList() ?? [],
 		};
 
 	public static UserWithPlansModel ToUserWithPlansModel(

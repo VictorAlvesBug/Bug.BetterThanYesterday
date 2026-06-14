@@ -6,5 +6,5 @@ namespace Bug.BetterThanYesterday.Application.PlanMembers;
 public class PlanWithMembersModel
 {
 	public PlanModel Plan { get; set; }
-	public List<UserModel> Members { get; set; }
+	public List<UserModel> Users { get; set; }
 }

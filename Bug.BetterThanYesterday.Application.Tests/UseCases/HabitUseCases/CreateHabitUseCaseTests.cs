@@ -29,7 +29,7 @@ public class CreateHabitUseCaseTests : BaseHabitUseCaseTests
 		Assert.Equal(Messages.HabitSuccessfullyRegistered, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<HabitModel>>(result).Data;
-		Assert.NotEqual(Guid.Empty, resultData.HabitId);
+		Assert.NotEqual(Guid.Empty, resultData.Id);
 		Assert.Equal(habitName, resultData.Name);
 		Assert.Equal(_today, resultData.CreatedAt);
 

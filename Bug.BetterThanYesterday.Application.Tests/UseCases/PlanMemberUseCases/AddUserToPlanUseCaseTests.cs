@@ -37,7 +37,7 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 
 		var resultData = Assert.IsType<Result<PlanMemberDetailsModel>>(result).Data;
 		
-		Assert.Equal(plan.Id, resultData.Plan.PlanId);
+		Assert.Equal(plan.Id, resultData.Plan.Id);
 		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
 		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
@@ -49,10 +49,10 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(plan.PenaltyValue, resultData.Plan.PenaltyValue);
 		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
-		Assert.Equal(user.Id, resultData.Member.UserId);
-		Assert.Equal(user.Name, resultData.Member.Name);
-		Assert.Equal(user.Email.Value, resultData.Member.Email);
-		Assert.Equal(user.CreatedAt, resultData.Member.CreatedAt);
+		Assert.Equal(user.Id, resultData.User.Id);
+		Assert.Equal(user.Name, resultData.User.Name);
+		Assert.Equal(user.Email.Value, resultData.User.Email);
+		Assert.Equal(user.CreatedAt, resultData.User.CreatedAt);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -189,7 +189,7 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 
 		var resultData = Assert.IsType<Result<PlanMemberDetailsModel>>(result).Data;
 		
-		Assert.Equal(plan.Id, resultData.Plan.PlanId);
+		Assert.Equal(plan.Id, resultData.Plan.Id);
 		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
 		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
@@ -201,10 +201,10 @@ public class AddUserToPlanUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(plan.PenaltyValue, resultData.Plan.PenaltyValue);
 		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
-		Assert.Equal(user.Id, resultData.Member.UserId);
-		Assert.Equal(user.Name, resultData.Member.Name);
-		Assert.Equal(user.Email.Value, resultData.Member.Email);
-		Assert.Equal(user.CreatedAt, resultData.Member.CreatedAt);
+		Assert.Equal(user.Id, resultData.User.Id);
+		Assert.Equal(user.Name, resultData.User.Name);
+		Assert.Equal(user.Email.Value, resultData.User.Email);
+		Assert.Equal(user.CreatedAt, resultData.User.CreatedAt);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

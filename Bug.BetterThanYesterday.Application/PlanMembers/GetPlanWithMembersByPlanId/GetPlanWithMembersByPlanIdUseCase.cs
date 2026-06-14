@@ -42,17 +42,17 @@ public sealed class GetPlanWithMembersByPlanIdUseCase(
 
             var memberIds = planMembers.Select(planMember => planMember.UserId).ToList();
 
-            var members = await userRepository.BatchGetByIdAsync(memberIds);
+            var users = await userRepository.BatchGetByIdAsync(memberIds);
 
-            if (memberIds.Count > members.Count)
+            if (memberIds.Count > users.Count)
             {
-                var notFoundIds = memberIds.Where(id => !members.Any(p => p.Id == id));
+                var notFoundIds = memberIds.Where(id => !users.Any(p => p.Id == id));
                 var strNotFoundIds = string.Join(", ", notFoundIds);
                 return Result.Rejected($"Usuários não encontrados para os IDs: {strNotFoundIds}");
             }
 
             return Result.Success(
-                plan.ToPlanWithMembersModel(habit, owner, members),
+                plan.ToPlanWithMembersModel(habit, owner, users),
                 Messages.PlanSuccessfullyFound
             );
         }

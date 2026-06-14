@@ -57,7 +57,7 @@ public class HabitsController(
 		if (result.IsSuccess())
 		{
 			var data = ((Result<HabitModel>)result).Data;
-			return Created($"Habits/{data.HabitId}", result);
+			return Created($"Habits/{data.Id}", result);
 		}
 
 		if (result.IsRejected())

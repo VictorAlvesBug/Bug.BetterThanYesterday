@@ -28,7 +28,7 @@ public class UpdateHabitUseCaseTests : BaseHabitUseCaseTests
 		Assert.Equal(Messages.HabitSuccessfullyUpdated, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<HabitModel>>(result).Data;
-		Assert.Equal(firstHabit.Id, resultData.HabitId);
+		Assert.Equal(firstHabit.Id, resultData.Id);
 		Assert.Equal(newName, resultData.Name);
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

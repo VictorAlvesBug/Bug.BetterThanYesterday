@@ -38,7 +38,7 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanMemberUseCaseTests
 
 		var resultData = Assert.IsType<Result<PlanMemberDetailsModel>>(result).Data;
 		
-		Assert.Equal(plan.Id, resultData.Plan.PlanId);
+		Assert.Equal(plan.Id, resultData.Plan.Id);
 		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
 		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
@@ -50,12 +50,12 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanMemberUseCaseTests
 		Assert.Equal(plan.PenaltyValue, resultData.Plan.PenaltyValue);
 		Assert.Equal(plan.CreatedAt, resultData.Plan.CreatedAt);
 		
-		Assert.Equal(user.Id, resultData.Member.UserId);
-		Assert.Equal(user.Name, resultData.Member.Name);
-		Assert.Equal(user.Email.Value, resultData.Member.Email);
-		Assert.Equal(user.CreatedAt, resultData.Member.CreatedAt);
+		Assert.Equal(user.Id, resultData.User.Id);
+		Assert.Equal(user.Name, resultData.User.Name);
+		Assert.Equal(user.Email.Value, resultData.User.Email);
+		Assert.Equal(user.CreatedAt, resultData.User.CreatedAt);
 
-		Assert.Equal(planMember.Id, resultData.PlanMemberId);
+		Assert.Equal(planMember.Id, resultData.Id);
 		Assert.Equal(planMember.JoinedAt.ToDateTime(TimeOnly.MinValue), resultData.JoinedAt);
 
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

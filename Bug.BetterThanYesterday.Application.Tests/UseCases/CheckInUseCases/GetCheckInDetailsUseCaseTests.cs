@@ -34,7 +34,7 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         Assert.Equal(Messages.CheckInSuccessfullyFound, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<CheckInModel>>(result).Data;
-        Assert.Equal(firstCheckIn.Id, resultData.CheckInId);
+        Assert.Equal(firstCheckIn.Id, resultData.Id);
         Assert.Equal(firstCheckIn.PlanId, resultData.PlanId);
         Assert.Equal(firstCheckIn.UserId, resultData.UserId);
         Assert.Equal(firstCheckIn.Date.ToDateTime(TimeOnly.MinValue), resultData.Date);

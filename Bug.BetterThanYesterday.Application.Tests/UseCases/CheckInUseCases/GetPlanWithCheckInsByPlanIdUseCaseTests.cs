@@ -32,7 +32,7 @@ public class GetPlanWithCheckInsByPlanIdUseCaseTests : BaseCheckInUseCaseTests
         var resultData = Assert.IsType<Result<PlanWithCheckInsModel>>(result).Data;
         Assert.Equal(checkIns.Count, resultData.CheckIns.Count);
 		
-		Assert.Equal(firstPlan.Id, resultData.Plan.PlanId);
+		Assert.Equal(firstPlan.Id, resultData.Plan.Id);
 		Assert.Equal(firstPlan.OwnerId, resultData.Plan.OwnerId);
 		Assert.Equal(owner.Name, resultData.Plan.OwnerName);
 		Assert.Equal(firstPlan.HabitId, resultData.Plan.HabitId);
@@ -51,7 +51,7 @@ public class GetPlanWithCheckInsByPlanIdUseCaseTests : BaseCheckInUseCaseTests
         foreach (var checkIn in planCheckIns)
         {
             var resultCheckIn = resultData.CheckIns.FirstOrDefault(x => 
-                x.CheckInId == checkIn.Id &&
+                x.Id == checkIn.Id &&
                 x.PlanId == checkIn.PlanId &&
                 x.UserId == checkIn.UserId &&
                 x.Date == checkIn.Date.ToDateTime(TimeOnly.MinValue) &&

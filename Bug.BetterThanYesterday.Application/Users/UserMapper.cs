@@ -6,7 +6,7 @@ internal static class UserMapper
 {
 	public static UserModel ToModel(this User user) => new()
 	{
-		UserId = user.Id,
+		Id = user.Id,
 		Name = user.Name,
 		Email = user.Email.Value,
 		PhotoUrl = user.Photo is null ? null : user.Photo.Value,

@@ -27,6 +27,7 @@ public class PlanPlarticipantsController(
 	: ControllerBase
 {
 	[HttpGet("Plans/{planId}/Members")]
+	[HttpGet("Plans/{planId}/Users")]
 	public async Task<IActionResult> GetByPlanId(Guid planId)
 	{
 		var command = new GetPlanWithMembersByPlanIdCommand(planId);
@@ -57,6 +58,7 @@ public class PlanPlarticipantsController(
 	}
 
 	[HttpGet("Plans/{planId}/Members/{userId}")]
+	[HttpGet("Plans/{planId}/Users/{userId}")]
 	//[HttpGet("Users/{userId}/Plans/{planId}")]
 	public async Task<IActionResult> GetByPlanIdAndUserId(Guid planId, Guid userId)
 	{
@@ -73,6 +75,7 @@ public class PlanPlarticipantsController(
 	}
 
 	[HttpPost("Plans/{planId}/Members/{userId}")]
+	[HttpPost("Plans/{planId}/Users/{userId}")]
 	//[HttpPost("Users/{userId}/Plans/{planId}")]
 	public async Task<IActionResult> AddUserToPlan(Guid planId, Guid userId)
 	{
@@ -82,7 +85,7 @@ public class PlanPlarticipantsController(
 		if (result.IsSuccess())
 		{
 			var data = ((Result<PlanMemberDetailsModel>)result).Data;
-			return Created($"Plans/{data.Plan.PlanId}/Members/{data.Member.UserId}", result);
+			return Created($"Plans/{data.Plan.Id}/Members/{data.User.Id}", result);
 		}
 
 		if (result.IsRejected())
@@ -92,6 +95,7 @@ public class PlanPlarticipantsController(
 	}
 
 	[HttpDelete("Plans/{planId}/Members/{userId}")]
+	[HttpDelete("Plans/{planId}/Users/{userId}")]
 	//[HttpDelete("Users/{userId}/Plans/{planId}")]
 	public async Task<IActionResult> RemoveUserFromPlan(Guid planId, Guid userId)
 	{
@@ -108,6 +112,7 @@ public class PlanPlarticipantsController(
 	}
 
 	[HttpPost("Plans/{planId}/Members/{userId}/Block")]
+	[HttpPost("Plans/{planId}/Users/{userId}/Block")]
 	//[HttpPost("Users/{userId}/Plans/{planId}/Block")]
 	public async Task<IActionResult> BlockUserInThePlan(Guid planId, Guid userId)
 	{
@@ -117,7 +122,7 @@ public class PlanPlarticipantsController(
 		if (result.IsSuccess())
 		{
 			var data = ((Result<PlanMemberDetailsModel>)result).Data;
-			return Created($"Plans/{data.Plan.PlanId}/Members/{data.Member.UserId}/Block", result);
+			return Created($"Plans/{data.Plan.Id}/Members/{data.User.Id}/Block", result);
 		}
 
 		if (result.IsRejected())
@@ -127,6 +132,7 @@ public class PlanPlarticipantsController(
 	}
 
 	[HttpDelete("Plans/{planId}/Members/{userId}/Block")]
+	[HttpDelete("Plans/{planId}/Users/{userId}/Block")]
 	//[HttpDelete("Users/{userId}/Plans/{planId}/Block")]
 	public async Task<IActionResult> UnblockUserInThePlan(Guid planId, Guid userId)
 	{

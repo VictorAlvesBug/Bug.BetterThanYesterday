@@ -2,7 +2,7 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.Models;
 
 public class CheckInModel
 {
-    public required Guid CheckInId { get; set; }
+    public required Guid Id { get; set; }
     public required Guid PlanId { get; set; }
     public required string PlanName { get; set; }
     public required Guid UserId { get; set; }

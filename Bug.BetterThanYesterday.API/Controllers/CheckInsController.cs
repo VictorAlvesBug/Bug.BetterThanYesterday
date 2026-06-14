@@ -56,7 +56,7 @@ public class CheckInsController(
 		if (result.IsSuccess())
 		{
 			var data = ((Result<CheckInModel>)result).Data;
-			return Created($"CheckIns/{data.CheckInId}", result);
+			return Created($"CheckIns/{data.Id}", result);
 		}
 
 		if (result.IsRejected())

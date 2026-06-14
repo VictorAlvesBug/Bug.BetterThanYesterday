@@ -17,12 +17,12 @@ public sealed record Photo
 		if (string.IsNullOrWhiteSpace(value))
 			throw new ArgumentNullException(nameof(Photo), Messages.EnterPhoto);
 
-		var regex = new Regex(@"^https?:\/\/s3.[a-z0-9\-]+\.amazonaws.com(\/[a-z0-9\-_]*)*\.(jpg|jpeg|png)$");
+		var regexS3 = new Regex(@"^https?:\/\/s3.[a-z0-9\-]+\.amazonaws.com(\/[a-z0-9\-_]*)*\.(jpg|jpeg|png)$");
 
 		value = value.Trim().ToLower();
 
-		if (!regex.IsMatch(value))
-			throw new ArgumentException(Messages.EnterValidPhoto, nameof(Photo));
+		//if (!regexS3.IsMatch(value))
+		//	throw new ArgumentException(Messages.EnterValidPhoto, nameof(Photo));
 
 		return new Photo(value);
 	}

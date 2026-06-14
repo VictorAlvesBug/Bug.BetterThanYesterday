@@ -12,7 +12,7 @@ public static class HabitMapper
 		List<Plan>? plans = null,
 		List<User>? owners = null) => new()
 	{
-		HabitId = habit.Id,
+		Id = habit.Id,
 		Name = habit.Name,
 		CreatedAt = habit.CreatedAt,
 		Plans = plans is null 
