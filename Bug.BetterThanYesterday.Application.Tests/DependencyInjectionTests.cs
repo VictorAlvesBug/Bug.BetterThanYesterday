@@ -23,6 +23,16 @@ public class Tests
 		services.AddSingleton(Options.Create(cfg));
 		services.AddSingleton<IDatabaseConfig>(_ => cfg);
 
+		var awsCfg = new AwsConfig
+		{
+			AccessKey = "test-key",
+			SecretKey = "test-secret",
+			Region = "sa-east-1",
+			BucketName = "test-bucket"
+		};
+		services.AddSingleton<IOptions<AwsConfig>>(Options.Create(awsCfg));
+		services.AddSingleton<IAwsConfig>(_ => awsCfg);
+
 		// Mock do IMongoDatabase
 		var db = Substitute.For<IMongoDatabase>();
 		services.AddSingleton(db);

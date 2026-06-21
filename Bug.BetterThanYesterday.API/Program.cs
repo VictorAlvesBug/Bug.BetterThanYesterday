@@ -11,6 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<DatabaseConfig>(
 builder.Configuration.GetSection(nameof(DatabaseConfig)));
 
+builder.Services.Configure<AwsConfig>(
+builder.Configuration.GetSection(nameof(AwsConfig)));
+
+builder.Services.AddSingleton<IAwsConfig>(sp =>
+	sp.GetRequiredService<IOptions<AwsConfig>>().Value);
+
 builder.Services.AddSingleton(sp =>
 {
 	var dbConfig = sp.GetRequiredService<IOptions<DatabaseConfig>>().Value;
@@ -45,7 +51,16 @@ builder.Services.AddCors(options =>
 	options.AddPolicy("AllowLocalhost",
 		builder =>
 		{
-			builder.WithOrigins("http://localhost:5173") // URL do seu front local
+			builder.SetIsOriginAllowed(origin =>
+				{
+					if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+						return false;
+
+					if (uri.Host is "localhost" or "127.0.0.1")
+						return true;
+
+					return uri.Host.StartsWith("192.168.", StringComparison.Ordinal);
+				})
 				.AllowAnyHeader()
 				.AllowAnyMethod();
 		});

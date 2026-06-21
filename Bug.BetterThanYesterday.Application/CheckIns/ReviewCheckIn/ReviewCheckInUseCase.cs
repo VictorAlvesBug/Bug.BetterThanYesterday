@@ -66,6 +66,7 @@ public sealed class ReviewCheckInUseCase(
                 return Result.Rejected(Messages.MemberIsBlockedInThePlan);
 
             if (plan.GetStatus() != PlanStatus.Running)
+                return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);
 
             if (!checkIn.IsReviewWindowOpen(plan.CheckInReviewWindowInDays))
                 return Result.Rejected(Messages.CheckInReviewWindowHasAlreadyClosed);

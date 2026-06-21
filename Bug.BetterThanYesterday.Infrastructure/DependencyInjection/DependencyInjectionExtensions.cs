@@ -9,12 +9,14 @@ using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
+using Bug.BetterThanYesterday.Domain.Uploads;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.CheckIns;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Habits;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.PlanMembers;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Plans;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Users;
+using Bug.BetterThanYesterday.Infrastructure.S3;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
@@ -27,6 +29,7 @@ public static class DependencyInjectionExtensions
 		services.AddDocumentMappers();
 		services.AddRepositories();
 		services.AddMongoCollections();
+		services.AddScoped<IPresignedUploadUrlGenerator, S3PresignedUploadUrlGenerator>();
 		return services;
 	}
 

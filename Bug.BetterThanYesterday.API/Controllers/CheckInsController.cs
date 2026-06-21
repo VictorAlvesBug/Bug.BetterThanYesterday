@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 using Bug.BetterThanYesterday.Application.CheckIns.GetCheckInById;
 using Bug.BetterThanYesterday.Application.CheckIns.ListCheckInsByFilter;
+using Bug.BetterThanYesterday.Application.CheckIns.ReviewCheckIn;
 using Bug.BetterThanYesterday.Application.CheckIns;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,8 @@ namespace Bug.BetterThanYesterday.API.Controllers;
 public class CheckInsController(
 	IUseCase<AddCheckInCommand> addCheckInUseCase,
 	IUseCase<ListCheckInsByFilterCommand> listCheckInsByFilterUseCase,
-	IUseCase<GetCheckInByIdCommand> getCheckInByIdUseCase)
+	IUseCase<GetCheckInByIdCommand> getCheckInByIdUseCase,
+	IUseCase<ReviewCheckInCommand> reviewCheckInUseCase)
 	: ControllerBase
 {
 	[HttpGet("{checkInId}")]
@@ -57,6 +59,31 @@ public class CheckInsController(
 		{
 			var data = ((Result<CheckInModel>)result).Data;
 			return Created($"CheckIns/{data.Id}", result);
+		}
+
+		if (result.IsRejected())
+			return StatusCode(result.GetStatusCode(), result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
+
+	[HttpPost("{checkInId}/Reviews")]
+	public async Task<IActionResult> Review(Guid checkInId, [FromBody] ReviewCheckInRequest request)
+	{
+		var command = new ReviewCheckInCommand
+		{
+			CheckInId = checkInId,
+			ReviewerId = request.ReviewerId,
+			Status = request.Status,
+			Date = request.Date
+		};
+
+		var result = await reviewCheckInUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+		{
+			var data = ((Result<CheckInModel>)result).Data;
+			return Created($"CheckIns/{data.Id}/Reviews", result);
 		}
 
 		if (result.IsRejected())

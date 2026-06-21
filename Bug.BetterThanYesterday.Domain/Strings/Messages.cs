@@ -136,4 +136,11 @@ public static class Messages
     public const string EnterPhoto = "Adicione uma foto";
     public const string EnterValidPhoto = "Informe um caminho válido para a imagem";
     #endregion
+
+    #region Upload Messages
+    public const string EnterUploadFileName = "Informe o nome do arquivo";
+    public const string EnterUploadContentType = "Informe o tipo do arquivo";
+    public const string AwsConfigNotConfigured = "Configuração AWS não encontrada";
+    public const string PresignedUploadUrlSuccessfullyGenerated = "URL de upload gerada com sucesso";
+    #endregion
 }
