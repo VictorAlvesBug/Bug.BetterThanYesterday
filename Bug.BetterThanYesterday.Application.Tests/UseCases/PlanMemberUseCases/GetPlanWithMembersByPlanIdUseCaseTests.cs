@@ -46,7 +46,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 
 		Assert.Equal(plan.Id, resultData.Plan.Id);
 		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
-		Assert.Equal(owner.Name, resultData.Plan.OwnerName);
+		Assert.Equal(owner.Nickname, resultData.Plan.OwnerName);
 		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
 		Assert.Equal(plan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);
@@ -85,7 +85,7 @@ public class GetPlanWithMembersByPlanIdUseCaseTests : BasePlanMemberUseCaseTests
 
 		Assert.Equal(plan.Id, resultData.Plan.Id);
 		Assert.Equal(plan.OwnerId, resultData.Plan.OwnerId);
-		Assert.Equal(owner.Name, resultData.Plan.OwnerName);
+		Assert.Equal(owner.Nickname, resultData.Plan.OwnerName);
 		Assert.Equal(plan.HabitId, resultData.Plan.HabitId);
 		Assert.Equal(plan.Description, resultData.Plan.Description);
 		Assert.Equal(plan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.Plan.StartsAt);

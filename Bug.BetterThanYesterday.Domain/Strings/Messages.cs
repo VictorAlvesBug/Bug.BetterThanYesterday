@@ -126,6 +126,8 @@ public static class Messages
 
     #region Review CheckIn Messages
     public const string CheckInReviewWindowHasAlreadyClosed = "O Período de revisão do check-in já foi encerrado";
+    public const string ReviewAlreadyMadeByUserForThisCheckIn = "Você já avaliou este check-in";
+    public const string ReviewerCannotReviewHisOwnCheckIn = "Você não pode avaliar seu próprio check-in";
 	#endregion
 
 	#region Other Messages

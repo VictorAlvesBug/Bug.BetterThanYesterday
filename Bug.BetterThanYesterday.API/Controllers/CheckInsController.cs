@@ -18,7 +18,8 @@ public class CheckInsController(
 	IUseCase<AddCheckInCommand> addCheckInUseCase,
 	IUseCase<ListCheckInsByFilterCommand> listCheckInsByFilterUseCase,
 	IUseCase<GetCheckInByIdCommand> getCheckInByIdUseCase,
-	IUseCase<ReviewCheckInCommand> reviewCheckInUseCase)
+	IUseCase<ReviewCheckInCommand> reviewCheckInUseCase,
+	IUseCase<RemoveReviewCommand> removeReviewUseCase)
 	: ControllerBase
 {
 	[HttpGet("{checkInId}")]
@@ -88,6 +89,20 @@ public class CheckInsController(
 
 		if (result.IsRejected())
 			return StatusCode(result.GetStatusCode(), result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
+
+	[HttpDelete("{checkInId}/Reviews/{reviewerId}")]
+	public async Task<IActionResult> RemoveReview(Guid checkInId, Guid reviewerId)
+	{
+		var command = new RemoveReviewCommand
+		{
+			CheckInId = checkInId,
+			ReviewerId = reviewerId
+		};
+
+		var result = await removeReviewUseCase.HandleAsync(command);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}

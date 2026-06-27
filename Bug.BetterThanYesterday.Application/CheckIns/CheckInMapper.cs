@@ -22,7 +22,7 @@ internal static class CheckInMapper
 			PlanId = checkIn.PlanId,
 			PlanName = plan.Description ?? habit.Name,
 			UserId = checkIn.UserId,
-			UserName = user.Name,
+			UserName = user.Nickname,
 			Date = checkIn.Date.ToDateTime(TimeOnly.MinValue),
 			Index = checkIn.Index,
 			Title = checkIn.Title,

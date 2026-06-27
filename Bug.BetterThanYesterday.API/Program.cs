@@ -93,6 +93,12 @@ app.Run();
 
 /*
 
+TODO - Criar back e front para o ranking por plano
+TODO - Alterar lista de checkins para permitir avaliação na tela inicial do plano
+TODO - Testar uso da folga
+TODO - Definir o que vai ficar na tela de 'configurações' e 'sobre nós'
+TODO - Implementar entrada num plano via link de convite
+
 ######### TODO - End-to-end tests to implement via CursorAI #########
 
 - GetHabitById with a non-guid habitId
