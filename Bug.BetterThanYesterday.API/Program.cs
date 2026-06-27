@@ -1,4 +1,5 @@
 using Bug.BetterThanYesterday.API;
+using Bug.BetterThanYesterday.API.Configurations;
 using Bug.BetterThanYesterday.Application.DependencyInjection;
 using Bug.BetterThanYesterday.Domain.Configurations;
 using Bug.BetterThanYesterday.Infrastructure.Configurations;
@@ -12,7 +13,9 @@ builder.Services.Configure<DatabaseConfig>(
 builder.Configuration.GetSection(nameof(DatabaseConfig)));
 
 builder.Services.Configure<AwsConfig>(
-builder.Configuration.GetSection(nameof(AwsConfig)));
+	builder.Configuration.GetSection(nameof(AwsConfig)));
+
+builder.Services.AddSingleton<IConfigureOptions<AwsConfig>, AwsConfigEnvironmentConfigurer>();
 
 builder.Services.AddSingleton<IAwsConfig>(sp =>
 	sp.GetRequiredService<IOptions<AwsConfig>>().Value);
@@ -98,6 +101,8 @@ TODO - Alterar lista de checkins para permitir avaliação na tela inicial do plan
 TODO - Testar uso da folga
 TODO - Definir o que vai ficar na tela de 'configurações' e 'sobre nós'
 TODO - Implementar entrada num plano via link de convite
+TODO - Implementar recarregamento das telas ao puxar de cima para baixo
+TODO - Ajustar para persistir a imagem apenas quando o checkin for criado
 
 ######### TODO - End-to-end tests to implement via CursorAI #########
 

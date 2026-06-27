@@ -12,19 +12,31 @@ Swagger: `http://localhost:5018/swagger`
 
 ## AWS configuration (presigned uploads)
 
-Check-in photo uploads use `POST /api/Uploads/PresignedUrl`. Configure AWS credentials locally — do not commit secrets.
+Check-in photo uploads use `POST /api/Uploads/PresignedUrl`. Configure AWS credentials via environment variables — do not commit secrets.
 
-**Option A — User Secrets (recommended):**
+**Required environment variables** (any of these names work):
+
+| Purpose | Preferred | AWS standard fallback |
+|---------|-----------|------------------------|
+| Access key | `AWS_ACCESS_KEY` | `AWS_ACCESS_KEY_ID` |
+| Secret key | `AWS_SECRET_KEY` | `AWS_SECRET_ACCESS_KEY` |
+
+```powershell
+$env:AWS_ACCESS_KEY = "your-access-key"
+$env:AWS_SECRET_KEY = "your-secret-key"
+```
+
+If you set variables in Windows Settings, restart Cursor/your terminal so the API process can see them. The API also reads User and Machine scope without requiring a restart in some cases.
+
+**Non-secret settings** (`Region`, `BucketName`) live in `appsettings.Development.json` under `AwsConfig`.
+
+**Optional fallback — User Secrets** (overridden by env vars when both are set):
 
 ```sh
 cd Bug.BetterThanYesterday.API
 dotnet user-secrets set "AwsConfig:AccessKey" "YOUR_ACCESS_KEY"
 dotnet user-secrets set "AwsConfig:SecretKey" "YOUR_SECRET_KEY"
-dotnet user-secrets set "AwsConfig:Region" "sa-east-1"
-dotnet user-secrets set "AwsConfig:BucketName" "your-bucket-name"
 ```
-
-**Option B — `appsettings.Development.json`:** fill the `AwsConfig` section (keep empty strings in git).
 
 ## New endpoints
 
