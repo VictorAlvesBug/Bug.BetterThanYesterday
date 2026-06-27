@@ -31,7 +31,7 @@ public class GetPlanByIdUseCaseTests : BasePlanUseCaseTests
 
 		Assert.Equal(firstPlan.Id, resultData.Id);
 		Assert.Equal(firstPlan.OwnerId, resultData.OwnerId);
-		Assert.Equal(owner.Name, resultData.OwnerName);
+		Assert.Equal(owner.Nickname, resultData.OwnerName);
 		Assert.Equal(firstPlan.HabitId, resultData.HabitId);
 		Assert.Equal(firstPlan.Description, resultData.Description);
 		Assert.Equal(firstPlan.StartsAt.ToDateTime(TimeOnly.MinValue), resultData.StartsAt);

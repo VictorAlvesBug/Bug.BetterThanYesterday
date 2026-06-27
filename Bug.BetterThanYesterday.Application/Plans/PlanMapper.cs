@@ -12,7 +12,7 @@ internal static class PlanMapper
 	{
 		Id = plan.Id,
 		OwnerId = plan.OwnerId,
-		OwnerName = owner.Name,
+		OwnerName = owner.Nickname,
 		HabitId = plan.HabitId,
 		HabitName = habit.Name,
 		Description = plan.Description,

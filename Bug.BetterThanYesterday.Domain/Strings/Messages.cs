@@ -126,6 +126,8 @@ public static class Messages
 
     #region Review CheckIn Messages
     public const string CheckInReviewWindowHasAlreadyClosed = "O Período de revisão do check-in já foi encerrado";
+    public const string ReviewAlreadyMadeByUserForThisCheckIn = "Você já avaliou este check-in";
+    public const string ReviewerCannotReviewHisOwnCheckIn = "Você não pode avaliar seu próprio check-in";
 	#endregion
 
 	#region Other Messages
@@ -135,5 +137,12 @@ public static class Messages
     public const string StartDateCannotBeEarlierThanToday = "Data de início não pode ser anterior a hoje";
     public const string EnterPhoto = "Adicione uma foto";
     public const string EnterValidPhoto = "Informe um caminho válido para a imagem";
+    #endregion
+
+    #region Upload Messages
+    public const string EnterUploadFileName = "Informe o nome do arquivo";
+    public const string EnterUploadContentType = "Informe o tipo do arquivo";
+    public const string AwsConfigNotConfigured = "Configuração AWS não encontrada";
+    public const string PresignedUploadUrlSuccessfullyGenerated = "URL de upload gerada com sucesso";
     #endregion
 }

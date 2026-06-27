@@ -169,11 +169,32 @@ public class CheckIn : Entity
 	public void AddReview(Review review)
 	{
 		Reviews.Add(review);
+		Reviews = Reviews.DistinctBy(review => review.ReviewerId).ToList();
+	}
+
+	public void RemoveReviewByReviewerId(Guid reviewerId)
+	{
+		Reviews.RemoveAll(review => review.ReviewerId == reviewerId);
+
+		if (Reviews.Count == 0)
+		{
+			Status = CheckInStatus.Pending;
+		}
 	}
 
 	public bool IsReviewWindowOpen(int reviewWindowInDays)
 	{
 		return DateTime.Now <= Date.ToDateTime(TimeOnly.MinValue).AddDays(reviewWindowInDays);
+	}
+
+	public bool IsReviewAlreadyMadeByUser(Guid userId)
+	{
+		return Reviews.Any(review => review.ReviewerId == userId);
+	}
+
+	public bool IsReviewerCheckInOwner(Guid reviewerId)
+	{
+		return reviewerId == UserId;
 	}
 
 	// TODO: Testar, pois nunca foi utilizado

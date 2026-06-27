@@ -13,15 +13,15 @@ using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 
-public sealed class ReviewCheckInUseCase(
+public sealed class RemoveReviewUseCase(
     ICheckInRepository checkInRepository,
     IPlanRepository planRepository,
     IHabitRepository habitRepository,
     IUserRepository userRepository,
     IPlanMemberRepository planMemberRepository)
-    : IUseCase<ReviewCheckInCommand>
+    : IUseCase<RemoveReviewCommand>
 {
-    public async Task<IResult> HandleAsync(ReviewCheckInCommand command)
+    public async Task<IResult> HandleAsync(RemoveReviewCommand command)
     {
         try
         {
@@ -71,13 +71,7 @@ public sealed class ReviewCheckInUseCase(
             if (!checkIn.IsReviewWindowOpen(plan.CheckInReviewWindowInDays))
                 return Result.Rejected(Messages.CheckInReviewWindowHasAlreadyClosed);
 
-            if (checkIn.IsReviewAlreadyMadeByUser(command.ReviewerId))
-                return Result.Rejected(Messages.ReviewAlreadyMadeByUserForThisCheckIn);
-
-            if (checkIn.IsReviewerCheckInOwner(command.ReviewerId))
-                return Result.Rejected(Messages.ReviewerCannotReviewHisOwnCheckIn);
-
-            checkIn.AddReview(Review.Create(command.ReviewerId, command.Status, command.Date));
+            checkIn.RemoveReviewByReviewerId(command.ReviewerId);
 
             await checkInRepository.UpdateAsync(checkIn);
 
