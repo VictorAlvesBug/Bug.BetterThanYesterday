@@ -30,6 +30,18 @@ public static class Messages
     public const string UserHasReachedTheMaximumNumberOfCheckInsForTheDay = "Usuário atingiu o número máximo de check-ins para o dia";
     public const string EnterCheckInStatus = "Informe o status do check-ins";
     public const string EnterCheckInPhotoUrl = "Informe o URL da foto de evidência";
+
+    public const string DayOffSuccessfullyRegistered = "Folga registrada com sucesso";
+    public const string EnterDayOffDate = "Informe a data da folga";
+    public const string EnterDayOffId = "Informe o ID da folga";
+    public const string EnterDayOffCreateDate = "Informe a data de criação da folga";
+    public const string DayOffAlreadyExistsForDate = "Já existe uma folga registrada para esta data";
+    public const string NoDayOffAvailable = "Nenhuma folga disponível no período";
+    public const string OnlyRunningPlansCanReceiveDayOffs = "Apenas planos em execução permitem uso de folga";
+    public const string CheckInAlreadyExistsForDate = "Já existe um check-in registrado para esta data";
+    public const string DayOffDateCannotBeInTheFuture = "A data da folga não pode ser no futuro";
+    public const string DayOffDateOutsidePlanRange = "A data da folga está fora do período do plano";
+    public const string PlanRankingSuccessfullyFound = "Ranking do plano encontrado com sucesso";
     public const string EnterReviewerId = "Informe o ID do avaliador";
     public const string InvalidReviewStatus = "Status de avaliação inválido";
     public const string InvalidReviewDate = "Data da avaliação inválida";

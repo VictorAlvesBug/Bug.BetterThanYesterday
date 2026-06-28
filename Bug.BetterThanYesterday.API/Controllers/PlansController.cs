@@ -5,7 +5,8 @@ using Bug.BetterThanYesterday.Application.Plans.ListPlansByFilter;
 using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Microsoft.AspNetCore.Mvc;
-using Bug.BetterThanYesterday.Application.Plans.ListPlansByHabitId;
+using Bug.BetterThanYesterday.Application.Plans.GetPlanRanking;
+using Bug.BetterThanYesterday.Application.Plans.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,7 +18,8 @@ namespace Bug.BetterThanYesterday.API.Controllers;
 public class PlansController(
 	IUseCase<CreatePlanCommand> createPlanUseCase,
 	IUseCase<ListPlansByFilterCommand> listPlansByFilterUseCase,
-	IUseCase<GetPlanByIdCommand> getPlanByIdUseCase/*,
+	IUseCase<GetPlanByIdCommand> getPlanByIdUseCase,
+	IUseCase<GetPlanRankingCommand> getPlanRankingUseCase/*,
 	IUseCase<ListPlansByHabitIdCommand> listPlansByHabitIdUseCase,
 	IUseCase<CancelPlanCommand> cancelPlanUseCase*/)
 	: ControllerBase
@@ -41,6 +43,21 @@ public class PlansController(
 	public async Task<IActionResult> ListByFilter([FromQuery] ListPlansByFilterCommand command)
 	{
 		var result = await listPlansByFilterUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+			return Ok(result);
+
+		if (result.IsRejected())
+			return StatusCode(result.GetStatusCode(), result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
+
+	[HttpGet("{planId}/Ranking")]
+	public async Task<IActionResult> GetRanking(Guid planId, [FromQuery] Guid? userId)
+	{
+		var command = new GetPlanRankingCommand(planId, userId);
+		var result = await getPlanRankingUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
 			return Ok(result);

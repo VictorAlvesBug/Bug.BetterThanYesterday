@@ -104,6 +104,15 @@ public class CheckInsController(
 
 		var result = await removeReviewUseCase.HandleAsync(command);
 
+		if (result.IsSuccess())
+		{
+			var data = ((Result<CheckInModel>)result).Data;
+			return Ok(result);
+		}
+
+		if (result.IsRejected())
+			return StatusCode(result.GetStatusCode(), result);
+
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 }

@@ -73,6 +73,11 @@ public sealed class RemoveReviewUseCase(
 
             checkIn.RemoveReviewByReviewerId(command.ReviewerId);
 
+			var activeMemberCount = (await planMemberRepository.ListByPlanIdAsync(checkIn.PlanId))
+				.Count(m => m.Status == PlanMemberStatus.Active);
+
+			checkIn.ConsolidateReviewsIntoStatus(activeMemberCount, plan.CheckInReviewWindowInDays);
+
             await checkInRepository.UpdateAsync(checkIn);
 
             return Result.Success(

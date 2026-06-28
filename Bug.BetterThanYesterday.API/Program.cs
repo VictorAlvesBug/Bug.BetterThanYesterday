@@ -97,12 +97,18 @@ app.Run();
 /*
 
 TODO - Criar back e front para o ranking por plano
-TODO - Alterar lista de checkins para permitir avaliação na tela inicial do plano
+TODO - Alterar lista de checkins para permitir avalia??o na tela inicial do plano
 TODO - Testar uso da folga
-TODO - Definir o que vai ficar na tela de 'configurações' e 'sobre nós'
+TODO - Definir o que vai ficar na tela de 'configura??es' e 'sobre n?s'
 TODO - Implementar entrada num plano via link de convite
 TODO - Implementar recarregamento das telas ao puxar de cima para baixo
 TODO - Ajustar para persistir a imagem apenas quando o checkin for criado
+
+TODO - Exibir progresso, sequencia e posi??o no plan-tracker apenas se o plano j? estiver em andamento
+TODO - Validar se checkin j? foi feito por este usu?rio na aba plan-settings > Check-ins
+TODO - Sequ?ncia est? ficando sempre zerada no plan-tracker e no ranking
+
+TODO - Exibir "+1" ou "+2" na sequencia caso checkin ainda esteja com status de pendente
 
 ######### TODO - End-to-end tests to implement via CursorAI #########
 
@@ -308,7 +314,7 @@ TODO - Ajustar para persistir a imagem apenas quando o checkin for criado
 - ReviewCheckIn for checkIn already reviewed by this reviewer
 - ReviewCheckIn for a non-pending checkIn
 
-######### Cenários de teste #########
+######### Cen?rios de teste #########
 
 # Testes do UseCase
 
@@ -354,7 +360,7 @@ TODO - Ajustar para persistir a imagem apenas quando o checkin for criado
 - DuplicatedCheckIn
 - UserIsNotInThisPlan
 - PlanIsNotRunning
-- UserIsBlocked
+-?UserIsBlocked
 
 # Testes da Controller
 
@@ -459,7 +465,7 @@ TODO - Ajustar para persistir a imagem apenas quando o checkin for criado
 
 ---
 
-// Definir testes de 422 (recursos inválidos vindos do banco) de planos
+// Definir testes de 422 (recursos inv?lidos vindos do banco) de planos
  
  ## ListPlansByFilter()
  - Test_ListPlansByFilterUseCase_Valid_ShouldReturn200();
@@ -506,7 +512,7 @@ TODO - Ajustar para persistir a imagem apenas quando o checkin for criado
 
 
 
-########################################  Versão 1  ########################################
+########################################  Vers?o 1  ########################################
 
 users (Collection)
 - Id (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
@@ -574,7 +580,7 @@ checkins (Collection)
 > Check
 
 
-########################################  Versão 2  ########################################
+########################################  Vers?o 2  ########################################
 
 users (Collection)
 - Id (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
@@ -623,7 +629,7 @@ checkins (Collection)
 - Evidence (Image Link)
 
 
-########################################  Versão 3  ########################################
+########################################  Vers?o 3  ########################################
 
 users (Collection)
 - Id (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
@@ -711,7 +717,7 @@ ValidationFlag (Entity)
 - CreatedAt (Ex: 2024-01-06)
 
 
---> Índices essenciais
+--> ?ndices essenciais
 
 users:
 - { emailLower: 1 } (unique)
@@ -726,11 +732,11 @@ plan_members:
 
 checkins:
 - { planId: 1, userId: 1, date: 1 } (unique)
-- { planId: 1, periodIndex: 1 } (ranking por período)
+- { planId: 1, periodIndex: 1 } (ranking por per?odo)
 
 penalties:
 - { planId: 1, userId: 1, dueAt: 1 }
-- { status: 1, dueAt: 1 } (cobrança em lote)
+- { status: 1, dueAt: 1 } (cobran?a em lote)
 
 rewards:
 - { planId: 1, userId: 1 }
@@ -738,7 +744,7 @@ rewards:
 
 plans:
 - { status: 1, startsAt: 1 }
-- { type: 1 } (listar públicos)
+- { type: 1 } (listar p?blicos)
 
 
 */

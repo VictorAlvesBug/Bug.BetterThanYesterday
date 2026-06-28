@@ -23,7 +23,7 @@ internal static class AwsEnvironmentVariables
 		foreach (var name in names)
 		{
             var value = Resolve(name);
-            Console.WriteLine($"Resolving {name}: {value}");
+            
             if (!string.IsNullOrWhiteSpace(value))
 				return value;
 		}

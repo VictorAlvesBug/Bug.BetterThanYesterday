@@ -79,6 +79,11 @@ public sealed class ReviewCheckInUseCase(
 
             checkIn.AddReview(Review.Create(command.ReviewerId, command.Status, command.Date));
 
+			var activeMemberCount = (await planMemberRepository.ListByPlanIdAsync(checkIn.PlanId))
+				.Count(m => m.Status == PlanMemberStatus.Active);
+
+			checkIn.ConsolidateReviewsIntoStatus(activeMemberCount, plan.CheckInReviewWindowInDays);
+
             await checkInRepository.UpdateAsync(checkIn);
 
             return Result.Success(

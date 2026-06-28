@@ -156,14 +156,17 @@ public class CheckIn : Entity
 		if (index < 0)
 			throw new ArgumentNullException(nameof(index), Messages.EnterCheckInIndex);
 
-		using var sha = SHA256.Create();
-		var bytes = new List<byte>();
-		bytes.AddRange(planId.ToByteArray());
-		bytes.AddRange(userId.ToByteArray());
-		bytes.AddRange(BitConverter.GetBytes(date.Date.ToBinary()));
-		bytes.AddRange(BitConverter.GetBytes(index));
-		var hash = sha.ComputeHash(bytes.ToArray());
-		return new Guid(hash.Take(16).ToArray());
+		//TODO Remover quando terminar de testar via MoveInTime
+		return Guid.NewGuid();
+
+		//using var sha = SHA256.Create();
+		//var bytes = new List<byte>();
+		//bytes.AddRange(planId.ToByteArray());
+		//bytes.AddRange(userId.ToByteArray());
+		//bytes.AddRange(BitConverter.GetBytes(date.Date.ToBinary()));
+		//bytes.AddRange(BitConverter.GetBytes(index));
+		//var hash = sha.ComputeHash(bytes.ToArray());
+		//return new Guid(hash.Take(16).ToArray());
 	}
 
 	public void AddReview(Review review)
@@ -175,11 +178,31 @@ public class CheckIn : Entity
 	public void RemoveReviewByReviewerId(Guid reviewerId)
 	{
 		Reviews.RemoveAll(review => review.ReviewerId == reviewerId);
+	}
 
-		if (Reviews.Count == 0)
-		{
-			Status = CheckInStatus.Pending;
-		}
+	public CheckInStatus ResolveStatus(int planMemberCount, int reviewWindowInDays)
+	{
+		if (Status == CheckInStatus.Validated || Status == CheckInStatus.Rejected)
+			return Status;
+
+		var rejections = Reviews.Count(review => review.Status == CheckInStatus.Rejected);
+		var validations = Reviews.Count(review => review.Status == CheckInStatus.Validated);
+
+		if (rejections > planMemberCount / 2 || (Reviews.Count > 0 && rejections > Reviews.Count / 2))
+			return CheckInStatus.Rejected;
+
+		if (!IsReviewWindowOpen(reviewWindowInDays))
+			return CheckInStatus.Validated;
+
+		if (validations > rejections && validations > 0)
+			return CheckInStatus.Validated;
+
+		return CheckInStatus.Pending;
+	}
+
+	public void ConsolidateReviewsIntoStatus(int planMemberCount, int reviewWindowInDays)
+	{
+		Status = ResolveStatus(planMemberCount, reviewWindowInDays);
 	}
 
 	public bool IsReviewWindowOpen(int reviewWindowInDays)
@@ -195,23 +218,5 @@ public class CheckIn : Entity
 	public bool IsReviewerCheckInOwner(Guid reviewerId)
 	{
 		return reviewerId == UserId;
-	}
-
-	// TODO: Testar, pois nunca foi utilizado
-	public void ConsolidateReviewsIntoStatus(int planMemberCount, int reviewWindowInDays)
-	{
-		if (IsReviewWindowOpen(reviewWindowInDays))
-			return;
-
-		var rejections = Reviews.Count(review => review.Status == CheckInStatus.Rejected);
-		var validations = Reviews.Count(review => review.Status == CheckInStatus.Validated);
-
-		if (rejections > planMemberCount / 2 || rejections > Reviews.Count / 2)
-		{
-			Status = CheckInStatus.Rejected;
-			return;
-		}
-
-		Status = CheckInStatus.Validated;
 	}
 }

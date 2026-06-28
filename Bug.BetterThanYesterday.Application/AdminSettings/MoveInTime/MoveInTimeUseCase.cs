@@ -1,14 +1,17 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
-using Bug.BetterThanYesterday.Domain.Strings;
+using Bug.BetterThanYesterday.Domain.CheckIns;
+using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
+using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.AdminSettings.MoveInTime;
 
 public sealed class MoveInTimeUseCase(
 	IPlanRepository planRepository,
-	IPlanMemberRepository planMemberRepository)
+	IPlanMemberRepository planMemberRepository,
+	ICheckInRepository checkInRepository)
 	: IUseCase<MoveInTimeCommand>
 {
 	public async Task<IResult> HandleAsync(MoveInTimeCommand command)
@@ -43,7 +46,18 @@ public sealed class MoveInTimeUseCase(
 				await planMemberRepository.UpdateAsync(planMember);
 			}
 
-			var isDirectionForward = command.DaysAmount > 0;
+			var checkIns = await checkInRepository.ListAllAsync();
+
+			foreach (var checkIn in checkIns)
+			{
+				checkIn.Date = checkIn.Date.AddDays(daysToAdd);
+				checkIn.Reviews = checkIn.Reviews.ConvertAll(review =>
+                    Review.Create(review.ReviewerId, review.Status.Name, review.Date.AddDays(daysToAdd)))
+                    .ToList();
+                await checkInRepository.UpdateAsync(checkIn);
+			}
+
+            var isDirectionForward = command.DaysAmount > 0;
 			var absoluteDaysAmount = Math.Abs(command.DaysAmount);
 			var dayOrDays = absoluteDaysAmount == 1 ? "dia" : "dias";
 
