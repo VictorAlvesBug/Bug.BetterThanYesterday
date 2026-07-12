@@ -29,6 +29,8 @@ public sealed class GetCheckInByIdUseCase(
 			if (checkIn is null)
 				return Result.Rejected(Messages.CheckInNotFound, RejectionType.NotFound);
 
+			await CheckInStatusResolver.ConsolidateClosedWindowCheckInsAsync([checkIn], checkInRepository);
+
 			var plan = await planRepository.GetByIdAsync(checkIn.PlanId);
 
 			if (plan is null)

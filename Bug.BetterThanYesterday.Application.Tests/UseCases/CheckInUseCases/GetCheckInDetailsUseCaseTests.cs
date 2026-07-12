@@ -21,7 +21,7 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         var command = new GetCheckInDetailsCommand(
             firstPlan.Id,
             firstUser.Id,
-            firstCheckIn.Date.ToDateTime(TimeOnly.MinValue),
+            firstCheckIn.Date,
             firstCheckIn.Index
         );
 
@@ -37,7 +37,7 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         Assert.Equal(firstCheckIn.Id, resultData.Id);
         Assert.Equal(firstCheckIn.PlanId, resultData.PlanId);
         Assert.Equal(firstCheckIn.UserId, resultData.UserId);
-        Assert.Equal(firstCheckIn.Date.ToDateTime(TimeOnly.MinValue), resultData.Date);
+        Assert.Equal(firstCheckIn.Date, resultData.Date);
         Assert.Equal(firstCheckIn.Index, resultData.Index);
         Assert.Equal(firstCheckIn.Title, resultData.Title);
         Assert.Equal(firstCheckIn.PhotoUrl, resultData.PhotoUrl);

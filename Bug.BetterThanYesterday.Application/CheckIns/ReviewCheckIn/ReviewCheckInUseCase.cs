@@ -68,7 +68,7 @@ public sealed class ReviewCheckInUseCase(
             if (plan.GetStatus() != PlanStatus.Running)
                 return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);
 
-            if (!checkIn.IsReviewWindowOpen(plan.CheckInReviewWindowInDays))
+            if (!checkIn.IsReviewWindowOpen())
                 return Result.Rejected(Messages.CheckInReviewWindowHasAlreadyClosed);
 
             if (checkIn.IsReviewAlreadyMadeByUser(command.ReviewerId))
@@ -78,11 +78,6 @@ public sealed class ReviewCheckInUseCase(
                 return Result.Rejected(Messages.ReviewerCannotReviewHisOwnCheckIn);
 
             checkIn.AddReview(Review.Create(command.ReviewerId, command.Status, command.Date));
-
-			var activeMemberCount = (await planMemberRepository.ListByPlanIdAsync(checkIn.PlanId))
-				.Count(m => m.Status == PlanMemberStatus.Active);
-
-			checkIn.ConsolidateReviewsIntoStatus(activeMemberCount, plan.CheckInReviewWindowInDays);
 
             await checkInRepository.UpdateAsync(checkIn);
 

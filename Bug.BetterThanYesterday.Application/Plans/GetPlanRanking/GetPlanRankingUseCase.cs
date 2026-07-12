@@ -1,3 +1,4 @@
+using Bug.BetterThanYesterday.Application.CheckIns;
 using Bug.BetterThanYesterday.Application.DayOffs;
 using Bug.BetterThanYesterday.Application.Plans.Models;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
@@ -44,11 +45,11 @@ public sealed class GetPlanRankingUseCase(
 				.ToList();
 
 			var planCheckIns = await checkInRepository.ListByPlanIdAsync(command.PlanId);
+			await CheckInStatusResolver.ConsolidateClosedWindowCheckInsAsync(planCheckIns, checkInRepository);
+
 			var planDayOffs = await dayOffRepository.ListByPlanIdAsync(command.PlanId);
 
 			var items = new List<PlanRankingItemModel>();
-
-			var activeMemberCount = members.Count;
 
 			foreach (var member in members)
 			{
@@ -61,15 +62,22 @@ public sealed class GetPlanRankingUseCase(
 				var memberDayOffs = planDayOffs.Where(d => d.UserId == member.UserId).ToList();
 
 				var validatedDates = memberCheckIns
-					.Where(c => c.ResolveStatus(activeMemberCount, plan.CheckInReviewWindowInDays) == CheckInStatus.Validated)
-					.Select(c => c.Date)
+					.Where(c => c.ResolveStatus() == CheckInStatus.Validated)
+					.Select(c => c.CalendarDate)
 					.ToHashSet();
 
 				var validatedCount = validatedDates.Count;
+				var pendingCheckinCount = memberCheckIns
+					.Count(c => c.ResolveStatus() == CheckInStatus.Pending 
+						&& c.CalendarDate <= elapsedEnd);
 				var dayOffCount = memberDayOffs.Count(d => d.Date <= elapsedEnd);
-				var missedDays = Math.Max(0, totalCheckinCount - validatedCount - dayOffCount);
+				var missedDays = Math.Max(0, totalCheckinCount - validatedCount - pendingCheckinCount - dayOffCount);
 				var penalty = missedDays * plan.PenaltyValue;
 				var streak = CalculateStreak(validatedDates, memberDayOffs, today, plan.StartsAt);
+				var streakBonus = memberCheckIns.Count(c =>
+					c.IsReviewWindowOpen() &&
+					c.CalendarDate == today &&
+					c.ResolveStatus() == CheckInStatus.Pending);
 
 				items.Add(new PlanRankingItemModel
 				{
@@ -77,7 +85,8 @@ public sealed class GetPlanRankingUseCase(
 					UserName = user.Nickname,
 					CheckinCount = validatedCount,
 					Penalty = penalty,
-					Streak = streak
+					Streak = streak,
+					StreakBonus = streakBonus
 				});
 			}
 

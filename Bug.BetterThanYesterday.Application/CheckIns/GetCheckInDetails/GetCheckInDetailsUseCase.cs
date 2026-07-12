@@ -42,6 +42,8 @@ public sealed class GetCheckInDetailsUseCase(
             if (checkIn is null)
                 return Result.Rejected(Messages.CheckInNotFound, RejectionType.NotFound);
 
+            await CheckInStatusResolver.ConsolidateClosedWindowCheckInsAsync([checkIn], checkInRepository);
+
             return Result.Success(
                 checkIn.ToModel(plan, habit, user),
                 Messages.CheckInSuccessfullyFound

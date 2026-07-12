@@ -22,11 +22,11 @@ public class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCaseTests : B
         var checkIns = _mock.CheckIns.Where(x =>
             x.PlanId == firstPlan.Id &&
             x.UserId == firstUser.Id &&
-            x.Date == checkInDate).ToList();
+            DateOnly.FromDateTime(x.Date) == DateOnly.FromDateTime(checkInDate)).ToList();
         var command = new GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateCommand(
             firstPlan.Id,
             firstUser.Id,
-            checkInDate.ToDateTime(TimeOnly.MinValue)
+            checkInDate
         );
 
         // Act
@@ -40,7 +40,7 @@ public class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCaseTests : B
         var resultData = Assert.IsType<Result<PlanUserDateWithCheckInsModel>>(result).Data;
         Assert.Equal(checkIns.Count, resultData.CheckIns.Count);
         
-		Assert.Equal(checkInDate.ToDateTime(TimeOnly.MinValue), resultData.Date);
+		Assert.Equal(checkInDate, resultData.Date);
 		
 		Assert.Equal(firstPlan.Id, resultData.Plan.Id);
 		Assert.Equal(firstPlan.OwnerId, resultData.Plan.OwnerId);
@@ -62,7 +62,7 @@ public class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCaseTests : B
         var dateCheckIns = _mock.CheckIns.Where(x =>
             x.PlanId == firstPlan.Id &&
             x.UserId == firstUser.Id &&
-            x.Date == checkInDate).ToList();
+            DateOnly.FromDateTime(x.Date) == DateOnly.FromDateTime(checkInDate)).ToList();
 
         Assert.Equal(dateCheckIns.Count, resultData.CheckIns.Count);
         
@@ -72,7 +72,7 @@ public class GetPlanUserDateWithCheckInsByPlanIdAndUserIdAndDateUseCaseTests : B
                 x.Id == checkIn.Id &&
                 x.PlanId == checkIn.PlanId &&
                 x.UserId == checkIn.UserId &&
-                x.Date == checkIn.Date.ToDateTime(TimeOnly.MinValue) &&
+                x.Date == checkIn.Date &&
                 x.Index == checkIn.Index &&
                 x.Title == checkIn.Title &&
                 x.PhotoUrl == checkIn.PhotoUrl);

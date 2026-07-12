@@ -125,7 +125,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         {
             PlanId = existingCheckIn.PlanId,
             UserId = existingCheckIn.UserId,
-            Date = existingCheckIn.Date.ToDateTime(TimeOnly.MinValue),
+            Date = existingCheckIn.Date,
             Title = "Test Title",
             PhotoUrl = "Test Description"
         };

@@ -57,6 +57,8 @@ public sealed class ListCheckInsByFilterUseCase(
 
             checkIns = await checkInRepository.ListByPlanIdAsync(command.PlanId.Value);
 
+            await CheckInStatusResolver.ConsolidateClosedWindowCheckInsAsync(checkIns, checkInRepository);
+
             if (command.UserId is not null)
             {
                 var user = await userRepository.GetByIdAsync(command.UserId.Value);
@@ -77,12 +79,15 @@ public sealed class ListCheckInsByFilterUseCase(
             }
 
             if (command.Date is not null)
-                checkIns = checkIns.Where(checkIn => checkIn.Date.ToDateTime(TimeOnly.MinValue) == command.Date.Value).ToList();
+            {
+                var filterDate = DateOnly.FromDateTime(command.Date.Value);
+                checkIns = checkIns.Where(checkIn => checkIn.CalendarDate == filterDate).ToList();
+            }
 
             if (command.Status is not null)
             {
                 var status = CheckInStatus.Get(command.Status);
-                checkIns = checkIns.Where(checkIn => checkIn.Status == status).ToList();
+                checkIns = checkIns.Where(checkIn => checkIn.ResolveStatus() == status).ToList();
             }
 
             return Result.Success(

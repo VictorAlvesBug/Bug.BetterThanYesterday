@@ -23,11 +23,11 @@ internal static class CheckInMapper
 			PlanName = plan.Description ?? habit.Name,
 			UserId = checkIn.UserId,
 			UserName = user.Nickname,
-			Date = checkIn.Date.ToDateTime(TimeOnly.MinValue),
+			Date = checkIn.Date,
 			Index = checkIn.Index,
 			Title = checkIn.Title,
 			PhotoUrl = checkIn.PhotoUrl,
-			Status = checkIn.Status.Name,
+			Status = checkIn.ResolveStatus().Name,
 			Reviews = checkIn.Reviews.Select(review => review.ToModel()).ToArray(),
 			CreatedAt = checkIn.CreatedAt
 		};

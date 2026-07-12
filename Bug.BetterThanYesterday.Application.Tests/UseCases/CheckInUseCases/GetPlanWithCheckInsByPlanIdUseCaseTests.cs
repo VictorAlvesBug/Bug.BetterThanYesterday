@@ -54,7 +54,7 @@ public class GetPlanWithCheckInsByPlanIdUseCaseTests : BaseCheckInUseCaseTests
                 x.Id == checkIn.Id &&
                 x.PlanId == checkIn.PlanId &&
                 x.UserId == checkIn.UserId &&
-                x.Date == checkIn.Date.ToDateTime(TimeOnly.MinValue) &&
+                x.Date == checkIn.Date &&
                 x.Index == checkIn.Index &&
                 x.Title == checkIn.Title &&
                 x.PhotoUrl == checkIn.PhotoUrl);

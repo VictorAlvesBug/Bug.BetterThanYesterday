@@ -68,15 +68,10 @@ public sealed class RemoveReviewUseCase(
             if (plan.GetStatus() != PlanStatus.Running)
                 return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);
 
-            if (!checkIn.IsReviewWindowOpen(plan.CheckInReviewWindowInDays))
+            if (!checkIn.IsReviewWindowOpen())
                 return Result.Rejected(Messages.CheckInReviewWindowHasAlreadyClosed);
 
             checkIn.RemoveReviewByReviewerId(command.ReviewerId);
-
-			var activeMemberCount = (await planMemberRepository.ListByPlanIdAsync(checkIn.PlanId))
-				.Count(m => m.Status == PlanMemberStatus.Active);
-
-			checkIn.ConsolidateReviewsIntoStatus(activeMemberCount, plan.CheckInReviewWindowInDays);
 
             await checkInRepository.UpdateAsync(checkIn);
 

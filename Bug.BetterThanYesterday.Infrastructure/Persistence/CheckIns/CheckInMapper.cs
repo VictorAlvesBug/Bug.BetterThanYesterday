@@ -11,7 +11,7 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 		Id = checkIn.Id,
 		PlanId = checkIn.PlanId,
 		UserId = checkIn.UserId,
-		Date = checkIn.Date.ToDateTime(TimeOnly.MinValue),
+		Date = checkIn.Date,
 		Index = checkIn.Index,
 		Title = checkIn.Title,
 		PhotoUrl = checkIn.PhotoUrl,

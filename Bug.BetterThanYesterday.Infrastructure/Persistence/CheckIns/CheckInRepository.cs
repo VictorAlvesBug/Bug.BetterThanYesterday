@@ -14,11 +14,15 @@ public class CheckInRepository(
 {
     public async Task<CheckIn> GetDetailsAsync(Guid planId, Guid userId, DateOnly date, int index = 0)
     {
+		var dayStart = date.ToDateTime(TimeOnly.MinValue);
+		var dayEnd = date.ToDateTime(TimeOnly.MaxValue);
+
 		return mapper.ToDomain(
 			(await _collection.FindAsync(checkInDoc =>
 			checkInDoc.PlanId == planId
 			&& checkInDoc.UserId == userId
-			&& checkInDoc.Date == date.ToDateTime(TimeOnly.MinValue)
+			&& checkInDoc.Date >= dayStart
+			&& checkInDoc.Date <= dayEnd
 			&& checkInDoc.Index == index))
 			.FirstOrDefault()
 		);
@@ -42,10 +46,14 @@ public class CheckInRepository(
 
     public async Task<List<CheckIn>> ListByPlanIdAndUserIdAndDateAsync(Guid planId, Guid userId, DateOnly date)
     {
+		var dayStart = date.ToDateTime(TimeOnly.MinValue);
+		var dayEnd = date.ToDateTime(TimeOnly.MaxValue);
+
 		return (await _collection.FindAsync(checkInDoc =>
 				checkInDoc.PlanId == planId 
 				&& checkInDoc.UserId == userId
-				&& checkInDoc.Date == date.ToDateTime(TimeOnly.MinValue)))
+				&& checkInDoc.Date >= dayStart
+				&& checkInDoc.Date <= dayEnd))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
     }

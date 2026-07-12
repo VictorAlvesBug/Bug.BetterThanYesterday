@@ -50,37 +50,53 @@ public class GetPlanRankingUseCaseTests
 	}
 
 	[Fact]
-	public void ResolveStatus_PendingWithValidationReview_CountsAsValidated()
+	public void ResolveStatus_OpenWindowWithValidationReview_ReturnsPending()
 	{
-		var checkIn = CreateCheckIn(new DateOnly(2025, 6, 28), CheckInStatus.Pending);
+		var checkIn = CreateCheckIn(DateTime.Now.AddHours(-1), CheckInStatus.Pending);
 		checkIn.AddReview(Review.Create(Guid.NewGuid(), CheckInStatus.Validated.Name, DateTime.Now));
 
-		var status = checkIn.ResolveStatus(4, 1);
+		var status = checkIn.ResolveStatus();
+
+		Assert.Equal(CheckInStatus.Pending, status);
+	}
+
+	[Fact]
+	public void ResolveStatus_ClosedWindowWithoutReviews_ReturnsValidated()
+	{
+		var checkIn = CreateCheckIn(DateTime.Now.AddHours(-25), CheckInStatus.Pending);
+
+		var status = checkIn.ResolveStatus();
 
 		Assert.Equal(CheckInStatus.Validated, status);
 	}
 
 	[Fact]
-	public void ResolveStatus_ClosedWindowWithoutReviews_CountsAsValidated()
+	public void ResolveStatus_ClosedWindowRejectedByMajority_ReturnsRejected()
 	{
-		var checkIn = CreateCheckIn(new DateOnly(2025, 6, 20), CheckInStatus.Pending);
-
-		var status = checkIn.ResolveStatus(4, 1);
-
-		Assert.Equal(CheckInStatus.Validated, status);
-	}
-
-	[Fact]
-	public void ResolveStatus_RejectedByMajority_ExcludedFromValidated()
-	{
-		var checkIn = CreateCheckIn(new DateOnly(2025, 6, 28), CheckInStatus.Pending);
+		var checkIn = CreateCheckIn(DateTime.Now.AddHours(-25), CheckInStatus.Pending);
 		checkIn.AddReview(Review.Create(Guid.NewGuid(), CheckInStatus.Rejected.Name, DateTime.Now));
 		checkIn.AddReview(Review.Create(Guid.NewGuid(), CheckInStatus.Rejected.Name, DateTime.Now));
 		checkIn.AddReview(Review.Create(Guid.NewGuid(), CheckInStatus.Validated.Name, DateTime.Now));
 
-		var status = checkIn.ResolveStatus(4, 1);
+		var status = checkIn.ResolveStatus();
 
 		Assert.Equal(CheckInStatus.Rejected, status);
+	}
+
+	[Fact]
+	public void IsReviewWindowOpen_Within24Hours_ReturnsTrue()
+	{
+		var checkIn = CreateCheckIn(DateTime.Now.AddHours(-1), CheckInStatus.Pending);
+
+		Assert.True(checkIn.IsReviewWindowOpen());
+	}
+
+	[Fact]
+	public void IsReviewWindowOpen_After24Hours_ReturnsFalse()
+	{
+		var checkIn = CreateCheckIn(DateTime.Now.AddHours(-25), CheckInStatus.Pending);
+
+		Assert.False(checkIn.IsReviewWindowOpen());
 	}
 
 	[Fact]
@@ -99,12 +115,38 @@ public class GetPlanRankingUseCaseTests
 		Assert.Equal(2, count);
 	}
 
-	private static CheckIn CreateCheckIn(DateOnly date, CheckInStatus status)
+	[Fact]
+	public void StreakBonus_TodayCheckInInOpenWindow_ReturnsOne()
+	{
+		var today = DateOnly.FromDateTime(DateTime.Today);
+		var checkIn = CreateCheckIn(DateTime.Now.AddHours(-1), CheckInStatus.Pending);
+
+		var streakBonus = checkIn.IsReviewWindowOpen() &&
+			checkIn.CalendarDate == today &&
+			checkIn.ResolveStatus() == CheckInStatus.Pending ? 1 : 0;
+
+		Assert.Equal(1, streakBonus);
+	}
+
+	[Fact]
+	public void StreakBonus_ClosedWindowCheckIn_ReturnsZero()
+	{
+		var today = DateOnly.FromDateTime(DateTime.Today);
+		var checkIn = CreateCheckIn(DateTime.Now.AddHours(-25), CheckInStatus.Pending);
+
+		var streakBonus = checkIn.IsReviewWindowOpen() &&
+			checkIn.CalendarDate == today &&
+			checkIn.ResolveStatus() == CheckInStatus.Pending ? 1 : 0;
+
+		Assert.Equal(0, streakBonus);
+	}
+
+	private static CheckIn CreateCheckIn(DateTime date, CheckInStatus status)
 	{
 		var checkIn = CheckIn.CreateNew(
 			Guid.NewGuid(),
 			Guid.NewGuid(),
-			date.ToDateTime(TimeOnly.MinValue),
+			date,
 			1,
 			"Title",
 			"https://photo.url");

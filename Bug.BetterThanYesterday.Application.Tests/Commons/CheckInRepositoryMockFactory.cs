@@ -43,7 +43,7 @@ public static class CheckInRepositoryMockFactory
                 checkIns.FirstOrDefault(x =>
                     x.PlanId == planId &&
                     x.UserId == userId &&
-                    x.Date == date &&
+                    DateOnly.FromDateTime(x.Date) == date &&
                     x.Index == index
                 )!
             );
@@ -70,7 +70,10 @@ public static class CheckInRepositoryMockFactory
                 It.IsAny<DateOnly>()
             ))
             .ReturnsAsync((Guid planId, Guid userId, DateOnly date) =>
-                checkIns.Where(x => x.PlanId == planId && x.UserId == userId && x.Date == date).ToList()
+                checkIns.Where(x =>
+                    x.PlanId == planId &&
+                    x.UserId == userId &&
+                    DateOnly.FromDateTime(x.Date) == date).ToList()
             );
 
         // GetByIdAsync should return matching checkin by id
