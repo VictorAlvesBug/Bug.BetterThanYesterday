@@ -101,33 +101,42 @@ TODO - Validar se checkin já foi feito por este usuário na aba plan-settings >
 TODO - Sequência está ficando sempre zerada no plan-tracker e no ranking
 TODO - Exibir "+1" ou "+2" na sequência caso checkin ainda esteja com status de pendente
 
-TODO - Fix the bug that auto-validate checking for yesterday
-TODO - Change the color of navigation bar to the gradient color from the app theme
+
 TODO - On Side Drawer, allow to open Users Setting Screen when click on user's info, allowing to change the user's nickname, phone number, photo and pix key
 TODO - On Create User Screen, allow to select a profile picture from the gallery or take a photo
 TODO - On Create User Screen, allow to select a pix key type and related pix key, with validation
+
+TODO - On Plan Settings Screen, display the plan details, as Description, StartsAt, EndsAt, Type, DaysOffPerWeek and PenaltyValue
 TODO - On Plan Settings Screen, display the payout pool from truth data
 TODO - On Plan Settings Screen > Ranking, display current user's name with green color
 TODO - On Plan Settings Screen > Ranking, display all users profile picture with the same size
 TODO - On Plan Settings Screen > Check-ins and Plan Tracker Screen > Check-ins, hide divider line for each current users's checkin, because the line is not needed (they cannot review their own checkins)
+
 TODO - On Plan Tracker Screen, camera floating button should be displayed only if the plan is running
 TODO - On Plan Tracker Screen, camera floating button should open 2 options: Today and Yesterday
 TODO - On Plan Tracker Screen, when the user clicks on the Today option, the create checkin screen is opened with the date set to today
 TODO - On Plan Tracker Screen, when the user clicks on the Yesterday option, the create checkin screen is opened with the date set to yesterday
 TODO - On Create Checkin Screen, don't allow user to change the date if thats already a checkin (pending or validated) for this date
+
 TODO - Create a new screen (called "My Plans") to display the plans created by the current user
 TODO - On My Plans Screen, allow user to change the plan settings on a Modal screen, as Description, StartsAt, EndsAt, Type, DaysOffPerWeek and PenaltyValue (if it is not started yet) and save the changes
 TODO - On My Plans Screen, allow user to delete a plan if it is not started yet, but with a confirmation modal
 TODO - On My Plans Screen, allow user to duplicate a plan preselecting the field on create plan screen, and redirection there
+
 TODO - On Invitation Link Modal, fix the modal to be displayed in the center of the screen, with a close button on the top right corner
+TODO - Change the color of navigation bar to the gradient color from the app theme
+TODO - Fix the Side Drawer animation to be smoother
+TODO - Fix the bug that auto-validate checking for yesterday
+
 TODO - On Public Plans Screen > Header, display the Invitation Link Modal if the anex icon is clicked
 TODO - On Public Plans Screen > Each Plan Card, allow user to click on the plan card to display the Plan Details Modal
 TODO - On Public Plans Screen > Each Plan Card, display simplified info. Only habit name, owner's name, plan description (if not null), days to/since startsAt, Penalty Value Icon with Dollar Signs (1 to 3) and commitment level (1/7 to 7/7)
 TODO - On Public Plans Screen > Each Plan Card Modal, display the Share Plan icon on the top right corner
 TODO - On Manage Plans Screen, add a new button to display My Plans Screen
-TODO - Fix the Side Drawer animation to be smoother
-TODO - On Plan Settings Screen, display the plan details, as Description, StartsAt, EndsAt, Type, DaysOffPerWeek and PenaltyValue
+
 TODO - Version Obsidian Collection
+
+TODO - Fix my keyboardable view to be able to scroll the content properly when the keyboard is open
 
 ######### TODO - End-to-end tests to implement via CursorAI #########
 

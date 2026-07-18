@@ -2,6 +2,7 @@ using Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 using Bug.BetterThanYesterday.Application.CheckIns.ListCheckInsByFilter;
 using Bug.BetterThanYesterday.Application.Plans.CreatePlan;
 using Bug.BetterThanYesterday.Application.Plans.ListPlansByFilter;
+using Bug.BetterThanYesterday.Application.Users.UpdateUser;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
@@ -562,11 +563,16 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			Type = PlanType.Private.Name,
 		};
 
-		/*public static readonly UpdateUserCommand BaseUpdateUserCommand = new UpdateUserCommand(
+		public static readonly UpdateUserCommand BaseUpdateUserCommand = new UpdateUserCommand(
 			userId: UserId1,
 			name: "Mock Name",
-			email: "mock@email.com"
-		);*/
+			email: "mock@email.com",
+			photoUrl: "https://example.com/photo.jpg",
+			nickname: "MockNick",
+			phoneNumber: "11987654321",
+			pixKey: "11987654321",
+			pixKeyType: "PhoneNumber"
+		);
 
 		#endregion
 

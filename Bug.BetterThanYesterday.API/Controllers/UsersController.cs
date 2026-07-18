@@ -1,6 +1,5 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Users;
-using Bug.BetterThanYesterday.Application.Users.DeleteUser;
 using Bug.BetterThanYesterday.Application.Users.GetUserById;
 using Bug.BetterThanYesterday.Application.Users.ListUsersByFilter;
 using Bug.BetterThanYesterday.Application.Users.RegisterUser;
@@ -15,9 +14,8 @@ namespace Bug.BetterThanYesterday.API.Controllers;
 public class UsersController(
 	IUseCase<GetUserByIdCommand> getUserByIdUseCase,
 	IUseCase<ListUsersByFilterCommand> listUsersByFilterUseCase,
-	IUseCase<RegisterUserCommand> registerUserUseCase/*,
-	IUseCase<UpdateUserCommand> updateUserUseCase,
-	IUseCase<DeleteUserCommand> deleteUserUseCase*/)
+	IUseCase<RegisterUserCommand> registerUserUseCase,
+	IUseCase<UpdateUserCommand> updateUserUseCase)
 	: ControllerBase
 {
 	[HttpGet("{userId}")]
@@ -66,32 +64,17 @@ public class UsersController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	/*[HttpPut]
+	[HttpPut]
 	public async Task<IActionResult> Update([FromBody] UpdateUserCommand command)
 	{
 		var result = await updateUserUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
-			return NoContent();
+			return Ok(result);
 
 		if (result.IsRejected())
 			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
-
-	[HttpDelete("{userId}")]
-	public async Task<IActionResult> Delete(Guid userId)
-	{
-		var command = new DeleteUserCommand(userId);
-		var result = await deleteUserUseCase.HandleAsync(command);
-
-		if (result.IsSuccess())
-			return NoContent();
-
-		if (result.IsRejected())
-			return StatusCode(result.GetStatusCode(), result);
-
-		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}*/
 }
