@@ -194,7 +194,7 @@ public class CheckIn : Entity
 
     public bool IsReviewWindowOpen()
     {
-        return DateTime.Now < Date.AddHours(24);
+        return DateTime.Now < CreatedAt.AddHours(24);
     }
 
     public bool IsReviewAlreadyMadeByUser(Guid userId)
