@@ -5,29 +5,12 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 
 public class AddCheckInCommand : ICommand
 {
-    /*public AddCheckInCommand(
-        Guid planId,
-        Guid userId,
-        DateTime date,
-        //int index,
-        string title,
-        string photoUrl
-    )
-    {
-        PlanId = planId;
-        UserId = userId;
-        Date = date;
-        //Index = index;
-        Title = title;
-        PhotoUrl = photoUrl;
-    }*/
-    
     public required Guid PlanId { get; init; }
     public required Guid UserId { get; init; }
     public required DateTime Date { get; init; }
     //TODO Adicionar: public int Index { get; init; }
     public required string Title { get; init; }
-    public required string PhotoUrl { get; init; }
+    public required string EvidencePhotoUrl { get; init; }
 
     public void Validate()
     {
@@ -46,7 +29,7 @@ public class AddCheckInCommand : ICommand
         if (string.IsNullOrWhiteSpace(Title))
             throw new ArgumentException(Messages.EnterCheckInTitle, nameof(Title));
 
-        if (string.IsNullOrWhiteSpace(PhotoUrl))
-            throw new ArgumentException(Messages.EnterCheckInPhotoUrl, nameof(PhotoUrl));
+        if (string.IsNullOrWhiteSpace(EvidencePhotoUrl))
+            throw new ArgumentException(Messages.EnterCheckInPhotoUrl, nameof(EvidencePhotoUrl));
     }
 }

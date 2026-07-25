@@ -83,6 +83,7 @@ public sealed class GetPlanRankingUseCase(
 				{
 					UserId = member.UserId,
 					UserName = user.Nickname,
+					PhotoUrl = user.Photo?.Value,
 					CheckinCount = validatedCount,
 					Penalty = penalty,
 					Streak = streak,

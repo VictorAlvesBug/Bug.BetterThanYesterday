@@ -85,7 +85,7 @@ public sealed class AddCheckInUseCase(
                 command.Date,
                 nextIndex,
                 command.Title,
-                command.PhotoUrl);
+                command.EvidencePhotoUrl);
 
             await checkInRepository.AddAsync(checkIn);
 

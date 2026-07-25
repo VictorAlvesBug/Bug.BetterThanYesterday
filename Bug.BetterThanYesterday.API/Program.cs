@@ -137,6 +137,7 @@ TODO - Version Obsidian Collection
 TODO - Implement to delete former images from the S3 bucket when the user updates the photo
 TODO - On Create User Screen and Update User Screen, add mask validation to fields (phone number, pix key)
 
+
 ######### TODO - End-to-end tests to implement via CursorAI #########
 
 - GetHabitById with a non-guid habitId
@@ -298,8 +299,8 @@ TODO - On Create User Screen and Update User Screen, add mask validation to fiel
 - AddCheckIn with registered userId
 - AddCheckIn without title
 - AddCheckIn with white space title
-- AddCheckIn without photoUrl
-- AddCheckIn with empty photoUrl
+- AddCheckIn without evidencePhotoUrl
+- AddCheckIn with empty evidencePhotoUrl
 - AddCheckIn without date
 - AddCheckIn with planId and userId not related via planMembers
 - AddCheckIn with user blocked in the plan

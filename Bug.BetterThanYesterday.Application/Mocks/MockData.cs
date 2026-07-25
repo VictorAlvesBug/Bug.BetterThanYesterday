@@ -520,7 +520,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			UserId = UserId1,
 			Date = DateTime.Today,
 			Title = "Mock Title",
-			PhotoUrl = "Mock Url"
+			EvidencePhotoUrl = "Mock Url"
 		};
 
 		public static readonly ListCheckInsByFilterCommand BaseListCheckInsByFilterCommand = new ListCheckInsByFilterCommand

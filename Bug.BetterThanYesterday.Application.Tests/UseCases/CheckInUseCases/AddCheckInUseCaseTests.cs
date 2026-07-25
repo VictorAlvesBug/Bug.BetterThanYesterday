@@ -30,7 +30,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
             UserId = user.Id,
             Date = DateTime.Today,
             Title = "Test Title",
-            PhotoUrl = "Test Description"
+            EvidencePhotoUrl = "Test Description"
         };
 
         // Act
@@ -46,7 +46,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         Assert.Equal(user.Id, resultData.UserId);
         Assert.Equal(command.Date, resultData.Date);
         Assert.Equal(command.Title, resultData.Title);
-        Assert.Equal(command.PhotoUrl, resultData.PhotoUrl);
+        Assert.Equal(command.EvidencePhotoUrl, resultData.EvidencePhotoUrl);
 
         _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -67,7 +67,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
             UserId = user.Id,
             Date = DateTime.Today,
             Title = "Test Title",
-            PhotoUrl = "Test Description"
+            EvidencePhotoUrl = "Test Description"
         };
 
         // Act
@@ -97,7 +97,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
             UserId = Guid.NewGuid(),
             Date = DateTime.Today,
             Title = "Test Title",
-            PhotoUrl = "Test Description"
+            EvidencePhotoUrl = "Test Description"
         };
 
         // Act
@@ -127,7 +127,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
             UserId = existingCheckIn.UserId,
             Date = existingCheckIn.Date,
             Title = "Test Title",
-            PhotoUrl = "Test Description"
+            EvidencePhotoUrl = "Test Description"
         };
 
         // Act

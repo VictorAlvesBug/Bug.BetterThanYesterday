@@ -9,6 +9,7 @@ public class PlanRankingItemModel
 	public decimal Penalty { get; set; }
 	public int Streak { get; set; }
 	public int StreakBonus { get; set; }
+	public string? PhotoUrl { get; set; }
 }
 
 public class PlanRankingModel
