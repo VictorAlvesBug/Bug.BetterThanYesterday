@@ -6,6 +6,7 @@ public class PlanRankingItemModel
 	public Guid UserId { get; set; }
 	public string UserName { get; set; } = string.Empty;
 	public int CheckinCount { get; set; }
+	public int PendingCheckinCount { get; set; }
 	public decimal Penalty { get; set; }
 	public int Streak { get; set; }
 	public int StreakBonus { get; set; }
