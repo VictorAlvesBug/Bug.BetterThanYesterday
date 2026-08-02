@@ -51,6 +51,7 @@ public sealed class MoveInTimeUseCase(
 			foreach (var checkIn in checkIns)
 			{
 				checkIn.Date = checkIn.Date.AddDays(daysToAdd);
+				checkIn.CreatedAt = checkIn.CreatedAt.AddDays(daysToAdd);
 				checkIn.Reviews = checkIn.Reviews.ConvertAll(review =>
                     Review.Create(review.ReviewerId, review.Status.Name, review.Date.AddDays(daysToAdd)))
                     .ToList();
