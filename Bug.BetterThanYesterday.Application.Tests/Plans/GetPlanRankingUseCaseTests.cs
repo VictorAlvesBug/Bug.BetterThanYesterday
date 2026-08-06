@@ -10,7 +10,7 @@ namespace Bug.BetterThanYesterday.Application.Tests.Plans;
 public class GetPlanRankingUseCaseTests
 {
 	[Fact]
-	public void CalculateStreak_CountsValidatedAndDayOffDays()
+	public void CalculateStreak_CountsValidatedAndDayOffDaysAndPendingCheckins()
 	{
 		var today = new DateOnly(2025, 6, 28);
 		var planStart = new DateOnly(2025, 6, 1);
@@ -27,13 +27,13 @@ public class GetPlanRankingUseCaseTests
 			CreateDayOff(today.AddDays(-2))
 		};
 
-		var streak = GetPlanRankingUseCase.CalculateStreak(validatedDates, dayOffs, today, planStart);
+		var streak = GetPlanRankingUseCase.CalculateStreak(validatedDates, 0, dayOffs, today, planStart);
 
 		Assert.Equal(4, streak);
 	}
 
 	[Fact]
-	public void CalculateStreak_SkipsTodayWhenNoActivityYet()
+	public void CalculateStreak_SkipsTodayWhenNoActivityYetAndNoPendingCheckins()
 	{
 		var today = new DateOnly(2025, 6, 28);
 		var planStart = new DateOnly(2025, 6, 1);
@@ -44,7 +44,7 @@ public class GetPlanRankingUseCaseTests
 			today.AddDays(-2),
 		};
 
-		var streak = GetPlanRankingUseCase.CalculateStreak(validatedDates, [], today, planStart);
+		var streak = GetPlanRankingUseCase.CalculateStreak(validatedDates, 0, [], today, planStart);
 
 		Assert.Equal(2, streak);
 	}
@@ -113,32 +113,6 @@ public class GetPlanRankingUseCaseTests
 		var count = DayOffMapper.CountDayOffsInRollingWindow(dayOffs, reference);
 
 		Assert.Equal(2, count);
-	}
-
-	[Fact]
-	public void StreakBonus_TodayCheckInInOpenWindow_ReturnsOne()
-	{
-		var today = DateOnly.FromDateTime(DateTime.Today);
-		var checkIn = CreateCheckIn(DateTime.Now.AddHours(-1), CheckInStatus.Pending);
-
-		var streakBonus = checkIn.IsReviewWindowOpen() &&
-			checkIn.CalendarDate == today &&
-			checkIn.ResolveStatus() == CheckInStatus.Pending ? 1 : 0;
-
-		Assert.Equal(1, streakBonus);
-	}
-
-	[Fact]
-	public void StreakBonus_ClosedWindowCheckIn_ReturnsZero()
-	{
-		var today = DateOnly.FromDateTime(DateTime.Today);
-		var checkIn = CreateCheckIn(DateTime.Now.AddHours(-25), CheckInStatus.Pending);
-
-		var streakBonus = checkIn.IsReviewWindowOpen() &&
-			checkIn.CalendarDate == today &&
-			checkIn.ResolveStatus() == CheckInStatus.Pending ? 1 : 0;
-
-		Assert.Equal(0, streakBonus);
 	}
 
 	private static CheckIn CreateCheckIn(DateTime date, CheckInStatus status)

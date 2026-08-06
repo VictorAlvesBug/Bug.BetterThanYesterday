@@ -12,150 +12,149 @@ using Bug.BetterThanYesterday.Domain.PlanMembers.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
+using Microsoft.Extensions.Logging;
 
 namespace Bug.BetterThanYesterday.Application.Plans.GetPlanRanking;
 
 public sealed class GetPlanRankingUseCase(
-	IPlanRepository planRepository,
-	IPlanMemberRepository planMemberRepository,
-	ICheckInRepository checkInRepository,
-	IDayOffRepository dayOffRepository,
-	IUserRepository userRepository)
-	: IUseCase<GetPlanRankingCommand>
+    IPlanRepository planRepository,
+    IPlanMemberRepository planMemberRepository,
+    ICheckInRepository checkInRepository,
+    IDayOffRepository dayOffRepository,
+    IUserRepository userRepository)
+    : IUseCase<GetPlanRankingCommand>
 {
-	public async Task<IResult> HandleAsync(GetPlanRankingCommand command)
-	{
-		try
-		{
-			command.Validate();
+    public async Task<IResult> HandleAsync(GetPlanRankingCommand command)
+    {
+        try
+        {
+            command.Validate();
 
-			var plan = await planRepository.GetByIdAsync(command.PlanId);
+            var plan = await planRepository.GetByIdAsync(command.PlanId);
 
-			if (plan is null)
-				return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
+            if (plan is null)
+                return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
 
-			var today = DateOnly.FromDateTime(DateTime.Today);
-			var elapsedEnd = plan.EndsAt < today ? plan.EndsAt : today;
-			var totalCheckinCount = elapsedEnd >= plan.StartsAt
-				? elapsedEnd.DayNumber - plan.StartsAt.DayNumber + 1
-				: 0;
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            var elapsedEnd = plan.EndsAt < today ? plan.EndsAt : today;
+            var totalCheckinCount = elapsedEnd >= plan.StartsAt
+                ? elapsedEnd.DayNumber - plan.StartsAt.DayNumber + 1
+                : 0;
 
-			var members = (await planMemberRepository.ListByPlanIdAsync(command.PlanId))
-				.Where(m => m.Status == PlanMemberStatus.Active)
-				.ToList();
+            var members = (await planMemberRepository.ListByPlanIdAsync(command.PlanId))
+                .Where(m => m.Status == PlanMemberStatus.Active)
+                .ToList();
 
-			var planCheckIns = await checkInRepository.ListByPlanIdAsync(command.PlanId);
-			await CheckInStatusResolver.ConsolidateClosedWindowCheckInsAsync(planCheckIns, checkInRepository);
+            var planCheckIns = await checkInRepository.ListByPlanIdAsync(command.PlanId);
+            await CheckInStatusResolver.ConsolidateClosedWindowCheckInsAsync(planCheckIns, checkInRepository);
 
-			var planDayOffs = await dayOffRepository.ListByPlanIdAsync(command.PlanId);
+            var planDayOffs = await dayOffRepository.ListByPlanIdAsync(command.PlanId);
 
-			var items = new List<PlanRankingItemModel>();
+            var items = new List<PlanRankingItemModel>();
 
-			foreach (var member in members)
-			{
-				var user = await userRepository.GetByIdAsync(member.UserId);
+            foreach (var member in members)
+            {
+                var user = await userRepository.GetByIdAsync(member.UserId);
 
-				if (user is null)
-					continue;
+                if (user is null)
+                    continue;
 
-				var memberCheckIns = planCheckIns.Where(c => c.UserId == member.UserId).ToList();
-				var memberDayOffs = planDayOffs.Where(d => d.UserId == member.UserId).ToList();
+                var memberCheckIns = planCheckIns.Where(c => c.UserId == member.UserId).ToList();
+                var memberDayOffs = planDayOffs.Where(d => d.UserId == member.UserId).ToList();
 
-				var validatedDates = memberCheckIns
-					.Where(c => c.ResolveStatus() == CheckInStatus.Validated)
-					.Select(c => c.CalendarDate)
-					.ToHashSet();
+                var validatedDates = memberCheckIns
+                    .Where(c => c.ResolveStatus() == CheckInStatus.Validated)
+                    .Select(c => c.CalendarDate)
+                    .ToHashSet();
 
-				var validatedCount = validatedDates.Count;
-				var pendingCheckinCount = memberCheckIns
-					.Count(c => c.ResolveStatus() == CheckInStatus.Pending 
-						&& c.CalendarDate <= elapsedEnd);
-				var dayOffCount = memberDayOffs.Count(d => d.Date <= elapsedEnd);
-				var missedDays = Math.Max(0, totalCheckinCount - validatedCount - pendingCheckinCount - dayOffCount);
-				var penalty = missedDays * plan.PenaltyValue;
-				var streak = CalculateStreak(validatedDates, memberDayOffs, today, plan.StartsAt);
-				var streakBonus = memberCheckIns.Count(c =>
-					c.IsReviewWindowOpen() &&
-					c.CalendarDate == today &&
-					c.ResolveStatus() == CheckInStatus.Pending);
+                var validatedCount = validatedDates.Count;
+                var pendingCheckinCount = memberCheckIns
+                    .Count(c => c.ResolveStatus() == CheckInStatus.Pending
+                        && c.CalendarDate <= elapsedEnd);
+                var dayOffCount = memberDayOffs.Count(d => d.Date <= elapsedEnd);
+                var missedDays = Math.Max(0, totalCheckinCount - validatedCount - pendingCheckinCount - dayOffCount);
+                var penalty = missedDays * plan.PenaltyValue;
+                var streak = CalculateStreak(validatedDates, pendingCheckinCount, memberDayOffs, today, plan.StartsAt);
 
-				items.Add(new PlanRankingItemModel
-				{
-					UserId = member.UserId,
-					UserName = user.Nickname,
-					PhotoUrl = user.Photo?.Value,
-					CheckinCount = validatedCount,
-					PendingCheckinCount = pendingCheckinCount,
-					Penalty = penalty,
-					Streak = streak,
-					StreakBonus = streakBonus
-				});
-			}
+                items.Add(new PlanRankingItemModel
+                {
+                    UserId = member.UserId,
+                    UserName = user.Nickname,
+                    PhotoUrl = user.Photo?.Value,
+                    CheckinCount = validatedCount,
+                    PendingCheckinCount = pendingCheckinCount,
+                    Penalty = penalty,
+                    Streak = streak
+                });
+            }
 
-			items = items
-				.OrderByDescending(i => i.CheckinCount)
-				.ThenBy(i => i.Penalty)
-				.ThenByDescending(i => i.Streak)
-				.ToList();
+            items = items
+                .OrderByDescending(i => i.CheckinCount)
+                .ThenBy(i => i.Penalty)
+                .ThenByDescending(i => i.Streak)
+                .ToList();
 
-			for (var i = 0; i < items.Count; i++)
-				items[i].Position = i + 1;
+            for (var i = 0; i < items.Count; i++)
+                items[i].Position = i + 1;
 
-			PlanRankingItemModel? currentUser = null;
-			var daysOffAvailable = 0;
+            PlanRankingItemModel? currentUser = null;
+            var daysOffAvailable = 0;
 
-			if (command.UserId is not null)
-			{
-				currentUser = items.FirstOrDefault(i => i.UserId == command.UserId.Value);
-				var userDayOffs = planDayOffs.Where(d => d.UserId == command.UserId.Value);
-				daysOffAvailable = DayOffMapper.GetDaysOffAvailable(plan, userDayOffs, today);
-			}
+            if (command.UserId is not null)
+            {
+                currentUser = items.FirstOrDefault(i => i.UserId == command.UserId.Value);
+                var userDayOffs = planDayOffs.Where(d => d.UserId == command.UserId.Value);
+                daysOffAvailable = DayOffMapper.GetDaysOffAvailable(plan, userDayOffs, today);
+            }
 
-			return Result.Success(
-				new PlanRankingModel
-				{
-					TotalCheckinCount = totalCheckinCount,
-					DaysOffAvailable = daysOffAvailable,
-					Items = items,
-					CurrentUser = currentUser
-				},
-				Messages.PlanRankingSuccessfullyFound);
-		}
-		catch (Exception ex)
-		{
-			return Result.Rejected(ex.Message);
-		}
-	}
+            return Result.Success(
+                new PlanRankingModel
+                {
+                    TotalCheckinCount = totalCheckinCount,
+                    DaysOffAvailable = daysOffAvailable,
+                    Items = items,
+                    CurrentUser = currentUser
+                },
+                Messages.PlanRankingSuccessfullyFound);
+        }
+        catch (Exception ex)
+        {
+            return Result.Rejected(ex.Message);
+        }
+    }
 
-	public static int CalculateStreak(
-		IReadOnlySet<DateOnly> validatedDates,
-		IReadOnlyList<DayOff> dayOffs,
-		DateOnly today,
-		DateOnly planStartsAt)
-	{
-		var dayOffDates = dayOffs.Select(d => d.Date).ToHashSet();
+    public static int CalculateStreak(
+        IReadOnlySet<DateOnly> validatedDates,
+        int pendingCheckinCount,
+        IReadOnlyList<DayOff> dayOffs,
+        DateOnly today,
+        DateOnly planStartsAt)
+    {
+        var dayOffDates = dayOffs.Select(d => d.Date).ToHashSet();
+        var pendingCheckinsRemaining = pendingCheckinCount;
 
-		var streak = 0;
-		var cursor = today;
+        var streak = 0;
+        var cursor = today;
 
-		while (cursor >= planStartsAt)
-		{
-			if (validatedDates.Contains(cursor) || dayOffDates.Contains(cursor))
-			{
-				streak++;
-				cursor = cursor.AddDays(-1);
-				continue;
-			}
+        while (cursor >= planStartsAt)
+        {
+            if (validatedDates.Contains(cursor) || dayOffDates.Contains(cursor) || pendingCheckinsRemaining > 0)
+            {
+                streak++;
+                cursor = cursor.AddDays(-1);
+                pendingCheckinsRemaining = Math.Max(0, pendingCheckinsRemaining - 1);
+                continue;
+            }
 
-			if (cursor == today)
-			{
-				cursor = cursor.AddDays(-1);
-				continue;
-			}
+            if (cursor == today)
+            {
+                cursor = cursor.AddDays(-1);
+                continue;
+            }
 
-			break;
-		}
+            break;
+        }
 
-		return streak;
-	}
+        return streak;
+    }
 }
