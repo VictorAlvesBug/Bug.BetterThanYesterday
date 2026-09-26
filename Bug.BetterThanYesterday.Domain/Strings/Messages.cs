@@ -27,7 +27,7 @@ public static class Messages
     public const string PlanUserSuccessfullyFound = "Plano e usuário encontrados com sucesso";
     public const string OnlyRunningPlansCanReceiveNewCheckIns = "Apenas planos em execução podem receber novos check-ins";
     public const string OnlyActiveMembersCanMakeCheckIns = "Apenas membros ativos podem fazer check-ins";
-    public const string UserHasReachedTheMaximumNumberOfCheckInsForTheDay = "Usuário atingiu o número máximo de check-ins para o dia";
+    public const string UserHasReachedTheMaximumNumberOfCheckInsForTheDay = "Você já marcou um check-in para este dia";
     public const string EnterCheckInStatus = "Informe o status do check-ins";
     public const string EnterCheckInPhotoUrl = "Informe o URL da foto de evidência";
 
@@ -75,6 +75,11 @@ public static class Messages
     public const string EnterValidPlanType = "Informe um tipo de plano válido";
     public const string EnterValidDaysOffPerWeek = "Informe uma quantidade de folgas semanas válida";
     public const string EnterValidPenaltyValue = "Informe um valor de penalidade válido";
+    public const string EnterPenaltyId = "Informe o ID da multa";
+    public const string PenaltyNotFound = "Multa não encontrada";
+    public const string PenaltyAlreadyPaid = "Multa já foi paga";
+    public const string PenaltySuccessfullyPaid = "Multa paga com sucesso";
+    public const string PenaltiesSuccessfullyFound = "Multas encontradas com sucesso";
     public const string PlanStatusSuccessfullyUpdated = "Status do plano atualizado com sucesso";
     public const string PlanSuccessfullyCancelled = "Plano cancelado com sucesso";
     public const string PlanSuccessfullyFound = "Plano encontrado com sucesso";

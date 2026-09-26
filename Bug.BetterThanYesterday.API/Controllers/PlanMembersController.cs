@@ -8,9 +8,6 @@ using Bug.BetterThanYesterday.Application.PlanMembers.GetUserWithPlansByUserId;
 using Bug.BetterThanYesterday.Application.PlanMembers.BlockUserInThePlan;
 using Bug.BetterThanYesterday.Application.PlanMembers.UnblockUserInThePlan;
 using Bug.BetterThanYesterday.Application.PlanMembers.RemoveUserFromPlan;
-using Bug.BetterThanYesterday.Application.DayOffs.GetDayOffAvailability;
-using Bug.BetterThanYesterday.Application.DayOffs.Models;
-using Bug.BetterThanYesterday.Application.DayOffs.UseDayOff;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -26,9 +23,7 @@ public class PlanPlarticipantsController(
 	IUseCase<BlockUserInThePlanCommand> blockUserInThePlanUseCase,
 	IUseCase<UnblockUserInThePlanCommand> unblockUserInThePlanUseCase,
 	IUseCase<AddUserToPlanCommand> addUserToPlanUseCase,
-	IUseCase<RemoveUserFromPlanCommand> removeUserFromPlanUseCase,
-	IUseCase<UseDayOffCommand> useDayOffUseCase,
-	IUseCase<GetDayOffAvailabilityCommand> getDayOffAvailabilityUseCase)
+	IUseCase<RemoveUserFromPlanCommand> removeUserFromPlanUseCase)
 	: ControllerBase
 {
 	[HttpGet("Plans/{planId}/Members")]
@@ -143,47 +138,6 @@ public class PlanPlarticipantsController(
 	{
 		var command = new UnblockUserInThePlanCommand(planId, userId);
 		var result = await unblockUserInThePlanUseCase.HandleAsync(command);
-
-		if (result.IsSuccess())
-			return Ok(result);
-
-		if (result.IsRejected())
-			return StatusCode(result.GetStatusCode(), result);
-
-		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}
-
-	[HttpPost("Plans/{planId}/Members/{userId}/DayOffs")]
-	[HttpPost("Plans/{planId}/Users/{userId}/DayOffs")]
-	public async Task<IActionResult> UseDayOff(Guid planId, Guid userId, [FromBody] UseDayOffRequest request)
-	{
-		var command = new UseDayOffCommand
-		{
-			PlanId = planId,
-			UserId = userId,
-			Date = request.Date
-		};
-
-		var result = await useDayOffUseCase.HandleAsync(command);
-
-		if (result.IsSuccess())
-		{
-			var data = ((Result<UseDayOffResultModel>)result).Data;
-			return Created($"Plans/{planId}/Members/{userId}/DayOffs/{data.DayOff.Id}", result);
-		}
-
-		if (result.IsRejected())
-			return StatusCode(result.GetStatusCode(), result);
-
-		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}
-
-	[HttpGet("Plans/{planId}/Members/{userId}/DayOffs/Available")]
-	[HttpGet("Plans/{planId}/Users/{userId}/DayOffs/Available")]
-	public async Task<IActionResult> GetDayOffAvailability(Guid planId, Guid userId)
-	{
-		var command = new GetDayOffAvailabilityCommand(planId, userId);
-		var result = await getDayOffAvailabilityUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
 			return Ok(result);

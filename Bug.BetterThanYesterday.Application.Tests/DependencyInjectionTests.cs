@@ -19,7 +19,7 @@ public class Tests
 		// Arrange
 		var services = new ServiceCollection();
 
-		var cfg = new DatabaseConfig { ConnectionString = "mongodb://fake", DatabaseName = "di-tests" };
+		var cfg = new DatabaseConfig { DatabaseName = "di-tests" };
 		services.AddSingleton(Options.Create(cfg));
 		services.AddSingleton<IDatabaseConfig>(_ => cfg);
 

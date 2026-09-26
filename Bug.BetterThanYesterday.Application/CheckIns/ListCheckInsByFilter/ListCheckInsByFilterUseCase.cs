@@ -1,5 +1,6 @@
 using Bug.BetterThanYesterday.Application.CheckIns.Models;
 using Bug.BetterThanYesterday.Application.Extensions;
+using Bug.BetterThanYesterday.Application.Penalties;
 using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
@@ -24,7 +25,8 @@ public sealed class ListCheckInsByFilterUseCase(
     IPlanRepository planRepository,
     IHabitRepository habitRepository,
     IUserRepository userRepository,
-    IPlanMemberRepository planMemberRepository)
+    IPlanMemberRepository planMemberRepository,
+    IPlanDayClosureProcessor planDayClosureProcessor)
     : IUseCase<ListCheckInsByFilterCommand>
 {
     public async Task<IResult> HandleAsync(ListCheckInsByFilterCommand command)
@@ -54,6 +56,8 @@ public sealed class ListCheckInsByFilterUseCase(
 
             if (plan is null)
                 return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
+
+            await planDayClosureProcessor.ProcessPlanAsync(command.PlanId.Value);
 
             checkIns = await checkInRepository.ListByPlanIdAsync(command.PlanId.Value);
 

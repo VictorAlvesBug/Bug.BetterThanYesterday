@@ -1,8 +1,8 @@
 ﻿using Bug.BetterThanYesterday.Domain.Commons;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
-using Bug.BetterThanYesterday.Domain.DayOffs;
-using Bug.BetterThanYesterday.Domain.DayOffs.Entities;
+using Bug.BetterThanYesterday.Domain.Penalties;
+using Bug.BetterThanYesterday.Domain.Penalties.Entities;
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
@@ -13,7 +13,7 @@ using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Bug.BetterThanYesterday.Domain.Uploads;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.CheckIns;
-using Bug.BetterThanYesterday.Infrastructure.Persistence.DayOffs;
+using Bug.BetterThanYesterday.Infrastructure.Persistence.Penalties;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Habits;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.PlanMembers;
@@ -38,7 +38,7 @@ public static class DependencyInjectionExtensions
 
 	public static IServiceCollection AddDocumentMappers(this IServiceCollection services)
 	{
-		services.AddScoped<IDocumentMapper<DayOff, DayOffDocument>, DayOffMapper>();
+		services.AddScoped<IDocumentMapper<Penalty, PenaltyDocument>, PenaltyMapper>();
 		services.AddScoped<IDocumentMapper<CheckIn, CheckInDocument>, CheckInMapper>();
 		services.AddScoped<IDocumentMapper<Habit, HabitDocument>, HabitMapper>();
 		services.AddScoped<IDocumentMapper<Plan, PlanDocument>, PlanMapper>();
@@ -49,8 +49,8 @@ public static class DependencyInjectionExtensions
 
 	public static IServiceCollection AddRepositories(this IServiceCollection services)
 	{
-		services.AddScoped<IDayOffRepository, DayOffRepository>();
-		services.AddScoped<IRepository<DayOff>>(sp => sp.GetRequiredService<IDayOffRepository>());
+		services.AddScoped<IPenaltyRepository, PenaltyRepository>();
+		services.AddScoped<IRepository<Penalty>>(sp => sp.GetRequiredService<IPenaltyRepository>());
 
 		services.AddScoped<ICheckInRepository, CheckInRepository>();
 		services.AddScoped<IRepository<CheckIn>>(sp => sp.GetRequiredService<ICheckInRepository>());
@@ -77,7 +77,7 @@ public static class DependencyInjectionExtensions
 
 	public static IServiceCollection AddMongoCollections(this IServiceCollection services)
 	{
-		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<DayOffDocument>("dayoffs"));
+		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<PenaltyDocument>("penalties"));
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<CheckInDocument>("checkins"));
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<HabitDocument>("habits"));
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<PlanDocument>("plans"));

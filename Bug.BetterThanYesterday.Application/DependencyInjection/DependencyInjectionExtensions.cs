@@ -1,5 +1,6 @@
 ﻿using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Application.Penalties;
 using Bug.BetterThanYesterday.Domain.Habits.Policies;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,6 +34,7 @@ public static class DependencyInjectionExtensions
 	private static IServiceCollection AddPolicies(this IServiceCollection services)
 	{
 		services.AddScoped<IHabitDeletionPolicy, HabitDeletionPolicy>();
+		services.AddScoped<IPlanDayClosureProcessor, PlanDayClosureProcessor>();
 
 		return services;
 	}

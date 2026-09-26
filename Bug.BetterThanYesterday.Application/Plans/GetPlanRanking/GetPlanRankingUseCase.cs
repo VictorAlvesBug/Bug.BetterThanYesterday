@@ -1,18 +1,18 @@
 using Bug.BetterThanYesterday.Application.CheckIns;
-using Bug.BetterThanYesterday.Application.DayOffs;
+using Bug.BetterThanYesterday.Application.Penalties;
 using Bug.BetterThanYesterday.Application.Plans.Models;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
-using Bug.BetterThanYesterday.Domain.DayOffs;
-using Bug.BetterThanYesterday.Domain.DayOffs.Entities;
+using Bug.BetterThanYesterday.Domain.Penalties;
+using Bug.BetterThanYesterday.Domain.Penalties.Entities;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
 using Bug.BetterThanYesterday.Domain.PlanMembers.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.Penalties.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
-using Microsoft.Extensions.Logging;
 
 namespace Bug.BetterThanYesterday.Application.Plans.GetPlanRanking;
 
@@ -20,8 +20,9 @@ public sealed class GetPlanRankingUseCase(
     IPlanRepository planRepository,
     IPlanMemberRepository planMemberRepository,
     ICheckInRepository checkInRepository,
-    IDayOffRepository dayOffRepository,
-    IUserRepository userRepository)
+    IPenaltyRepository penaltyRepository,
+    IUserRepository userRepository,
+    IPlanDayClosureProcessor planDayClosureProcessor)
     : IUseCase<GetPlanRankingCommand>
 {
     public async Task<IResult> HandleAsync(GetPlanRankingCommand command)
@@ -29,6 +30,8 @@ public sealed class GetPlanRankingUseCase(
         try
         {
             command.Validate();
+
+            await planDayClosureProcessor.ProcessPlanAsync(command.PlanId);
 
             var plan = await planRepository.GetByIdAsync(command.PlanId);
 
@@ -42,13 +45,13 @@ public sealed class GetPlanRankingUseCase(
                 : 0;
 
             var members = (await planMemberRepository.ListByPlanIdAsync(command.PlanId))
-                .Where(m => m.Status == PlanMemberStatus.Active)
+                .Where(m => m.Status == PlanMemberStatus.Active || m.Status == PlanMemberStatus.Blocked)
                 .ToList();
 
             var planCheckIns = await checkInRepository.ListByPlanIdAsync(command.PlanId);
             await CheckInStatusResolver.ConsolidateClosedWindowCheckInsAsync(planCheckIns, checkInRepository);
 
-            var planDayOffs = await dayOffRepository.ListByPlanIdAsync(command.PlanId);
+            var planPenalties = await penaltyRepository.ListByPlanIdAsync(command.PlanId);
 
             var items = new List<PlanRankingItemModel>();
 
@@ -60,7 +63,7 @@ public sealed class GetPlanRankingUseCase(
                     continue;
 
                 var memberCheckIns = planCheckIns.Where(c => c.UserId == member.UserId).ToList();
-                var memberDayOffs = planDayOffs.Where(d => d.UserId == member.UserId).ToList();
+                var memberPenalties = planPenalties.Where(p => p.UserId == member.UserId).ToList();
 
                 var validatedDates = memberCheckIns
                     .Where(c => c.ResolveStatus() == CheckInStatus.Validated)
@@ -71,10 +74,20 @@ public sealed class GetPlanRankingUseCase(
                 var pendingCheckinCount = memberCheckIns
                     .Count(c => c.ResolveStatus() == CheckInStatus.Pending
                         && c.CalendarDate <= elapsedEnd);
-                var dayOffCount = memberDayOffs.Count(d => d.Date <= elapsedEnd);
-                var missedDays = Math.Max(0, totalCheckinCount - validatedCount - pendingCheckinCount - dayOffCount);
-                var penalty = missedDays * plan.PenaltyValue;
-                var streak = CalculateStreak(validatedDates, pendingCheckinCount, memberDayOffs, today, plan.StartsAt);
+
+                // Valor a pagar de multas pendentes
+                var pendingPenaltyAmount = memberPenalties
+                    .Where(p => p.Status == PenaltyStatus.Pending)
+                    .Sum(p => p.Amount);
+
+                var streak = CalculateStreak(
+                    validatedDates,
+                    pendingCheckinCount,
+                    member.JoinedAt,
+                    plan,
+                    memberCheckIns,
+                    memberPenalties,
+                    today);
 
                 items.Add(new PlanRankingItemModel
                 {
@@ -83,7 +96,7 @@ public sealed class GetPlanRankingUseCase(
                     PhotoUrl = user.Photo?.Value,
                     CheckinCount = validatedCount,
                     PendingCheckinCount = pendingCheckinCount,
-                    Penalty = penalty,
+                    Penalty = pendingPenaltyAmount,
                     Streak = streak
                 });
             }
@@ -103,8 +116,19 @@ public sealed class GetPlanRankingUseCase(
             if (command.UserId is not null)
             {
                 currentUser = items.FirstOrDefault(i => i.UserId == command.UserId.Value);
-                var userDayOffs = planDayOffs.Where(d => d.UserId == command.UserId.Value);
-                daysOffAvailable = DayOffMapper.GetDaysOffAvailable(plan, userDayOffs, today);
+                var member = members.FirstOrDefault(m => m.UserId == command.UserId.Value);
+
+                if (member is not null)
+                {
+                    var userCheckIns = planCheckIns.Where(c => c.UserId == command.UserId.Value).ToList();
+                    var userPenalties = planPenalties.Where(p => p.UserId == command.UserId.Value).ToList();
+                    daysOffAvailable = DayOffAvailabilityCalculator.GetDaysOffAvailable(
+                        plan,
+                        member.JoinedAt,
+                        today,
+                        userCheckIns,
+                        userPenalties);
+                }
             }
 
             return Result.Success(
@@ -126,28 +150,52 @@ public sealed class GetPlanRankingUseCase(
     public static int CalculateStreak(
         IReadOnlySet<DateOnly> validatedDates,
         int pendingCheckinCount,
-        IReadOnlyList<DayOff> dayOffs,
-        DateOnly today,
-        DateOnly planStartsAt)
+        DateOnly memberJoinedAt,
+        Domain.Plans.Entities.Plan plan,
+        IReadOnlyList<CheckIn> memberCheckIns,
+        IReadOnlyList<Penalty> memberPenalties,
+        DateOnly today)
     {
-        var dayOffDates = dayOffs.Select(d => d.Date).ToHashSet();
         var pendingCheckinsRemaining = pendingCheckinCount;
-
         var streak = 0;
         var cursor = today;
 
-        while (cursor >= planStartsAt)
+        // Itera dias para trás: de hoje até o início
+        while (cursor >= plan.StartsAt && cursor >= memberJoinedAt)
         {
-            if (validatedDates.Contains(cursor) || dayOffDates.Contains(cursor) || pendingCheckinsRemaining > 0)
+            // Checkin do dia já está validado
+            if (validatedDates.Contains(cursor))
             {
                 streak++;
                 cursor = cursor.AddDays(-1);
-                pendingCheckinsRemaining = Math.Max(0, pendingCheckinsRemaining - 1);
                 continue;
             }
 
-            if (cursor == today)
+            // Checkin do dia está pendente
+            if (pendingCheckinsRemaining > 0)
             {
+                streak++;
+                pendingCheckinsRemaining = Math.Max(0, pendingCheckinsRemaining - 1);
+                cursor = cursor.AddDays(-1);
+                continue;
+            }
+
+            // Dia é hoje e ainda não tem checkin realizados
+            if (cursor == today && !validatedDates.Contains(cursor))
+            {
+                cursor = cursor.AddDays(-1);
+                continue;
+            }
+
+            // Dia é elegível para ser considerado como folga
+            if (DayOffAvailabilityCalculator.IsAutoRestDay(
+                cursor,
+                memberJoinedAt,
+                plan,
+                memberCheckIns,
+                memberPenalties))
+            {
+                streak++;
                 cursor = cursor.AddDays(-1);
                 continue;
             }

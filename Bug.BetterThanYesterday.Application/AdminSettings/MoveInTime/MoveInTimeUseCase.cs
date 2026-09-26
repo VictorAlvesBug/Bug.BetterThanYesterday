@@ -4,6 +4,7 @@ using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
 using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.Penalties;
 using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.AdminSettings.MoveInTime;
@@ -11,7 +12,8 @@ namespace Bug.BetterThanYesterday.Application.AdminSettings.MoveInTime;
 public sealed class MoveInTimeUseCase(
 	IPlanRepository planRepository,
 	IPlanMemberRepository planMemberRepository,
-	ICheckInRepository checkInRepository)
+	ICheckInRepository checkInRepository,
+	IPenaltyRepository penaltyRepository)
 	: IUseCase<MoveInTimeCommand>
 {
 	public async Task<IResult> HandleAsync(MoveInTimeCommand command)
@@ -56,6 +58,20 @@ public sealed class MoveInTimeUseCase(
                     Review.Create(review.ReviewerId, review.Status.Name, review.Date.AddDays(daysToAdd)))
                     .ToList();
                 await checkInRepository.UpdateAsync(checkIn);
+			}
+
+			var penalties = await penaltyRepository.ListAllAsync();
+
+			foreach (var penalty in penalties)
+			{
+				penalty.Date = penalty.Date.AddDays(daysToAdd);
+				penalty.CreatedAt = penalty.CreatedAt.AddDays(daysToAdd);
+				
+				if (penalty.Date >= DateOnly.FromDateTime(DateTime.Today)){
+					await penaltyRepository.DeleteAsync(penalty);
+					continue;
+				}
+                await penaltyRepository.UpdateAsync(penalty);
 			}
 
             var isDirectionForward = command.DaysAmount > 0;

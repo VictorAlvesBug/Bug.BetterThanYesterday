@@ -34,9 +34,8 @@ namespace Bug.BetterThanYesterday.API.Tests
 
 			var cfg = new DatabaseConfig
 			{
-				ConnectionString = "mongodb://localhost:27017",
-				DatabaseName = /*"better-than-yesterday",
-				TestDatabaseName = */"better-than-yesterday-test"
+				DatabaseName = "better-than-yesterday",
+				//TestDatabaseName = "better-than-yesterday-test"
 			};
 			services.AddSingleton(Options.Create(cfg));
 			services.AddSingleton<IDatabaseConfig>(_ => cfg);

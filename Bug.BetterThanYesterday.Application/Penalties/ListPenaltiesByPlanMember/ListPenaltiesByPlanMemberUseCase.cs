@@ -1,20 +1,20 @@
-using Bug.BetterThanYesterday.Application.DayOffs;
+using Bug.BetterThanYesterday.Application.Penalties;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
-using Bug.BetterThanYesterday.Domain.DayOffs;
+using Bug.BetterThanYesterday.Domain.Penalties;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
 using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
 
-namespace Bug.BetterThanYesterday.Application.DayOffs.GetDayOffAvailability;
+namespace Bug.BetterThanYesterday.Application.Penalties.ListPenaltiesByPlanMember;
 
-public sealed class GetDayOffAvailabilityUseCase(
-	IDayOffRepository dayOffRepository,
+public sealed class ListPenaltiesByPlanMemberUseCase(
+	IPenaltyRepository penaltyRepository,
 	IPlanRepository planRepository,
 	IPlanMemberRepository planMemberRepository)
-	: IUseCase<GetDayOffAvailabilityCommand>
+	: IUseCase<ListPenaltiesByPlanMemberCommand>
 {
-	public async Task<IResult> HandleAsync(GetDayOffAvailabilityCommand command)
+	public async Task<IResult> HandleAsync(ListPenaltiesByPlanMemberCommand command)
 	{
 		try
 		{
@@ -31,14 +31,11 @@ public sealed class GetDayOffAvailabilityUseCase(
 			if (planMember is null)
 				return Result.Rejected(Messages.PlanMemberNotFound, RejectionType.NotFound);
 
-			var userDayOffs = await dayOffRepository.ListByPlanIdAndUserIdAsync(
-				command.PlanId,
-				command.UserId);
+			var penalties = await penaltyRepository.ListByPlanIdAndUserIdAsync(command.PlanId, command.UserId);
 
-			var today = DateOnly.FromDateTime(DateTime.Today);
-			var daysOffAvailable = DayOffMapper.GetDaysOffAvailable(plan, userDayOffs, today);
-
-			return Result.Success(daysOffAvailable, Messages.PlanSuccessfullyFound);
+			return Result.Success(
+				penalties.Select(PenaltyMapper.ToModel).ToList(),
+				Messages.PenaltiesSuccessfullyFound);
 		}
 		catch (Exception ex)
 		{

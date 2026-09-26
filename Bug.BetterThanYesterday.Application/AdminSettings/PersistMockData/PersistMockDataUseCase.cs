@@ -1,21 +1,21 @@
 ﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
-using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.Plans;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
-using Bug.BetterThanYesterday.Domain.CheckIns;
-using Bug.BetterThanYesterday.Domain.Users;
-using Bug.BetterThanYesterday.Application.Mocks;
+//using Bug.BetterThanYesterday.Domain.Habits;
+//using Bug.BetterThanYesterday.Domain.Plans;
+//using Bug.BetterThanYesterday.Domain.PlanMembers;
+//using Bug.BetterThanYesterday.Domain.CheckIns;
+//using Bug.BetterThanYesterday.Domain.Users;
+//using Bug.BetterThanYesterday.Application.Mocks;
 
 namespace Bug.BetterThanYesterday.Application.AdminSettings.PersistMockData;
 
 
 
 public sealed class PersistMockDataUseCase(
-	ICheckInRepository checkInRepository,
+	/*ICheckInRepository checkInRepository,
 	IHabitRepository habitRepository,
 	IPlanMemberRepository planMemberRepository,
 	IPlanRepository planRepository,
-	IUserRepository userRepository
+	IUserRepository userRepository*/
 )
 	: IUseCase<PersistMockDataCommand>
 {

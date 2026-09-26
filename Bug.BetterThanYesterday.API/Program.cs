@@ -22,8 +22,15 @@ builder.Services.AddSingleton<IAwsConfig>(sp =>
 
 builder.Services.AddSingleton(sp =>
 {
-	var dbConfig = sp.GetRequiredService<IOptions<DatabaseConfig>>().Value;
-	return (IMongoClient)new MongoClient(dbConfig.ConnectionString);
+    var connectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTIONSTRING");
+
+    if (string.IsNullOrWhiteSpace(connectionString))
+    {
+        throw new InvalidOperationException(
+            "Variável de ambiente MONGODB_CONNECTIONSTRING não configurada.");
+    }
+
+    return (IMongoClient)new MongoClient(connectionString);
 });
 
 builder.Services.AddHttpContextAccessor();
