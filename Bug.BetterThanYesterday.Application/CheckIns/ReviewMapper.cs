@@ -13,6 +13,7 @@ public static class ReviewMapper
     {
         ReviewerId = review.ReviewerId,
         Status = review.Status.Name,
-        Date = review.Date
+        Date = review.Date,
+        Enable = review.Enable
     };
 }

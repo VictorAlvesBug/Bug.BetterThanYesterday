@@ -1,3 +1,4 @@
+using Bug.BetterThanYesterday.Application.Notifications;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
@@ -17,7 +18,8 @@ public sealed class AddCheckInUseCase(
     IPlanRepository planRepository,
     IHabitRepository habitRepository,
     IUserRepository userRepository,
-    IPlanMemberRepository planMemberRepository)
+    IPlanMemberRepository planMemberRepository,
+    IPlanCycleNotificationProcessor notificationProcessor)
     : IUseCase<AddCheckInCommand>
 {
     public async Task<IResult> HandleAsync(AddCheckInCommand command)
@@ -62,16 +64,23 @@ public sealed class AddCheckInUseCase(
 
             var maxIndexPerDateAllowed = plan.GetMaxCheckInsPerDateAllowed();
 
-            List<PlanMemberStatus> allowedPlanMemberStatuses = [
-                PlanMemberStatus.Active,
-                PlanMemberStatus.Blocked
-            ];
-
-            if (!allowedPlanMemberStatuses.Contains(planMember.Status))
+            if (planMember.Status != PlanMemberStatus.Active)
                 return Result.Rejected(Messages.OnlyActiveMembersCanMakeCheckIns);
 
             if (plan.GetStatus() != PlanStatus.Running)
                 return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);
+
+            var members = await planMemberRepository.ListByPlanIdAsync(plan.Id);
+
+            if (members.Count < 2)
+                return Result.Rejected(Messages.PlanNeedsAtLeastTwoMembers);
+
+            var checkInDay = DateOnly.FromDateTime(command.Date);
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            var yesterday = today.AddDays(-1);
+
+            if (checkInDay != today && checkInDay != yesterday)
+                return Result.Rejected(Messages.CheckInDateMustBeTodayOrYesterday);
 
             if (command.Date < plan.StartsAt.ToDateTime(TimeOnly.MinValue) || command.Date > plan.EndsAt.ToDateTime(TimeOnly.MaxValue))
                 return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);
@@ -88,6 +97,15 @@ public sealed class AddCheckInUseCase(
                 command.EvidencePhotoUrl);
 
             await checkInRepository.AddAsync(checkIn);
+
+            try
+            {
+                await notificationProcessor.NotifyCheckInAsync(plan.Id, user.Id, user.Name, members);
+            }
+            catch
+            {
+                // O aviso não impede o check-in.
+            }
 
             return Result.Success(
                 checkIn.ToModel(plan, habit, user),

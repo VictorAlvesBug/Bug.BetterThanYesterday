@@ -9,4 +9,5 @@ namespace Bug.BetterThanYesterday.Infrastructure.Persistence.CheckIns;
 		public Guid ReviewerId { get; set; }
 		public string Status { get; set; }
 		public DateTime Date { get; set; }
+		public bool Enable { get; set; } = true;
 	}

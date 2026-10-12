@@ -12,6 +12,7 @@ internal sealed class PlanMemberMapper : IDocumentMapper<PlanMember, PlanMemberD
 		UserId = planMember.UserId,
 		JoinedAt = planMember.JoinedAt.ToDateTime(TimeOnly.MinValue),
 		Status = planMember.Status.Name,
+		IsDelinquent = planMember.IsDelinquent,
 		CreatedAt = planMember.CreatedAt
 	};
 
@@ -21,6 +22,7 @@ internal sealed class PlanMemberMapper : IDocumentMapper<PlanMember, PlanMemberD
 		document.UserId,
 		document.JoinedAt,
 		document.Status,
-		document.CreatedAt
+		document.CreatedAt,
+		document.IsDelinquent
 	);
 }

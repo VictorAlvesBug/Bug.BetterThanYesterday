@@ -190,4 +190,26 @@ public sealed class Plan : Entity
 
 		return PlanStatus.Running;
 	}
+
+	public PlanStatus GetStatus(int memberCount)
+	{
+		var status = GetStatus();
+
+		if (status == PlanStatus.Running && memberCount < 2)
+			return PlanStatus.NotStarted;
+
+		return status;
+	}
+
+	public void UpdatePeriod(DateOnly startsAt, DateOnly endsAt, int memberCount)
+	{
+		if (GetStatus(memberCount) != PlanStatus.NotStarted)
+			throw new InvalidOperationException(Messages.OnlyNotStartedPlansCanBeUpdated);
+
+		if (endsAt <= startsAt)
+			throw new ArgumentException(Messages.EndDateMustBeLaterThanStartDate, nameof(endsAt));
+
+		StartsAt = startsAt;
+		EndsAt = endsAt;
+	}
 }

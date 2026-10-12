@@ -9,6 +9,7 @@ public sealed record Review
 	public Guid ReviewerId { get; }
 	public CheckInStatus Status { get; }
 	public DateTime Date { get; }
+	public bool Enable { get; init; } = true;
 
 	private Review(
 		Guid reviewerId,
@@ -70,6 +71,8 @@ public sealed record Review
 		review = new Review(reviewerId, status, date);
 		return true;
 	}
+
+	public Review Disable() => this with { Enable = false };
 
 	public override string ToString() => $"{ReviewerId}:{Status.Name}:{Date:O}";
 }

@@ -1,6 +1,7 @@
 ﻿using Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 using Bug.BetterThanYesterday.Application.CheckIns.GetCheckInById;
 using Bug.BetterThanYesterday.Application.CheckIns.ListCheckInsByFilter;
+using Bug.BetterThanYesterday.Application.CheckIns.ReplaceCheckIn;
 using Bug.BetterThanYesterday.Application.CheckIns.ReviewCheckIn;
 using Bug.BetterThanYesterday.Application.CheckIns;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
@@ -19,6 +20,7 @@ public class CheckInsController(
 	IUseCase<ListCheckInsByFilterCommand> listCheckInsByFilterUseCase,
 	IUseCase<GetCheckInByIdCommand> getCheckInByIdUseCase,
 	IUseCase<ReviewCheckInCommand> reviewCheckInUseCase,
+	IUseCase<ReplaceCheckInCommand> replaceCheckInUseCase,
 	IUseCase<RemoveReviewCommand> removeReviewUseCase)
 	: ControllerBase
 {
@@ -61,6 +63,28 @@ public class CheckInsController(
 			var data = ((Result<CheckInModel>)result).Data;
 			return Created($"CheckIns/{data.Id}", result);
 		}
+
+		if (result.IsRejected())
+			return StatusCode(result.GetStatusCode(), result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
+
+	[HttpPut("{checkInId}")]
+	public async Task<IActionResult> Replace(Guid checkInId, [FromBody] ReplaceCheckInRequest request)
+	{
+		var command = new ReplaceCheckInCommand
+		{
+			CheckInId = checkInId,
+			UserId = request.UserId,
+			Title = request.Title,
+			EvidencePhotoUrl = request.EvidencePhotoUrl
+		};
+
+		var result = await replaceCheckInUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+			return Ok(result);
 
 		if (result.IsRejected())
 			return StatusCode(result.GetStatusCode(), result);

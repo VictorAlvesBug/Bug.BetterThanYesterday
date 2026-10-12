@@ -30,7 +30,9 @@ internal static class CheckInMapper
 			EvidencePhotoUrl = checkIn.PhotoUrl,
 			Status = checkIn.ResolveStatus().Name,
 			Reviews = checkIn.Reviews.Select(review => review.ToModel()).ToArray(),
-			CreatedAt = checkIn.CreatedAt
+			CreatedAt = checkIn.CreatedAt,
+			ReviewClosesAt = checkIn.ReviewClosesAt,
+			IsReplacement = checkIn.IsReplacement
 		};
 
 	public static async Task<CheckInModel> ToModelAsync(

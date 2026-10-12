@@ -1,5 +1,7 @@
+using Bug.BetterThanYesterday.Application.Ledger;
 using Bug.BetterThanYesterday.Application.Penalties;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Domain.Ledger;
 using Bug.BetterThanYesterday.Domain.Penalties;
 using Bug.BetterThanYesterday.Domain.Penalties.ValueObjects;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
@@ -13,7 +15,8 @@ namespace Bug.BetterThanYesterday.Application.Penalties.PayPenalty;
 public sealed class PayPenaltyUseCase(
 	IPenaltyRepository penaltyRepository,
 	IPlanRepository planRepository,
-	IPlanMemberRepository planMemberRepository)
+	IPlanMemberRepository planMemberRepository,
+	ILedgerRepository ledgerRepository)
 	: IUseCase<PayPenaltyCommand>
 {
 	public async Task<IResult> HandleAsync(PayPenaltyCommand command)
@@ -34,6 +37,7 @@ public sealed class PayPenaltyUseCase(
 
 			penalty.MarkAsPaid(PaymentMethod.Manual, command.ConfirmedByUserId);
 			await penaltyRepository.UpdateAsync(penalty);
+			await FinePaymentBook.RecordAsync(ledgerRepository, penalty);
 
 			var planMemberId = PlanMember.BuildId(penalty.PlanId, penalty.UserId);
 			var planMember = await planMemberRepository.GetByIdAsync(planMemberId);

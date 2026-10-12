@@ -20,8 +20,11 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 		{
 			ReviewerId = review.ReviewerId,
 			Status = review.Status.Name,
-			Date = review.Date
+			Date = review.Date,
+			Enable = review.Enable
 		}).ToArray(),
+		ReviewClosesAt = checkIn.ReviewClosesAt,
+		IsReplacement = checkIn.IsReplacement,
 		CreatedAt = checkIn.CreatedAt
 	};
 
@@ -29,10 +32,13 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 	{
 		var reviews = document.Reviews
 			.Select(review =>
-				Review.Create(
+			{
+				var restored = Review.Create(
 					review.ReviewerId,
 					review.Status,
-					review.Date))
+					review.Date);
+				return review.Enable ? restored : restored.Disable();
+			})
 			.ToList();
 
 		return CheckIn.Restore(
@@ -45,6 +51,8 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 		document.PhotoUrl,
 		document.Status,
 		reviews,
-		document.CreatedAt);
+		document.CreatedAt,
+		document.ReviewClosesAt,
+		document.IsReplacement);
 	}
 }

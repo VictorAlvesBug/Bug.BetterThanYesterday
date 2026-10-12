@@ -9,6 +9,17 @@ using Bug.BetterThanYesterday.Domain.PlanMembers;
 using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
+using Bug.BetterThanYesterday.Domain.Reports;
+using Bug.BetterThanYesterday.Domain.Reports.Entities;
+using Bug.BetterThanYesterday.Domain.Ledger;
+using Bug.BetterThanYesterday.Domain.Ledger.Entities;
+using Bug.BetterThanYesterday.Domain.Notifications;
+using Bug.BetterThanYesterday.Domain.Notifications.Entities;
+using Bug.BetterThanYesterday.Domain.Payments;
+using Bug.BetterThanYesterday.Infrastructure.Payments;
+using Bug.BetterThanYesterday.Infrastructure.Persistence.Reports;
+using Bug.BetterThanYesterday.Infrastructure.Persistence.Ledger;
+using Bug.BetterThanYesterday.Infrastructure.Persistence.Notifications;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 using Bug.BetterThanYesterday.Domain.Uploads;
@@ -44,6 +55,9 @@ public static class DependencyInjectionExtensions
 		services.AddScoped<IDocumentMapper<Plan, PlanDocument>, PlanMapper>();
 		services.AddScoped<IDocumentMapper<PlanMember, PlanMemberDocument>, PlanMemberMapper>();
 		services.AddScoped<IDocumentMapper<User, UserDocument>, UserMapper>();
+		services.AddScoped<IDocumentMapper<CheckInReport, CheckInReportDocument>, CheckInReportMapper>();
+		services.AddScoped<IDocumentMapper<LedgerEntry, LedgerEntryDocument>, LedgerEntryMapper>();
+		services.AddScoped<IDocumentMapper<UserNotification, UserNotificationDocument>, UserNotificationMapper>();
 		return services;
 	}
 
@@ -72,6 +86,17 @@ public static class DependencyInjectionExtensions
 		services.AddScoped<IRepository<User>>(sp => sp.GetRequiredService<IUserRepository>());
 		services.AddScoped<IRepository<User>, Repository<User, UserDocument>>();
 
+		services.AddScoped<ICheckInReportRepository, CheckInReportRepository>();
+		services.AddScoped<IRepository<CheckInReport>>(sp => sp.GetRequiredService<ICheckInReportRepository>());
+
+		services.AddScoped<ILedgerRepository, LedgerEntryRepository>();
+		services.AddScoped<IRepository<LedgerEntry>>(sp => sp.GetRequiredService<ILedgerRepository>());
+
+		services.AddScoped<IUserNotificationRepository, UserNotificationRepository>();
+		services.AddScoped<IRepository<UserNotification>>(sp => sp.GetRequiredService<IUserNotificationRepository>());
+
+		services.AddScoped<IPixGateway, DevPixGateway>();
+
 		return services;
 	}
 
@@ -83,6 +108,9 @@ public static class DependencyInjectionExtensions
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<PlanDocument>("plans"));
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<PlanMemberDocument>("plan_members"));
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<UserDocument>("users"));
+		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<CheckInReportDocument>("checkin_reports"));
+		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<LedgerEntryDocument>("ledger_entries"));
+		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<UserNotificationDocument>("notifications"));
 
 		return services;
 	}

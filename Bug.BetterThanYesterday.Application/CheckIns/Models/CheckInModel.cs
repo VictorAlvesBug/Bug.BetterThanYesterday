@@ -15,4 +15,6 @@ public class CheckInModel
     public required string Status { get; set; }
     public required ReviewModel[] Reviews { get; set; }
     public required DateTime CreatedAt { get; set; }
+    public required DateTime ReviewClosesAt { get; set; }
+    public required bool IsReplacement { get; set; }
 }

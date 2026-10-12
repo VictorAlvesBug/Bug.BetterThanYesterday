@@ -1,3 +1,6 @@
+using Bug.BetterThanYesterday.Application.Ledger;
+using Bug.BetterThanYesterday.Application.Notifications;
+using Bug.BetterThanYesterday.Application.PlanMembers;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
@@ -13,7 +16,9 @@ public sealed class RemoveUserFromPlanUseCase(
     IPlanMemberRepository planMemberRepository,
     IPlanRepository planRepository,
     IHabitRepository habitRepository,
-    IUserRepository userRepository)
+    IUserRepository userRepository,
+    IPlanFinancesProcessor planFinancesProcessor,
+    IPlanCycleNotificationProcessor planCycleNotificationProcessor)
     : IUseCase<RemoveUserFromPlanCommand>
 {
     public async Task<IResult> HandleAsync(RemoveUserFromPlanCommand command)
@@ -57,7 +62,25 @@ public sealed class RemoveUserFromPlanUseCase(
                 return Result.Rejected(Messages.MemberCanOnlyBeRemovedFromNotStartedOrRunningPlans);
 
             await planMemberRepository.DeleteAsync(planMember);
+
+            var remainingMembers = await planMemberRepository.ListByPlanIdAsync(plan.Id);
+
+            if (plan.GetStatus() == PlanStatus.Running && remainingMembers.Count < 2)
+            {
+                plan.Cancel();
+                await planRepository.UpdateAsync(plan);
+                await planFinancesProcessor.ProcessAsync(plan.Id);
+
+                var recipients = remainingMembers
+                    .Select(member => member.UserId)
+                    .Append(command.UserId)
+                    .Distinct()
+                    .ToList();
+                await planCycleNotificationProcessor.NotifyPlanCancelledForQuorumAsync(plan.Id, recipients);
+            }
+
             return Result.Success(
+                planMember.ToPlanMemberDetailsModel(habit, plan, owner, user),
                 Messages.MemberSuccessfullyRemovedFromThePlan
             );
         }

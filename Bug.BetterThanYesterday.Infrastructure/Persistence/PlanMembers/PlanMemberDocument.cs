@@ -12,5 +12,6 @@ public class PlanMemberDocument : Document
 	[BsonRepresentation(BsonType.String)]
 	public Guid UserId { get; set; }
 	public DateTime JoinedAt { get; set; }
-	public string Status { get; set; }
+	public string Status { get; set; } = string.Empty;
+	public bool IsDelinquent { get; set; }
 }

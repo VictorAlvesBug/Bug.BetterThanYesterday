@@ -1,3 +1,4 @@
+using Bug.BetterThanYesterday.Application.Payments.CreatePixCharge;
 using Bug.BetterThanYesterday.Application.Penalties.ListPenaltiesByPlanId;
 using Bug.BetterThanYesterday.Application.Penalties.ListPenaltiesByPlanMember;
 using Bug.BetterThanYesterday.Application.Penalties.Models;
@@ -13,7 +14,8 @@ namespace Bug.BetterThanYesterday.API.Controllers;
 public class PenaltiesController(
 	IUseCase<ListPenaltiesByPlanIdCommand> listPenaltiesByPlanIdUseCase,
 	IUseCase<ListPenaltiesByPlanMemberCommand> listPenaltiesByPlanMemberUseCase,
-	IUseCase<PayPenaltyCommand> payPenaltyUseCase)
+	IUseCase<PayPenaltyCommand> payPenaltyUseCase,
+	IUseCase<CreatePixChargeCommand> createPixChargeUseCase)
 	: ControllerBase
 {
 	[HttpGet("Plans/{planId}/Penalties")]
@@ -64,9 +66,34 @@ public class PenaltiesController(
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
+
+	[HttpPost("Plans/{planId}/Penalties/{penaltyId}/Pix")]
+	public async Task<IActionResult> CreatePixCharge(Guid planId, Guid penaltyId, [FromBody] CreatePixChargeRequest request)
+	{
+		var command = new CreatePixChargeCommand
+		{
+			PlanId = planId,
+			PenaltyId = penaltyId,
+			UserId = request.UserId
+		};
+		var result = await createPixChargeUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+			return Ok(result);
+
+		if (result.IsRejected())
+			return StatusCode(result.GetStatusCode(), result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
 }
 
 public sealed class PayPenaltyRequest
 {
 	public Guid ConfirmedByUserId { get; set; }
+}
+
+public sealed class CreatePixChargeRequest
+{
+	public Guid UserId { get; set; }
 }

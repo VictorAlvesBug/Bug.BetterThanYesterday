@@ -11,4 +11,5 @@ public interface IPenaltyRepository : IRepository<Penalty>
 	Task<Penalty?> GetByPlanIdAndUserIdAndDateAsync(Guid planId, Guid userId, DateOnly date);
 	Task<decimal> SumPendingAmountByPlanIdAndUserIdAsync(Guid planId, Guid userId);
 	Task<bool> HasPendingPenaltiesAsync(Guid planId, Guid userId);
+	Task<Penalty?> GetByExternalPaymentIdAsync(string externalPaymentId);
 }

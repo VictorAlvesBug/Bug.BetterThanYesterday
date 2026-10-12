@@ -54,9 +54,12 @@ public sealed class MoveInTimeUseCase(
 			{
 				checkIn.Date = checkIn.Date.AddDays(daysToAdd);
 				checkIn.CreatedAt = checkIn.CreatedAt.AddDays(daysToAdd);
+				checkIn.ReviewClosesAt = checkIn.ReviewClosesAt.AddDays(daysToAdd);
 				checkIn.Reviews = checkIn.Reviews.ConvertAll(review =>
-                    Review.Create(review.ReviewerId, review.Status.Name, review.Date.AddDays(daysToAdd)))
-                    .ToList();
+				{
+					var shifted = Review.Create(review.ReviewerId, review.Status.Name, review.Date.AddDays(daysToAdd));
+					return review.Enable ? shifted : shifted.Disable();
+				});
                 await checkInRepository.UpdateAsync(checkIn);
 			}
 

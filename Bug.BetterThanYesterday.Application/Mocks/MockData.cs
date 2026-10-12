@@ -306,6 +306,14 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				DateTime.Today
 			),
 			PlanMember.Restore(
+				PlanMember.BuildId(PublicRunningPlanId1_WithUserId1Active, UserId5),
+				PublicRunningPlanId1_WithUserId1Active,
+				UserId5,
+				DateTime.Today,
+				PlanMemberStatus.Active.Name,
+				DateTime.Today
+			),
+			PlanMember.Restore(
 				PlanMemberId2_PlanId2AndUserId1Relation,
 				PrivateNotStartedPlanId2_WithUserId1ActiveAndUserId2BlockedAndUser3Active,
 				UserId1,

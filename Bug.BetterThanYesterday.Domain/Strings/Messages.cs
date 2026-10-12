@@ -27,6 +27,14 @@ public static class Messages
     public const string PlanUserSuccessfullyFound = "Plano e usuário encontrados com sucesso";
     public const string OnlyRunningPlansCanReceiveNewCheckIns = "Apenas planos em execução podem receber novos check-ins";
     public const string OnlyActiveMembersCanMakeCheckIns = "Apenas membros ativos podem fazer check-ins";
+    public const string CheckInDateMustBeTodayOrYesterday = "O check-in só pode ser de hoje ou de ontem";
+    public const string CheckInAlreadyReplaced = "Este check-in já foi substituído";
+    public const string CheckInReplacementWindowHasClosed = "A substituição só pode ser feita enquanto faltarem pelo menos 4 horas para o fim da avaliação";
+    public const string OnlyCheckInOwnerCanReplace = "Apenas o autor pode substituir o check-in";
+    public const string EnterReportReason = "Informe o motivo da denúncia";
+    public const string ReportSuccessfullyRegistered = "Denúncia registrada com sucesso";
+    public const string ReportsSuccessfullyFound = "Denúncias encontradas com sucesso";
+    public const string OnlyOwnerOrAdminCanSeeReports = "Apenas o dono do plano ou o administrador podem ver as denúncias";
     public const string UserHasReachedTheMaximumNumberOfCheckInsForTheDay = "Você já marcou um check-in para este dia";
     public const string EnterCheckInStatus = "Informe o status do check-ins";
     public const string EnterCheckInPhotoUrl = "Informe o URL da foto de evidência";
@@ -78,6 +86,11 @@ public static class Messages
     public const string EnterPenaltyId = "Informe o ID da multa";
     public const string PenaltyNotFound = "Multa não encontrada";
     public const string PenaltyAlreadyPaid = "Multa já foi paga";
+    public const string EnterExternalPaymentId = "Informe o identificador do pagamento";
+    public const string PixChargeSuccessfullyCreated = "Cobrança Pix criada com sucesso";
+    public const string PixPaymentConfirmed = "Pagamento Pix confirmado";
+    public const string OnlyPenaltyOwnerCanCreatePixCharge = "Apenas o membro da multa pode gerar a cobrança";
+    public const string NotificationsSuccessfullyFound = "Avisos encontrados com sucesso";
     public const string PenaltySuccessfullyPaid = "Multa paga com sucesso";
     public const string PenaltiesSuccessfullyFound = "Multas encontradas com sucesso";
     public const string PlanStatusSuccessfullyUpdated = "Status do plano atualizado com sucesso";
@@ -91,6 +104,8 @@ public static class Messages
     public const string EnterPlanMemberId = "Informe o ID do membro no plano";
     public const string EnterPlanMemberJoinedDate = "Informe a data de inclusão do usuário no plano";
     public const string OnlyNotStartedPlansCanReceiveNewMembers = "Apenas planos não iniciados podem receber novos membros";
+    public const string OnlyNotStartedPlansCanBeUpdated = "Apenas planos não iniciados podem ser alterados";
+    public const string PlanNeedsAtLeastTwoMembers = "O plano precisa de pelo menos dois membros para estar em andamento";
     public const string MemberAlreadyAddedToThePlan = "Membro já adicionado ao plano";
     public const string MemberSuccessfullyAddedToThePlan = "Membro adicionado ao plano com sucesso";
     public const string MemberSuccessfullyReaddedToThePlan = "Membro readicionado ao plano com sucesso";

@@ -14,6 +14,8 @@ public class CheckIn : Entity
     public string PhotoUrl { get; set; }
     public CheckInStatus Status { get; set; }
     public List<Review> Reviews { get; set; }
+    public DateTime ReviewClosesAt { get; set; }
+    public bool IsReplacement { get; set; }
 
     public DateOnly CalendarDate => DateOnly.FromDateTime(Date);
 
@@ -27,7 +29,9 @@ public class CheckIn : Entity
         string photoUrl,
         string status,
         List<Review> reviews,
-        DateTime createdAt)
+        DateTime createdAt,
+        DateTime? reviewClosesAt = null,
+        bool isReplacement = false)
     {
         Id = id;
         PlanId = planId;
@@ -39,6 +43,10 @@ public class CheckIn : Entity
         Status = CheckInStatus.Get(status);
         Reviews = reviews;
         CreatedAt = createdAt;
+        ReviewClosesAt = reviewClosesAt is null || reviewClosesAt == DateTime.MinValue
+            ? createdAt.AddHours(24)
+            : reviewClosesAt.Value;
+        IsReplacement = isReplacement;
     }
 
     private CheckIn(
@@ -100,7 +108,9 @@ public class CheckIn : Entity
         string photoUrl,
         string status,
         List<Review> reviews,
-        DateTime createdAt)
+        DateTime createdAt,
+        DateTime? reviewClosesAt = null,
+        bool isReplacement = false)
     {
         if (id == Guid.Empty)
             throw new ArgumentNullException(nameof(id), Messages.EnterCheckInId);
@@ -139,7 +149,9 @@ public class CheckIn : Entity
             photoUrl,
             status,
             reviews,
-            createdAt);
+            createdAt,
+            reviewClosesAt,
+            isReplacement);
     }
 
     public static Guid BuildId(Guid planId, Guid userId, DateTime date, int index = 0)
@@ -162,8 +174,11 @@ public class CheckIn : Entity
 
     public void AddReview(Review review)
     {
+        Reviews.RemoveAll(existing => existing.ReviewerId == review.ReviewerId && !existing.Enable);
+        if (Reviews.Any(existing => existing.ReviewerId == review.ReviewerId && existing.Enable))
+            return;
+
         Reviews.Add(review);
-        Reviews = Reviews.DistinctBy(review => review.ReviewerId).ToList();
     }
 
     public void RemoveReviewByReviewerId(Guid reviewerId)
@@ -176,9 +191,10 @@ public class CheckIn : Entity
         if (IsReviewWindowOpen())
             return CheckInStatus.Pending;
 
-        var rejections = Reviews.Count(review => review.Status == CheckInStatus.Rejected);
+        var activeReviews = Reviews.Where(review => review.Enable).ToList();
+        var rejections = activeReviews.Count(review => review.Status == CheckInStatus.Rejected);
 
-        if (Reviews.Count > 0 && rejections > Reviews.Count / 2)
+        if (activeReviews.Count > 0 && rejections > activeReviews.Count / 2)
             return CheckInStatus.Rejected;
 
         return CheckInStatus.Validated;
@@ -194,12 +210,37 @@ public class CheckIn : Entity
 
     public bool IsReviewWindowOpen()
     {
-        return DateTime.Now < CreatedAt.AddHours(24);
+        return DateTime.Now < ReviewClosesAt;
+    }
+
+    public bool CanReplace()
+    {
+        return !IsReplacement && DateTime.Now <= ReviewClosesAt.AddHours(-4);
+    }
+
+    public void ReplaceEvidence(string title, string photoUrl)
+    {
+        if (IsReplacement)
+            throw new InvalidOperationException(Messages.CheckInAlreadyReplaced);
+
+        if (!CanReplace())
+            throw new InvalidOperationException(Messages.CheckInReplacementWindowHasClosed);
+
+        if (string.IsNullOrWhiteSpace(title))
+            throw new ArgumentNullException(nameof(title), Messages.EnterCheckInTitle);
+
+        if (string.IsNullOrWhiteSpace(photoUrl))
+            throw new ArgumentNullException(nameof(photoUrl), Messages.EnterCheckInPhotoUrl);
+
+        Title = title;
+        PhotoUrl = photoUrl;
+        IsReplacement = true;
+        Reviews = Reviews.Select(review => review.Disable()).ToList();
     }
 
     public bool IsReviewAlreadyMadeByUser(Guid userId)
     {
-        return Reviews.Any(review => review.ReviewerId == userId);
+        return Reviews.Any(review => review.Enable && review.ReviewerId == userId);
     }
 
     public bool IsReviewerCheckInOwner(Guid reviewerId)

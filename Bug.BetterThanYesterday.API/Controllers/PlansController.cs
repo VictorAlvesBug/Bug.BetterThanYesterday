@@ -6,6 +6,7 @@ using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Microsoft.AspNetCore.Mvc;
 using Bug.BetterThanYesterday.Application.Plans.GetPlanRanking;
+using Bug.BetterThanYesterday.Application.Plans.UpdatePlanPeriod;
 using Bug.BetterThanYesterday.Application.Plans.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,9 +20,9 @@ public class PlansController(
 	IUseCase<CreatePlanCommand> createPlanUseCase,
 	IUseCase<ListPlansByFilterCommand> listPlansByFilterUseCase,
 	IUseCase<GetPlanByIdCommand> getPlanByIdUseCase,
-	IUseCase<GetPlanRankingCommand> getPlanRankingUseCase/*,
-	IUseCase<ListPlansByHabitIdCommand> listPlansByHabitIdUseCase,
-	IUseCase<CancelPlanCommand> cancelPlanUseCase*/)
+	IUseCase<GetPlanRankingCommand> getPlanRankingUseCase,
+	IUseCase<UpdatePlanPeriodCommand> updatePlanPeriodUseCase,
+	IUseCase<CancelPlanCommand> cancelPlanUseCase)
 	: ControllerBase
 {
 	[HttpGet("{planId}")]
@@ -85,20 +86,41 @@ public class PlansController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	/*[HttpDelete("{planId}")]
+	[HttpPut("{planId}/Period")]
+	public async Task<IActionResult> UpdatePeriod(Guid planId, [FromBody] UpdatePlanPeriodRequest request)
+	{
+		var command = new UpdatePlanPeriodCommand
+		{
+			PlanId = planId,
+			OwnerId = request.OwnerId,
+			StartsAt = request.StartsAt,
+			EndsAt = request.EndsAt
+		};
+		var result = await updatePlanPeriodUseCase.HandleAsync(command);
+
+		if (result.IsSuccess())
+			return Ok(result);
+
+		if (result.IsRejected())
+			return StatusCode(result.GetStatusCode(), result);
+
+		return StatusCode(StatusCodes.Status500InternalServerError, result);
+	}
+
+	[HttpDelete("{planId}")]
 	public async Task<IActionResult> Cancel(Guid planId)
 	{
 		var command = new CancelPlanCommand(planId);
 		var result = await cancelPlanUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
-			return NoContent();
+			return Ok(result);
 
 		if (result.IsRejected())
 			return StatusCode(result.GetStatusCode(), result);
 
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
-	}*/
+	}
 
 	/*[HttpGet]
 	private async Task<IActionResult> ListByHabitId(Guid habitId)

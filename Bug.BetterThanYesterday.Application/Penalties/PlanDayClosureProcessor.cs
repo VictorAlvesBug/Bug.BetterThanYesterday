@@ -1,4 +1,5 @@
 using Bug.BetterThanYesterday.Application.CheckIns;
+using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.Penalties;
@@ -6,7 +7,6 @@ using Bug.BetterThanYesterday.Domain.Penalties.Entities;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
 using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
 using Bug.BetterThanYesterday.Domain.PlanMembers.ValueObjects;
-using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.Entities;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
@@ -30,11 +30,17 @@ public sealed class PlanDayClosureProcessor(
 	{
 		var plan = await planRepository.GetByIdAsync(planId);
 
-		if (plan is null || plan.GetStatus() != PlanStatus.Running)
+		if (plan is null)
+			return;
+
+		var membersForQuorum = await planMemberRepository.ListByPlanIdAsync(planId);
+		await PlanQuorumPostponer.PostponeWhileUnderQuorumAsync(plan, membersForQuorum.Count, planRepository);
+
+		if (plan.GetStatus() != PlanStatus.Running)
 			return;
 
 		var today = DateOnly.FromDateTime(DateTime.Today);
-		var endDate = today.AddDays(-1);
+		var endDate = today.AddDays(-2);
 
 		if (endDate < plan.StartsAt)
 			return;

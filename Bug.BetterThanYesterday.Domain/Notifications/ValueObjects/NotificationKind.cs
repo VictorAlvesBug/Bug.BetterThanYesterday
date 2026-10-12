@@ -1,0 +1,14 @@
+using Bug.BetterThanYesterday.Domain.Commons;
+
+namespace Bug.BetterThanYesterday.Domain.Notifications.ValueObjects;
+
+public sealed class NotificationKind : Enumeration<NotificationKind>
+{
+	public static readonly NotificationKind CheckInMade = new(1, nameof(CheckInMade));
+	public static readonly NotificationKind RestAtRisk = new(2, nameof(RestAtRisk));
+	public static readonly NotificationKind FineAtRisk = new(3, nameof(FineAtRisk));
+	public static readonly NotificationKind PlanStartsToday = new(4, nameof(PlanStartsToday));
+	public static readonly NotificationKind PlanCancelledForQuorum = new(5, nameof(PlanCancelledForQuorum));
+
+	private NotificationKind(int id, string name) : base(id, name) { }
+}

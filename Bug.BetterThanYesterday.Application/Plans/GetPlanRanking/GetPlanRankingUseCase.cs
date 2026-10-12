@@ -1,4 +1,5 @@
 using Bug.BetterThanYesterday.Application.CheckIns;
+using Bug.BetterThanYesterday.Application.Ledger;
 using Bug.BetterThanYesterday.Application.Penalties;
 using Bug.BetterThanYesterday.Application.Plans.Models;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
@@ -22,7 +23,8 @@ public sealed class GetPlanRankingUseCase(
     ICheckInRepository checkInRepository,
     IPenaltyRepository penaltyRepository,
     IUserRepository userRepository,
-    IPlanDayClosureProcessor planDayClosureProcessor)
+    IPlanDayClosureProcessor planDayClosureProcessor,
+    IPlanFinancesProcessor planFinancesProcessor)
     : IUseCase<GetPlanRankingCommand>
 {
     public async Task<IResult> HandleAsync(GetPlanRankingCommand command)
@@ -32,6 +34,7 @@ public sealed class GetPlanRankingUseCase(
             command.Validate();
 
             await planDayClosureProcessor.ProcessPlanAsync(command.PlanId);
+            await planFinancesProcessor.ProcessAsync(command.PlanId);
 
             var plan = await planRepository.GetByIdAsync(command.PlanId);
 

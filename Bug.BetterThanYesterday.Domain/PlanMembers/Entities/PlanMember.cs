@@ -11,6 +11,7 @@ public class PlanMember : Entity
 	public Guid UserId { get; set; }
 	public DateOnly JoinedAt { get; set; }
 	public PlanMemberStatus Status { get; set; }
+	public bool IsDelinquent { get; private set; }
 
 	private PlanMember(
 		Guid id,
@@ -18,7 +19,8 @@ public class PlanMember : Entity
 		Guid userId,
 		DateTime joinedAt,
 		string statusIdOrName,
-		DateTime createdAt)
+		DateTime createdAt,
+		bool isDelinquent = false)
 	{
 		Id = id;
 		PlanId = planId;
@@ -26,6 +28,7 @@ public class PlanMember : Entity
 		JoinedAt = DateOnly.FromDateTime(joinedAt);
 		Status = PlanMemberStatus.Get(statusIdOrName);
 		CreatedAt = createdAt;
+		IsDelinquent = isDelinquent;
 	}
 
 	private PlanMember(Guid planId, Guid userId)
@@ -67,7 +70,8 @@ public class PlanMember : Entity
 		Guid userId,
 		DateTime joinedAt,
 		string statusIdOrName,
-		DateTime createdAt)
+		DateTime createdAt,
+		bool isDelinquent = false)
 	{
 		if (id == Guid.Empty)
 			throw new ArgumentNullException(nameof(id), Messages.EnterPlanMemberId);
@@ -93,7 +97,13 @@ public class PlanMember : Entity
 			userId,
 			joinedAt,
 			statusIdOrName,
-			createdAt);
+			createdAt,
+			isDelinquent);
+	}
+
+	public void MarkAsDelinquent()
+	{
+		IsDelinquent = true;
 	}
 
 	public void MarkAsBlocked()

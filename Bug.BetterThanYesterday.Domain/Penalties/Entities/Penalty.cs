@@ -123,7 +123,26 @@ public sealed class Penalty : Entity
 		PaidAt = DateTime.Now;
 		PaymentMethod = paymentMethod;
 		ConfirmedByUserId = confirmedByUserId;
+		ExternalPaymentId = externalPaymentId ?? ExternalPaymentId;
+	}
+
+	public void AssignCharge(string externalPaymentId)
+	{
+		if (Status == PenaltyStatus.Paid)
+			throw new InvalidOperationException(Messages.PenaltyAlreadyPaid);
+
+		if (string.IsNullOrWhiteSpace(externalPaymentId))
+			throw new ArgumentException(Messages.EnterExternalPaymentId, nameof(externalPaymentId));
+
 		ExternalPaymentId = externalPaymentId;
+	}
+
+	public void Forgive()
+	{
+		if (Status != PenaltyStatus.Pending)
+			return;
+
+		Status = PenaltyStatus.Forgiven;
 	}
 
 	private static Guid GuidFromDayNumber(int dayNumber)

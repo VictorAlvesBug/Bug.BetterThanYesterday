@@ -54,4 +54,12 @@ public class PenaltyRepository(
 
 		return count > 0;
 	}
+
+	public async Task<Penalty?> GetByExternalPaymentIdAsync(string externalPaymentId)
+	{
+		var document = (await _collection.FindAsync(doc => doc.ExternalPaymentId == externalPaymentId))
+			.FirstOrDefault();
+
+		return document is null ? null : mapper.ToDomain(document);
+	}
 }

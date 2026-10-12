@@ -8,7 +8,7 @@ namespace Bug.BetterThanYesterday.Application.Plans;
 
 internal static class PlanMapper
 {
-	public static PlanModel ToModel(this Plan plan, Habit habit, User owner) => new()
+	public static PlanModel ToModel(this Plan plan, Habit habit, User owner, int? memberCount = null) => new()
 	{
 		Id = plan.Id,
 		OwnerId = plan.OwnerId,
@@ -18,7 +18,7 @@ internal static class PlanMapper
 		Description = plan.Description,
 		StartsAt = plan.StartsAt.ToDateTime(TimeOnly.MinValue),
 		EndsAt = plan.EndsAt.ToDateTime(TimeOnly.MinValue),
-		Status = plan.GetStatus().Name,
+		Status = (memberCount is null ? plan.GetStatus() : plan.GetStatus(memberCount.Value)).Name,
 		Type = plan.Type.Name,
 		DaysOffPerWeek = plan.DaysOffPerWeek,
 		PenaltyValue = plan.PenaltyValue,

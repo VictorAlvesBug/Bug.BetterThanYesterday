@@ -7,12 +7,15 @@ using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
+using Bug.BetterThanYesterday.Domain.PlanMembers;
+
 namespace Bug.BetterThanYesterday.Application.Plans.ListPlansByFilter;
 
 public class ListPlansByFilterUseCase(
 	IUserRepository userRepository,
 	IPlanRepository planRepository,
-	IHabitRepository habitRepository)
+	IHabitRepository habitRepository,
+	IPlanMemberRepository planMemberRepository)
 	: IUseCase<ListPlansByFilterCommand>
 {
 	public async Task<IResult> HandleAsync(ListPlansByFilterCommand command)
@@ -48,13 +51,24 @@ public class ListPlansByFilterUseCase(
 				//plans = await planRepository.ListByHabitIdAsync(command.HabitId.Value);
 			}
 
+			var members = await planMemberRepository.ListAllAsync();
+			var memberCountByPlanId = members
+				.GroupBy(member => member.PlanId)
+				.ToDictionary(group => group.Key, group => group.Count());
+
+			int MemberCount(Guid planId) =>
+				memberCountByPlanId.TryGetValue(planId, out var count) ? count : 0;
+
+			foreach (var plan in plans)
+				await PlanQuorumPostponer.PostponeWhileUnderQuorumAsync(plan, MemberCount(plan.Id), planRepository);
+
 			if (!string.IsNullOrEmpty(command.Status))
 			{
 				if (!PlanStatus.TryGet(command.Status, out var status, out var errorMessage))
 					return Result.Rejected(errorMessage ?? Messages.GenericError);
 
 				plans = plans
-					.Where(plan => plan.GetStatus() == status)
+					.Where(plan => plan.GetStatus(MemberCount(plan.Id)) == status)
 					.ToList();
 			}
 
@@ -81,7 +95,7 @@ public class ListPlansByFilterUseCase(
 			var tasks = plans.Select(async plan =>
 			{
 				var habit = await habitRepository.GetByIdAsync(plan.HabitId) ?? throw new Exception(Messages.HabitNotFound);
-				return plan.ToModel(habit, ownersById[plan.OwnerId]);
+				return plan.ToModel(habit, ownersById[plan.OwnerId], MemberCount(plan.Id));
 			}).ToList();
 
 			return Result.Success(
