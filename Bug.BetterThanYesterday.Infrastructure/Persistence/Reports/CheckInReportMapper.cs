@@ -9,7 +9,7 @@ internal sealed class CheckInReportMapper : IDocumentMapper<CheckInReport, Check
 	{
 		Id = report.Id,
 		CheckInId = report.CheckInId,
-		PlanId = report.PlanId,
+		ChallengeId = report.ChallengeId,
 		ReporterId = report.ReporterId,
 		TargetUserId = report.TargetUserId,
 		Reason = report.Reason,
@@ -20,7 +20,7 @@ internal sealed class CheckInReportMapper : IDocumentMapper<CheckInReport, Check
 		CheckInReport.Restore(
 			document.Id,
 			document.CheckInId,
-			document.PlanId,
+			document.ChallengeId,
 			document.ReporterId,
 			document.TargetUserId,
 			document.Reason,

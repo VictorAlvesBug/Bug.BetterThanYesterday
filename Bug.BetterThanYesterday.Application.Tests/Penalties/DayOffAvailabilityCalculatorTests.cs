@@ -1,5 +1,5 @@
 using Bug.BetterThanYesterday.Application.Penalties;
-using Bug.BetterThanYesterday.Domain.Plans.Entities;
+using Bug.BetterThanYesterday.Domain.Challenges.Entities;
 using Xunit;
 
 namespace Bug.BetterThanYesterday.Application.Tests.Penalties;
@@ -11,7 +11,7 @@ public class DayOffAvailabilityCalculatorTests
 	{
 		var monday = new DateOnly(2026, 10, 5);
 		var wednesday = monday.AddDays(2);
-		var plan = Plan.Restore(
+		var challenge = Challenge.Restore(
 			Guid.NewGuid(),
 			Guid.NewGuid(),
 			Guid.NewGuid(),
@@ -27,7 +27,7 @@ public class DayOffAvailabilityCalculatorTests
 		var checkIns = Array.Empty<Domain.CheckIns.Entities.CheckIn>();
 		var penalties = Array.Empty<Domain.Penalties.Entities.Penalty>();
 
-		Assert.True(DayOffAvailabilityCalculator.IsAutoRestDay(monday, monday, plan, checkIns, penalties));
-		Assert.False(DayOffAvailabilityCalculator.IsAutoRestDay(wednesday, monday, plan, checkIns, penalties));
+		Assert.True(DayOffAvailabilityCalculator.IsAutoRestDay(monday, monday, challenge, checkIns, penalties));
+		Assert.False(DayOffAvailabilityCalculator.IsAutoRestDay(wednesday, monday, challenge, checkIns, penalties));
 	}
 }

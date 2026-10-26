@@ -6,7 +6,7 @@ namespace Bug.BetterThanYesterday.Domain.Ledger.Entities;
 
 public sealed class LedgerEntry : Entity
 {
-	public Guid PlanId { get; private set; }
+	public Guid ChallengeId { get; private set; }
 	public Guid UserId { get; private set; }
 	public Guid? PenaltyId { get; private set; }
 	public DateOnly? Date { get; private set; }
@@ -16,27 +16,27 @@ public sealed class LedgerEntry : Entity
 	public string? ExternalPaymentId { get; private set; }
 
 	public static LedgerEntry CreateFinePaid(
-		Guid planId,
+		Guid challengeId,
 		Guid userId,
 		Guid penaltyId,
 		DateOnly date,
 		decimal amount) =>
-		Create(planId, userId, penaltyId, date, amount, LedgerKind.FinePaid, LedgerStatus.Recorded);
+		Create(challengeId, userId, penaltyId, date, amount, LedgerKind.FinePaid, LedgerStatus.Recorded);
 
-	public static LedgerEntry CreateSettlement(Guid planId, Guid userId, decimal amount) =>
-		Create(planId, userId, null, null, amount, LedgerKind.Settlement, LedgerStatus.Owed);
+	public static LedgerEntry CreateSettlement(Guid challengeId, Guid userId, decimal amount) =>
+		Create(challengeId, userId, null, null, amount, LedgerKind.Settlement, LedgerStatus.Owed);
 
 	public static LedgerEntry CreateRefund(
-		Guid planId,
+		Guid challengeId,
 		Guid userId,
 		Guid penaltyId,
 		DateOnly date,
 		decimal amount) =>
-		Create(planId, userId, penaltyId, date, amount, LedgerKind.Refund, LedgerStatus.Owed);
+		Create(challengeId, userId, penaltyId, date, amount, LedgerKind.Refund, LedgerStatus.Owed);
 
 	public static LedgerEntry Restore(
 		Guid id,
-		Guid planId,
+		Guid challengeId,
 		Guid userId,
 		Guid? penaltyId,
 		DateTime? date,
@@ -47,7 +47,7 @@ public sealed class LedgerEntry : Entity
 		DateTime createdAt)
 	{
 		var entry = Create(
-			planId,
+			challengeId,
 			userId,
 			penaltyId,
 			date is null ? null : DateOnly.FromDateTime(date.Value),
@@ -70,7 +70,7 @@ public sealed class LedgerEntry : Entity
 	}
 
 	private static LedgerEntry Create(
-		Guid planId,
+		Guid challengeId,
 		Guid userId,
 		Guid? penaltyId,
 		DateOnly? date,
@@ -78,8 +78,8 @@ public sealed class LedgerEntry : Entity
 		LedgerKind kind,
 		LedgerStatus status)
 	{
-		if (planId == Guid.Empty)
-			throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
+		if (challengeId == Guid.Empty)
+			throw new ArgumentNullException(nameof(challengeId), Messages.EnterChallengeId);
 
 		if (userId == Guid.Empty)
 			throw new ArgumentNullException(nameof(userId), Messages.EnterUserId);
@@ -90,7 +90,7 @@ public sealed class LedgerEntry : Entity
 		return new LedgerEntry
 		{
 			Id = Guid.NewGuid(),
-			PlanId = planId,
+			ChallengeId = challengeId,
 			UserId = userId,
 			PenaltyId = penaltyId,
 			Date = date,

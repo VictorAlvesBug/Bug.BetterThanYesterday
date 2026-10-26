@@ -1,4 +1,4 @@
-﻿using Bug.BetterThanYesterday.Domain.CheckIns;
+using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
 using MongoDB.Driver;
@@ -12,14 +12,14 @@ public class CheckInRepository(
 		collection,
 		mapper), ICheckInRepository
 {
-    public async Task<CheckIn> GetDetailsAsync(Guid planId, Guid userId, DateOnly date, int index = 0)
+    public async Task<CheckIn> GetDetailsAsync(Guid challengeId, Guid userId, DateOnly date, int index = 0)
     {
 		var dayStart = date.ToDateTime(TimeOnly.MinValue);
 		var dayEnd = date.ToDateTime(TimeOnly.MaxValue);
 
 		return mapper.ToDomain(
 			(await _collection.FindAsync(checkInDoc =>
-			checkInDoc.PlanId == planId
+			checkInDoc.ChallengeId == challengeId
 			&& checkInDoc.UserId == userId
 			&& checkInDoc.Date >= dayStart
 			&& checkInDoc.Date <= dayEnd
@@ -28,29 +28,29 @@ public class CheckInRepository(
 		);
     }
 
-	public async Task<List<CheckIn>> ListByPlanIdAsync(Guid planId)
+	public async Task<List<CheckIn>> ListByChallengeIdAsync(Guid challengeId)
 	{
-		return (await _collection.FindAsync(checkInDoc => checkInDoc.PlanId == planId))
+		return (await _collection.FindAsync(checkInDoc => checkInDoc.ChallengeId == challengeId))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
 	}
 
-	public async Task<List<CheckIn>> ListByPlanIdAndUserIdAsync(Guid planId, Guid userId)
+	public async Task<List<CheckIn>> ListByChallengeIdAndUserIdAsync(Guid challengeId, Guid userId)
 	{
 		return (await _collection.FindAsync(checkInDoc =>
-				checkInDoc.PlanId == planId 
+				checkInDoc.ChallengeId == challengeId 
 				&& checkInDoc.UserId == userId))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
 	}
 
-    public async Task<List<CheckIn>> ListByPlanIdAndUserIdAndDateAsync(Guid planId, Guid userId, DateOnly date)
+    public async Task<List<CheckIn>> ListByChallengeIdAndUserIdAndDateAsync(Guid challengeId, Guid userId, DateOnly date)
     {
 		var dayStart = date.ToDateTime(TimeOnly.MinValue);
 		var dayEnd = date.ToDateTime(TimeOnly.MaxValue);
 
 		return (await _collection.FindAsync(checkInDoc =>
-				checkInDoc.PlanId == planId 
+				checkInDoc.ChallengeId == challengeId 
 				&& checkInDoc.UserId == userId
 				&& checkInDoc.Date >= dayStart
 				&& checkInDoc.Date <= dayEnd))

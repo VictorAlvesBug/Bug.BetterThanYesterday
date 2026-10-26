@@ -4,11 +4,11 @@ using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
-using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
-using Bug.BetterThanYesterday.Domain.PlanMembers.ValueObjects;
-using Bug.BetterThanYesterday.Domain.Plans;
-using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.Entities;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Challenges;
+using Bug.BetterThanYesterday.Domain.Challenges.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
@@ -16,11 +16,11 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 
 public sealed class ReviewCheckInUseCase(
     ICheckInRepository checkInRepository,
-    IPlanRepository planRepository,
+    IChallengeRepository challengeRepository,
     IHabitRepository habitRepository,
     IUserRepository userRepository,
-    IPlanMemberRepository planMemberRepository,
-    IPlanCycleNotificationProcessor notificationProcessor)
+    IChallengeMemberRepository challengeMemberRepository,
+    IChallengeCycleNotificationProcessor notificationProcessor)
     : IUseCase<ReviewCheckInCommand>
 {
     public async Task<IResult> HandleAsync(ReviewCheckInCommand command)
@@ -44,31 +44,31 @@ public sealed class ReviewCheckInUseCase(
 			if (checkInOwner is null)
 				return Result.Rejected(Messages.CheckInOwnerNotFound, RejectionType.NotFound);
             
-            var plan = await planRepository.GetByIdAsync(checkIn.PlanId);
+            var challenge = await challengeRepository.GetByIdAsync(checkIn.ChallengeId);
 
-            if (plan is null)
-                return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
+            if (challenge is null)
+                return Result.Rejected(Messages.ChallengeNotFound, RejectionType.NotFound);
 
-            var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+            var habit = await habitRepository.GetByIdAsync(challenge.HabitId);
 
             if (habit is null)
 				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
-			var planMemberId = PlanMember.BuildId(
-				checkIn.PlanId,
+			var challengeMemberId = ChallengeMember.BuildId(
+				checkIn.ChallengeId,
 				command.ReviewerId
 			);
 
-			var planMember = await planMemberRepository.GetByIdAsync(planMemberId);
+			var challengeMember = await challengeMemberRepository.GetByIdAsync(challengeMemberId);
 
-			if (planMember is null)
-                return Result.Rejected(Messages.UserIsNotInThePlan, RejectionType.NotFound);
+			if (challengeMember is null)
+                return Result.Rejected(Messages.UserIsNotInTheChallenge, RejectionType.NotFound);
 
-            if (planMember.Status == PlanMemberStatus.Blocked)
-                return Result.Rejected(Messages.MemberIsBlockedInThePlan);
+            if (challengeMember.Status == ChallengeMemberStatus.Blocked)
+                return Result.Rejected(Messages.MemberIsBlockedInTheChallenge);
 
-            if (plan.GetStatus() != PlanStatus.Running)
-                return Result.Rejected(Messages.OnlyRunningPlansCanReceiveNewCheckIns);
+            if (challenge.GetStatus() != ChallengeStatus.Running)
+                return Result.Rejected(Messages.OnlyRunningChallengesCanReceiveNewCheckIns);
 
             if (!checkIn.IsReviewWindowOpen())
                 return Result.Rejected(Messages.CheckInReviewWindowHasAlreadyClosed);
@@ -92,7 +92,7 @@ public sealed class ReviewCheckInUseCase(
                     && rejections > activeReviews.Count / 2;
 
                 await notificationProcessor.NotifyCheckInReviewedAsync(
-                    plan.Id,
+                    challenge.Id,
                     checkIn.Id,
                     checkIn.UserId,
                     reviewer.Id,
@@ -106,7 +106,7 @@ public sealed class ReviewCheckInUseCase(
             }
 
             return Result.Success(
-                checkIn.ToModel(plan, habit, checkInOwner),
+                checkIn.ToModel(challenge, habit, checkInOwner),
                 Messages.CheckInSuccessfullyRegistered
             );
         }

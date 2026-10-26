@@ -1,181 +1,180 @@
 
-
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 
 namespace Bug.BetterThanYesterday.Domain.Strings;
 
 public static class Messages
 {
-    public const string GenericError = "Ops! Ocorreu um erro";
+    public const string GenericError = "Ops! Algo saiu do trilho";
 
     #region Admin Settings
-    public const string EnterDaysAmountToMoveInTime = "Defina uma quantidade de dias para viajar no tempo";
+    public const string EnterDaysAmountToMoveInTime = "Diz quantos dias você quer avançar no tempo";
     #endregion
 
     #region Check-In Messages
-    public const string CheckInNotFound = "Check-in não encontrado";
-    public const string CheckInSuccessfullyFound = "Check-in encontrado com sucesso";
-    public const string CheckInsSuccessfullyFound = "Check-ins encontrados com sucesso";
-    public const string CheckInSuccessfullyRegistered = "Check-in cadastrado com sucesso";
-    public const string EnterCheckInDate = "Informe a data do check-in";
-    public const string EnterCheckInId = "Informe o ID do Check-in";
-    public const string EnterCheckInIndex = "Informe o índice do check-in";
-    public const string EnterCheckInTitle = "Informe o título do check-in";
-    public const string EnterCheckInCreateDate = "Informe a data de criação do check-in";
-    public const string CheckInAlreadyExists = "Check-in já existe";
-    public const string PlanUserDateSuccessfullyFound = "Plano, usuário e data encontrados com sucesso";
-    public const string PlanUserSuccessfullyFound = "Plano e usuário encontrados com sucesso";
-    public const string OnlyRunningPlansCanReceiveNewCheckIns = "Apenas planos em execução podem receber novos check-ins";
-    public const string OnlyActiveMembersCanMakeCheckIns = "Apenas membros ativos podem fazer check-ins";
-    public const string CheckInDateMustBeTodayOrYesterday = "O check-in só pode ser de hoje ou de ontem";
-    public const string CheckInAlreadyReplaced = "Este check-in já foi substituído";
-    public const string CheckInReplacementWindowHasClosed = "A substituição só pode ser feita enquanto faltarem pelo menos 4 horas para o fim da avaliação";
-    public const string OnlyCheckInOwnerCanReplace = "Apenas o autor pode substituir o check-in";
-    public const string EnterReportReason = "Informe o motivo da denúncia";
-    public const string ReportSuccessfullyRegistered = "Denúncia registrada com sucesso";
-    public const string ReportsSuccessfullyFound = "Denúncias encontradas com sucesso";
-    public const string OnlyOwnerOrAdminCanSeeReports = "Apenas o dono do plano ou o administrador podem ver as denúncias";
-    public const string UserHasReachedTheMaximumNumberOfCheckInsForTheDay = "Você já marcou um check-in para este dia";
-    public const string EnterCheckInStatus = "Informe o status do check-ins";
-    public const string EnterCheckInPhotoUrl = "Informe o URL da foto de evidência";
+    public const string CheckInNotFound = "Esse check-in sumiu do mapa";
+    public const string CheckInSuccessfullyFound = "Check-in encontrado";
+    public const string CheckInsSuccessfullyFound = "Check-ins encontrados";
+    public const string CheckInSuccessfullyRegistered = "Check-in na conta. Sequência protegida!";
+    public const string EnterCheckInDate = "Escolhe o dia do check-in";
+    public const string EnterCheckInId = "Faltou o ID do check-in";
+    public const string EnterCheckInIndex = "Faltou o índice do check-in";
+    public const string EnterCheckInTitle = "Dá um título para o seu check-in";
+    public const string EnterCheckInCreateDate = "Faltou a data de criação do check-in";
+    public const string CheckInAlreadyExists = "Esse dia já tem check-in";
+    public const string ChallengeUserDateSuccessfullyFound = "Desafio, jogador e data encontrados";
+    public const string ChallengeUserSuccessfullyFound = "Desafio e jogador encontrados";
+    public const string OnlyRunningChallengesCanReceiveNewCheckIns = "Só dá para marcar check-in com o desafio em andamento";
+    public const string OnlyActiveMembersCanMakeCheckIns = "Só quem está na partida pode marcar check-in";
+    public const string CheckInDateMustBeTodayOrYesterday = "O check-in vale para hoje ou para ontem";
+    public const string CheckInAlreadyReplaced = "Esse check-in já foi substituído";
+    public const string CheckInReplacementWindowHasClosed = "A troca só vale enquanto faltarem pelo menos 4 horas para a avaliação acabar";
+    public const string OnlyCheckInOwnerCanReplace = "Só quem fez o check-in pode substituí-lo";
+    public const string EnterReportReason = "Conta o motivo da denúncia";
+    public const string ReportSuccessfullyRegistered = "Denúncia enviada. O dono e o admin já ficam sabendo";
+    public const string ReportsSuccessfullyFound = "Denúncias encontradas";
+    public const string OnlyOwnerOrAdminCanSeeReports = "Só o dono do desafio ou o admin da arena veem as denúncias";
+    public const string UserHasReachedTheMaximumNumberOfCheckInsForTheDay = "Esse dia já está marcado";
+    public const string EnterCheckInStatus = "Faltou o status do check-in";
+    public const string EnterCheckInPhotoUrl = "Faltou a foto da prova";
 
-    public const string DayOffSuccessfullyRegistered = "Folga registrada com sucesso";
-    public const string EnterDayOffDate = "Informe a data da folga";
-    public const string EnterDayOffId = "Informe o ID da folga";
-    public const string EnterDayOffCreateDate = "Informe a data de criação da folga";
-    public const string DayOffAlreadyExistsForDate = "Já existe uma folga registrada para esta data";
-    public const string NoDayOffAvailable = "Nenhuma folga disponível no período";
-    public const string OnlyRunningPlansCanReceiveDayOffs = "Apenas planos em execução permitem uso de folga";
-    public const string CheckInAlreadyExistsForDate = "Já existe um check-in registrado para esta data";
-    public const string DayOffDateCannotBeInTheFuture = "A data da folga não pode ser no futuro";
-    public const string DayOffDateOutsidePlanRange = "A data da folga está fora do período do plano";
-    public const string PlanRankingSuccessfullyFound = "Ranking do plano encontrado com sucesso";
-    public const string EnterReviewerId = "Informe o ID do avaliador";
-    public const string InvalidReviewStatus = "Status de avaliação inválido";
-    public const string InvalidReviewDate = "Data da avaliação inválida";
-    public const string ProvidePlanIdInOrderToUseAlsoOtherFilters = "Forneça o ID do plano para utilizar os demais filtros";
+    public const string DayOffSuccessfullyRegistered = "Folga usada. Descansa e volta mais forte";
+    public const string EnterDayOffDate = "Escolhe o dia da folga";
+    public const string EnterDayOffId = "Faltou o ID da folga";
+    public const string EnterDayOffCreateDate = "Faltou a data de criação da folga";
+    public const string DayOffAlreadyExistsForDate = "Esse dia já está de folga";
+    public const string NoDayOffAvailable = "Suas folgas da semana acabaram";
+    public const string OnlyRunningChallengesCanReceiveDayOffs = "Folga só vale com o desafio em andamento";
+    public const string CheckInAlreadyExistsForDate = "Esse dia já tem check-in";
+    public const string DayOffDateCannotBeInTheFuture = "Folga não vale para um dia que ainda não chegou";
+    public const string DayOffDateOutsideChallengeRange = "Essa data está fora do período do desafio";
+    public const string ChallengeRankingSuccessfullyFound = "Ranking do desafio na mesa";
+    public const string EnterReviewerId = "Faltou quem avaliou";
+    public const string InvalidReviewStatus = "Essa avaliação não vale";
+    public const string InvalidReviewDate = "A data da avaliação não vale";
+    public const string ProvideChallengeIdInOrderToUseAlsoOtherFilters = "Manda o ID do desafio para usar os outros filtros";
     #endregion
 
     #region Habit Messages
-    public const string EnterHabitCreationDate = "Informe a data de criação do hábito";
-    public const string EnterHabitId = "Informe o ID do hábito";
-    public const string EnterHabitName = "Informe o nome do hábito";
-    public const string HabitCannotBeRemovedAsItHasLinkedPlans = "Hábito não pode ser removido, pois possui planos vinculados";
-    public const string HabitNotFound = "Hábito não encontrado";
-    public const string HabitSuccessfullyDeleted = "Hábito deletado com sucesso";
-    public const string HabitSuccessfullyFound = "Hábito encontrado com sucesso";
-    public const string HabitsSuccessfullyFound = "Hábitos encontrados com sucesso";
-    public const string HabitSuccessfullyRegistered = "Hábito cadastrado com sucesso";
-    public const string HabitSuccessfullyUpdated = "Hábito atualizado com sucesso";
-    public const string ThereIsAlreadyAHabitRegisteredWithThatName = "Já existe um hábito cadastrado com esse nome";
+    public const string EnterHabitCreationDate = "Faltou a data de criação do hábito";
+    public const string EnterHabitId = "Faltou o ID do hábito";
+    public const string EnterHabitName = "Dá um nome para o hábito";
+    public const string HabitCannotBeRemovedAsItHasLinkedChallenges = "Esse hábito ainda está em um desafio";
+    public const string HabitNotFound = "Esse hábito sumiu do mapa";
+    public const string HabitSuccessfullyDeleted = "Hábito removido";
+    public const string HabitSuccessfullyFound = "Hábito encontrado";
+    public const string HabitsSuccessfullyFound = "Hábitos encontrados";
+    public const string HabitSuccessfullyRegistered = "Hábito criado. Bora transformar em desafio";
+    public const string HabitSuccessfullyUpdated = "Hábito atualizado";
+    public const string ThereIsAlreadyAHabitRegisteredWithThatName = "Já existe um hábito com esse nome";
     #endregion
 
-    #region Plan Messages
-    public const string EnterOwnerId = "Informe o ID do criador do plano";
-    public const string EnterPlanEndDate = "Informe a data final do plano";
-    public const string EnterPlanId = "Informe o ID do plano";
-    public const string EnterPlanCreationDate = "Informe a data de criação do plano";
-    public const string EnterPlanStatus = "Informe o status do plano";
-    public const string EnterPlanStartDate = "Informe a data inicial do plano";
-    public const string PlanHasNoMembers = "Plano não possui membros";
-    public const string PlanNotFound = "Plano não encontrado";
-    public const string EnterPlanType = "Informe o tipo de plano";
-    public const string EnterValidPlanType = "Informe um tipo de plano válido";
-    public const string EnterValidDaysOffPerWeek = "Informe uma quantidade de folgas semanas válida";
-    public const string EnterValidPenaltyValue = "Informe um valor de penalidade válido";
-    public const string EnterPenaltyId = "Informe o ID da multa";
-    public const string PenaltyNotFound = "Multa não encontrada";
-    public const string PenaltyAlreadyPaid = "Multa já foi paga";
-    public const string EnterExternalPaymentId = "Informe o identificador do pagamento";
-    public const string PixChargeSuccessfullyCreated = "Cobrança Pix criada com sucesso";
-    public const string PixPaymentConfirmed = "Pagamento Pix confirmado";
-    public const string OnlyPenaltyOwnerCanCreatePixCharge = "Apenas o membro da multa pode gerar a cobrança";
-    public const string NotificationsSuccessfullyFound = "Avisos encontrados com sucesso";
-    public const string PenaltySuccessfullyPaid = "Multa paga com sucesso";
-    public const string PenaltiesSuccessfullyFound = "Multas encontradas com sucesso";
-    public const string PlanStatusSuccessfullyUpdated = "Status do plano atualizado com sucesso";
-    public const string PlanSuccessfullyCancelled = "Plano cancelado com sucesso";
-    public const string PlanSuccessfullyFound = "Plano encontrado com sucesso";
-    public const string PlansSuccessfullyFound = "Planos encontrados com sucesso";
-    public const string PlanSuccessfullyRegistered = "Plano cadastrado com sucesso";
+    #region Challenge Messages
+    public const string EnterOwnerId = "Faltou quem cria o desafio";
+    public const string EnterChallengeEndDate = "Escolhe o dia em que o desafio termina";
+    public const string EnterChallengeId = "Faltou o ID do desafio";
+    public const string EnterChallengeCreationDate = "Faltou a data de criação do desafio";
+    public const string EnterChallengeStatus = "Faltou o status do desafio";
+    public const string EnterChallengeStartDate = "Escolhe o dia em que o desafio começa";
+    public const string ChallengeHasNoMembers = "Esse desafio ainda está sem jogadores";
+    public const string ChallengeNotFound = "Esse desafio sumiu do mapa";
+    public const string EnterChallengeType = "Escolhe se o desafio é público ou privado";
+    public const string EnterValidChallengeType = "Esse tipo de desafio não existe";
+    public const string EnterValidDaysOffPerWeek = "As folgas por semana precisam ficar entre 0 e 6";
+    public const string EnterValidPenaltyValue = "Escolhe um valor de multa que exista";
+    public const string EnterPenaltyId = "Faltou o ID da multa";
+    public const string PenaltyNotFound = "Essa multa sumiu do mapa";
+    public const string PenaltyAlreadyPaid = "Essa multa já foi paga";
+    public const string EnterExternalPaymentId = "Faltou o identificador do pagamento";
+    public const string PixChargeSuccessfullyCreated = "PIX gerado. Paga e segue no jogo";
+    public const string PixPaymentConfirmed = "PIX confirmado. Multa quitada!";
+    public const string OnlyPenaltyOwnerCanCreatePixCharge = "Só quem tomou a multa pode gerar o PIX";
+    public const string NotificationsSuccessfullyFound = "Avisos encontrados";
+    public const string PenaltySuccessfullyPaid = "Multa paga. De volta para o jogo";
+    public const string PenaltiesSuccessfullyFound = "Multas encontradas";
+    public const string ChallengeStatusSuccessfullyUpdated = "Status do desafio atualizado";
+    public const string ChallengeSuccessfullyCancelled = "Desafio cancelado. A arena fecha";
+    public const string ChallengeSuccessfullyFound = "Desafio encontrado";
+    public const string ChallengesSuccessfullyFound = "Desafios encontrados";
+    public const string ChallengeSuccessfullyRegistered = "Desafio criado. Chama a galera!";
     #endregion
 
-    #region Plan Member Messages
-    public const string EnterPlanMemberId = "Informe o ID do membro no plano";
-    public const string EnterPlanMemberJoinedDate = "Informe a data de inclusão do usuário no plano";
-    public const string OnlyNotStartedPlansCanReceiveNewMembers = "Apenas planos não iniciados podem receber novos membros";
-    public const string OnlyNotStartedPlansCanBeUpdated = "Apenas planos não iniciados podem ser alterados";
-    public const string PlanNeedsAtLeastTwoMembers = "O plano precisa de pelo menos dois membros para estar em andamento";
-    public const string MemberAlreadyAddedToThePlan = "Membro já adicionado ao plano";
-    public const string MemberSuccessfullyAddedToThePlan = "Membro adicionado ao plano com sucesso";
-    public const string MemberSuccessfullyReaddedToThePlan = "Membro readicionado ao plano com sucesso";
-    public const string MemberSuccessfullyBlocked = "Membro bloqueado com sucesso";
-    public const string MemberSuccessfullyUnblocked = "Membro desbloqueado com sucesso";
-    public const string MemberSuccessfullyRemovedFromThePlan = "Membro removido do plano com sucesso";
-    public const string PlanMemberNotFound = "Membro não encontrado no plano";
-    public const string PlanMemberStatusIdMustBeGreaterThanZero = "O ID do status do membro deve ser maior que zero";
-    public const string EnterPlanMemberCreateDate = "Informe a data de criação do membro do plano";
-    public const string PlanMemberSuccessfullyFound = "Membro do plano encontrado com sucesso";
-    public const string MemberAlreadyBlockedInThisPlan = "Este membro já está bloqueado neste plano";
-    public const string MemberCannotBeRemovedFromThePlanAsHeIsBlocked = "Este membro não pode ser removido do plano, pois está bloqueado";
-    public const string MemberCanOnlyBeBlockedInRunningPlans = "Membros só podem ser bloqueados em planos em andamento";
-    public const string MemberCanOnlyBeRemovedFromNotStartedOrRunningPlans = "Membros só podem ser removidos de planos não iniciados ou em andamento";
-    public const string MemberCanOnlyBeUnblockedInRunningPlans = "Membros só podem ser desbloqueados em planos em andamento";
-    public const string MemberHasAlreadyBeenOnThisPlanBefore = "Membro já esteve neste plano antes";
-    public const string MemberIsAlreadyBlockedInThePlan = "Membro já está bloqueado neste plano";
-    public const string MemberIsAlreadyActiveInThePlan = "Membro já está ativo neste plano";
-    public const string MemberIsBlockedInThePlan = "Membro está bloqueado neste plano";
-    public const string UserIsNotInThePlan = "Usuário não está no plano";
-    public const string UserHasNoPlans = "Usuário não possui planos";
+    #region Challenge Member Messages
+    public const string EnterChallengeMemberId = "Faltou o ID do jogador no desafio";
+    public const string EnterChallengeMemberJoinedDate = "Faltou a data de entrada no desafio";
+    public const string OnlyNotStartedChallengesCanReceiveNewMembers = "Só dá para entrar antes do desafio começar";
+    public const string OnlyNotStartedChallengesCanBeUpdated = "Só dá para mudar as datas antes do desafio começar";
+    public const string ChallengeNeedsAtLeastTwoMembers = "O desafio precisa de pelo menos dois jogadores para começar";
+    public const string MemberAlreadyAddedToTheChallenge = "Você já está nesse desafio";
+    public const string MemberSuccessfullyAddedToTheChallenge = "Você entrou no desafio. Bora!";
+    public const string MemberSuccessfullyReaddedToTheChallenge = "Você voltou para o desafio";
+    public const string MemberSuccessfullyBlocked = "Jogador bloqueado";
+    public const string MemberSuccessfullyUnblocked = "Jogador liberado";
+    public const string MemberSuccessfullyRemovedFromTheChallenge = "Você saiu do desafio";
+    public const string ChallengeMemberNotFound = "Esse jogador sumiu desse desafio";
+    public const string ChallengeMemberStatusIdMustBeGreaterThanZero = "O status do jogador precisa ser maior que zero";
+    public const string EnterChallengeMemberCreateDate = "Faltou a data de criação do jogador";
+    public const string ChallengeMemberSuccessfullyFound = "Jogador encontrado";
+    public const string MemberAlreadyBlockedInThisChallenge = "Esse jogador já está bloqueado";
+    public const string MemberCannotBeRemovedFromTheChallengeAsHeIsBlocked = "Jogador bloqueado não sai do desafio por aqui";
+    public const string MemberCanOnlyBeBlockedInRunningChallenges = "Só dá para bloquear com o desafio em andamento";
+    public const string MemberCanOnlyBeRemovedFromNotStartedOrRunningChallenges = "Só dá para sair de um desafio que ainda não terminou";
+    public const string MemberCanOnlyBeUnblockedInRunningChallenges = "Só dá para desbloquear com o desafio em andamento";
+    public const string MemberHasAlreadyBeenOnThisChallengeBefore = "Esse jogador já passou por esse desafio";
+    public const string MemberIsAlreadyBlockedInTheChallenge = "Esse jogador já está bloqueado";
+    public const string MemberIsAlreadyActiveInTheChallenge = "Esse jogador já está na partida";
+    public const string MemberIsBlockedInTheChallenge = "Você está bloqueado nesse desafio";
+    public const string UserIsNotInTheChallenge = "Você não está nesse desafio";
+    public const string UserHasNoChallenges = "Você ainda não entrou em nenhum desafio";
     #endregion
 
     #region User Messages
-    public const string UserEmailAlreadyRegistered = "E-mail já cadastrado para outro usuário";
-    public const string EnterUserEmail = "Informe seu e-mail";
-    public const string EnterUserId = "Informe o ID de usuário";
-    public const string EnterUserName = "Informe seu nome";
-    public const string EnterUserNameOrEmail = "Informe seu nome ou e-mail";
-    public const string EnterUserNickname = "Informe um nickname (apelido)";
-    public const string EnterUserPhoneNumber = "Informe seu número de celular";
-    public const string EnterValidUserPhoneNumber = "Informe um número de celular válido";
-    public const string EnterUserPixKey = "Informe sua chave PIX";
-    public const string EnterValidUserPixKey = "Informe uma chave PIX válida";
-    public const string EnterValidCpfTaxIdentification = "Informe um CPF válido";
-    public const string EnterValidCnpjTaxIdentification = "Informe um CNPJ válido";
-    public const string EnterValidTaxIdentification = "Informe um número de documento válido";
-    public const string EnterValidEVP = "Informe um endereço virtual de pagamento válido para a chave PIX";
-    public const string EnterUserPixKeyType = "Informe um tipo válido para a chave PIX";
-    public const string EnterUserCreationDate = "Informe a data de criação do usuário";
-    public const string EnterValidUserEmail = "Informe um e-mail válido para o usuário";
-	public const string UserNotFound = "Usuário não encontrado";
-	public const string CheckInOwnerNotFound = "Criador do check-in não encontrado";
-	public const string UserSuccessfullyDeleted = "Usuário deletado com sucesso";
-    public const string UserSuccessfullyFound = "Usuário encontrado com sucesso";
-    public const string UsersSuccessfullyFound = "Usuários encontrados com sucesso";
-    public const string UserSuccessfullyRegistered = "Usuário cadastrado com sucesso";
-    public const string UserSuccessfullyUpdated = "Usuário atualizado com sucesso";
+    public const string UserEmailAlreadyRegistered = "Esse e-mail já está no jogo";
+    public const string EnterUserEmail = "Informa seu e-mail";
+    public const string EnterUserId = "Faltou o ID do jogador";
+    public const string EnterUserName = "Informa seu nome";
+    public const string EnterUserNameOrEmail = "Informa seu nome ou e-mail";
+    public const string EnterUserNickname = "Escolhe um apelido para a arena";
+    public const string EnterUserPhoneNumber = "Informa seu celular";
+    public const string EnterValidUserPhoneNumber = "Esse celular não vale";
+    public const string EnterUserPixKey = "Informa sua chave PIX";
+    public const string EnterValidUserPixKey = "Essa chave PIX não vale";
+    public const string EnterValidCpfTaxIdentification = "Esse CPF não vale";
+    public const string EnterValidCnpjTaxIdentification = "Esse CNPJ não vale";
+    public const string EnterValidTaxIdentification = "Esse documento não vale";
+    public const string EnterValidEVP = "Essa chave aleatória do PIX não vale";
+    public const string EnterUserPixKeyType = "Escolhe o tipo da chave PIX";
+    public const string EnterUserCreationDate = "Faltou a data de criação";
+    public const string EnterValidUserEmail = "Esse e-mail não vale";
+	public const string UserNotFound = "Esse jogador sumiu do mapa";
+	public const string CheckInOwnerNotFound = "Quem fez o check-in sumiu do mapa";
+	public const string UserSuccessfullyDeleted = "Conta removida";
+    public const string UserSuccessfullyFound = "Jogador encontrado";
+    public const string UsersSuccessfullyFound = "Jogadores encontrados";
+    public const string UserSuccessfullyRegistered = "Conta criada. Bora para o primeiro desafio";
+    public const string UserSuccessfullyUpdated = "Perfil atualizado";
     #endregion
 
     #region Review CheckIn Messages
-    public const string CheckInReviewWindowHasAlreadyClosed = "O Período de revisão do check-in já foi encerrado";
-    public const string ReviewAlreadyMadeByUserForThisCheckIn = "Você já avaliou este check-in";
-    public const string ReviewerCannotReviewHisOwnCheckIn = "Você não pode avaliar seu próprio check-in";
+    public const string CheckInReviewWindowHasAlreadyClosed = "A janela de avaliação já fechou";
+    public const string ReviewAlreadyMadeByUserForThisCheckIn = "Você já deu o seu veredito nesse check-in";
+    public const string ReviewerCannotReviewHisOwnCheckIn = "Você não julga o próprio check-in";
 	#endregion
 
 	#region Other Messages
-	public const string ChangeNotMappedToCurrentStatus = "Alteração não mapeada para status atual";
-    public const string EndDateMustBeLaterThanStartDate = "Data final deve ser posterior à data inicial";
-    public const string OnlyValidGuidsCanBeCombined = "Apenas GUIDs válidos podem ser combinados";
-    public const string StartDateCannotBeEarlierThanToday = "Data de início não pode ser anterior a hoje";
-    public const string StartDateMustBeFromTomorrow = "A data de início deve ser a partir de amanhã";
-    public const string EnterPhoto = "Adicione uma foto";
-    public const string EnterValidPhoto = "Informe um caminho válido para a imagem";
+	public const string ChangeNotMappedToCurrentStatus = "Essa mudança não vale nesse status";
+    public const string EndDateMustBeLaterThanStartDate = "O fim precisa ser depois do começo";
+    public const string OnlyValidGuidsCanBeCombined = "Só identificadores válidos podem ser combinados";
+    public const string StartDateCannotBeEarlierThanToday = "O começo não pode ser antes de hoje";
+    public const string StartDateMustBeFromTomorrow = "O começo precisa ser a partir de amanhã";
+    public const string EnterPhoto = "Manda uma foto da prova";
+    public const string EnterValidPhoto = "Essa foto não vale";
     #endregion
 
     #region Upload Messages
-    public const string EnterUploadFileName = "Informe o nome do arquivo";
-    public const string EnterUploadContentType = "Informe o tipo do arquivo";
-    public const string AwsConfigNotConfigured = "Configuração AWS não encontrada";
-    public const string PresignedUploadUrlSuccessfullyGenerated = "URL de upload gerada com sucesso";
+    public const string EnterUploadFileName = "Faltou o nome do arquivo";
+    public const string EnterUploadContentType = "Faltou o tipo do arquivo";
+    public const string AwsConfigNotConfigured = "O cofre de fotos não está configurado";
+    public const string PresignedUploadUrlSuccessfullyGenerated = "Caminho da foto liberado";
     #endregion
 }

@@ -15,15 +15,15 @@ public static partial class AutoMockerExtensions
         mocker.Use(mockedValues.HabitRepository.Object);
         mocker.Use(mockedValues.Habits);
 
-        (mockedValues.PlanRepository, mockedValues.Plans) = PlanRepositoryMockFactory.Create();
-        mocker.Use(mockedValues.PlanRepository.Object);
-        mocker.Use(mockedValues.Plans);
+        (mockedValues.ChallengeRepository, mockedValues.Challenges) = ChallengeRepositoryMockFactory.Create();
+        mocker.Use(mockedValues.ChallengeRepository.Object);
+        mocker.Use(mockedValues.Challenges);
 
         (mockedValues.UserRepository, mockedValues.Users) = UserRepositoryMockFactory.Create();
         mocker.Use(mockedValues.UserRepository.Object);
         mocker.Use(mockedValues.Users);
 
-        var habitDeletionPolicy = new HabitDeletionPolicy(mockedValues.PlanRepository.Object);
+        var habitDeletionPolicy = new HabitDeletionPolicy(mockedValues.ChallengeRepository.Object);
         mocker.Use<IHabitDeletionPolicy>(habitDeletionPolicy);
 
         return mockedValues;

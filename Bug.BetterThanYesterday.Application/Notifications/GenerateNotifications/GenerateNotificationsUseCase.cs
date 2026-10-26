@@ -5,7 +5,7 @@ using Bug.BetterThanYesterday.Domain.Strings;
 namespace Bug.BetterThanYesterday.Application.Notifications.GenerateNotifications;
 
 public sealed class GenerateNotificationsUseCase(
-	IPlanCycleNotificationProcessor notificationProcessor,
+	IChallengeCycleNotificationProcessor notificationProcessor,
 	IUserNotificationRepository notificationRepository)
 	: IUseCase<GenerateNotificationsCommand>
 {
@@ -21,7 +21,7 @@ public sealed class GenerateNotificationsUseCase(
 				.Select(notification => new
 				{
 					notification.Id,
-					notification.PlanId,
+					notification.ChallengeId,
 					Kind = notification.Kind.Name,
 					notification.Message,
 					notification.Payload,

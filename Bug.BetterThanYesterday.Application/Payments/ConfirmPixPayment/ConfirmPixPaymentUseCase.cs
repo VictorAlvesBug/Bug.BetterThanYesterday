@@ -4,9 +4,9 @@ using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Ledger;
 using Bug.BetterThanYesterday.Domain.Penalties;
 using Bug.BetterThanYesterday.Domain.Penalties.ValueObjects;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
-using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
-using Bug.BetterThanYesterday.Domain.PlanMembers.ValueObjects;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.Entities;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Payments.ConfirmPixPayment;
@@ -14,7 +14,7 @@ namespace Bug.BetterThanYesterday.Application.Payments.ConfirmPixPayment;
 public sealed class ConfirmPixPaymentUseCase(
 	IPenaltyRepository penaltyRepository,
 	ILedgerRepository ledgerRepository,
-	IPlanMemberRepository planMemberRepository)
+	IChallengeMemberRepository challengeMemberRepository)
 	: IUseCase<ConfirmPixPaymentCommand>
 {
 	public async Task<IResult> HandleAsync(ConfirmPixPaymentCommand command)
@@ -33,22 +33,22 @@ public sealed class ConfirmPixPaymentUseCase(
 		}
 
 		await FinePaymentBook.RecordAsync(ledgerRepository, penalty);
-		await UnblockIfClearAsync(penalty.PlanId, penalty.UserId);
+		await UnblockIfClearAsync(penalty.ChallengeId, penalty.UserId);
 
 		return Result.Success(PenaltyMapper.ToModel(penalty), Messages.PixPaymentConfirmed);
 	}
 
-	private async Task UnblockIfClearAsync(Guid planId, Guid userId)
+	private async Task UnblockIfClearAsync(Guid challengeId, Guid userId)
 	{
-		if (await penaltyRepository.HasPendingPenaltiesAsync(planId, userId))
+		if (await penaltyRepository.HasPendingPenaltiesAsync(challengeId, userId))
 			return;
 
-		var planMember = await planMemberRepository.GetByIdAsync(PlanMember.BuildId(planId, userId));
+		var challengeMember = await challengeMemberRepository.GetByIdAsync(ChallengeMember.BuildId(challengeId, userId));
 
-		if (planMember is null || planMember.Status != PlanMemberStatus.Blocked)
+		if (challengeMember is null || challengeMember.Status != ChallengeMemberStatus.Blocked)
 			return;
 
-		planMember.MarkAsActive();
-		await planMemberRepository.UpdateAsync(planMember);
+		challengeMember.MarkAsActive();
+		await challengeMemberRepository.UpdateAsync(challengeMember);
 	}
 }

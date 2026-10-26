@@ -7,7 +7,7 @@ namespace Bug.BetterThanYesterday.Domain.Notifications.Entities;
 public sealed class UserNotification : Entity
 {
 	public Guid UserId { get; private set; }
-	public Guid PlanId { get; private set; }
+	public Guid ChallengeId { get; private set; }
 	public Guid? RelatedUserId { get; private set; }
 	public DateOnly Day { get; private set; }
 	public NotificationKind Kind { get; private set; } = null!;
@@ -25,8 +25,8 @@ public sealed class UserNotification : Entity
 		if (userId == Guid.Empty)
 			throw new ArgumentNullException(nameof(userId), Messages.EnterUserId);
 
-		if (payload is null || payload.PlanId == Guid.Empty)
-			throw new ArgumentNullException(nameof(payload), Messages.EnterPlanId);
+		if (payload is null || payload.ChallengeId == Guid.Empty)
+			throw new ArgumentNullException(nameof(payload), Messages.EnterChallengeId);
 
 		if (string.IsNullOrWhiteSpace(message))
 			throw new ArgumentException(Messages.GenericError, nameof(message));
@@ -35,7 +35,7 @@ public sealed class UserNotification : Entity
 		{
 			Id = Guid.NewGuid(),
 			UserId = userId,
-			PlanId = payload.PlanId,
+			ChallengeId = payload.ChallengeId,
 			RelatedUserId = relatedUserId,
 			Day = day,
 			Kind = kind,
@@ -48,7 +48,7 @@ public sealed class UserNotification : Entity
 	public static UserNotification Restore(
 		Guid id,
 		Guid userId,
-		Guid planId,
+		Guid challengeId,
 		Guid? relatedUserId,
 		DateTime day,
 		string kind,
@@ -58,7 +58,7 @@ public sealed class UserNotification : Entity
 	{
 		Id = id,
 		UserId = userId,
-		PlanId = planId,
+		ChallengeId = challengeId,
 		RelatedUserId = relatedUserId,
 		Day = DateOnly.FromDateTime(day),
 		Kind = NotificationKind.Get(kind),

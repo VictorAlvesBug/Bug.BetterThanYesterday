@@ -8,7 +8,7 @@ internal sealed class PenaltyMapper : IDocumentMapper<Penalty, PenaltyDocument>
 	public PenaltyDocument ToDocument(Penalty penalty) => new()
 	{
 		Id = penalty.Id,
-		PlanId = penalty.PlanId,
+		ChallengeId = penalty.ChallengeId,
 		UserId = penalty.UserId,
 		Date = penalty.Date.ToDateTime(TimeOnly.MinValue),
 		Amount = penalty.Amount,
@@ -24,7 +24,7 @@ internal sealed class PenaltyMapper : IDocumentMapper<Penalty, PenaltyDocument>
 	public Penalty ToDomain(PenaltyDocument document) =>
 		Penalty.Restore(
 			document.Id,
-			document.PlanId,
+			document.ChallengeId,
 			document.UserId,
 			DateOnly.FromDateTime(document.Date),
 			document.Amount,

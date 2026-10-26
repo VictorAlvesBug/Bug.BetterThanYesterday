@@ -10,9 +10,9 @@ public class CheckInReportRepository(
 	IDocumentMapper<CheckInReport, CheckInReportDocument> mapper)
 	: Repository<CheckInReport, CheckInReportDocument>(collection, mapper), ICheckInReportRepository
 {
-	public async Task<List<CheckInReport>> ListByPlanIdAsync(Guid planId)
+	public async Task<List<CheckInReport>> ListByChallengeIdAsync(Guid challengeId)
 	{
-		return (await _collection.FindAsync(doc => doc.PlanId == planId))
+		return (await _collection.FindAsync(doc => doc.ChallengeId == challengeId))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
 	}

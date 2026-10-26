@@ -13,17 +13,17 @@ public static partial class AutoMockerExtensions
         mocker.Use(mockedValues.CheckInRepository.Object);
         mocker.Use(mockedValues.CheckIns);
 
-        (mockedValues.PlanMemberRepository, mockedValues.PlanMembers) = PlanMemberRepositoryMockFactory.Create();
-        mocker.Use(mockedValues.PlanMemberRepository.Object);
-        mocker.Use(mockedValues.PlanMembers);
+        (mockedValues.ChallengeMemberRepository, mockedValues.ChallengeMembers) = ChallengeMemberRepositoryMockFactory.Create();
+        mocker.Use(mockedValues.ChallengeMemberRepository.Object);
+        mocker.Use(mockedValues.ChallengeMembers);
 
         (mockedValues.HabitRepository, mockedValues.Habits) = HabitRepositoryMockFactory.Create();
         mocker.Use(mockedValues.HabitRepository.Object);
         mocker.Use(mockedValues.Habits);
 
-        (mockedValues.PlanRepository, mockedValues.Plans) = PlanRepositoryMockFactory.Create();
-        mocker.Use(mockedValues.PlanRepository.Object);
-        mocker.Use(mockedValues.Plans);
+        (mockedValues.ChallengeRepository, mockedValues.Challenges) = ChallengeRepositoryMockFactory.Create();
+        mocker.Use(mockedValues.ChallengeRepository.Object);
+        mocker.Use(mockedValues.Challenges);
 
         (mockedValues.UserRepository, mockedValues.Users) = UserRepositoryMockFactory.Create();
         mocker.Use(mockedValues.UserRepository.Object);

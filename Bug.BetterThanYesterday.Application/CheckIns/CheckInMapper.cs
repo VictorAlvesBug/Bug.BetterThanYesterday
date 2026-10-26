@@ -1,9 +1,9 @@
-﻿using Bug.BetterThanYesterday.Application.CheckIns.Models;
+using Bug.BetterThanYesterday.Application.CheckIns.Models;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
-using Bug.BetterThanYesterday.Domain.Plans;
-using Bug.BetterThanYesterday.Domain.Plans.Entities;
+using Bug.BetterThanYesterday.Domain.Challenges;
+using Bug.BetterThanYesterday.Domain.Challenges.Entities;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
@@ -14,13 +14,13 @@ internal static class CheckInMapper
 {
 	public static CheckInModel ToModel(
 		this CheckIn checkIn,
-		Plan plan,
+		Challenge challenge,
 		Habit habit,
 		User user) => new()
 		{
 			Id = checkIn.Id,
-			PlanId = checkIn.PlanId,
-			PlanName = plan.Description ?? habit.Name,
+			ChallengeId = checkIn.ChallengeId,
+			ChallengeName = challenge.Description ?? habit.Name,
 			UserId = checkIn.UserId,
 			UserName = user.Nickname,
 			UserPhotoUrl = user.Photo?.Value,
@@ -37,17 +37,17 @@ internal static class CheckInMapper
 
 	public static async Task<CheckInModel> ToModelAsync(
 		this CheckIn checkIn,
-		IPlanRepository planRepository,
+		IChallengeRepository challengeRepository,
 		IHabitRepository habitRepository,
 		IUserRepository userRepository
 	)
 	{
-		var plan = await planRepository.GetByIdAsync(checkIn.PlanId);
+		var challenge = await challengeRepository.GetByIdAsync(checkIn.ChallengeId);
 
-        if (plan is null)
-            throw new Exception(Messages.PlanNotFound);
+        if (challenge is null)
+            throw new Exception(Messages.ChallengeNotFound);
 
-        var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+        var habit = await habitRepository.GetByIdAsync(challenge.HabitId);
 
         if (habit is null)
             throw new Exception(Messages.HabitNotFound);
@@ -57,6 +57,6 @@ internal static class CheckInMapper
         if (user is null)
             throw new Exception(Messages.UserNotFound);
 
-		return checkIn.ToModel(plan, habit, user);
+		return checkIn.ToModel(challenge, habit, user);
 	}
 }

@@ -6,14 +6,14 @@ namespace Bug.BetterThanYesterday.Domain.Reports.Entities;
 public sealed class CheckInReport : Entity
 {
 	public Guid CheckInId { get; set; }
-	public Guid PlanId { get; set; }
+	public Guid ChallengeId { get; set; }
 	public Guid ReporterId { get; set; }
 	public Guid TargetUserId { get; set; }
 	public string Reason { get; set; } = string.Empty;
 
 	public static CheckInReport CreateNew(
 		Guid checkInId,
-		Guid planId,
+		Guid challengeId,
 		Guid reporterId,
 		Guid targetUserId,
 		string reason)
@@ -21,8 +21,8 @@ public sealed class CheckInReport : Entity
 		if (checkInId == Guid.Empty)
 			throw new ArgumentNullException(nameof(checkInId), Messages.EnterCheckInId);
 
-		if (planId == Guid.Empty)
-			throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
+		if (challengeId == Guid.Empty)
+			throw new ArgumentNullException(nameof(challengeId), Messages.EnterChallengeId);
 
 		if (reporterId == Guid.Empty)
 			throw new ArgumentNullException(nameof(reporterId), Messages.EnterUserId);
@@ -34,7 +34,7 @@ public sealed class CheckInReport : Entity
 		{
 			Id = Guid.NewGuid(),
 			CheckInId = checkInId,
-			PlanId = planId,
+			ChallengeId = challengeId,
 			ReporterId = reporterId,
 			TargetUserId = targetUserId,
 			Reason = reason.Trim(),
@@ -45,7 +45,7 @@ public sealed class CheckInReport : Entity
 	public static CheckInReport Restore(
 		Guid id,
 		Guid checkInId,
-		Guid planId,
+		Guid challengeId,
 		Guid reporterId,
 		Guid targetUserId,
 		string reason,
@@ -53,7 +53,7 @@ public sealed class CheckInReport : Entity
 	{
 		Id = id,
 		CheckInId = checkInId,
-		PlanId = planId,
+		ChallengeId = challengeId,
 		ReporterId = reporterId,
 		TargetUserId = targetUserId,
 		Reason = reason,

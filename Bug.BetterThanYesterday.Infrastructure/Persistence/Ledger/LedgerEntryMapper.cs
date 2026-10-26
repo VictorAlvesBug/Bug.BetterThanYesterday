@@ -8,7 +8,7 @@ internal sealed class LedgerEntryMapper : IDocumentMapper<LedgerEntry, LedgerEnt
 	public LedgerEntryDocument ToDocument(LedgerEntry entry) => new()
 	{
 		Id = entry.Id,
-		PlanId = entry.PlanId,
+		ChallengeId = entry.ChallengeId,
 		UserId = entry.UserId,
 		PenaltyId = entry.PenaltyId,
 		Date = entry.Date?.ToDateTime(TimeOnly.MinValue),
@@ -22,7 +22,7 @@ internal sealed class LedgerEntryMapper : IDocumentMapper<LedgerEntry, LedgerEnt
 	public LedgerEntry ToDomain(LedgerEntryDocument document) =>
 		LedgerEntry.Restore(
 			document.Id,
-			document.PlanId,
+			document.ChallengeId,
 			document.UserId,
 			document.PenaltyId,
 			document.Date,

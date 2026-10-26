@@ -5,5 +5,5 @@ namespace Bug.BetterThanYesterday.Domain.Ledger;
 
 public interface ILedgerRepository : IRepository<LedgerEntry>
 {
-	Task<List<LedgerEntry>> ListByPlanIdAsync(Guid planId);
+	Task<List<LedgerEntry>> ListByChallengeIdAsync(Guid challengeId);
 }

@@ -1,7 +1,7 @@
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Penalties.Entities;
-using Bug.BetterThanYesterday.Domain.Plans.Entities;
+using Bug.BetterThanYesterday.Domain.Challenges.Entities;
 
 namespace Bug.BetterThanYesterday.Application.Penalties;
 
@@ -43,7 +43,7 @@ public static class DayOffAvailabilityCalculator
 	public static int CountAutoRestDaysBeforeDay(
 		DateOnly day,
 		DateOnly memberJoinedAt,
-		Plan plan,
+		Challenge challenge,
 		IReadOnlyList<CheckIn> memberCheckIns,
 		IReadOnlyList<Penalty> memberPenalties)
 	{
@@ -54,7 +54,7 @@ public static class DayOffAvailabilityCalculator
         for (var cursor = windowStart; cursor < day; cursor = cursor.AddDays(1))
 		{
 			// Pula dias fora do plano
-			if (cursor < plan.StartsAt || cursor < memberJoinedAt)
+			if (cursor < challenge.StartsAt || cursor < memberJoinedAt)
 				continue;
 
 			// Pula dias com multa
@@ -70,7 +70,7 @@ public static class DayOffAvailabilityCalculator
 	}
 
 	public static int GetDaysOffAvailable(
-		Plan plan,
+		Challenge challenge,
 		DateOnly memberJoinedAt,
 		DateOnly referenceDate,
 		IReadOnlyList<CheckIn> memberCheckIns,
@@ -79,21 +79,21 @@ public static class DayOffAvailabilityCalculator
 		var autoRestUsed = CountAutoRestDaysBeforeDay(
 			referenceDate,
 			memberJoinedAt,
-			plan,
+			challenge,
 			memberCheckIns,
 			memberPenalties);
 
-		return Math.Max(0, plan.DaysOffPerWeek - autoRestUsed);
+		return Math.Max(0, challenge.DaysOffPerWeek - autoRestUsed);
 	}
 
 	public static bool IsAutoRestDay(
 		DateOnly day,
 		DateOnly memberJoinedAt,
-		Plan plan,
+		Challenge challenge,
 		IReadOnlyList<CheckIn> memberCheckIns,
 		IReadOnlyList<Penalty> memberPenalties)
 	{
-		if (day < plan.StartsAt || day < memberJoinedAt)
+		if (day < challenge.StartsAt || day < memberJoinedAt)
 			return false;
 
 		if (memberPenalties.Any(p => p.Date == day))
@@ -105,10 +105,10 @@ public static class DayOffAvailabilityCalculator
 		var autoRestsBeforeDay = CountAutoRestDaysBeforeDay(
 			day,
 			memberJoinedAt,
-			plan,
+			challenge,
 			memberCheckIns,
 			memberPenalties);
 
-		return autoRestsBeforeDay < plan.DaysOffPerWeek;
+		return autoRestsBeforeDay < challenge.DaysOffPerWeek;
 	}
 }

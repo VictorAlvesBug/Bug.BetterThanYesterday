@@ -7,7 +7,7 @@ namespace Bug.BetterThanYesterday.Infrastructure.Persistence.Penalties;
 public class PenaltyDocument : Document
 {
 	[BsonRepresentation(BsonType.String)]
-	public Guid PlanId { get; set; }
+	public Guid ChallengeId { get; set; }
 
 	[BsonRepresentation(BsonType.String)]
 	public Guid UserId { get; set; }

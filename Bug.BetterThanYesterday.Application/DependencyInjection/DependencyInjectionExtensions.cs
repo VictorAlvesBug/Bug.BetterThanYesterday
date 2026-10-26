@@ -1,4 +1,4 @@
-﻿using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
+using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
 using Bug.BetterThanYesterday.Application.Ledger;
 using Bug.BetterThanYesterday.Application.Notifications;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
@@ -36,9 +36,9 @@ public static class DependencyInjectionExtensions
 	private static IServiceCollection AddPolicies(this IServiceCollection services)
 	{
 		services.AddScoped<IHabitDeletionPolicy, HabitDeletionPolicy>();
-		services.AddScoped<IPlanDayClosureProcessor, PlanDayClosureProcessor>();
-		services.AddScoped<IPlanFinancesProcessor, PlanFinancesProcessor>();
-		services.AddScoped<IPlanCycleNotificationProcessor, PlanCycleNotificationProcessor>();
+		services.AddScoped<IChallengeDayClosureProcessor, ChallengeDayClosureProcessor>();
+		services.AddScoped<IChallengeFinancesProcessor, ChallengeFinancesProcessor>();
+		services.AddScoped<IChallengeCycleNotificationProcessor, ChallengeCycleNotificationProcessor>();
 
 		return services;
 	}

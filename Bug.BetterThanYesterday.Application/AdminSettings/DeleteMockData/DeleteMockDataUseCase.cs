@@ -1,7 +1,7 @@
-﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.Plans;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
+using Bug.BetterThanYesterday.Domain.Challenges;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Application.Mocks;
@@ -13,8 +13,8 @@ namespace Bug.BetterThanYesterday.Application.AdminSettings.DeleteMockData;
 public sealed class DeleteMockDataUseCase(
 	ICheckInRepository checkInRepository,
 	IHabitRepository habitRepository,
-	IPlanMemberRepository planMemberRepository,
-	IPlanRepository planRepository,
+	IChallengeMemberRepository challengeMemberRepository,
+	IChallengeRepository challengeRepository,
 	IUserRepository userRepository
 )
 	: IUseCase<DeleteMockDataCommand>
@@ -29,8 +29,8 @@ public sealed class DeleteMockDataUseCase(
 			{
 				habitRepository.DeleteAllAsync(),
 				userRepository.DeleteAllAsync(),
-				planRepository.DeleteAllAsync(),
-				planMemberRepository.DeleteAllAsync(),
+				challengeRepository.DeleteAllAsync(),
+				challengeMemberRepository.DeleteAllAsync(),
 				checkInRepository.DeleteAllAsync(),
 			};
 

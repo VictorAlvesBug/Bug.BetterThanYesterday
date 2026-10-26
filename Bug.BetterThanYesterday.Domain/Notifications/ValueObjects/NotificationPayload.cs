@@ -9,27 +9,27 @@ namespace Bug.BetterThanYesterday.Domain.Notifications.ValueObjects;
 [JsonDerivedType(typeof(CheckInReportedPayload), "CheckInReported")]
 [JsonDerivedType(typeof(RestAtRiskPayload), "RestAtRisk")]
 [JsonDerivedType(typeof(FineAtRiskPayload), "FineAtRisk")]
-[JsonDerivedType(typeof(PlanStartsTodayPayload), "PlanStartsToday")]
-[JsonDerivedType(typeof(PlanCancelledForQuorumPayload), "PlanCancelledForQuorum")]
+[JsonDerivedType(typeof(ChallengeStartsTodayPayload), "ChallengeStartsToday")]
+[JsonDerivedType(typeof(ChallengeCancelledForQuorumPayload), "ChallengeCancelledForQuorum")]
 public abstract class NotificationPayload
 {
-	public Guid PlanId { get; init; }
+	public Guid ChallengeId { get; init; }
 
-	public static NotificationPayload ForPlan(NotificationKind kind, Guid planId)
+	public static NotificationPayload ForChallenge(NotificationKind kind, Guid challengeId)
 	{
 		if (kind == NotificationKind.RestAtRisk)
-			return new RestAtRiskPayload { PlanId = planId };
+			return new RestAtRiskPayload { ChallengeId = challengeId };
 
 		if (kind == NotificationKind.FineAtRisk)
-			return new FineAtRiskPayload { PlanId = planId };
+			return new FineAtRiskPayload { ChallengeId = challengeId };
 
-		if (kind == NotificationKind.PlanStartsToday)
-			return new PlanStartsTodayPayload { PlanId = planId };
+		if (kind == NotificationKind.ChallengeStartsToday)
+			return new ChallengeStartsTodayPayload { ChallengeId = challengeId };
 
-		if (kind == NotificationKind.PlanCancelledForQuorum)
-			return new PlanCancelledForQuorumPayload { PlanId = planId };
+		if (kind == NotificationKind.ChallengeCancelledForQuorum)
+			return new ChallengeCancelledForQuorumPayload { ChallengeId = challengeId };
 
-		return new PlanStartsTodayPayload { PlanId = planId };
+		return new ChallengeStartsTodayPayload { ChallengeId = challengeId };
 	}
 
 	public Guid? ReadCheckInId() => this switch
@@ -70,6 +70,6 @@ public sealed class RestAtRiskPayload : NotificationPayload;
 
 public sealed class FineAtRiskPayload : NotificationPayload;
 
-public sealed class PlanStartsTodayPayload : NotificationPayload;
+public sealed class ChallengeStartsTodayPayload : NotificationPayload;
 
-public sealed class PlanCancelledForQuorumPayload : NotificationPayload;
+public sealed class ChallengeCancelledForQuorumPayload : NotificationPayload;

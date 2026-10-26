@@ -6,27 +6,27 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.GetCheckInDetails;
 public class GetCheckInDetailsCommand : ICommand
 {
     public GetCheckInDetailsCommand(
-        Guid planId,
+        Guid challengeId,
         Guid userId,
         DateTime date,
         int index
     )
     {
-        PlanId = planId;
+        ChallengeId = challengeId;
         UserId = userId;
         Date = date;
         Index = index;
     }
     
-    public Guid PlanId { get; init; }
+    public Guid ChallengeId { get; init; }
     public Guid UserId { get; init; }
     public DateTime Date { get; init; }
     public int Index { get; init; }
     
     public void Validate()
     {
-        if (PlanId == Guid.Empty)
-            throw new ArgumentNullException(nameof(PlanId), Messages.PlanNotFound);
+        if (ChallengeId == Guid.Empty)
+            throw new ArgumentNullException(nameof(ChallengeId), Messages.ChallengeNotFound);
             
         if (UserId == Guid.Empty)
             throw new ArgumentNullException(nameof(UserId), Messages.UserNotFound);

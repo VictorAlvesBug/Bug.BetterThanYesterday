@@ -1,4 +1,4 @@
-﻿using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
+using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
 
@@ -9,7 +9,7 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 	public CheckInDocument ToDocument(CheckIn checkIn) => new()
 	{
 		Id = checkIn.Id,
-		PlanId = checkIn.PlanId,
+		ChallengeId = checkIn.ChallengeId,
 		UserId = checkIn.UserId,
 		Date = checkIn.Date,
 		Index = checkIn.Index,
@@ -43,7 +43,7 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 
 		return CheckIn.Restore(
 		document.Id,
-		document.PlanId,
+		document.ChallengeId,
 		document.UserId,
 		document.Date,
 		document.Index,

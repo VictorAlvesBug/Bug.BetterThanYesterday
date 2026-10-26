@@ -10,7 +10,7 @@ public class CheckInReportDocument : Document
 	public Guid CheckInId { get; set; }
 
 	[BsonRepresentation(BsonType.String)]
-	public Guid PlanId { get; set; }
+	public Guid ChallengeId { get; set; }
 
 	[BsonRepresentation(BsonType.String)]
 	public Guid ReporterId { get; set; }

@@ -3,8 +3,8 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.Models;
 public class CheckInModel
 {
     public required Guid Id { get; set; }
-    public required Guid PlanId { get; set; }
-    public required string PlanName { get; set; }
+    public required Guid ChallengeId { get; set; }
+    public required string ChallengeName { get; set; }
     public required Guid UserId { get; set; }
     public required string UserName { get; set; }
     public string? UserPhotoUrl { get; set; }

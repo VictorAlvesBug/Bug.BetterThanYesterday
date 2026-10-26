@@ -15,11 +15,11 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
     {
         // Arrange
         var useCase = _mocker.CreateInstance<GetCheckInDetailsUseCase>();
-        var firstPlan = _mock.Plans[0];
+        var firstChallenge = _mock.Challenges[0];
         var firstUser = _mock.Users[0];
-        var firstCheckIn = _mock.CheckIns.First(x => x.PlanId == firstPlan.Id && x.UserId == firstUser.Id);
+        var firstCheckIn = _mock.CheckIns.First(x => x.ChallengeId == firstChallenge.Id && x.UserId == firstUser.Id);
         var command = new GetCheckInDetailsCommand(
-            firstPlan.Id,
+            firstChallenge.Id,
             firstUser.Id,
             firstCheckIn.Date,
             firstCheckIn.Index
@@ -35,20 +35,20 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
 
 		var resultData = Assert.IsType<Result<CheckInModel>>(result).Data;
         Assert.Equal(firstCheckIn.Id, resultData.Id);
-        Assert.Equal(firstCheckIn.PlanId, resultData.PlanId);
+        Assert.Equal(firstCheckIn.ChallengeId, resultData.ChallengeId);
         Assert.Equal(firstCheckIn.UserId, resultData.UserId);
         Assert.Equal(firstCheckIn.Date, resultData.Date);
         Assert.Equal(firstCheckIn.Index, resultData.Index);
         Assert.Equal(firstCheckIn.Title, resultData.Title);
         Assert.Equal(firstCheckIn.PhotoUrl, resultData.EvidencePhotoUrl);
 
-        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.ChallengeRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.CheckInRepository.Verify(x => x.GetDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
-    public async Task Test_GetCheckInDetailsUseCase_PlanNotFound_ShouldReturnRejected()
+    public async Task Test_GetCheckInDetailsUseCase_ChallengeNotFound_ShouldReturnRejected()
     {
         // Arrange
         var useCase = _mocker.CreateInstance<GetCheckInDetailsUseCase>();
@@ -66,9 +66,9 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         // Assert
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
-        Assert.Equal(Messages.PlanNotFound, result.GetMessage());
+        Assert.Equal(Messages.ChallengeNotFound, result.GetMessage());
 
-        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.ChallengeRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
         _mock.CheckInRepository.Verify(x => x.GetDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<int>()), Times.Never);
     }
@@ -78,9 +78,9 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
     {
         // Arrange
         var useCase = _mocker.CreateInstance<GetCheckInDetailsUseCase>();
-        var firstPlan = _mock.Plans[0];
+        var firstChallenge = _mock.Challenges[0];
         var command = new GetCheckInDetailsCommand(
-            firstPlan.Id,
+            firstChallenge.Id,
             Guid.NewGuid(),
             DateTime.Today,
             0
@@ -94,7 +94,7 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.UserNotFound, result.GetMessage());
 
-        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.ChallengeRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.CheckInRepository.Verify(x => x.GetDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<int>()), Times.Never);
     }
@@ -104,10 +104,10 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
     {
         // Arrange
         var useCase = _mocker.CreateInstance<GetCheckInDetailsUseCase>();
-        var firstPlan = _mock.Plans[0];
+        var firstChallenge = _mock.Challenges[0];
         var firstUser = _mock.Users[0];
         var command = new GetCheckInDetailsCommand(
-            firstPlan.Id,
+            firstChallenge.Id,
             firstUser.Id,
             DateTime.Today.AddYears(1),
             999
@@ -121,7 +121,7 @@ public class GetCheckInDetailsUseCaseTests : BaseCheckInUseCaseTests
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.CheckInNotFound, result.GetMessage());
 
-        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.ChallengeRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.CheckInRepository.Verify(x => x.GetDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<int>()), Times.Once);
     }

@@ -1,10 +1,10 @@
-﻿using Bug.BetterThanYesterday.API.Tests.Commons;
+using Bug.BetterThanYesterday.API.Tests.Commons;
 using Bug.BetterThanYesterday.Application.DependencyInjection;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.Configurations;
 using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
-using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers;
+using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Users;
 using Bug.BetterThanYesterday.Infrastructure.Configurations;
 using Bug.BetterThanYesterday.Infrastructure.DependencyInjection;
@@ -23,8 +23,8 @@ namespace Bug.BetterThanYesterday.API.Tests
 
 		private readonly IHabitRepository _habitRepository;
 		private readonly IUserRepository _userRepository;
-		private readonly IPlanRepository _planRepository;
-		private readonly IPlanMemberRepository _planMemberRepository;
+		private readonly IChallengeRepository _challengeRepository;
+		private readonly IChallengeMemberRepository _challengeMemberRepository;
 		private readonly ICheckInRepository _checkInRepository;
 
 
@@ -51,8 +51,8 @@ namespace Bug.BetterThanYesterday.API.Tests
 
 			_habitRepository = provider.GetRequiredService<IHabitRepository>();
 			_userRepository = provider.GetRequiredService<IUserRepository>();
-			_planRepository = provider.GetRequiredService<IPlanRepository>();
-			_planMemberRepository = provider.GetRequiredService<IPlanMemberRepository>();
+			_challengeRepository = provider.GetRequiredService<IChallengeRepository>();
+			_challengeMemberRepository = provider.GetRequiredService<IChallengeMemberRepository>();
 			_checkInRepository = provider.GetRequiredService<ICheckInRepository>();
 		}
 
@@ -75,8 +75,8 @@ namespace Bug.BetterThanYesterday.API.Tests
 			{
 				_habitRepository.InsertJsonAsync(mocksCollection.Habits),
 				_userRepository.InsertJsonAsync(mocksCollection.Users),
-				_planRepository.InsertJsonAsync(mocksCollection.Plans),
-				_planMemberRepository.InsertJsonAsync(mocksCollection.PlanMembers),
+				_challengeRepository.InsertJsonAsync(mocksCollection.Challenges),
+				_challengeMemberRepository.InsertJsonAsync(mocksCollection.ChallengeMembers),
 				_checkInRepository.InsertJsonAsync(mocksCollection.CheckIns)
 			};
 

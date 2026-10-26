@@ -1,9 +1,9 @@
 using Bug.BetterThanYesterday.Application.Notifications;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
-using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
-using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.Entities;
+using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Reports;
 using Bug.BetterThanYesterday.Domain.Reports.Entities;
 using Bug.BetterThanYesterday.Domain.Strings;
@@ -20,11 +20,11 @@ public sealed class PlatformAdminOptions
 
 public sealed class CreateCheckInReportUseCase(
 	ICheckInRepository checkInRepository,
-	IPlanMemberRepository planMemberRepository,
+	IChallengeMemberRepository challengeMemberRepository,
 	ICheckInReportRepository checkInReportRepository,
-	IPlanRepository planRepository,
+	IChallengeRepository challengeRepository,
 	IUserRepository userRepository,
-	IPlanCycleNotificationProcessor notificationProcessor,
+	IChallengeCycleNotificationProcessor notificationProcessor,
 	IOptions<PlatformAdminOptions> adminOptions)
 	: IUseCase<CreateCheckInReportCommand>
 {
@@ -39,15 +39,15 @@ public sealed class CreateCheckInReportUseCase(
 			if (checkIn is null)
 				return Result.Rejected(Messages.CheckInNotFound, RejectionType.NotFound);
 
-			var reporterMemberId = PlanMember.BuildId(checkIn.PlanId, command.ReporterId);
-			var reporter = await planMemberRepository.GetByIdAsync(reporterMemberId);
+			var reporterMemberId = ChallengeMember.BuildId(checkIn.ChallengeId, command.ReporterId);
+			var reporter = await challengeMemberRepository.GetByIdAsync(reporterMemberId);
 
 			if (reporter is null)
-				return Result.Rejected(Messages.UserIsNotInThePlan, RejectionType.NotFound);
+				return Result.Rejected(Messages.UserIsNotInTheChallenge, RejectionType.NotFound);
 
 			var report = CheckInReport.CreateNew(
 				checkIn.Id,
-				checkIn.PlanId,
+				checkIn.ChallengeId,
 				command.ReporterId,
 				checkIn.UserId,
 				command.Reason);
@@ -56,22 +56,22 @@ public sealed class CreateCheckInReportUseCase(
 
 			try
 			{
-				var plan = await planRepository.GetByIdAsync(checkIn.PlanId);
+				var challenge = await challengeRepository.GetByIdAsync(checkIn.ChallengeId);
 				var reporterUser = await userRepository.GetByIdAsync(command.ReporterId);
 				var targetUser = await userRepository.GetByIdAsync(checkIn.UserId);
 				var reporterName = reporterUser?.Nickname ?? "Alguém";
 				var targetName = targetUser?.Nickname ?? "um membro";
-				var message = $"{reporterName} denunciou {targetName}. Motivo: {command.Reason.Trim()}";
+				var message = $"{reporterName} denunciou {targetName} na arena. Motivo: {command.Reason.Trim()}";
 				var recipients = new List<Guid>();
 
-				if (plan is not null)
-					recipients.Add(plan.OwnerId);
+				if (challenge is not null)
+					recipients.Add(challenge.OwnerId);
 
 				if (Guid.TryParse(adminOptions.Value?.UserId, out var adminId))
 					recipients.Add(adminId);
 
 				await notificationProcessor.NotifyCheckInReportedAsync(
-					checkIn.PlanId,
+					checkIn.ChallengeId,
 					checkIn.Id,
 					command.ReporterId,
 					checkIn.UserId,
@@ -87,7 +87,7 @@ public sealed class CreateCheckInReportUseCase(
 			{
 				report.Id,
 				report.CheckInId,
-				report.PlanId,
+				report.ChallengeId,
 				report.ReporterId,
 				report.TargetUserId,
 				report.Reason,

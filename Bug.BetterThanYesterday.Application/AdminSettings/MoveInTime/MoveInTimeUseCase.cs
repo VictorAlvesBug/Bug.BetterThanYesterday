@@ -1,17 +1,17 @@
-﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
-using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers;
+using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Penalties;
 using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.AdminSettings.MoveInTime;
 
 public sealed class MoveInTimeUseCase(
-	IPlanRepository planRepository,
-	IPlanMemberRepository planMemberRepository,
+	IChallengeRepository challengeRepository,
+	IChallengeMemberRepository challengeMemberRepository,
 	ICheckInRepository checkInRepository,
 	IPenaltyRepository penaltyRepository)
 	: IUseCase<MoveInTimeCommand>
@@ -27,25 +27,25 @@ public sealed class MoveInTimeUseCase(
 			// O mesmo se aplica ao retrocesso no tempo.
 			var daysToAdd = -command.DaysAmount;
 
-			var plans = await planRepository.ListAllAsync();
+			var challenges = await challengeRepository.ListAllAsync();
 
-			foreach (var plan in plans)
+			foreach (var challenge in challenges)
 			{
-				plan.StartsAt = plan.StartsAt.AddDays(daysToAdd);
-				plan.EndsAt = plan.EndsAt.AddDays(daysToAdd);
-				plan.CreatedAt = plan.CreatedAt.AddDays(daysToAdd);
+				challenge.StartsAt = challenge.StartsAt.AddDays(daysToAdd);
+				challenge.EndsAt = challenge.EndsAt.AddDays(daysToAdd);
+				challenge.CreatedAt = challenge.CreatedAt.AddDays(daysToAdd);
 
-				await planRepository.UpdateAsync(plan);
+				await challengeRepository.UpdateAsync(challenge);
 			}
 
-			var planMembers = await planMemberRepository.ListAllAsync();
+			var challengeMembers = await challengeMemberRepository.ListAllAsync();
 
-			foreach (var planMember in planMembers)
+			foreach (var challengeMember in challengeMembers)
 			{
-				planMember.JoinedAt = planMember.JoinedAt.AddDays(daysToAdd);
-				planMember.CreatedAt = planMember.CreatedAt.AddDays(daysToAdd);
+				challengeMember.JoinedAt = challengeMember.JoinedAt.AddDays(daysToAdd);
+				challengeMember.CreatedAt = challengeMember.CreatedAt.AddDays(daysToAdd);
 
-				await planMemberRepository.UpdateAsync(planMember);
+				await challengeMemberRepository.UpdateAsync(challengeMember);
 			}
 
 			var checkIns = await checkInRepository.ListAllAsync();

@@ -3,8 +3,8 @@ using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
-using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers;
+using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
@@ -12,10 +12,10 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.GetCheckInById;
 
 public sealed class GetCheckInByIdUseCase(
     ICheckInRepository checkInRepository,
-    IPlanRepository planRepository,
+    IChallengeRepository challengeRepository,
     IHabitRepository habitRepository,
     IUserRepository userRepository,
-    IPlanMemberRepository planMemberRepository)
+    IChallengeMemberRepository challengeMemberRepository)
     : IUseCase<GetCheckInByIdCommand>
 {
     public async Task<IResult> HandleAsync(GetCheckInByIdCommand command)
@@ -31,12 +31,12 @@ public sealed class GetCheckInByIdUseCase(
 
 			await CheckInStatusResolver.ConsolidateClosedWindowCheckInsAsync([checkIn], checkInRepository);
 
-			var plan = await planRepository.GetByIdAsync(checkIn.PlanId);
+			var challenge = await challengeRepository.GetByIdAsync(checkIn.ChallengeId);
 
-			if (plan is null)
-				return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
+			if (challenge is null)
+				return Result.Rejected(Messages.ChallengeNotFound, RejectionType.NotFound);
 
-			var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+			var habit = await habitRepository.GetByIdAsync(challenge.HabitId);
 
 			if (habit is null)
 				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
@@ -48,7 +48,7 @@ public sealed class GetCheckInByIdUseCase(
 
 			return Result.Success(
                 await checkIn.ToModelAsync(
-					planRepository,
+					challengeRepository,
 					habitRepository,
 					userRepository
 				)

@@ -39,9 +39,9 @@ public static class CheckInRepositoryMockFactory
                 It.IsAny<DateOnly>(),
                 It.IsAny<int>()
             ))
-            .ReturnsAsync((Guid planId, Guid userId, DateOnly date, int index) =>
+            .ReturnsAsync((Guid challengeId, Guid userId, DateOnly date, int index) =>
                 checkIns.FirstOrDefault(x =>
-                    x.PlanId == planId &&
+                    x.ChallengeId == challengeId &&
                     x.UserId == userId &&
                     DateOnly.FromDateTime(x.Date) == date &&
                     x.Index == index
@@ -49,29 +49,29 @@ public static class CheckInRepositoryMockFactory
             );
 
         checkInRepository
-            .Setup(repo => repo.ListByPlanIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync((Guid planId) =>
-                checkIns.Where(x => x.PlanId == planId).ToList()
+            .Setup(repo => repo.ListByChallengeIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync((Guid challengeId) =>
+                checkIns.Where(x => x.ChallengeId == challengeId).ToList()
             );
 
         checkInRepository
-            .Setup(repo => repo.ListByPlanIdAndUserIdAsync(
+            .Setup(repo => repo.ListByChallengeIdAndUserIdAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<Guid>()
             ))
-            .ReturnsAsync((Guid planId, Guid userId) =>
-                checkIns.Where(x => x.PlanId == planId && x.UserId == userId).ToList()
+            .ReturnsAsync((Guid challengeId, Guid userId) =>
+                checkIns.Where(x => x.ChallengeId == challengeId && x.UserId == userId).ToList()
             );
 
         checkInRepository
-            .Setup(repo => repo.ListByPlanIdAndUserIdAndDateAsync(
+            .Setup(repo => repo.ListByChallengeIdAndUserIdAndDateAsync(
                 It.IsAny<Guid>(),
                 It.IsAny<Guid>(),
                 It.IsAny<DateOnly>()
             ))
-            .ReturnsAsync((Guid planId, Guid userId, DateOnly date) =>
+            .ReturnsAsync((Guid challengeId, Guid userId, DateOnly date) =>
                 checkIns.Where(x =>
-                    x.PlanId == planId &&
+                    x.ChallengeId == challengeId &&
                     x.UserId == userId &&
                     DateOnly.FromDateTime(x.Date) == date).ToList()
             );

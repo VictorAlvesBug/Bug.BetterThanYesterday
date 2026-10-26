@@ -10,9 +10,9 @@ public class LedgerEntryRepository(
 	IDocumentMapper<LedgerEntry, LedgerEntryDocument> mapper)
 	: Repository<LedgerEntry, LedgerEntryDocument>(collection, mapper), ILedgerRepository
 {
-	public async Task<List<LedgerEntry>> ListByPlanIdAsync(Guid planId)
+	public async Task<List<LedgerEntry>> ListByChallengeIdAsync(Guid challengeId)
 	{
-		return (await _collection.FindAsync(doc => doc.PlanId == planId))
+		return (await _collection.FindAsync(doc => doc.ChallengeId == challengeId))
 			.ToList()
 			.ConvertAll(mapper.ToDomain);
 	}

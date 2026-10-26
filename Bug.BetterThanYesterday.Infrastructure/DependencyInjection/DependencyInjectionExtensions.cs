@@ -1,14 +1,14 @@
-﻿using Bug.BetterThanYesterday.Domain.Commons;
+using Bug.BetterThanYesterday.Domain.Commons;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.Penalties;
 using Bug.BetterThanYesterday.Domain.Penalties.Entities;
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
-using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
-using Bug.BetterThanYesterday.Domain.Plans;
-using Bug.BetterThanYesterday.Domain.Plans.Entities;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.Entities;
+using Bug.BetterThanYesterday.Domain.Challenges;
+using Bug.BetterThanYesterday.Domain.Challenges.Entities;
 using Bug.BetterThanYesterday.Domain.Reports;
 using Bug.BetterThanYesterday.Domain.Reports.Entities;
 using Bug.BetterThanYesterday.Domain.Ledger;
@@ -27,8 +27,8 @@ using Bug.BetterThanYesterday.Infrastructure.Persistence.CheckIns;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Penalties;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Commons;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Habits;
-using Bug.BetterThanYesterday.Infrastructure.Persistence.PlanMembers;
-using Bug.BetterThanYesterday.Infrastructure.Persistence.Plans;
+using Bug.BetterThanYesterday.Infrastructure.Persistence.ChallengeMembers;
+using Bug.BetterThanYesterday.Infrastructure.Persistence.Challenges;
 using Bug.BetterThanYesterday.Infrastructure.Persistence.Users;
 using Bug.BetterThanYesterday.Infrastructure.S3;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,8 +52,8 @@ public static class DependencyInjectionExtensions
 		services.AddScoped<IDocumentMapper<Penalty, PenaltyDocument>, PenaltyMapper>();
 		services.AddScoped<IDocumentMapper<CheckIn, CheckInDocument>, CheckInMapper>();
 		services.AddScoped<IDocumentMapper<Habit, HabitDocument>, HabitMapper>();
-		services.AddScoped<IDocumentMapper<Plan, PlanDocument>, PlanMapper>();
-		services.AddScoped<IDocumentMapper<PlanMember, PlanMemberDocument>, PlanMemberMapper>();
+		services.AddScoped<IDocumentMapper<Challenge, ChallengeDocument>, ChallengeMapper>();
+		services.AddScoped<IDocumentMapper<ChallengeMember, ChallengeMemberDocument>, ChallengeMemberMapper>();
 		services.AddScoped<IDocumentMapper<User, UserDocument>, UserMapper>();
 		services.AddScoped<IDocumentMapper<CheckInReport, CheckInReportDocument>, CheckInReportMapper>();
 		services.AddScoped<IDocumentMapper<LedgerEntry, LedgerEntryDocument>, LedgerEntryMapper>();
@@ -74,13 +74,13 @@ public static class DependencyInjectionExtensions
 		services.AddScoped<IRepository<Habit>>(sp => sp.GetRequiredService<IHabitRepository>());
 		services.AddScoped<IRepository<Habit>, Repository<Habit, HabitDocument>>();
 
-		services.AddScoped<IPlanRepository, PlanRepository>();
-		services.AddScoped<IRepository<Plan>>(sp => sp.GetRequiredService<IPlanRepository>());
-		services.AddScoped<IRepository<Plan>, Repository<Plan, PlanDocument>>();
+		services.AddScoped<IChallengeRepository, ChallengeRepository>();
+		services.AddScoped<IRepository<Challenge>>(sp => sp.GetRequiredService<IChallengeRepository>());
+		services.AddScoped<IRepository<Challenge>, Repository<Challenge, ChallengeDocument>>();
 
-		services.AddScoped<IPlanMemberRepository, PlanMemberRepository>();
-		services.AddScoped<IRepository<PlanMember>>(sp => sp.GetRequiredService<IPlanMemberRepository>());
-		services.AddScoped<IRepository<PlanMember>, Repository<PlanMember, PlanMemberDocument>>();
+		services.AddScoped<IChallengeMemberRepository, ChallengeMemberRepository>();
+		services.AddScoped<IRepository<ChallengeMember>>(sp => sp.GetRequiredService<IChallengeMemberRepository>());
+		services.AddScoped<IRepository<ChallengeMember>, Repository<ChallengeMember, ChallengeMemberDocument>>();
 
 		services.AddScoped<IUserRepository, UserRepository>();
 		services.AddScoped<IRepository<User>>(sp => sp.GetRequiredService<IUserRepository>());
@@ -105,8 +105,8 @@ public static class DependencyInjectionExtensions
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<PenaltyDocument>("penalties"));
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<CheckInDocument>("checkins"));
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<HabitDocument>("habits"));
-		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<PlanDocument>("plans"));
-		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<PlanMemberDocument>("plan_members"));
+		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ChallengeDocument>("challenges"));
+		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<ChallengeMemberDocument>("challenge_members"));
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<UserDocument>("users"));
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<CheckInReportDocument>("checkin_reports"));
 		services.AddScoped(sp => sp.GetRequiredService<IMongoDatabase>().GetCollection<LedgerEntryDocument>("ledger_entries"));

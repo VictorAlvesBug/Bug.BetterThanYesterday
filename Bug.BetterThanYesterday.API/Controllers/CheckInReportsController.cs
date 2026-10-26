@@ -29,13 +29,13 @@ public class CheckInReportsController(
 	}
 
 	[HttpGet]
-	public async Task<IActionResult> List([FromQuery] Guid planId, [FromQuery] Guid requesterId)
+	public async Task<IActionResult> List([FromQuery] Guid challengeId, [FromQuery] Guid requesterId)
 	{
 		var adminUserId = configuration["Admin:UserId"];
 		var isPlatformAdmin = Guid.TryParse(adminUserId, out var parsedAdminId) && parsedAdminId == requesterId;
 		var result = await listCheckInReportsUseCase.HandleAsync(new ListCheckInReportsCommand
 		{
-			PlanId = planId,
+			ChallengeId = challengeId,
 			RequesterId = requesterId,
 			IsPlatformAdmin = isPlatformAdmin
 		});

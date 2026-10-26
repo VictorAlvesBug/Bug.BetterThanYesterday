@@ -8,7 +8,7 @@ public static class PenaltyMapper
 	public static PenaltyModel ToModel(Penalty penalty) => new()
 	{
 		Id = penalty.Id,
-		PlanId = penalty.PlanId,
+		ChallengeId = penalty.ChallengeId,
 		UserId = penalty.UserId,
 		Date = penalty.Date.ToDateTime(TimeOnly.MinValue),
 		Amount = penalty.Amount,

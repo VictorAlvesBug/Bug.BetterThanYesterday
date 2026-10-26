@@ -6,10 +6,10 @@ namespace Bug.BetterThanYesterday.Domain.Penalties;
 
 public interface IPenaltyRepository : IRepository<Penalty>
 {
-	Task<List<Penalty>> ListByPlanIdAsync(Guid planId);
-	Task<List<Penalty>> ListByPlanIdAndUserIdAsync(Guid planId, Guid userId);
-	Task<Penalty?> GetByPlanIdAndUserIdAndDateAsync(Guid planId, Guid userId, DateOnly date);
-	Task<decimal> SumPendingAmountByPlanIdAndUserIdAsync(Guid planId, Guid userId);
-	Task<bool> HasPendingPenaltiesAsync(Guid planId, Guid userId);
+	Task<List<Penalty>> ListByChallengeIdAsync(Guid challengeId);
+	Task<List<Penalty>> ListByChallengeIdAndUserIdAsync(Guid challengeId, Guid userId);
+	Task<Penalty?> GetByChallengeIdAndUserIdAndDateAsync(Guid challengeId, Guid userId, DateOnly date);
+	Task<decimal> SumPendingAmountByChallengeIdAndUserIdAsync(Guid challengeId, Guid userId);
+	Task<bool> HasPendingPenaltiesAsync(Guid challengeId, Guid userId);
 	Task<Penalty?> GetByExternalPaymentIdAsync(string externalPaymentId);
 }

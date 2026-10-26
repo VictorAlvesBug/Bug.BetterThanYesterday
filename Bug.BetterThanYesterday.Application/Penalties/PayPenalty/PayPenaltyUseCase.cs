@@ -4,18 +4,18 @@ using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Ledger;
 using Bug.BetterThanYesterday.Domain.Penalties;
 using Bug.BetterThanYesterday.Domain.Penalties.ValueObjects;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
-using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
-using Bug.BetterThanYesterday.Domain.PlanMembers.ValueObjects;
-using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.Entities;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Application.Penalties.PayPenalty;
 
 public sealed class PayPenaltyUseCase(
 	IPenaltyRepository penaltyRepository,
-	IPlanRepository planRepository,
-	IPlanMemberRepository planMemberRepository,
+	IChallengeRepository challengeRepository,
+	IChallengeMemberRepository challengeMemberRepository,
 	ILedgerRepository ledgerRepository)
 	: IUseCase<PayPenaltyCommand>
 {
@@ -25,29 +25,29 @@ public sealed class PayPenaltyUseCase(
 		{
 			command.Validate();
 
-			var plan = await planRepository.GetByIdAsync(command.PlanId);
+			var challenge = await challengeRepository.GetByIdAsync(command.ChallengeId);
 
-			if (plan is null)
-				return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
+			if (challenge is null)
+				return Result.Rejected(Messages.ChallengeNotFound, RejectionType.NotFound);
 
 			var penalty = await penaltyRepository.GetByIdAsync(command.PenaltyId);
 
-			if (penalty is null || penalty.PlanId != command.PlanId)
+			if (penalty is null || penalty.ChallengeId != command.ChallengeId)
 				return Result.Rejected(Messages.PenaltyNotFound, RejectionType.NotFound);
 
 			penalty.MarkAsPaid(PaymentMethod.Manual, command.ConfirmedByUserId);
 			await penaltyRepository.UpdateAsync(penalty);
 			await FinePaymentBook.RecordAsync(ledgerRepository, penalty);
 
-			var planMemberId = PlanMember.BuildId(penalty.PlanId, penalty.UserId);
-			var planMember = await planMemberRepository.GetByIdAsync(planMemberId);
+			var challengeMemberId = ChallengeMember.BuildId(penalty.ChallengeId, penalty.UserId);
+			var challengeMember = await challengeMemberRepository.GetByIdAsync(challengeMemberId);
 
-			if (planMember is not null
-				&& planMember.Status == PlanMemberStatus.Blocked
-				&& !await penaltyRepository.HasPendingPenaltiesAsync(penalty.PlanId, penalty.UserId))
+			if (challengeMember is not null
+				&& challengeMember.Status == ChallengeMemberStatus.Blocked
+				&& !await penaltyRepository.HasPendingPenaltiesAsync(penalty.ChallengeId, penalty.UserId))
 			{
-				planMember.MarkAsActive();
-				await planMemberRepository.UpdateAsync(planMember);
+				challengeMember.MarkAsActive();
+				await challengeMemberRepository.UpdateAsync(challengeMember);
 			}
 
 			return Result.Success(PenaltyMapper.ToModel(penalty), Messages.PenaltySuccessfullyPaid);

@@ -10,7 +10,7 @@ internal sealed class UserNotificationMapper : IDocumentMapper<UserNotification,
 	{
 		Id = notification.Id,
 		UserId = notification.UserId,
-		PlanId = notification.PlanId,
+		ChallengeId = notification.ChallengeId,
 		RelatedUserId = notification.RelatedUserId,
 		Day = notification.Day.ToDateTime(TimeOnly.MinValue),
 		Kind = notification.Kind.Name,
@@ -23,12 +23,12 @@ internal sealed class UserNotificationMapper : IDocumentMapper<UserNotification,
 		UserNotification.Restore(
 			document.Id,
 			document.UserId,
-			document.PlanId,
+			document.ChallengeId,
 			document.RelatedUserId,
 			document.Day,
 			document.Kind,
 			document.Message,
-			ToPayload(document.Payload, document.Kind, document.PlanId),
+			ToPayload(document.Payload, document.Kind, document.ChallengeId),
 			document.CreatedAt);
 
 	private static NotificationPayloadDocument ToPayloadDocument(NotificationPayload payload) => payload switch
@@ -36,27 +36,27 @@ internal sealed class UserNotificationMapper : IDocumentMapper<UserNotification,
 		CheckInReviewedPayload reviewed => new NotificationPayloadDocument
 		{
 			Type = "CheckInReviewed",
-			PlanId = reviewed.PlanId,
+			ChallengeId = reviewed.ChallengeId,
 			CheckInId = reviewed.CheckInId,
 			ReviewerId = reviewed.ReviewerId
 		},
 		CheckInRejectionRiskPayload risk => new NotificationPayloadDocument
 		{
 			Type = "CheckInRejectionRisk",
-			PlanId = risk.PlanId,
+			ChallengeId = risk.ChallengeId,
 			CheckInId = risk.CheckInId
 		},
 		CheckInMadePayload made => new NotificationPayloadDocument
 		{
 			Type = "CheckInMade",
-			PlanId = made.PlanId,
+			ChallengeId = made.ChallengeId,
 			CheckInId = made.CheckInId,
 			AuthorId = made.AuthorId
 		},
 		CheckInReportedPayload reported => new NotificationPayloadDocument
 		{
 			Type = "CheckInReported",
-			PlanId = reported.PlanId,
+			ChallengeId = reported.ChallengeId,
 			CheckInId = reported.CheckInId,
 			ReporterId = reported.ReporterId,
 			TargetUserId = reported.TargetUserId
@@ -64,45 +64,45 @@ internal sealed class UserNotificationMapper : IDocumentMapper<UserNotification,
 		_ => new NotificationPayloadDocument
 		{
 			Type = payload.GetType().Name.Replace("Payload", string.Empty),
-			PlanId = payload.PlanId
+			ChallengeId = payload.ChallengeId
 		}
 	};
 
-	private static NotificationPayload ToPayload(NotificationPayloadDocument? document, string kind, Guid planId)
+	private static NotificationPayload ToPayload(NotificationPayloadDocument? document, string kind, Guid challengeId)
 	{
 		var type = document?.Type;
-		var resolvedPlanId = document?.PlanId is Guid stored && stored != Guid.Empty ? stored : planId;
+		var resolvedChallengeId = document?.ChallengeId is Guid stored && stored != Guid.Empty ? stored : challengeId;
 
 		return type switch
 		{
 			"CheckInReviewed" => new CheckInReviewedPayload
 			{
-				PlanId = resolvedPlanId,
+				ChallengeId = resolvedChallengeId,
 				CheckInId = document?.CheckInId ?? Guid.Empty,
 				ReviewerId = document?.ReviewerId ?? Guid.Empty
 			},
 			"CheckInRejectionRisk" => new CheckInRejectionRiskPayload
 			{
-				PlanId = resolvedPlanId,
+				ChallengeId = resolvedChallengeId,
 				CheckInId = document?.CheckInId ?? Guid.Empty
 			},
 			"CheckInMade" => new CheckInMadePayload
 			{
-				PlanId = resolvedPlanId,
+				ChallengeId = resolvedChallengeId,
 				CheckInId = document?.CheckInId ?? Guid.Empty,
 				AuthorId = document?.AuthorId ?? Guid.Empty
 			},
 			"CheckInReported" => new CheckInReportedPayload
 			{
-				PlanId = resolvedPlanId,
+				ChallengeId = resolvedChallengeId,
 				CheckInId = document?.CheckInId ?? Guid.Empty,
 				ReporterId = document?.ReporterId ?? Guid.Empty,
 				TargetUserId = document?.TargetUserId ?? Guid.Empty
 			},
-			"RestAtRisk" => new RestAtRiskPayload { PlanId = resolvedPlanId },
-			"FineAtRisk" => new FineAtRiskPayload { PlanId = resolvedPlanId },
-			"PlanCancelledForQuorum" => new PlanCancelledForQuorumPayload { PlanId = resolvedPlanId },
-			_ => NotificationPayload.ForPlan(NotificationKind.Get(string.IsNullOrWhiteSpace(type) ? kind : type), resolvedPlanId)
+			"RestAtRisk" => new RestAtRiskPayload { ChallengeId = resolvedChallengeId },
+			"FineAtRisk" => new FineAtRiskPayload { ChallengeId = resolvedChallengeId },
+			"ChallengeCancelledForQuorum" => new ChallengeCancelledForQuorumPayload { ChallengeId = resolvedChallengeId },
+			_ => NotificationPayload.ForChallenge(NotificationKind.Get(string.IsNullOrWhiteSpace(type) ? kind : type), resolvedChallengeId)
 		};
 	}
 }

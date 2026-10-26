@@ -1,8 +1,8 @@
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
-using Bug.BetterThanYesterday.Domain.PlanMembers.Entities;
-using Bug.BetterThanYesterday.Domain.Plans.Entities;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.Entities;
+using Bug.BetterThanYesterday.Domain.Challenges.Entities;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
 
 namespace Bug.BetterThanYesterday.API.Tests.Commons
@@ -59,7 +59,7 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 				createdAt);
 		}
 
-		public static Plan CreatePlanWith(
+		public static Challenge CreateChallengeWith(
 			Guid id = default,
 			Guid ownerId = default,
 			Guid habitId = default,
@@ -76,12 +76,12 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 			id = id == default ? Guid.NewGuid() : id;
 			ownerId = ownerId == default ? Guid.NewGuid() : ownerId;
 			habitId = habitId == default ? Guid.NewGuid() : habitId;
-			description = string.IsNullOrWhiteSpace(description) ? $"Plan {id.ToString()[..4]} description" : description;
+			description = string.IsNullOrWhiteSpace(description) ? $"Challenge {id.ToString()[..4]} description" : description;
 			startsAt = startsAt == default ? DateTime.Today.AddDays(1) : startsAt;
 			endsAt = endsAt == default ? DateTime.Today.AddDays(8) : endsAt;
 			createdAt = createdAt == default ? DateTime.Now : createdAt;
 
-			return Plan.Restore(
+			return Challenge.Restore(
 				id,
 				ownerId,
 				habitId,
@@ -95,9 +95,9 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 				createdAt);
 		}
 
-		public static PlanMember CreatePlanMemberWith(
+		public static ChallengeMember CreateChallengeMemberWith(
 			Guid id = default,
-			Guid planId = default,
+			Guid challengeId = default,
 			Guid userId = default,
 			DateTime joinedAt = default,
 			string status = "",
@@ -105,15 +105,15 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 		)
 		{
 			id = id == default ? Guid.NewGuid() : id;
-			planId = planId == default ? Guid.NewGuid() : planId;
+			challengeId = challengeId == default ? Guid.NewGuid() : challengeId;
 			userId = userId == default ? Guid.NewGuid() : userId;
 			joinedAt = joinedAt == default ? DateTime.Today.AddDays(-1) : joinedAt;
 			status = string.IsNullOrWhiteSpace(status) ? "Active" : status;
 			createdAt = createdAt == default ? DateTime.Now : createdAt;
 
-			return PlanMember.Restore(
+			return ChallengeMember.Restore(
 				id,
-				planId,
+				challengeId,
 				userId,
 				joinedAt,
 				status,
@@ -122,7 +122,7 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 
 		public static CheckIn CreateCheckInWith(
 			Guid id = default,
-			Guid planId = default,
+			Guid challengeId = default,
 			Guid userId = default,
 			DateTime date = default,
 			int index = 1,
@@ -134,7 +134,7 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 		)
 		{
 			id = id == default ? Guid.NewGuid() : id;
-			planId = planId == default ? Guid.NewGuid() : planId;
+			challengeId = challengeId == default ? Guid.NewGuid() : challengeId;
 			userId = userId == default ? Guid.NewGuid() : userId;
 			date = date == default ? DateTime.Today : date;
 			title = string.IsNullOrWhiteSpace(title) ? $"CheckIn {id.ToString()[..4]}" : title;
@@ -145,7 +145,7 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 
 			return CheckIn.Restore(
 				id,
-				planId,
+				challengeId,
 				userId,
 				date,
 				index,

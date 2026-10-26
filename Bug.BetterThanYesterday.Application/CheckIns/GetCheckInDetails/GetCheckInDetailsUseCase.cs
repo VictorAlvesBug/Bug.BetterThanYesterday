@@ -1,7 +1,7 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
@@ -9,7 +9,7 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.GetCheckInDetails;
 
 public sealed class GetCheckInDetailsUseCase(
     ICheckInRepository checkInRepository,
-    IPlanRepository planRepository,
+    IChallengeRepository challengeRepository,
     IHabitRepository habitRepository,
     IUserRepository userRepository)
     : IUseCase<GetCheckInDetailsCommand>
@@ -20,11 +20,11 @@ public sealed class GetCheckInDetailsUseCase(
         {
             command.Validate();
 
-            var plan = await planRepository.GetByIdAsync(command.PlanId);
-            if (plan is null)
-                return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
+            var challenge = await challengeRepository.GetByIdAsync(command.ChallengeId);
+            if (challenge is null)
+                return Result.Rejected(Messages.ChallengeNotFound, RejectionType.NotFound);
 
-            var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+            var habit = await habitRepository.GetByIdAsync(challenge.HabitId);
             if (habit is null)
                 return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
@@ -33,7 +33,7 @@ public sealed class GetCheckInDetailsUseCase(
                 return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
             var checkIn = await checkInRepository.GetDetailsAsync(
-                command.PlanId,
+                command.ChallengeId,
                 command.UserId,
                 DateOnly.FromDateTime(command.Date),
                 command.Index
@@ -45,7 +45,7 @@ public sealed class GetCheckInDetailsUseCase(
             await CheckInStatusResolver.ConsolidateClosedWindowCheckInsAsync([checkIn], checkInRepository);
 
             return Result.Success(
-                checkIn.ToModel(plan, habit, user),
+                checkIn.ToModel(challenge, habit, user),
                 Messages.CheckInSuccessfullyFound
             );
         }

@@ -1,6 +1,6 @@
 using Bug.BetterThanYesterday.Application.Payments.CreatePixCharge;
-using Bug.BetterThanYesterday.Application.Penalties.ListPenaltiesByPlanId;
-using Bug.BetterThanYesterday.Application.Penalties.ListPenaltiesByPlanMember;
+using Bug.BetterThanYesterday.Application.Penalties.ListPenaltiesByChallengeId;
+using Bug.BetterThanYesterday.Application.Penalties.ListPenaltiesByChallengeMember;
 using Bug.BetterThanYesterday.Application.Penalties.Models;
 using Bug.BetterThanYesterday.Application.Penalties.PayPenalty;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
@@ -12,17 +12,17 @@ namespace Bug.BetterThanYesterday.API.Controllers;
 [Route("testapi")]
 [ApiController]
 public class PenaltiesController(
-	IUseCase<ListPenaltiesByPlanIdCommand> listPenaltiesByPlanIdUseCase,
-	IUseCase<ListPenaltiesByPlanMemberCommand> listPenaltiesByPlanMemberUseCase,
+	IUseCase<ListPenaltiesByChallengeIdCommand> listPenaltiesByChallengeIdUseCase,
+	IUseCase<ListPenaltiesByChallengeMemberCommand> listPenaltiesByChallengeMemberUseCase,
 	IUseCase<PayPenaltyCommand> payPenaltyUseCase,
 	IUseCase<CreatePixChargeCommand> createPixChargeUseCase)
 	: ControllerBase
 {
-	[HttpGet("Plans/{planId}/Penalties")]
-	public async Task<IActionResult> ListByPlanId(Guid planId)
+	[HttpGet("Challenges/{challengeId}/Penalties")]
+	public async Task<IActionResult> ListByChallengeId(Guid challengeId)
 	{
-		var command = new ListPenaltiesByPlanIdCommand(planId);
-		var result = await listPenaltiesByPlanIdUseCase.HandleAsync(command);
+		var command = new ListPenaltiesByChallengeIdCommand(challengeId);
+		var result = await listPenaltiesByChallengeIdUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
 			return Ok(result);
@@ -33,12 +33,12 @@ public class PenaltiesController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpGet("Plans/{planId}/Members/{userId}/Penalties")]
-	[HttpGet("Plans/{planId}/Users/{userId}/Penalties")]
-	public async Task<IActionResult> ListByPlanMember(Guid planId, Guid userId)
+	[HttpGet("Challenges/{challengeId}/Members/{userId}/Penalties")]
+	[HttpGet("Challenges/{challengeId}/Users/{userId}/Penalties")]
+	public async Task<IActionResult> ListByChallengeMember(Guid challengeId, Guid userId)
 	{
-		var command = new ListPenaltiesByPlanMemberCommand(planId, userId);
-		var result = await listPenaltiesByPlanMemberUseCase.HandleAsync(command);
+		var command = new ListPenaltiesByChallengeMemberCommand(challengeId, userId);
+		var result = await listPenaltiesByChallengeMemberUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
 			return Ok(result);
@@ -49,10 +49,10 @@ public class PenaltiesController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpPost("Plans/{planId}/Penalties/{penaltyId}/Pay")]
-	public async Task<IActionResult> PayPenalty(Guid planId, Guid penaltyId, [FromBody] PayPenaltyRequest request)
+	[HttpPost("Challenges/{challengeId}/Penalties/{penaltyId}/Pay")]
+	public async Task<IActionResult> PayPenalty(Guid challengeId, Guid penaltyId, [FromBody] PayPenaltyRequest request)
 	{
-		var command = new PayPenaltyCommand(planId, penaltyId, request.ConfirmedByUserId);
+		var command = new PayPenaltyCommand(challengeId, penaltyId, request.ConfirmedByUserId);
 		var result = await payPenaltyUseCase.HandleAsync(command);
 
 		if (result.IsSuccess())
@@ -67,12 +67,12 @@ public class PenaltiesController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 
-	[HttpPost("Plans/{planId}/Penalties/{penaltyId}/Pix")]
-	public async Task<IActionResult> CreatePixCharge(Guid planId, Guid penaltyId, [FromBody] CreatePixChargeRequest request)
+	[HttpPost("Challenges/{challengeId}/Penalties/{penaltyId}/Pix")]
+	public async Task<IActionResult> CreatePixCharge(Guid challengeId, Guid penaltyId, [FromBody] CreatePixChargeRequest request)
 	{
 		var command = new CreatePixChargeCommand
 		{
-			PlanId = planId,
+			ChallengeId = challengeId,
 			PenaltyId = penaltyId,
 			UserId = request.UserId
 		};

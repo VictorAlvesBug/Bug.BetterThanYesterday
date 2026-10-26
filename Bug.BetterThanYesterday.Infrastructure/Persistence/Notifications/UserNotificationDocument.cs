@@ -9,7 +9,7 @@ public class NotificationPayloadDocument
 	public string Type { get; set; } = string.Empty;
 
 	[BsonRepresentation(BsonType.String)]
-	public Guid PlanId { get; set; }
+	public Guid ChallengeId { get; set; }
 
 	[BsonRepresentation(BsonType.String)]
 	public Guid? CheckInId { get; set; }
@@ -33,7 +33,7 @@ public class UserNotificationDocument : Document
 	public Guid UserId { get; set; }
 
 	[BsonRepresentation(BsonType.String)]
-	public Guid PlanId { get; set; }
+	public Guid ChallengeId { get; set; }
 
 	[BsonRepresentation(BsonType.String)]
 	public Guid? RelatedUserId { get; set; }

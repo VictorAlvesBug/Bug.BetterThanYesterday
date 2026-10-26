@@ -25,7 +25,7 @@ namespace Bug.BetterThanYesterday.API.Tests
 		[MemberData(nameof(RouteTestCases))]
 		public async Task Route_Should_Return_Expected_Result(Route testCase)
 		{
-			var testCaseNameToDebug = "ListPlansByFilter_WhenUserDoesNotExist_ShouldReturnNotFound";
+			var testCaseNameToDebug = "ListChallengesByFilter_WhenUserDoesNotExist_ShouldReturnNotFound";
 
 			if (testCase.Name == testCaseNameToDebug)
 			{

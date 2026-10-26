@@ -6,8 +6,8 @@ using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
-using Bug.BetterThanYesterday.Domain.PlanMembers;
-using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers;
+using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 using Moq;
@@ -22,11 +22,11 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
     {
         // Arrange
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
-        var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId1_WithUserId1Active);
+        var challenge = _mock.Challenges.First(challenge => challenge.Id == MockData.PublicRunningChallengeId1_WithUserId1Active);
         var user = _mock.Users.First(user => user.Id == MockData.UserId1);
         var command = new AddCheckInCommand
         {
-            PlanId = plan.Id,
+            ChallengeId = challenge.Id,
             UserId = user.Id,
             Date = DateTime.Today,
             Title = "Test Title",
@@ -42,28 +42,28 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         Assert.Equal(Messages.CheckInSuccessfullyRegistered, result.GetMessage());
 
 		var resultData = Assert.IsType<Result<CheckInModel>>(result).Data;
-        Assert.Equal(plan.Id, resultData.PlanId);
+        Assert.Equal(challenge.Id, resultData.ChallengeId);
         Assert.Equal(user.Id, resultData.UserId);
         Assert.Equal(command.Date, resultData.Date);
         Assert.Equal(command.Title, resultData.Title);
         Assert.Equal(command.EvidencePhotoUrl, resultData.EvidencePhotoUrl);
 
-        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.ChallengeRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-        _mock.PlanMemberRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Once);
+        _mock.ChallengeMemberRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.ListByChallengeIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Once);
         _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Once);
     }
 
     [Fact]
-    public async Task Test_AddCheckInUseCase_PlanNotFound_ShouldReturnRejected()
+    public async Task Test_AddCheckInUseCase_ChallengeNotFound_ShouldReturnRejected()
     {
         // Arrange
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
         var user = _mock.Users.First(user => user.Id == MockData.UserId1);
         var command = new AddCheckInCommand
         {
-            PlanId = Guid.NewGuid(),
+            ChallengeId = Guid.NewGuid(),
             UserId = user.Id,
             Date = DateTime.Today,
             Title = "Test Title",
@@ -76,12 +76,12 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         // Assert
         Assert.NotNull(result);
         Assert.True(result.IsRejected());
-        Assert.Equal(Messages.PlanNotFound, result.GetMessage());
+        Assert.Equal(Messages.ChallengeNotFound, result.GetMessage());
 
-        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.ChallengeRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
-        _mock.PlanMemberRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
-        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Never);
+        _mock.ChallengeMemberRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        _mock.CheckInRepository.Verify(x => x.ListByChallengeIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Never);
         _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Never);
     }
 
@@ -90,10 +90,10 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
     {
         // Arrange
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
-        var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId1_WithUserId1Active);
+        var challenge = _mock.Challenges.First(challenge => challenge.Id == MockData.PublicRunningChallengeId1_WithUserId1Active);
         var command = new AddCheckInCommand
         {
-            PlanId = plan.Id,
+            ChallengeId = challenge.Id,
             UserId = Guid.NewGuid(),
             Date = DateTime.Today,
             Title = "Test Title",
@@ -108,10 +108,10 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.UserNotFound, result.GetMessage());
 
-        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.ChallengeRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-        _mock.PlanMemberRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
-        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Never);
+        _mock.ChallengeMemberRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        _mock.CheckInRepository.Verify(x => x.ListByChallengeIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Never);
         _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Never);
     }
 
@@ -123,7 +123,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         var existingCheckIn = _mock.CheckIns.First(checkIn => checkIn.Id == MockData.CheckInId1);
         var command = new AddCheckInCommand
         {
-            PlanId = existingCheckIn.PlanId,
+            ChallengeId = existingCheckIn.ChallengeId,
             UserId = existingCheckIn.UserId,
             Date = existingCheckIn.Date,
             Title = "Test Title",
@@ -138,10 +138,10 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         Assert.True(result.IsRejected());
         Assert.Equal(Messages.UserHasReachedTheMaximumNumberOfCheckInsForTheDay, result.GetMessage());
 
-        _mock.PlanRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.ChallengeRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mock.UserRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-        _mock.PlanMemberRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-        _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Once);
+        _mock.ChallengeMemberRepository.Verify(x => x.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _mock.CheckInRepository.Verify(x => x.ListByChallengeIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Once);
         _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Never);
     }
 
@@ -151,7 +151,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
         var command = new AddCheckInCommand
         {
-            PlanId = MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+            ChallengeId = MockData.PublicRunningChallengeId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
             UserId = MockData.UserId4,
             Date = DateTime.Today.AddDays(-1),
             Title = "Test Title",
@@ -169,11 +169,11 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
     public async Task Test_AddCheckInUseCase_DayBeforeYesterday_ShouldReturnRejected()
     {
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
-        var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId1_WithUserId1Active);
+        var challenge = _mock.Challenges.First(challenge => challenge.Id == MockData.PublicRunningChallengeId1_WithUserId1Active);
         var user = _mock.Users.First(user => user.Id == MockData.UserId1);
         var command = new AddCheckInCommand
         {
-            PlanId = plan.Id,
+            ChallengeId = challenge.Id,
             UserId = user.Id,
             Date = DateTime.Today.AddDays(-2),
             Title = "Test Title",
@@ -191,11 +191,11 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
     public async Task Test_AddCheckInUseCase_Tomorrow_ShouldReturnRejected()
     {
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
-        var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId1_WithUserId1Active);
+        var challenge = _mock.Challenges.First(challenge => challenge.Id == MockData.PublicRunningChallengeId1_WithUserId1Active);
         var user = _mock.Users.First(user => user.Id == MockData.UserId1);
         var command = new AddCheckInCommand
         {
-            PlanId = plan.Id,
+            ChallengeId = challenge.Id,
             UserId = user.Id,
             Date = DateTime.Today.AddDays(1),
             Title = "Test Title",
@@ -215,7 +215,7 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
         var command = new AddCheckInCommand
         {
-            PlanId = MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+            ChallengeId = MockData.PublicRunningChallengeId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
             UserId = MockData.UserId3,
             Date = DateTime.Today,
             Title = "Test Title",

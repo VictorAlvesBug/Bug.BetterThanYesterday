@@ -1,14 +1,14 @@
-﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.Habits.GetHabitById;
 
 public sealed class GetHabitByIdUseCase(
 	IHabitRepository habitRepository,
-	IPlanRepository planRepository,
+	IChallengeRepository challengeRepository,
 	IUserRepository userRepository
 )
 	: IUseCase<GetHabitByIdCommand>
@@ -24,8 +24,8 @@ public sealed class GetHabitByIdUseCase(
 			if (habit is null)
 				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
-			var plans = await planRepository.ListByHabitIdAsync(habit.Id);
-			var ownerIds = plans.Select(plan => plan.OwnerId).Distinct().ToList();
+			var challenges = await challengeRepository.ListByHabitIdAsync(habit.Id);
+			var ownerIds = challenges.Select(challenge => challenge.OwnerId).Distinct().ToList();
 			var owners = ownerIds.Count == 0
 				? []
 				: await userRepository.BatchGetByIdAsync(ownerIds);
@@ -33,7 +33,7 @@ public sealed class GetHabitByIdUseCase(
 			if (ownerIds.Count > owners.Count)
 				return Result.Rejected(Messages.UserNotFound, RejectionType.NotFound);
 
-			return Result.Success(habit.ToModel(plans, owners), Messages.HabitSuccessfullyFound);
+			return Result.Success(habit.ToModel(challenges, owners), Messages.HabitSuccessfullyFound);
 		}
 		catch (Exception ex)
 		{

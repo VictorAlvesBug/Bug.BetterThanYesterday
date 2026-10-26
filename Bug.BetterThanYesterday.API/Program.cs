@@ -4,6 +4,7 @@ using Bug.BetterThanYesterday.Application.DependencyInjection;
 using Bug.BetterThanYesterday.Domain.Configurations;
 using Bug.BetterThanYesterday.Infrastructure.Configurations;
 using Bug.BetterThanYesterday.Infrastructure.DependencyInjection;
+using Bug.BetterThanYesterday.Infrastructure.Persistence;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -85,6 +86,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MONGODB_CONNECTIONSTRING")))
+	await MigrateChallengeCollectionsAsync(app.Services);
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
@@ -101,13 +105,26 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+static async Task MigrateChallengeCollectionsAsync(IServiceProvider services)
+{
+	using var scope = services.CreateScope();
+	var client = scope.ServiceProvider.GetRequiredService<IMongoClient>();
+	var config = scope.ServiceProvider.GetRequiredService<IOptions<DatabaseConfig>>().Value;
+	var names = new[] { config.DatabaseName, config.TestDatabaseName }
+		.Where(name => !string.IsNullOrWhiteSpace(name))
+		.Distinct(StringComparer.OrdinalIgnoreCase);
+
+	foreach (var name in names)
+		await ChallengeCollectionMigration.ApplyAsync(client.GetDatabase(name));
+}
+
 app.Run();
 
 /*
 
-TODO - Exibir progresso, sequencia e posição no plan-tracker apenas se o plano já estiver em andamento
-TODO - Validar se checkin já foi feito por este usuário na aba plan-settings > Check-ins
-TODO - Sequência está ficando sempre zerada no plan-tracker e no ranking
+TODO - Exibir progresso, sequencia e posição no challenge-tracker apenas se o plano já estiver em andamento
+TODO - Validar se checkin já foi feito por este usuário na aba challenge-settings > Check-ins
+TODO - Sequência está ficando sempre zerada no challenge-tracker e no ranking
 TODO - Exibir "+1" ou "+2" na sequência caso checkin ainda esteja com status de pendente
 
 TODO - On Invitation Link Modal, fix the modal to be displayed in the center of the screen, with a close button on the top right corner
@@ -118,28 +135,28 @@ TODO - Fix the bug that auto-validate checking for yesterday, using the current 
 TODO - Fix my keyboardable view to be able to scroll the content properly when the keyboard is open in any screen
 
 
-TODO - On Plan Settings Screen, display the plan details, as Description, StartsAt, EndsAt, Type, DaysOffPerWeek and PenaltyValue
-TODO - On Plan Settings Screen, display the payout pool from truth data
-TODO - On Plan Settings Screen > Ranking, display current user's name with green color
-TODO - On Plan Settings Screen > Ranking, display all users profile picture with the same size
-TODO - On Plan Settings Screen > Check-ins and Plan Tracker Screen > Check-ins, hide divider line for each current users's checkin, because the line is not needed (they cannot review their own checkins)
+TODO - On Challenge Settings Screen, display the challenge details, as Description, StartsAt, EndsAt, Type, DaysOffPerWeek and PenaltyValue
+TODO - On Challenge Settings Screen, display the payout pool from truth data
+TODO - On Challenge Settings Screen > Ranking, display current user's name with green color
+TODO - On Challenge Settings Screen > Ranking, display all users profile picture with the same size
+TODO - On Challenge Settings Screen > Check-ins and Challenge Tracker Screen > Check-ins, hide divider line for each current users's checkin, because the line is not needed (they cannot review their own checkins)
 
-TODO - On Plan Tracker Screen, camera floating button should be displayed only if the plan is running
-TODO - On Plan Tracker Screen, camera floating button should open 2 options: Today and Yesterday
-TODO - On Plan Tracker Screen, when the user clicks on the Today option, the create checkin screen is opened with the date set to today
-TODO - On Plan Tracker Screen, when the user clicks on the Yesterday option, the create checkin screen is opened with the date set to yesterday
+TODO - On Challenge Tracker Screen, camera floating button should be displayed only if the challenge is running
+TODO - On Challenge Tracker Screen, camera floating button should open 2 options: Today and Yesterday
+TODO - On Challenge Tracker Screen, when the user clicks on the Today option, the create checkin screen is opened with the date set to today
+TODO - On Challenge Tracker Screen, when the user clicks on the Yesterday option, the create checkin screen is opened with the date set to yesterday
 TODO - On Create Checkin Screen, don't allow user to change the date if thats already a checkin (pending or validated) for this date
 
-TODO - Create a new screen (called "My Plans") to display the plans created by the current user
-TODO - On My Plans Screen, allow user to change the plan settings on a Modal screen, as Description, StartsAt, EndsAt, Type, DaysOffPerWeek and PenaltyValue (if it is not started yet) and save the changes
-TODO - On My Plans Screen, allow user to delete a plan if it is not started yet, but with a confirmation modal
-TODO - On My Plans Screen, allow user to duplicate a plan preselecting the field on create plan screen, and redirection there
+TODO - Create a new screen (called "My Challenges") to display the challenges created by the current user
+TODO - On My Challenges Screen, allow user to change the challenge settings on a Modal screen, as Description, StartsAt, EndsAt, Type, DaysOffPerWeek and PenaltyValue (if it is not started yet) and save the changes
+TODO - On My Challenges Screen, allow user to delete a challenge if it is not started yet, but with a confirmation modal
+TODO - On My Challenges Screen, allow user to duplicate a challenge preselecting the field on create challenge screen, and redirection there
 
-TODO - On Public Plans Screen > Header, display the Invitation Link Modal if the anex icon is clicked
-TODO - On Public Plans Screen > Each Plan Card, allow user to click on the plan card to display the Plan Details Modal
-TODO - On Public Plans Screen > Each Plan Card, display simplified info. Only habit name, owner's name, plan description (if not null), days to/since startsAt, Penalty Value Icon with Dollar Signs (1 to 3) and commitment level (1/7 to 7/7)
-TODO - On Public Plans Screen > Each Plan Card Modal, display the Share Plan icon on the top right corner
-TODO - On Manage Plans Screen, add a new button to display My Plans Screen
+TODO - On Public Challenges Screen > Header, display the Invitation Link Modal if the anex icon is clicked
+TODO - On Public Challenges Screen > Each Challenge Card, allow user to click on the challenge card to display the Challenge Details Modal
+TODO - On Public Challenges Screen > Each Challenge Card, display simplified info. Only habit name, owner's name, challenge description (if not null), days to/since startsAt, Penalty Value Icon with Dollar Signs (1 to 3) and commitment level (1/7 to 7/7)
+TODO - On Public Challenges Screen > Each Challenge Card Modal, display the Share Challenge icon on the top right corner
+TODO - On Manage Challenges Screen, add a new button to display My Challenges Screen
 
 TODO - Version Obsidian Collection
 
@@ -182,126 +199,126 @@ TODO - On Create User Screen and Update User Screen, add mask validation to fiel
 - AddUser without pix key
 - AddUser with an invalid pix key
 - AddUser with valid fields
-- GetPlanById with a non-guid planId
-- GetPlanById with a valid guid, but not registered
-- GetPlanById with a registered planId
-- ListPlansByFilter without any parameter
-- ListPlansByFilter with non-guid ownerId
-- ListPlansByFilter with non-registered ownerId
-- ListPlansByFilter with registered ownerId that has no plans
-- ListPlansByFilter with registered ownerId that has plans
-- ListPlansByFilter with non-guid habitId
-- ListPlansByFilter with non-registered habitId
-- ListPlansByFilter with registered habitId that has no plans
-- ListPlansByFilter with registered habitId that has plans
-- ListPlansByFilter with an invalid numeric status
-- ListPlansByFilter with an invalid text status
-- ListPlansByFilter with an invalid numeric type
-- ListPlansByFilter with an invalid text type
-- ListPlansByFilter with all field valid
-- AddPlan with an empty body
-- AddPlan without ownerId
-- AddPlan with an non-guid ownerId
-- AddPlan with an non-registered ownerId
-- AddPlan with an registered ownerId
-- AddPlan without habitId
-- AddPlan with an non-guid habitId
-- AddPlan with an non-registered habitId
-- AddPlan with an registered habitId
-- AddPlan without a description
-- AddPlan with a description
-- AddPlan without startsAt
-- AddPlan with startsAt before today
-- AddPlan without endsAt
-- AddPlan with endsAt before startsAt
-- AddPlan with endsAt before today
-- AddPlan without type
-- AddPlan with invalid numeric type
-- AddPlan with invalid text type
-- AddPlan with all field valid
-- GetPlanMemberDetails with a non-guid planId
-- GetPlanMemberDetails with a non-registered planId
-- GetPlanMemberDetails with a registered, but without members planId
-- GetPlanMemberDetails with a non-guid userId
-- GetPlanMemberDetails with a non-registered userId
-- GetPlanMemberDetails with a registered, but without plans userId
-- GetPlanMemberDetails with registered planId and userId related
-- GetPlanWithMembersByPlanId with a non-guid planId
-- GetPlanWithMembersByPlanId with a non-registered planId
-- GetPlanWithMembersByPlanId with a registered, but without members planId
-- GetPlanWithMembersByPlanId with a registered, and with members planId
-- GetUserWithPlansByUserId with a non-guid userId
-- GetUserWithPlansByUserId with a non-registered userId
-- GetUserWithPlansByUserId with a registered, but without plans userId
-- GetUserWithPlansByUserId with a registered, and with plans userId
-- AddUserToPlan with a non-guid planId
-- AddUserToPlan with a non-registered planId
-- AddUserToPlan with a non-guid userId
-- AddUserToPlan with a non-registered userId
-- AddUserToPlan with registered planId and userId, not related yet
-- AddUserToPlan with registered planId and userId, already related
-- AddUserToPlan with registered planId and userId, and not-started plan
-- AddUserToPlan with registered planId and userId, and running plan
-- AddUserToPlan with registered planId and userId, and finished plan
-- AddUserToPlan with registered planId and userId, and cancelled plan
-- RemoveUserFromPlan with a non-guid planId
-- RemoveUserFromPlan with a non-registered planId
-- RemoveUserFromPlan with a non-guid userId
-- RemoveUserFromPlan with a non-registered userId
-- RemoveUserFromPlan with registered planId and userId, not related
-- RemoveUserFromPlan with registered planId and userId related and active
-- RemoveUserFromPlan with registered planId and userId related and blocked
-- RemoveUserFromPlan with registered planId and userId, and not-started plan
-- RemoveUserFromPlan with registered planId and userId, and running plan
-- RemoveUserFromPlan with registered planId and userId, and finished plan
-- RemoveUserFromPlan with registered planId and userId, and cancelled plan
-- BlockUserInThePlan with a non-guid planId
-- BlockUserInThePlan with a non-registered planId
-- BlockUserInThePlan with a non-guid userId
-- BlockUserInThePlan with a non-registered userId
-- BlockUserInThePlan with registered planId and userId, not related
-- BlockUserInThePlan with registered planId and userId related and active
-- BlockUserInThePlan with registered planId and userId related and blocked
-- BlockUserInThePlan with registered planId and userId, and not-started plan
-- BlockUserInThePlan with registered planId and userId, and running plan
-- BlockUserInThePlan with registered planId and userId, and finished plan
-- BlockUserInThePlan with registered planId and userId, and cancelled plan
-- UnblockUserInThePlan with a non-guid planId
-- UnblockUserInThePlan with a non-registered planId
-- UnblockUserInThePlan with a non-guid userId
-- UnblockUserInThePlan with a non-registered userId
-- UnblockUserInThePlan with registered planId and userId, not related
-- UnblockUserInThePlan with registered planId and userId related and active
-- UnblockUserInThePlan with registered planId and userId related and blocked
-- UnblockUserInThePlan with registered planId and userId, and not-started plan
-- UnblockUserInThePlan with registered planId and userId, and running plan
-- UnblockUserInThePlan with registered planId and userId, and finished plan
-- UnblockUserInThePlan with registered planId and userId, and cancelled plan
+- GetChallengeById with a non-guid challengeId
+- GetChallengeById with a valid guid, but not registered
+- GetChallengeById with a registered challengeId
+- ListChallengesByFilter without any parameter
+- ListChallengesByFilter with non-guid ownerId
+- ListChallengesByFilter with non-registered ownerId
+- ListChallengesByFilter with registered ownerId that has no challenges
+- ListChallengesByFilter with registered ownerId that has challenges
+- ListChallengesByFilter with non-guid habitId
+- ListChallengesByFilter with non-registered habitId
+- ListChallengesByFilter with registered habitId that has no challenges
+- ListChallengesByFilter with registered habitId that has challenges
+- ListChallengesByFilter with an invalid numeric status
+- ListChallengesByFilter with an invalid text status
+- ListChallengesByFilter with an invalid numeric type
+- ListChallengesByFilter with an invalid text type
+- ListChallengesByFilter with all field valid
+- AddChallenge with an empty body
+- AddChallenge without ownerId
+- AddChallenge with an non-guid ownerId
+- AddChallenge with an non-registered ownerId
+- AddChallenge with an registered ownerId
+- AddChallenge without habitId
+- AddChallenge with an non-guid habitId
+- AddChallenge with an non-registered habitId
+- AddChallenge with an registered habitId
+- AddChallenge without a description
+- AddChallenge with a description
+- AddChallenge without startsAt
+- AddChallenge with startsAt before today
+- AddChallenge without endsAt
+- AddChallenge with endsAt before startsAt
+- AddChallenge with endsAt before today
+- AddChallenge without type
+- AddChallenge with invalid numeric type
+- AddChallenge with invalid text type
+- AddChallenge with all field valid
+- GetChallengeMemberDetails with a non-guid challengeId
+- GetChallengeMemberDetails with a non-registered challengeId
+- GetChallengeMemberDetails with a registered, but without members challengeId
+- GetChallengeMemberDetails with a non-guid userId
+- GetChallengeMemberDetails with a non-registered userId
+- GetChallengeMemberDetails with a registered, but without challenges userId
+- GetChallengeMemberDetails with registered challengeId and userId related
+- GetChallengeWithMembersByChallengeId with a non-guid challengeId
+- GetChallengeWithMembersByChallengeId with a non-registered challengeId
+- GetChallengeWithMembersByChallengeId with a registered, but without members challengeId
+- GetChallengeWithMembersByChallengeId with a registered, and with members challengeId
+- GetUserWithChallengesByUserId with a non-guid userId
+- GetUserWithChallengesByUserId with a non-registered userId
+- GetUserWithChallengesByUserId with a registered, but without challenges userId
+- GetUserWithChallengesByUserId with a registered, and with challenges userId
+- AddUserToChallenge with a non-guid challengeId
+- AddUserToChallenge with a non-registered challengeId
+- AddUserToChallenge with a non-guid userId
+- AddUserToChallenge with a non-registered userId
+- AddUserToChallenge with registered challengeId and userId, not related yet
+- AddUserToChallenge with registered challengeId and userId, already related
+- AddUserToChallenge with registered challengeId and userId, and not-started challenge
+- AddUserToChallenge with registered challengeId and userId, and running challenge
+- AddUserToChallenge with registered challengeId and userId, and finished challenge
+- AddUserToChallenge with registered challengeId and userId, and cancelled challenge
+- RemoveUserFromChallenge with a non-guid challengeId
+- RemoveUserFromChallenge with a non-registered challengeId
+- RemoveUserFromChallenge with a non-guid userId
+- RemoveUserFromChallenge with a non-registered userId
+- RemoveUserFromChallenge with registered challengeId and userId, not related
+- RemoveUserFromChallenge with registered challengeId and userId related and active
+- RemoveUserFromChallenge with registered challengeId and userId related and blocked
+- RemoveUserFromChallenge with registered challengeId and userId, and not-started challenge
+- RemoveUserFromChallenge with registered challengeId and userId, and running challenge
+- RemoveUserFromChallenge with registered challengeId and userId, and finished challenge
+- RemoveUserFromChallenge with registered challengeId and userId, and cancelled challenge
+- BlockUserInTheChallenge with a non-guid challengeId
+- BlockUserInTheChallenge with a non-registered challengeId
+- BlockUserInTheChallenge with a non-guid userId
+- BlockUserInTheChallenge with a non-registered userId
+- BlockUserInTheChallenge with registered challengeId and userId, not related
+- BlockUserInTheChallenge with registered challengeId and userId related and active
+- BlockUserInTheChallenge with registered challengeId and userId related and blocked
+- BlockUserInTheChallenge with registered challengeId and userId, and not-started challenge
+- BlockUserInTheChallenge with registered challengeId and userId, and running challenge
+- BlockUserInTheChallenge with registered challengeId and userId, and finished challenge
+- BlockUserInTheChallenge with registered challengeId and userId, and cancelled challenge
+- UnblockUserInTheChallenge with a non-guid challengeId
+- UnblockUserInTheChallenge with a non-registered challengeId
+- UnblockUserInTheChallenge with a non-guid userId
+- UnblockUserInTheChallenge with a non-registered userId
+- UnblockUserInTheChallenge with registered challengeId and userId, not related
+- UnblockUserInTheChallenge with registered challengeId and userId related and active
+- UnblockUserInTheChallenge with registered challengeId and userId related and blocked
+- UnblockUserInTheChallenge with registered challengeId and userId, and not-started challenge
+- UnblockUserInTheChallenge with registered challengeId and userId, and running challenge
+- UnblockUserInTheChallenge with registered challengeId and userId, and finished challenge
+- UnblockUserInTheChallenge with registered challengeId and userId, and cancelled challenge
 - GetCheckInById with a non-guid checkIn
 - GetCheckInById with a valid guid, but not registered
 - GetCheckInById with a registered checkIn
-- ListCheckInsByFilter with a non-guid planId
-- ListCheckInsByFilter with a non-registered planId
-- ListCheckInsByFilter with a registered planId, without any checkIns related
-- ListCheckInsByFilter with a registered planId, with checkIns related
+- ListCheckInsByFilter with a non-guid challengeId
+- ListCheckInsByFilter with a non-registered challengeId
+- ListCheckInsByFilter with a registered challengeId, without any checkIns related
+- ListCheckInsByFilter with a registered challengeId, with checkIns related
 - ListCheckInsByFilter only with userId
 - ListCheckInsByFilter only with date
 - ListCheckInsByFilter only with status
-- ListCheckInsByFilter with a registered planId and non-guid userId
-- ListCheckInsByFilter with a registered planId and non-registered userId
-- ListCheckInsByFilter with a registered planId and registered userId, but not related
-- ListCheckInsByFilter with a registered planId and registered userId, related via planMembers, but with no checkIns
-- ListCheckInsByFilter with a registered planId and registered userId, related and with some checkIns
-- ListCheckInsByFilter with a registered planId and date
-- ListCheckInsByFilter with a registered planId and invalid numeric status
-- ListCheckInsByFilter with a registered planId and invalid text status
-- ListCheckInsByFilter with a registered planId and valid numberic status
-- ListCheckInsByFilter with a registered planId and valid text status
+- ListCheckInsByFilter with a registered challengeId and non-guid userId
+- ListCheckInsByFilter with a registered challengeId and non-registered userId
+- ListCheckInsByFilter with a registered challengeId and registered userId, but not related
+- ListCheckInsByFilter with a registered challengeId and registered userId, related via challengeMembers, but with no checkIns
+- ListCheckInsByFilter with a registered challengeId and registered userId, related and with some checkIns
+- ListCheckInsByFilter with a registered challengeId and date
+- ListCheckInsByFilter with a registered challengeId and invalid numeric status
+- ListCheckInsByFilter with a registered challengeId and invalid text status
+- ListCheckInsByFilter with a registered challengeId and valid numberic status
+- ListCheckInsByFilter with a registered challengeId and valid text status
 - AddCheckIn with empty body
-- AddCheckIn without planId
-- AddCheckIn with non-guid planId
-- AddCheckIn with non-registered planId
-- AddCheckIn with registered planId
+- AddCheckIn without challengeId
+- AddCheckIn with non-guid challengeId
+- AddCheckIn with non-registered challengeId
+- AddCheckIn with registered challengeId
 - AddCheckIn without userId
 - AddCheckIn with non-guid userId
 - AddCheckIn with non-registered userId
@@ -311,16 +328,16 @@ TODO - On Create User Screen and Update User Screen, add mask validation to fiel
 - AddCheckIn without evidencePhotoUrl
 - AddCheckIn with empty evidencePhotoUrl
 - AddCheckIn without date
-- AddCheckIn with planId and userId not related via planMembers
-- AddCheckIn with user blocked in the plan
+- AddCheckIn with challengeId and userId not related via challengeMembers
+- AddCheckIn with user blocked in the challenge
 - AddCheckIn with date before yesterday
 - AddCheckIn with date after today
-- AddCheckIn with date before plan startsAt
-- AddCheckIn with date after plan endsAt
-- AddCheckIn with not-started plan
-- AddCheckIn with running plan
-- AddCheckIn with finished plan
-- AddCheckIn with cancelled plan
+- AddCheckIn with date before challenge startsAt
+- AddCheckIn with date after challenge endsAt
+- AddCheckIn with not-started challenge
+- AddCheckIn with running challenge
+- AddCheckIn with finished challenge
+- AddCheckIn with cancelled challenge
 - AddCheckIn with same fields already registered
 
 
@@ -333,8 +350,8 @@ TODO - On Create User Screen and Update User Screen, add mask validation to fiel
 - ReviewCheckIn without reviewerId
 - ReviewCheckIn with non-guid reviewerId
 - ReviewCheckIn with non-registered reviewerId
-- ReviewCheckIn with registered reviewerId, not related with the plan
-- ReviewCheckIn with registered reviewerId, related with the plan
+- ReviewCheckIn with registered reviewerId, not related with the challenge
+- ReviewCheckIn with registered reviewerId, related with the challenge
 - ReviewCheckIn with registered reviewerId, to his own checkIn
 - ReviewCheckIn without status
 - ReviewCheckIn with invalid numeric status
@@ -344,10 +361,10 @@ TODO - On Create User Screen and Update User Screen, add mask validation to fiel
 - ReviewCheckIn without date
 - ReviewCheckIn with date before checkIn createdAt
 - ReviewCheckIn with date after checkIn date+1
-- ReviewCheckIn for checkIn from a not-started plan
-- ReviewCheckIn for checkIn from a running plan
-- ReviewCheckIn for checkIn from a finished plan
-- ReviewCheckIn for checkIn from a cancelled plan
+- ReviewCheckIn for checkIn from a not-started challenge
+- ReviewCheckIn for checkIn from a running challenge
+- ReviewCheckIn for checkIn from a finished challenge
+- ReviewCheckIn for checkIn from a cancelled challenge
 - ReviewCheckIn for checkIn already reviewed by this reviewer
 - ReviewCheckIn for a non-pending checkIn
 
@@ -357,8 +374,8 @@ TODO - On Create User Screen and Update User Screen, add mask validation to fiel
 
 ## CheckIn
 
-- CheckInId (PlanId,UserId,Date,Index=0)
-- PlanId
+- CheckInId (ChallengeId,UserId,Date,Index=0)
+- ChallengeId
 - UserId
 - Date
 - Index
@@ -366,37 +383,37 @@ TODO - On Create User Screen and Update User Screen, add mask validation to fiel
 - Description
 
 --> GetCheckInDetailsUseCase
-(planId,userId,date,index=0)
+(challengeId,userId,date,index=0)
 - Valid
 - NotFoundCheckInId
 
 
---> GetPlanWithCheckInsByPlanId
-(planId)
+--> GetChallengeWithCheckInsByChallengeId
+(challengeId)
 - Valid
-- PlanWithoutCheckIns
-- NotFoundPlanId
+- ChallengeWithoutCheckIns
+- NotFoundChallengeId
 
 
---> GetPlanUserWithCheckInsByPlanIdAndUserId
-(planId,userId)
+--> GetChallengeUserWithCheckInsByChallengeIdAndUserId
+(challengeId,userId)
 - Valid
-- PlanUserWithoutCheckIns
-- UserIsNotInThisPlan
-- NotFoundPlanId
+- ChallengeUserWithoutCheckIns
+- UserIsNotInThisChallenge
+- NotFoundChallengeId
 - NotFoundUserId
 
 
 --> AddCheckIn
-(planId,userId,date,index=0,title,description)
+(challengeId,userId,date,index=0,title,description)
 - Valid
-- NotFoundPlanId
+- NotFoundChallengeId
 - NotFoundUserId
 - DateOutOfAllowedRange
 - IndexOutOfAllowedRange
 - DuplicatedCheckIn
-- UserIsNotInThisPlan
-- PlanIsNotRunning
+- UserIsNotInThisChallenge
+- ChallengeIsNotRunning
 -?UserIsBlocked
 
 # Testes da Controller
@@ -495,7 +512,7 @@ TODO - On Create User Screen and Update User Screen, add mask validation to fiel
  - Test_DeleteHabitUseCase_InvalidOrMissingToken_ShouldReturn401();
  - Test_DeleteHabitUseCase_InvalidHabitId_ShouldReturn400();
  - Test_DeleteHabitUseCase_NotFoundHabitId_ShouldReturn404();
- - Test_DeleteHabitUseCase_NonCancelledPlansRelated_ShouldReturn400();
+ - Test_DeleteHabitUseCase_NonCancelledChallengesRelated_ShouldReturn400();
  - Test_DeleteHabitUseCase_EmptyNameFromDb_ShouldReturn422();
  - Test_DeleteHabitUseCase_EmptyCreatedAtFromDb_ShouldReturn422();
  - Test_DeleteHabitUseCase_InvalidCreatedAtFromDb_ShouldReturn422();
@@ -504,48 +521,48 @@ TODO - On Create User Screen and Update User Screen, add mask validation to fiel
 
 // Definir testes de 422 (recursos inv?lidos vindos do banco) de planos
  
- ## ListPlansByFilter()
- - Test_ListPlansByFilterUseCase_Valid_ShouldReturn200();
- - Test_ListPlansByFilterUseCase_InvalidOrMissingToken_ShouldReturn401();
+ ## ListChallengesByFilter()
+ - Test_ListChallengesByFilterUseCase_Valid_ShouldReturn200();
+ - Test_ListChallengesByFilterUseCase_InvalidOrMissingToken_ShouldReturn401();
  
- ## GetPlanById(id)
- - Test_GetPlanByIdUseCase_Valid_ShouldReturn200();
- - Test_GetPlanByIdUseCase_InvalidOrMissingToken_ShouldReturn401();
- - Test_GetPlanByIdUseCase_InvalidPlanId_ShouldReturn400();
- - Test_GetPlanByIdUseCase_NotFoundPlanId_ShouldReturn404();
+ ## GetChallengeById(id)
+ - Test_GetChallengeByIdUseCase_Valid_ShouldReturn200();
+ - Test_GetChallengeByIdUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_GetChallengeByIdUseCase_InvalidChallengeId_ShouldReturn400();
+ - Test_GetChallengeByIdUseCase_NotFoundChallengeId_ShouldReturn404();
  
- ## ListPlansByHabitId(habitId)
- - Test_ListPlansByHabitIdUseCase_Valid_ShouldReturn200();
- - Test_ListPlansByHabitIdUseCase_InvalidOrMissingToken_ShouldReturn401();
- - Test_ListPlansByHabitIdUseCase_InvalidHabitId_ShouldReturn400();
- - Test_ListPlansByHabitIdUseCase_NotFoundHabitId_ShouldReturn404();
+ ## ListChallengesByHabitId(habitId)
+ - Test_ListChallengesByHabitIdUseCase_Valid_ShouldReturn200();
+ - Test_ListChallengesByHabitIdUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_ListChallengesByHabitIdUseCase_InvalidHabitId_ShouldReturn400();
+ - Test_ListChallengesByHabitIdUseCase_NotFoundHabitId_ShouldReturn404();
  
- ## CreatePlan(habitId, description, startsAt, endsAt, typeId)
- - Test_CreatePlanUseCase_Valid_ShouldReturn201();
- - Test_CreatePlanUseCase_InvalidOrMissingToken_ShouldReturn401();
- - Test_CreatePlanUseCase_InvalidHabitId_ShouldReturn400();
- - Test_CreatePlanUseCase_NotFoundHabitId_ShouldReturn404();
- - Test_CreatePlanUseCase_EmptyStartsAt_ShouldReturn400();
- - Test_CreatePlanUseCase_StartsAtBeforeToday_ShouldReturn400();
- - Test_CreatePlanUseCase_EmptyEndsAt_ShouldReturn400();
- - Test_CreatePlanUseCase_EndsAtBeforeStartsAt_ShouldReturn400();
- - Test_CreatePlanUseCase_EmptyTypeId_ShouldReturn400();
- - Test_CreatePlanUseCase_InvalidTypeId_ShouldReturn400();
+ ## CreateChallenge(habitId, description, startsAt, endsAt, typeId)
+ - Test_CreateChallengeUseCase_Valid_ShouldReturn201();
+ - Test_CreateChallengeUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_CreateChallengeUseCase_InvalidHabitId_ShouldReturn400();
+ - Test_CreateChallengeUseCase_NotFoundHabitId_ShouldReturn404();
+ - Test_CreateChallengeUseCase_EmptyStartsAt_ShouldReturn400();
+ - Test_CreateChallengeUseCase_StartsAtBeforeToday_ShouldReturn400();
+ - Test_CreateChallengeUseCase_EmptyEndsAt_ShouldReturn400();
+ - Test_CreateChallengeUseCase_EndsAtBeforeStartsAt_ShouldReturn400();
+ - Test_CreateChallengeUseCase_EmptyTypeId_ShouldReturn400();
+ - Test_CreateChallengeUseCase_InvalidTypeId_ShouldReturn400();
  
- ## UpdatePlanStatus(id, statusId)
- - Test_UpdatePlanStatusUseCase_Valid_ShouldReturn200();
- - Test_UpdatePlanStatusUseCase_InvalidOrMissingToken_ShouldReturn401();
- - Test_UpdatePlanStatusUseCase_InvalidPlanId_ShouldReturn400();
- - Test_UpdatePlanStatusUseCase_NotFoundPlanId_ShouldReturn404();
- - Test_UpdatePlanStatusUseCase_EmptyStatusId_ShouldReturn400();
- - Test_UpdatePlanStatusUseCase_InvalidStatusId_ShouldReturn400();
- - Test_UpdatePlanStatusUseCase_StatusIdNotAllowed_ShouldReturn400();
+ ## UpdateChallengeStatus(id, statusId)
+ - Test_UpdateChallengeStatusUseCase_Valid_ShouldReturn200();
+ - Test_UpdateChallengeStatusUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_UpdateChallengeStatusUseCase_InvalidChallengeId_ShouldReturn400();
+ - Test_UpdateChallengeStatusUseCase_NotFoundChallengeId_ShouldReturn404();
+ - Test_UpdateChallengeStatusUseCase_EmptyStatusId_ShouldReturn400();
+ - Test_UpdateChallengeStatusUseCase_InvalidStatusId_ShouldReturn400();
+ - Test_UpdateChallengeStatusUseCase_StatusIdNotAllowed_ShouldReturn400();
  
- ## CancelPlan(id)
- - Test_CancelPlanUseCase_Valid_ShouldReturn200();
- - Test_CancelPlanUseCase_InvalidOrMissingToken_ShouldReturn401();
- - Test_CancelPlanUseCase_InvalidPlanId_ShouldReturn400();
- - Test_CancelPlanUseCase_NotFoundPlanId_ShouldReturn404();
+ ## CancelChallenge(id)
+ - Test_CancelChallengeUseCase_Valid_ShouldReturn200();
+ - Test_CancelChallengeUseCase_InvalidOrMissingToken_ShouldReturn401();
+ - Test_CancelChallengeUseCase_InvalidChallengeId_ShouldReturn400();
+ - Test_CancelChallengeUseCase_NotFoundChallengeId_ShouldReturn404();
 
 
 
@@ -572,7 +589,7 @@ habits (Collection)
 > Update
 
 
-plans (Collection)
+challenges (Collection)
 - Id (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - HabitId (Ex: cd383069fbd840b3ad503447cf9e488d)
 - Description (Ex: Workout 5 times a week)
@@ -589,31 +606,31 @@ plans (Collection)
 > Cancel
 
 
-plan_members (Collection)
+challenge_members (Collection)
 - Id (Ex: d1f8e8c2a4b14c3e9f0e4b5a6c7d8e9f)
-- PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
+- ChallengeId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
 - JoinedAt (Ex: 2024-01-15)
 - LeftAt (Nullable, Ex: 2024-06-01)
 - Status (Active,Left,Blocked)
 > GetById
-> ListByPlanId
+> ListByChallengeId
 > ListByUserId
-> AddUserToPlan
-> RemoveUserFromPlan
-> BlockUserInThePlan
-> UnblockUserInThePlan
+> AddUserToChallenge
+> RemoveUserFromChallenge
+> BlockUserInTheChallenge
+> UnblockUserInTheChallenge
 
 checkins (Collection)
 - Id (Ex: f1988915ee294c34bdc6ff8b3c467cdc)
-- PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
+- ChallengeId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
 - Date (Ex: 2024-01-05)
 - Title (Ex: Let's call it a day)
 - Description (Ex: Today was rough)
 > GetById
-> ListByPlanId
-> ListByPlanIdAndUserId
+> ListByChallengeId
+> ListByChallengeIdAndUserId
 > Check
 
 
@@ -632,7 +649,7 @@ habits (Collection)
 - CreatedAt (Ex: 2024-01-01)
 
 
-plans (Collection)
+challenges (Collection)
 - Id (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - HabitId (Ex: cd383069fbd840b3ad503447cf9e488d)
 - Description (Ex: Workout 5 times a week)
@@ -645,9 +662,9 @@ plans (Collection)
 - CreatedAt (Ex: 2024-01-01)
 
 
-plan_members (Collection)
+challenge_members (Collection)
 - Id (Ex: d1f8e8c2a4b14c3e9f0e4b5a6c7d8e9f)
-- PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
+- ChallengeId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
 - JoinedAt (Ex: 2024-01-15)
 - LeftAt (Nullable, Ex: 2024-06-01)
@@ -657,7 +674,7 @@ plan_members (Collection)
 
 checkins (Collection)
 - Id (Ex: f1988915ee294c34bdc6ff8b3c467cdc)
-- PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
+- ChallengeId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
 - Role (CheckedIn,Rest)
 - Date (Ex: 2024-01-05)
@@ -682,7 +699,7 @@ habits (Collection)
 - CreatedAt (Ex: 2024-01-01)
 
 
-plans (Collection)
+challenges (Collection)
 - Id (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - HabitId (Ex: cd383069fbd840b3ad503447cf9e488d)
 - Description (Ex: Workout 5 times a week)
@@ -704,9 +721,9 @@ plans (Collection)
   - RewardsPoolCents (Ex: 81000 // penalties - adminFee)
 
 
-plan_members (Collection)
+challenge_members (Collection)
 - Id (Ex: d1f8e8c2a4b14c3e9f0e4b5a6c7d8e9f)
-- PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
+- ChallengeId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
 - JoinedAt (Ex: 2024-01-15)
 - LeftAt (Nullable, Ex: 2024-06-01)
@@ -716,7 +733,7 @@ plan_members (Collection)
 
 checkins (Collection)
 - Id (Ex: f1988915ee294c34bdc6ff8b3c467cdc)
-- PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
+- ChallengeId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
 - Role (CheckedIn,Rest)
 - Date (Ex: 2024-01-05)
@@ -729,7 +746,7 @@ checkins (Collection)
 
 penalties (Collection)
 - Id (Ex: 426881107ed44fca8c58d57646ae1a90)
-- PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
+- ChallengeId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
 - OccurredAt (Ex: 2024-01-10)
 - DueAt (Ex: 2024-01-11)
@@ -740,7 +757,7 @@ penalties (Collection)
 
 rewards (Collection)
 - Id (Ex: fa136a773bc24920a8bc84bc0f06396c)
-- PlanId (Ex: b6a049375f6f4445a4a884b02eedeac0)
+- ChallengeId (Ex: b6a049375f6f4445a4a884b02eedeac0)
 - UserId (Ex: 450e04cff74e4fbc86e7f100a13acd4b)
 - ValueCents (Ex: 1000)
 - Status (Pending/OverDue/Paid)
@@ -759,27 +776,27 @@ ValidationFlag (Entity)
 users:
 - { emailLower: 1 } (unique)
 
-plans:
+challenges:
 - { status: 1, startsAt: 1 }
 - { type: 1 }
 
-plan_members:
-- { planId: 1, userId: 1 } (unique)
+challenge_members:
+- { challengeId: 1, userId: 1 } (unique)
 - { userId: 1, status: 1 }
 
 checkins:
-- { planId: 1, userId: 1, date: 1 } (unique)
-- { planId: 1, periodIndex: 1 } (ranking por per?odo)
+- { challengeId: 1, userId: 1, date: 1 } (unique)
+- { challengeId: 1, periodIndex: 1 } (ranking por per?odo)
 
 penalties:
-- { planId: 1, userId: 1, dueAt: 1 }
+- { challengeId: 1, userId: 1, dueAt: 1 }
 - { status: 1, dueAt: 1 } (cobran?a em lote)
 
 rewards:
-- { planId: 1, userId: 1 }
+- { challengeId: 1, userId: 1 }
 - { status: 1 }
 
-plans:
+challenges:
 - { status: 1, startsAt: 1 }
 - { type: 1 } (listar p?blicos)
 

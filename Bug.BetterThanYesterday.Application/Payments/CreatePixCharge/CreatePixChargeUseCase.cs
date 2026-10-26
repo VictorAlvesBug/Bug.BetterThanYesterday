@@ -17,7 +17,7 @@ public sealed class CreatePixChargeUseCase(
 
 		var penalty = await penaltyRepository.GetByIdAsync(command.PenaltyId);
 
-		if (penalty is null || penalty.PlanId != command.PlanId)
+		if (penalty is null || penalty.ChallengeId != command.ChallengeId)
 			return Result.Rejected(Messages.PenaltyNotFound, RejectionType.NotFound);
 
 		if (penalty.UserId != command.UserId)
@@ -26,7 +26,7 @@ public sealed class CreatePixChargeUseCase(
 		if (penalty.Status != PenaltyStatus.Pending)
 			return Result.Rejected(Messages.PenaltyAlreadyPaid);
 
-		var charge = await pixGateway.CreateChargeAsync(penalty.Amount, "Multa do plano", penalty.Id);
+		var charge = await pixGateway.CreateChargeAsync(penalty.Amount, "Multa do desafio", penalty.Id);
 		penalty.AssignCharge(charge.ExternalId);
 		await penaltyRepository.UpdateAsync(penalty);
 

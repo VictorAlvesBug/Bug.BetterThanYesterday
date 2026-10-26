@@ -1,4 +1,4 @@
-﻿using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
+using Bug.BetterThanYesterday.Application.Habits.DeleteHabit;
 using Bug.BetterThanYesterday.Application.Mocks;
 using Bug.BetterThanYesterday.Application.Tests.Commons;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
@@ -27,7 +27,7 @@ public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 		Assert.Equal(Messages.HabitSuccessfullyDeleted, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.PlanRepository.Verify(repo => repo.ListByHabitIdAsync(It.IsAny<Guid>()), Times.Once);
+		_mock.ChallengeRepository.Verify(repo => repo.ListByHabitIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.HabitRepository.Verify(repo => repo.DeleteAsync(It.IsAny<Habit>()), Times.Once);
 	}
 
@@ -47,12 +47,12 @@ public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 		Assert.Equal(Messages.HabitNotFound, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.PlanRepository.Verify(repo => repo.ListByHabitIdAsync(It.IsAny<Guid>()), Times.Never);
+		_mock.ChallengeRepository.Verify(repo => repo.ListByHabitIdAsync(It.IsAny<Guid>()), Times.Never);
 		_mock.HabitRepository.Verify(repo => repo.DeleteAsync(It.IsAny<Habit>()), Times.Never);
 	}
 
 	[Fact]
-	public async Task Test_DeleteHabitUseCase_HabitCannotBeRemovedAsItHasLinkedPlans_ShouldReturnRejected()
+	public async Task Test_DeleteHabitUseCase_HabitCannotBeRemovedAsItHasLinkedChallenges_ShouldReturnRejected()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<DeleteHabitUseCase>();
@@ -65,10 +65,10 @@ public class DeleteHabitUseCaseTests : BaseHabitUseCaseTests
 		// Assert
 		Assert.NotNull(result);
 		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.HabitCannotBeRemovedAsItHasLinkedPlans, result.GetMessage());
+		Assert.Equal(Messages.HabitCannotBeRemovedAsItHasLinkedChallenges, result.GetMessage());
 
 		_mock.HabitRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.PlanRepository.Verify(repo => repo.ListByHabitIdAsync(It.IsAny<Guid>()), Times.Once);
+		_mock.ChallengeRepository.Verify(repo => repo.ListByHabitIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.HabitRepository.Verify(repo => repo.DeleteAsync(It.IsAny<Habit>()), Times.Never);
 	}
 }

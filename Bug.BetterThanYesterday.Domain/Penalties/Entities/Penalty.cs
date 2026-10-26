@@ -1,13 +1,13 @@
 using Bug.BetterThanYesterday.Domain.Commons;
 using Bug.BetterThanYesterday.Domain.Penalties.ValueObjects;
-using Bug.BetterThanYesterday.Domain.PlanMembers.Utils;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.Utils;
 using Bug.BetterThanYesterday.Domain.Strings;
 
 namespace Bug.BetterThanYesterday.Domain.Penalties.Entities;
 
 public sealed class Penalty : Entity
 {
-	public Guid PlanId { get; set; }
+	public Guid ChallengeId { get; set; }
 	public Guid UserId { get; set; }
 	public DateOnly Date { get; set; }
 	public decimal Amount { get; set; }
@@ -20,7 +20,7 @@ public sealed class Penalty : Entity
 
 	private Penalty(
 		Guid id,
-		Guid planId,
+		Guid challengeId,
 		Guid userId,
 		DateOnly date,
 		decimal amount,
@@ -33,7 +33,7 @@ public sealed class Penalty : Entity
 		Guid? confirmedByUserId)
 	{
 		Id = id;
-		PlanId = planId;
+		ChallengeId = challengeId;
 		UserId = userId;
 		Date = date;
 		Amount = amount;
@@ -47,13 +47,13 @@ public sealed class Penalty : Entity
 	}
 
 	public static Penalty CreateNew(
-		Guid planId,
+		Guid challengeId,
 		Guid userId,
 		DateOnly date,
 		decimal amount)
 	{
-		if (planId == Guid.Empty)
-			throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
+		if (challengeId == Guid.Empty)
+			throw new ArgumentNullException(nameof(challengeId), Messages.EnterChallengeId);
 
 		if (userId == Guid.Empty)
 			throw new ArgumentNullException(nameof(userId), Messages.EnterUserId);
@@ -62,8 +62,8 @@ public sealed class Penalty : Entity
 			throw new ArgumentException(Messages.EnterValidPenaltyValue, nameof(amount));
 
 		return new Penalty(
-			BuildId(planId, userId, date),
-			planId,
+			BuildId(challengeId, userId, date),
+			challengeId,
 			userId,
 			date,
 			amount,
@@ -78,7 +78,7 @@ public sealed class Penalty : Entity
 
 	public static Penalty Restore(
 		Guid id,
-		Guid planId,
+		Guid challengeId,
 		Guid userId,
 		DateOnly date,
 		decimal amount,
@@ -95,7 +95,7 @@ public sealed class Penalty : Entity
 
 		return new Penalty(
 			id,
-			planId,
+			challengeId,
 			userId,
 			date,
 			amount,
@@ -108,10 +108,10 @@ public sealed class Penalty : Entity
 			confirmedByUserId);
 	}
 
-	public static Guid BuildId(Guid planId, Guid userId, DateOnly date)
+	public static Guid BuildId(Guid challengeId, Guid userId, DateOnly date)
 	{
 		var dateGuid = GuidFromDayNumber(date.DayNumber);
-		return planId.Combine(userId).Combine(dateGuid);
+		return challengeId.Combine(userId).Combine(dateGuid);
 	}
 
 	public void MarkAsPaid(PaymentMethod paymentMethod, Guid? confirmedByUserId, string? externalPaymentId = null)

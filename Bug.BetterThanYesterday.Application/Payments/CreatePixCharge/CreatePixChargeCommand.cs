@@ -5,14 +5,14 @@ namespace Bug.BetterThanYesterday.Application.Payments.CreatePixCharge;
 
 public sealed class CreatePixChargeCommand : ICommand
 {
-	public required Guid PlanId { get; init; }
+	public required Guid ChallengeId { get; init; }
 	public required Guid PenaltyId { get; init; }
 	public required Guid UserId { get; init; }
 
 	public void Validate()
 	{
-		if (PlanId == Guid.Empty)
-			throw new ArgumentNullException(nameof(PlanId), Messages.EnterPlanId);
+		if (ChallengeId == Guid.Empty)
+			throw new ArgumentNullException(nameof(ChallengeId), Messages.EnterChallengeId);
 
 		if (PenaltyId == Guid.Empty)
 			throw new ArgumentNullException(nameof(PenaltyId), Messages.EnterPenaltyId);

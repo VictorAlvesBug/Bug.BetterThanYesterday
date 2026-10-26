@@ -1,7 +1,7 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.Habits;
-using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
@@ -9,7 +9,7 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.ReplaceCheckIn;
 
 public sealed class ReplaceCheckInUseCase(
 	ICheckInRepository checkInRepository,
-	IPlanRepository planRepository,
+	IChallengeRepository challengeRepository,
 	IHabitRepository habitRepository,
 	IUserRepository userRepository)
 	: IUseCase<ReplaceCheckInCommand>
@@ -28,12 +28,12 @@ public sealed class ReplaceCheckInUseCase(
 			if (checkIn.UserId != command.UserId)
 				return Result.Rejected(Messages.OnlyCheckInOwnerCanReplace);
 
-			var plan = await planRepository.GetByIdAsync(checkIn.PlanId);
+			var challenge = await challengeRepository.GetByIdAsync(checkIn.ChallengeId);
 
-			if (plan is null)
-				return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
+			if (challenge is null)
+				return Result.Rejected(Messages.ChallengeNotFound, RejectionType.NotFound);
 
-			var habit = await habitRepository.GetByIdAsync(plan.HabitId);
+			var habit = await habitRepository.GetByIdAsync(challenge.HabitId);
 
 			if (habit is null)
 				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
@@ -47,7 +47,7 @@ public sealed class ReplaceCheckInUseCase(
 			await checkInRepository.UpdateAsync(checkIn);
 
 			return Result.Success(
-				checkIn.ToModel(plan, habit, user),
+				checkIn.ToModel(challenge, habit, user),
 				Messages.CheckInSuccessfullyRegistered);
 		}
 		catch (Exception ex)

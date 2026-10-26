@@ -5,7 +5,7 @@ namespace Bug.BetterThanYesterday.Application.CheckIns.AddCheckIn;
 
 public class AddCheckInCommand : ICommand
 {
-    public required Guid PlanId { get; init; }
+    public required Guid ChallengeId { get; init; }
     public required Guid UserId { get; init; }
     public required DateTime Date { get; init; }
     //TODO Adicionar: public int Index { get; init; }
@@ -14,8 +14,8 @@ public class AddCheckInCommand : ICommand
 
     public void Validate()
     {
-        if (PlanId == Guid.Empty)
-            throw new ArgumentNullException(nameof(PlanId), Messages.PlanNotFound);
+        if (ChallengeId == Guid.Empty)
+            throw new ArgumentNullException(nameof(ChallengeId), Messages.ChallengeNotFound);
             
         if (UserId == Guid.Empty)
             throw new ArgumentNullException(nameof(UserId), Messages.UserNotFound);

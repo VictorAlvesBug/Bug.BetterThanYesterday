@@ -7,7 +7,7 @@ namespace Bug.BetterThanYesterday.Infrastructure.Persistence.Ledger;
 public class LedgerEntryDocument : Document
 {
 	[BsonRepresentation(BsonType.String)]
-	public Guid PlanId { get; set; }
+	public Guid ChallengeId { get; set; }
 
 	[BsonRepresentation(BsonType.String)]
 	public Guid UserId { get; set; }

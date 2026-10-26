@@ -1,4 +1,4 @@
-﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Habits;
 using Bug.BetterThanYesterday.Domain.Habits.Policies;
@@ -22,7 +22,7 @@ public class DeleteHabitUseCase(
 				return Result.Rejected(Messages.HabitNotFound, RejectionType.NotFound);
 
 			if (!await habitDeletionPolicy.CanDeleteAsync(habit.Id))
-				return Result.Rejected(Messages.HabitCannotBeRemovedAsItHasLinkedPlans);
+				return Result.Rejected(Messages.HabitCannotBeRemovedAsItHasLinkedChallenges);
 
 			await habitRepository.DeleteAsync(habit);
 			return Result.Success(Messages.HabitSuccessfullyDeleted);

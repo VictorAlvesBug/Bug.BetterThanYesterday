@@ -5,5 +5,5 @@ namespace Bug.BetterThanYesterday.Domain.Reports;
 
 public interface ICheckInReportRepository : IRepository<CheckInReport>
 {
-	Task<List<CheckInReport>> ListByPlanIdAsync(Guid planId);
+	Task<List<CheckInReport>> ListByChallengeIdAsync(Guid challengeId);
 }

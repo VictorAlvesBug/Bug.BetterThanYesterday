@@ -1,6 +1,6 @@
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
-using Bug.BetterThanYesterday.Domain.Plans;
+using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Reports;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
@@ -8,7 +8,7 @@ using Bug.BetterThanYesterday.Domain.Users;
 namespace Bug.BetterThanYesterday.Application.Reports.ListCheckInReports;
 
 public sealed class ListCheckInReportsUseCase(
-	IPlanRepository planRepository,
+	IChallengeRepository challengeRepository,
 	ICheckInReportRepository checkInReportRepository,
 	ICheckInRepository checkInRepository,
 	IUserRepository userRepository)
@@ -20,18 +20,18 @@ public sealed class ListCheckInReportsUseCase(
 		{
 			command.Validate();
 
-			var plan = await planRepository.GetByIdAsync(command.PlanId);
+			var challenge = await challengeRepository.GetByIdAsync(command.ChallengeId);
 
-			if (plan is null)
-				return Result.Rejected(Messages.PlanNotFound, RejectionType.NotFound);
+			if (challenge is null)
+				return Result.Rejected(Messages.ChallengeNotFound, RejectionType.NotFound);
 
-			var isOwner = plan.OwnerId == command.RequesterId;
+			var isOwner = challenge.OwnerId == command.RequesterId;
 
 			if (!command.IsPlatformAdmin && !isOwner)
 				return Result.Rejected(Messages.OnlyOwnerOrAdminCanSeeReports);
 
-			var reports = await checkInReportRepository.ListByPlanIdAsync(command.PlanId);
-			var checkIns = await checkInRepository.ListByPlanIdAsync(command.PlanId);
+			var reports = await checkInReportRepository.ListByChallengeIdAsync(command.ChallengeId);
+			var checkIns = await checkInRepository.ListByChallengeIdAsync(command.ChallengeId);
 			var reporterIds = reports.Select(report => report.ReporterId).Distinct().ToList();
 			var reporters = reporterIds.Count == 0
 				? []
@@ -46,7 +46,7 @@ public sealed class ListCheckInReportsUseCase(
 					{
 						report.Id,
 						report.CheckInId,
-						report.PlanId,
+						report.ChallengeId,
 						report.ReporterId,
 						ReporterName = reporter?.Nickname ?? "Alguém",
 						report.TargetUserId,

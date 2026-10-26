@@ -1,7 +1,7 @@
-﻿using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
+using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 //using Bug.BetterThanYesterday.Domain.Habits;
-//using Bug.BetterThanYesterday.Domain.Plans;
-//using Bug.BetterThanYesterday.Domain.PlanMembers;
+//using Bug.BetterThanYesterday.Domain.Challenges;
+//using Bug.BetterThanYesterday.Domain.ChallengeMembers;
 //using Bug.BetterThanYesterday.Domain.CheckIns;
 //using Bug.BetterThanYesterday.Domain.Users;
 //using Bug.BetterThanYesterday.Application.Mocks;
@@ -13,8 +13,8 @@ namespace Bug.BetterThanYesterday.Application.AdminSettings.PersistMockData;
 public sealed class PersistMockDataUseCase(
 	/*ICheckInRepository checkInRepository,
 	IHabitRepository habitRepository,
-	IPlanMemberRepository planMemberRepository,
-	IPlanRepository planRepository,
+	IChallengeMemberRepository challengeMemberRepository,
+	IChallengeRepository challengeRepository,
 	IUserRepository userRepository*/
 )
 	: IUseCase<PersistMockDataCommand>
@@ -29,8 +29,8 @@ public sealed class PersistMockDataUseCase(
 			{
 				habitRepository.InsertJsonAsync(MockData.MockHabits),
 				userRepository.InsertJsonAsync(MockData.MockUsers),
-				planRepository.InsertJsonAsync(MockData.MockPlans),
-				planMemberRepository.InsertJsonAsync(MockData.MockPlanMembers),
+				challengeRepository.InsertJsonAsync(MockData.MockChallenges),
+				challengeMemberRepository.InsertJsonAsync(MockData.MockChallengeMembers),
 				checkInRepository.InsertJsonAsync(MockData.MockCheckIns)
 			};
 

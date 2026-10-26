@@ -1,4 +1,4 @@
-﻿using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
+using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Commons;
 using Bug.BetterThanYesterday.Domain.Strings;
 
@@ -6,7 +6,7 @@ namespace Bug.BetterThanYesterday.Domain.CheckIns.Entities;
 
 public class CheckIn : Entity
 {
-    public Guid PlanId { get; set; }
+    public Guid ChallengeId { get; set; }
     public Guid UserId { get; set; }
     public DateTime Date { get; set; }
     public int Index { get; set; }
@@ -21,7 +21,7 @@ public class CheckIn : Entity
 
     private CheckIn(
         Guid id,
-        Guid planId,
+        Guid challengeId,
         Guid userId,
         DateTime date,
         int index,
@@ -34,7 +34,7 @@ public class CheckIn : Entity
         bool isReplacement = false)
     {
         Id = id;
-        PlanId = planId;
+        ChallengeId = challengeId;
         UserId = userId;
         Date = date;
         Index = index;
@@ -50,15 +50,15 @@ public class CheckIn : Entity
     }
 
     private CheckIn(
-        Guid planId,
+        Guid challengeId,
         Guid userId,
         DateTime date,
         int index,
         string title,
         string photoUrl)
     : this(
-            id: BuildId(planId, userId, date, index),
-            planId,
+            id: BuildId(challengeId, userId, date, index),
+            challengeId,
             userId,
             date,
             index,
@@ -70,15 +70,15 @@ public class CheckIn : Entity
     { }
 
     public static CheckIn CreateNew(
-        Guid planId,
+        Guid challengeId,
         Guid userId,
         DateTime date,
         int index,
         string title,
         string photoUrl)
     {
-        if (planId == Guid.Empty)
-            throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
+        if (challengeId == Guid.Empty)
+            throw new ArgumentNullException(nameof(challengeId), Messages.EnterChallengeId);
 
         if (userId == Guid.Empty)
             throw new ArgumentNullException(nameof(userId), Messages.EnterUserId);
@@ -95,12 +95,12 @@ public class CheckIn : Entity
         if (string.IsNullOrWhiteSpace(photoUrl))
             throw new ArgumentNullException(nameof(photoUrl), Messages.EnterCheckInPhotoUrl);
 
-        return new CheckIn(planId, userId, date, index, title, photoUrl);
+        return new CheckIn(challengeId, userId, date, index, title, photoUrl);
     }
 
     public static CheckIn Restore(
         Guid id,
-        Guid planId,
+        Guid challengeId,
         Guid userId,
         DateTime date,
         int index,
@@ -115,8 +115,8 @@ public class CheckIn : Entity
         if (id == Guid.Empty)
             throw new ArgumentNullException(nameof(id), Messages.EnterCheckInId);
 
-        if (planId == Guid.Empty)
-            throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
+        if (challengeId == Guid.Empty)
+            throw new ArgumentNullException(nameof(challengeId), Messages.EnterChallengeId);
 
         if (userId == Guid.Empty)
             throw new ArgumentNullException(nameof(userId), Messages.EnterUserId);
@@ -141,7 +141,7 @@ public class CheckIn : Entity
 
         return new CheckIn(
             id,
-            planId,
+            challengeId,
             userId,
             date,
             index,
@@ -154,10 +154,10 @@ public class CheckIn : Entity
             isReplacement);
     }
 
-    public static Guid BuildId(Guid planId, Guid userId, DateTime date, int index = 0)
+    public static Guid BuildId(Guid challengeId, Guid userId, DateTime date, int index = 0)
     {
-        if (planId == Guid.Empty)
-            throw new ArgumentNullException(nameof(planId), Messages.EnterPlanId);
+        if (challengeId == Guid.Empty)
+            throw new ArgumentNullException(nameof(challengeId), Messages.EnterChallengeId);
 
         if (userId == Guid.Empty)
             throw new ArgumentNullException(nameof(userId), Messages.EnterUserId);
