@@ -32,7 +32,7 @@ public sealed class PlanCycleNotificationProcessor(
 	public async Task NotifyCheckInAsync(Guid planId, Guid checkInId, Guid authorId, string authorName, IReadOnlyList<PlanMember> members)
 	{
 		var today = DateOnly.FromDateTime(DateTime.Today);
-		var message = $"{authorName} fez o check-in";
+		var message = $"{authorName} fez check-in";
 		var payload = new CheckInMadePayload { PlanId = planId, CheckInId = checkInId, AuthorId = authorId };
 
 		foreach (var member in members.Where(member => member.UserId != authorId))

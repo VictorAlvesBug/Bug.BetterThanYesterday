@@ -21,6 +21,7 @@ public class PlanQuorumPostponerTests
 		await PlanQuorumPostponer.PostponeWhileUnderQuorumAsync(plan, 1, repository.Object);
 
 		Assert.Equal(today.AddDays(1), plan.StartsAt);
+		Assert.Equal(start.AddDays(4), plan.StartsAt);
 		Assert.Equal(end.AddDays(4), plan.EndsAt);
 		repository.Verify(repo => repo.UpdateAsync(plan), Times.Once);
 	}
