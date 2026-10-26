@@ -16,5 +16,8 @@ public class PlanModel
 	public string Type { get; set; }
 	public int DaysOffPerWeek { get; set; }
 	public decimal PenaltyValue { get; set; }
+	public string? CoverPhotoUrl { get; set; }
+	public decimal AmountOwed { get; set; }
+	public decimal RewardPool { get; set; }
 	public DateTime CreatedAt { get; set; }
 }

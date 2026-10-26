@@ -24,6 +24,7 @@ public sealed class GenerateNotificationsUseCase(
 					notification.PlanId,
 					Kind = notification.Kind.Name,
 					notification.Message,
+					notification.Payload,
 					notification.CreatedAt
 				}),
 			Messages.NotificationsSuccessfullyFound);

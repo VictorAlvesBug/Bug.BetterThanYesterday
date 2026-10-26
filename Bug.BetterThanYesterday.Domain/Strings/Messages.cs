@@ -167,6 +167,7 @@ public static class Messages
     public const string EndDateMustBeLaterThanStartDate = "Data final deve ser posterior à data inicial";
     public const string OnlyValidGuidsCanBeCombined = "Apenas GUIDs válidos podem ser combinados";
     public const string StartDateCannotBeEarlierThanToday = "Data de início não pode ser anterior a hoje";
+    public const string StartDateMustBeFromTomorrow = "A data de início deve ser a partir de amanhã";
     public const string EnterPhoto = "Adicione uma foto";
     public const string EnterValidPhoto = "Informe um caminho válido para a imagem";
     #endregion

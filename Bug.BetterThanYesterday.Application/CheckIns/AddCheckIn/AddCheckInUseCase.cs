@@ -100,7 +100,7 @@ public sealed class AddCheckInUseCase(
 
             try
             {
-                await notificationProcessor.NotifyCheckInAsync(plan.Id, user.Id, user.Name, members);
+				await notificationProcessor.NotifyCheckInAsync(plan.Id, checkIn.Id, user.Id, user.Name, members);
             }
             catch
             {

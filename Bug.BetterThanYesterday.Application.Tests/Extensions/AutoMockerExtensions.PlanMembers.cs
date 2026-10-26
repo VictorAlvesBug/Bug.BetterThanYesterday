@@ -1,4 +1,6 @@
 using Bug.BetterThanYesterday.Application.Tests.Commons;
+using Bug.BetterThanYesterday.Domain.Penalties;
+using Moq;
 using Moq.AutoMock;
 
 namespace Bug.BetterThanYesterday.Application.Tests.Extensions;
@@ -24,6 +26,12 @@ public static partial class AutoMockerExtensions
         (mockedValues.UserRepository, mockedValues.Users) = UserRepositoryMockFactory.Create();
         mocker.Use(mockedValues.UserRepository.Object);
         mocker.Use(mockedValues.Users);
+
+        var penaltyRepository = new Mock<IPenaltyRepository>();
+        penaltyRepository
+            .Setup(repository => repository.ListByPlanIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync([]);
+        mocker.Use(penaltyRepository.Object);
 
         return mockedValues;
     }

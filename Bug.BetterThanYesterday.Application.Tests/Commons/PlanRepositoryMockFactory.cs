@@ -10,7 +10,23 @@ public static class PlanRepositoryMockFactory
 {
 	public static (Mock<IPlanRepository> repo, List<Plan> data) Create()
 	{
-		List<Plan> plans = MockData.MockPlans;
+		foreach (var source in MockData.MockPlans)
+			source.IsCancelled = false;
+
+		List<Plan> plans = MockData.MockPlans
+			.Select(source => Plan.Restore(
+				source.Id,
+				source.OwnerId,
+				source.HabitId,
+				source.Description,
+				source.StartsAt.ToDateTime(TimeOnly.MinValue),
+				source.EndsAt.ToDateTime(TimeOnly.MinValue),
+				source.Type.Name,
+				source.DaysOffPerWeek,
+				source.PenaltyValue,
+				false,
+				source.CreatedAt))
+			.ToList();
 
 		var planRepository = new Mock<IPlanRepository>();
 
@@ -21,7 +37,8 @@ public static class PlanRepositoryMockFactory
 			.ReturnsAsync(plans);
 
 		planRepository
-			.Setup(repo => repo.UpdateAsync(It.IsAny<Plan>()));
+			.Setup(repo => repo.UpdateAsync(It.IsAny<Plan>()))
+			.Returns(Task.CompletedTask);
 
 		planRepository
 			.Setup(repo => repo.DeleteAsync(It.IsAny<Plan>()));

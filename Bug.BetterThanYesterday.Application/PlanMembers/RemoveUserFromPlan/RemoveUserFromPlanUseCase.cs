@@ -77,6 +77,9 @@ public sealed class RemoveUserFromPlanUseCase(
                     .Distinct()
                     .ToList();
                 await planCycleNotificationProcessor.NotifyPlanCancelledForQuorumAsync(plan.Id, recipients);
+
+                foreach (var member in remainingMembers)
+                    await planMemberRepository.DeleteAsync(member);
             }
 
             return Result.Success(

@@ -100,7 +100,8 @@ public sealed class GetPlanRankingUseCase(
                     CheckinCount = validatedCount,
                     PendingCheckinCount = pendingCheckinCount,
                     Penalty = pendingPenaltyAmount,
-                    Streak = streak
+                    Streak = streak,
+                    Days = BuildRankingDays(plan, today, memberCheckIns)
                 });
             }
 
@@ -207,5 +208,73 @@ public sealed class GetPlanRankingUseCase(
         }
 
         return streak;
+    }
+
+    private static List<RankingDayModel> BuildRankingDays(Domain.Plans.Entities.Plan plan, DateOnly today, List<CheckIn> checkIns)
+    {
+        var duration = plan.EndsAt.DayNumber - plan.StartsAt.DayNumber + 1;
+        if (duration < 1)
+            return [];
+
+        var windowSize = Math.Min(duration, 7);
+        DateOnly windowStart;
+
+        if (today <= plan.StartsAt)
+            windowStart = plan.StartsAt;
+        else if (today >= plan.EndsAt)
+            windowStart = plan.EndsAt.AddDays(1 - windowSize);
+        else
+        {
+            var daysSinceStart = today.DayNumber - plan.StartsAt.DayNumber;
+            windowStart = daysSinceStart < windowSize - 1
+                ? plan.StartsAt
+                : today.AddDays(1 - windowSize);
+        }
+
+        if (windowStart < plan.StartsAt)
+            windowStart = plan.StartsAt;
+
+        var days = new List<RankingDayModel>();
+
+        for (var index = 0; index < windowSize; index++)
+        {
+            var date = windowStart.AddDays(index);
+            if (date > plan.EndsAt)
+                break;
+
+            var dayCheckIns = checkIns.Where(checkIn => checkIn.CalendarDate == date).ToList();
+            days.Add(new RankingDayModel
+            {
+                Date = date.ToDateTime(TimeOnly.MinValue),
+                Position = date < today ? "Past" : date == today ? "Today" : "Future",
+                Tone = ToneFor(date, today, dayCheckIns)
+            });
+        }
+
+        return days;
+    }
+
+    private static string ToneFor(DateOnly date, DateOnly today, List<CheckIn> dayCheckIns)
+    {
+        if (date > today)
+            return "gray-e";
+
+        if (dayCheckIns.Count == 0)
+            return date < today.AddDays(-1) ? "danger" : "gray-e";
+
+        var chosen = dayCheckIns.FirstOrDefault(checkIn => checkIn.ResolveStatus() == CheckInStatus.Validated)
+            ?? dayCheckIns.FirstOrDefault(checkIn => checkIn.IsReviewWindowOpen())
+            ?? dayCheckIns[0];
+
+        if (chosen.IsReviewWindowOpen())
+        {
+            var activeReviews = chosen.Reviews.Where(review => review.Enable).ToList();
+            var rejections = activeReviews.Count(review => review.Status == CheckInStatus.Rejected);
+            return activeReviews.Count > 0 && rejections > activeReviews.Count / 2
+                ? "dark-orange"
+                : "gold";
+        }
+
+        return chosen.ResolveStatus() == CheckInStatus.Rejected ? "danger" : "success";
     }
 }

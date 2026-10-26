@@ -18,4 +18,5 @@ public class PlanDocument : Document
 	public int DaysOffPerWeek { get; set; }
 	public decimal PenaltyValue { get; set; }
 	public bool IsCancelled { get; set; }
+	public string? CoverPhotoUrl { get; set; }
 }

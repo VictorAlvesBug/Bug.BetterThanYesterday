@@ -15,6 +15,7 @@ public sealed class Plan : Entity
 	public int DaysOffPerWeek { get; set; }
 	public decimal PenaltyValue { get; set; }
 	public bool IsCancelled { get; set; }
+	public string? CoverPhotoUrl { get; set; }
 
 	public int CheckInReviewWindowInDays = 1;
 
@@ -29,7 +30,8 @@ public sealed class Plan : Entity
 		int daysOffPerWeek,
 		decimal penaltyValue,
 		bool isCancelled,
-		DateTime createdAt)
+		DateTime createdAt,
+		string? coverPhotoUrl = null)
 	{
 		Id = id;
 		OwnerId = ownerId;
@@ -42,6 +44,7 @@ public sealed class Plan : Entity
 		PenaltyValue = penaltyValue;
 		IsCancelled = isCancelled;
 		CreatedAt = createdAt;
+		CoverPhotoUrl = coverPhotoUrl;
 	}
 
 	private Plan(
@@ -52,7 +55,8 @@ public sealed class Plan : Entity
 		DateTime endsAt,
 		string typeIdOrName,
 		int daysOffPerWeek,
-		decimal penaltyValue)
+		decimal penaltyValue,
+		string? coverPhotoUrl = null)
 	: this(
 		id: Guid.NewGuid(),
 		ownerId,
@@ -64,7 +68,8 @@ public sealed class Plan : Entity
 		daysOffPerWeek,
 		penaltyValue,
 		isCancelled: false,
-		createdAt: DateTime.Now)
+		createdAt: DateTime.Now,
+		coverPhotoUrl)
 	{
 	}
 
@@ -76,7 +81,8 @@ public sealed class Plan : Entity
 		DateTime endsAt,
 		string typeIdOrName,
 		int daysOffPerWeek,
-		decimal penaltyValue)
+		decimal penaltyValue,
+		string? coverPhotoUrl = null)
 	{
 		if (ownerId == Guid.Empty)
 			throw new ArgumentNullException(nameof(ownerId), Messages.EnterOwnerId);
@@ -107,7 +113,8 @@ public sealed class Plan : Entity
 			endsAt,
 			typeIdOrName,
 			daysOffPerWeek,
-			penaltyValue);
+			penaltyValue,
+			coverPhotoUrl);
 	}
 
 	public static Plan Restore(
@@ -121,7 +128,8 @@ public sealed class Plan : Entity
 		int daysOffPerWeek,
 		decimal penaltyValue,
 		bool isCancelled,
-		DateTime createdAt)
+		DateTime createdAt,
+		string? coverPhotoUrl = null)
 	{
 		if (id == Guid.Empty)
 			throw new ArgumentNullException(nameof(id), Messages.EnterPlanId);
@@ -161,7 +169,8 @@ public sealed class Plan : Entity
 			daysOffPerWeek,
 			penaltyValue,
 			isCancelled,
-			createdAt);
+			createdAt,
+			coverPhotoUrl);
 	}
 
 	public void Cancel()
@@ -208,6 +217,9 @@ public sealed class Plan : Entity
 
 		if (endsAt <= startsAt)
 			throw new ArgumentException(Messages.EndDateMustBeLaterThanStartDate, nameof(endsAt));
+
+		if (startsAt <= DateOnly.FromDateTime(DateTime.Today))
+			throw new ArgumentException(Messages.StartDateMustBeFromTomorrow, nameof(startsAt));
 
 		StartsAt = startsAt;
 		EndsAt = endsAt;

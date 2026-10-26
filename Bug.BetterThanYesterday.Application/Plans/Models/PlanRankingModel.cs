@@ -10,6 +10,14 @@ public class PlanRankingItemModel
 	public decimal Penalty { get; set; }
 	public int Streak { get; set; }
 	public string? PhotoUrl { get; set; }
+	public List<RankingDayModel> Days { get; set; } = [];
+}
+
+public class RankingDayModel
+{
+	public DateTime Date { get; set; }
+	public string Position { get; set; } = string.Empty;
+	public string Tone { get; set; } = "gray-e";
 }
 
 public class PlanRankingModel

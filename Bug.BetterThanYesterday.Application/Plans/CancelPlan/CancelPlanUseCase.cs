@@ -2,6 +2,7 @@
 using Bug.BetterThanYesterday.Application.Habits;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits;
+using Bug.BetterThanYesterday.Domain.PlanMembers;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Plans.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Strings;
@@ -11,6 +12,7 @@ namespace Bug.BetterThanYesterday.Application.Plans.CancelPlan;
 
 public class CancelPlanUseCase(
 	IPlanRepository planRepository,
+	IPlanMemberRepository planMemberRepository,
 	IHabitRepository habitRepository,
 	IUserRepository userRepository,
 	IPlanFinancesProcessor planFinancesProcessor)
@@ -41,6 +43,11 @@ public class CancelPlanUseCase(
 
 			await planRepository.UpdateAsync(plan);
 			await planFinancesProcessor.ProcessAsync(plan.Id);
+
+			var members = await planMemberRepository.ListByPlanIdAsync(plan.Id);
+			foreach (var member in members)
+				await planMemberRepository.DeleteAsync(member);
+
 			return Result.Success(plan.ToModel(habit, owner), Messages.PlanSuccessfullyCancelled);
 		}
 		catch (Exception ex)

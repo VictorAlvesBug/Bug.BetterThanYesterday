@@ -1,7 +1,10 @@
 using Bug.BetterThanYesterday.Application.Habits;
+using Bug.BetterThanYesterday.Application.Ledger;
 using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Habits;
+using Bug.BetterThanYesterday.Domain.Penalties;
+using Bug.BetterThanYesterday.Domain.Penalties.ValueObjects;
 using Bug.BetterThanYesterday.Domain.PlanMembers;
 using Bug.BetterThanYesterday.Domain.Plans;
 using Bug.BetterThanYesterday.Domain.Strings;
@@ -13,7 +16,8 @@ public sealed class GetUserWithPlansByUserIdUseCase(
     IPlanMemberRepository planMemberRepository,
     IPlanRepository planRepository,
     IHabitRepository habitRepository,
-    IUserRepository userRepository)
+    IUserRepository userRepository,
+    IPenaltyRepository penaltyRepository)
     : IUseCase<GetUserWithPlansByUserIdCommand>
 {
     public async Task<IResult> HandleAsync(GetUserWithPlansByUserIdCommand command)
@@ -55,7 +59,16 @@ public sealed class GetUserWithPlansByUserIdUseCase(
 
             var tasks = plans.Select(async plan => {
                 var habit = await habitRepository.GetByIdAsync(plan.HabitId) ?? throw new Exception(Messages.HabitNotFound);
-                return plan.ToModel(habit, ownersById[plan.OwnerId]);
+                var model = plan.ToModel(habit, ownersById[plan.OwnerId]);
+                var penalties = await penaltyRepository.ListByPlanIdAsync(plan.Id);
+                model.AmountOwed = penalties
+                    .Where(penalty => penalty.UserId == command.UserId && penalty.Status == PenaltyStatus.Pending)
+                    .Sum(penalty => penalty.Amount);
+                var paidPot = penalties
+                    .Where(penalty => penalty.Status == PenaltyStatus.Paid)
+                    .Sum(penalty => penalty.Amount);
+                model.RewardPool = SettlementCalculator.DistributableAmount(paidPot);
+                return model;
             }).ToList();
 
             var planModels = (await Task.WhenAll(tasks)).ToList();

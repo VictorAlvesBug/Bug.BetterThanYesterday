@@ -17,6 +17,7 @@ internal sealed class PlanMapper : IDocumentMapper<Plan, PlanDocument>
 		DaysOffPerWeek = plan.DaysOffPerWeek,
 		PenaltyValue = plan.PenaltyValue,
 		IsCancelled = plan.IsCancelled,
+		CoverPhotoUrl = plan.CoverPhotoUrl,
 		CreatedAt = plan.CreatedAt,
 	};
 
@@ -31,5 +32,6 @@ internal sealed class PlanMapper : IDocumentMapper<Plan, PlanDocument>
 		document.DaysOffPerWeek,
 		document.PenaltyValue,
 		document.IsCancelled,
-		document.CreatedAt);
+		document.CreatedAt,
+		document.CoverPhotoUrl);
 }

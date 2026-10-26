@@ -9,6 +9,9 @@ public sealed class NotificationKind : Enumeration<NotificationKind>
 	public static readonly NotificationKind FineAtRisk = new(3, nameof(FineAtRisk));
 	public static readonly NotificationKind PlanStartsToday = new(4, nameof(PlanStartsToday));
 	public static readonly NotificationKind PlanCancelledForQuorum = new(5, nameof(PlanCancelledForQuorum));
+	public static readonly NotificationKind CheckInReviewed = new(6, nameof(CheckInReviewed));
+	public static readonly NotificationKind CheckInRejectionRisk = new(7, nameof(CheckInRejectionRisk));
+	public static readonly NotificationKind CheckInReported = new(8, nameof(CheckInReported));
 
 	private NotificationKind(int id, string name) : base(id, name) { }
 }

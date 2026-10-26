@@ -22,6 +22,7 @@ internal static class PlanMapper
 		Type = plan.Type.Name,
 		DaysOffPerWeek = plan.DaysOffPerWeek,
 		PenaltyValue = plan.PenaltyValue,
+		CoverPhotoUrl = plan.CoverPhotoUrl,
 		CreatedAt = plan.CreatedAt
 	};
 }

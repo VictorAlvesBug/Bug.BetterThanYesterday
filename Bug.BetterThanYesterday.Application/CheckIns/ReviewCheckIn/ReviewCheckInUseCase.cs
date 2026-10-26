@@ -1,3 +1,4 @@
+using Bug.BetterThanYesterday.Application.Notifications;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.CheckIns;
 using Bug.BetterThanYesterday.Domain.CheckIns.Entities;
@@ -18,7 +19,8 @@ public sealed class ReviewCheckInUseCase(
     IPlanRepository planRepository,
     IHabitRepository habitRepository,
     IUserRepository userRepository,
-    IPlanMemberRepository planMemberRepository)
+    IPlanMemberRepository planMemberRepository,
+    IPlanCycleNotificationProcessor notificationProcessor)
     : IUseCase<ReviewCheckInCommand>
 {
     public async Task<IResult> HandleAsync(ReviewCheckInCommand command)
@@ -80,6 +82,28 @@ public sealed class ReviewCheckInUseCase(
             checkIn.AddReview(Review.Create(command.ReviewerId, command.Status, command.Date));
 
             await checkInRepository.UpdateAsync(checkIn);
+
+            try
+            {
+                var activeReviews = checkIn.Reviews.Where(review => review.Enable).ToList();
+                var rejections = activeReviews.Count(review => review.Status == CheckInStatus.Rejected);
+                var atRisk = checkIn.IsReviewWindowOpen()
+                    && activeReviews.Count > 0
+                    && rejections > activeReviews.Count / 2;
+
+                await notificationProcessor.NotifyCheckInReviewedAsync(
+                    plan.Id,
+                    checkIn.Id,
+                    checkIn.UserId,
+                    reviewer.Id,
+                    reviewer.Nickname,
+                    command.Status == CheckInStatus.Rejected.Name,
+                    atRisk);
+            }
+            catch
+            {
+                // O aviso não impede a avaliação.
+            }
 
             return Result.Success(
                 checkIn.ToModel(plan, habit, checkInOwner),

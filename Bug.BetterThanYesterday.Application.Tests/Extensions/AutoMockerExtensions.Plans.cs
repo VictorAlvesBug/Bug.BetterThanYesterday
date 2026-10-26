@@ -21,6 +21,10 @@ public static partial class AutoMockerExtensions
         mocker.Use(mockedValues.UserRepository.Object);
         mocker.Use(mockedValues.Users);
 
+        (mockedValues.PlanMemberRepository, mockedValues.PlanMembers) = PlanMemberRepositoryMockFactory.Create();
+        mocker.Use(mockedValues.PlanMemberRepository.Object);
+        mocker.Use(mockedValues.PlanMembers);
+
         return mockedValues;
     }
 }

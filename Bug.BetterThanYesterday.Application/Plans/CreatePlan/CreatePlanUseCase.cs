@@ -38,7 +38,8 @@ public class CreatePlanUseCase(
 				command.EndsAt,
 				command.Type,
 				command.DaysOffPerWeek,
-				command.PenaltyValue);
+				command.PenaltyValue,
+				command.CoverPhotoUrl);
 
 			await planRepository.AddAsync(plan);
 			return Result.Success(plan.ToModel(habit, owner), Messages.PlanSuccessfullyRegistered);

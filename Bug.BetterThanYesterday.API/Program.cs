@@ -55,6 +55,8 @@ builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
+builder.Services.Configure<Bug.BetterThanYesterday.Application.Reports.CreateCheckInReport.PlatformAdminOptions>(
+	builder.Configuration.GetSection(Bug.BetterThanYesterday.Application.Reports.CreateCheckInReport.PlatformAdminOptions.SectionName));
 
 builder.Services.AddCors(options =>
 {

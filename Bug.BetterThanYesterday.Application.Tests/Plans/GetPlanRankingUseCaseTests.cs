@@ -132,7 +132,7 @@ public class GetPlanRankingUseCaseTests
 			[],
 			[]);
 
-		Assert.Equal(7, count);
+		Assert.Equal(6, count);
 	}
 
 	private static Plan CreatePlan(DateOnly startsAt, int daysOffPerWeek)

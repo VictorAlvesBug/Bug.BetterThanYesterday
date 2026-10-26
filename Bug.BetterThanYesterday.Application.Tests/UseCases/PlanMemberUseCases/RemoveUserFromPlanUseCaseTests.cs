@@ -61,7 +61,7 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanMemberUseCaseTests
 		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
 		_mock.PlanMemberRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.PlanMemberRepository.Verify(repo => repo.UpdateAsync(It.IsAny<PlanMember>()), Times.Once);
+		_mock.PlanMemberRepository.Verify(repo => repo.DeleteAsync(It.IsAny<PlanMember>()), Times.Once);
 	}
 
 	[Fact]
@@ -137,7 +137,7 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanMemberUseCaseTests
 	}
 
 	[Fact]
-	public async Task Test_RemoveUserFromPlanUseCase_MemberCannotBeRemovedFromThePlanAsHeIsBlocked_ShouldReturnRejected()
+	public async Task Test_RemoveUserFromPlanUseCase_BlockedMemberCanLeave_ShouldReturnSuccess()
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<RemoveUserFromPlanUseCase>();
@@ -151,13 +151,10 @@ public class RemoveUserFromPlanUseCaseTests : BasePlanMemberUseCaseTests
 
 		// Assert
 		Assert.NotNull(result);
-		Assert.True(result.IsRejected());
-		Assert.Equal(Messages.MemberCannotBeRemovedFromThePlanAsHeIsBlocked, result.GetMessage());
+		Assert.True(result.IsSuccess());
+		Assert.Equal(Messages.MemberSuccessfullyRemovedFromThePlan, result.GetMessage());
 
-		_mock.PlanRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.PlanMemberRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
-		_mock.PlanMemberRepository.Verify(repo => repo.UpdateAsync(It.IsAny<PlanMember>()), Times.Never);
+		_mock.PlanMemberRepository.Verify(repo => repo.DeleteAsync(It.IsAny<PlanMember>()), Times.Once);
 	}
 
 	[Fact]

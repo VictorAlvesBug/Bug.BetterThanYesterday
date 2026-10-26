@@ -1,4 +1,5 @@
-﻿using Bug.BetterThanYesterday.Application.Plans.CancelPlan;
+﻿using Bug.BetterThanYesterday.Application.Ledger;
+using Bug.BetterThanYesterday.Application.Plans.CancelPlan;
 using Bug.BetterThanYesterday.Application.Plans;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Moq;
@@ -16,6 +17,9 @@ public class CancelPlanUseCaseTests : BasePlanUseCaseTests
 	{
 		// Arrange
 		var useCase = _mocker.CreateInstance<CancelPlanUseCase>();
+		_mocker.GetMock<IPlanFinancesProcessor>()
+			.Setup(processor => processor.ProcessAsync(It.IsAny<Guid>()))
+			.Returns(Task.CompletedTask);
 		var firstPlan = _mock.Plans[0];
 		var command = new CancelPlanCommand(firstPlan.Id);
 

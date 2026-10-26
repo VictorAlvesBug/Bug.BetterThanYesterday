@@ -15,17 +15,20 @@ public static class PlanMemberRepositoryMockFactory
 		var planMemberRepository = new Mock<IPlanMemberRepository>();
 
 		planMemberRepository
-			.Setup(repo => repo.AddAsync(It.IsAny<PlanMember>()));
+			.Setup(repo => repo.AddAsync(It.IsAny<PlanMember>()))
+			.Returns(Task.CompletedTask);
 
 		planMemberRepository
 			.Setup(repo => repo.ListAllAsync())
 			.ReturnsAsync(planMembers);
 
 		planMemberRepository
-			.Setup(repo => repo.UpdateAsync(It.IsAny<PlanMember>()));
+			.Setup(repo => repo.UpdateAsync(It.IsAny<PlanMember>()))
+			.Returns(Task.CompletedTask);
 
 		planMemberRepository
-			.Setup(repo => repo.DeleteAsync(It.IsAny<PlanMember>()));
+			.Setup(repo => repo.DeleteAsync(It.IsAny<PlanMember>()))
+			.Returns(Task.CompletedTask);
 
 		planMemberRepository
 			.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))

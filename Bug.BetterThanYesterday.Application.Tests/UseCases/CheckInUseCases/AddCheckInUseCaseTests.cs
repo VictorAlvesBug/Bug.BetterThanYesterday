@@ -144,4 +144,88 @@ public class AddCheckInUseCaseTests : BaseCheckInUseCaseTests
         _mock.CheckInRepository.Verify(x => x.ListByPlanIdAndUserIdAndDateAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<DateOnly>()), Times.Once);
         _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Never);
     }
+
+    [Fact]
+    public async Task Test_AddCheckInUseCase_Yesterday_ShouldReturnSuccess()
+    {
+        var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
+        var command = new AddCheckInCommand
+        {
+            PlanId = MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+            UserId = MockData.UserId4,
+            Date = DateTime.Today.AddDays(-1),
+            Title = "Test Title",
+            EvidencePhotoUrl = "Test Description"
+        };
+
+        var result = await useCase.HandleAsync(command);
+
+        Assert.True(result.IsSuccess());
+        Assert.Equal(Messages.CheckInSuccessfullyRegistered, result.GetMessage());
+        _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task Test_AddCheckInUseCase_DayBeforeYesterday_ShouldReturnRejected()
+    {
+        var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
+        var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId1_WithUserId1Active);
+        var user = _mock.Users.First(user => user.Id == MockData.UserId1);
+        var command = new AddCheckInCommand
+        {
+            PlanId = plan.Id,
+            UserId = user.Id,
+            Date = DateTime.Today.AddDays(-2),
+            Title = "Test Title",
+            EvidencePhotoUrl = "Test Description"
+        };
+
+        var result = await useCase.HandleAsync(command);
+
+        Assert.True(result.IsRejected());
+        Assert.Equal(Messages.CheckInDateMustBeTodayOrYesterday, result.GetMessage());
+        _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task Test_AddCheckInUseCase_Tomorrow_ShouldReturnRejected()
+    {
+        var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
+        var plan = _mock.Plans.First(plan => plan.Id == MockData.PublicRunningPlanId1_WithUserId1Active);
+        var user = _mock.Users.First(user => user.Id == MockData.UserId1);
+        var command = new AddCheckInCommand
+        {
+            PlanId = plan.Id,
+            UserId = user.Id,
+            Date = DateTime.Today.AddDays(1),
+            Title = "Test Title",
+            EvidencePhotoUrl = "Test Description"
+        };
+
+        var result = await useCase.HandleAsync(command);
+
+        Assert.True(result.IsRejected());
+        Assert.Equal(Messages.CheckInDateMustBeTodayOrYesterday, result.GetMessage());
+        _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task Test_AddCheckInUseCase_BlockedMember_ShouldReturnRejected()
+    {
+        var useCase = _mocker.CreateInstance<AddCheckInUseCase>();
+        var command = new AddCheckInCommand
+        {
+            PlanId = MockData.PublicRunningPlanId7_WithUserId3BlockedAndUserId4ActiveAndUserId5Active,
+            UserId = MockData.UserId3,
+            Date = DateTime.Today,
+            Title = "Test Title",
+            EvidencePhotoUrl = "Test Description"
+        };
+
+        var result = await useCase.HandleAsync(command);
+
+        Assert.True(result.IsRejected());
+        Assert.Equal(Messages.OnlyActiveMembersCanMakeCheckIns, result.GetMessage());
+        _mock.CheckInRepository.Verify(x => x.AddAsync(It.IsAny<CheckIn>()), Times.Never);
+    }
 }

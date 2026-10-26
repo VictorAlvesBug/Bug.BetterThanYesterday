@@ -33,6 +33,7 @@ public class CreatePlanCommand : ICommand
 	public string Type { get; init; }
 	public int DaysOffPerWeek { get; init; }
 	public decimal PenaltyValue { get; init; }
+	public string? CoverPhotoUrl { get; set; }
 
 	public void Validate()
 	{
