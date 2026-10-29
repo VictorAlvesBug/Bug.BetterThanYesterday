@@ -6,16 +6,16 @@ using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Strings;
 using Bug.BetterThanYesterday.Domain.Users;
 
-namespace Bug.BetterThanYesterday.Application.CheckIns.GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDate;
+namespace Bug.BetterThanYesterday.Application.CheckIns.GetChallengeUserDateWithCheckIns;
 
-public sealed class GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCase(
+public sealed class GetChallengeUserDateWithCheckInsUseCase(
     ICheckInRepository checkInRepository,
     IChallengeRepository challengeRepository,
     IHabitRepository habitRepository,
     IUserRepository userRepository)
-    : IUseCase<GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateCommand>
+    : IUseCase<GetChallengeUserDateWithCheckInsCommand>
 {
-    public async Task<IResult> HandleAsync(GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateCommand command)
+    public async Task<IResult> HandleAsync(GetChallengeUserDateWithCheckInsCommand command)
     {
         try
         {

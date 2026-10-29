@@ -11,6 +11,7 @@ using Bug.BetterThanYesterday.Domain.ChallengeMembers.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Challenges.Entities;
 using Bug.BetterThanYesterday.Domain.Challenges.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
+using Bug.BetterThanYesterday.Domain.Users.ValueObjects;
 
 namespace Bug.BetterThanYesterday.Application.Mocks
 {
@@ -115,7 +116,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				$"User {UserId1} Nickname",
 				"11987654321",
 				"11987654321",
-				"PhoneNumber",
+				nameof(PixKeyType.PhoneNumber),
 				new DateTime(2023, 06, 20)
 			),
 			User.Restore(
@@ -126,7 +127,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				$"User {UserId2} Nickname",
 				"11987654321",
 				"11987654321",
-				"PhoneNumber",
+				nameof(PixKeyType.PhoneNumber),
 				new DateTime(2024, 01, 10)
 			),
 			User.Restore(
@@ -137,7 +138,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				$"User {UserId3} Nickname",
 				"11987654321",
 				"11987654321",
-				"PhoneNumber",
+				nameof(PixKeyType.PhoneNumber),
 				new DateTime(2020, 06, 20)
 			),
 			User.Restore(
@@ -148,7 +149,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				$"User {UserId4} Nickname",
 				"11987654321",
 				"11987654321",
-				"PhoneNumber",
+				nameof(PixKeyType.PhoneNumber),
 				new DateTime(2020, 06, 20)
 			),
 			User.Restore(
@@ -159,7 +160,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				$"User {UserId5} Nickname",
 				"11987654321",
 				"11987654321",
-				"PhoneNumber",
+				nameof(PixKeyType.PhoneNumber),
 				new DateTime(2020, 06, 20)
 			),
 			User.Restore(
@@ -170,7 +171,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 				$"User {UserId6} Nickname",
 				"11987654321",
 				"11987654321",
-				"PhoneNumber",
+				nameof(PixKeyType.PhoneNumber),
 				new DateTime(2020, 06, 20)
 			)
 		];
@@ -579,7 +580,7 @@ namespace Bug.BetterThanYesterday.Application.Mocks
 			nickname: "MockNick",
 			phoneNumber: "11987654321",
 			pixKey: "11987654321",
-			pixKeyType: "PhoneNumber"
+			pixKeyType: nameof(PixKeyType.PhoneNumber)
 		);
 
 		#endregion

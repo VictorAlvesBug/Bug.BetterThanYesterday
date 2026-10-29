@@ -21,7 +21,7 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 			"Jane",
 			"11987654321",
 			"11987654321",
-			"PhoneNumber");
+			nameof(PixKeyType.PhoneNumber));
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -47,7 +47,7 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 			"Jane",
 			"11987654321",
 			"11987654321",
-			"PhoneNumber");
+			nameof(PixKeyType.PhoneNumber));
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -73,7 +73,7 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 			"Jane",
 			"11987654321",
 			"11987654321",
-			"PhoneNumber");
+			nameof(PixKeyType.PhoneNumber));
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -99,7 +99,7 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 			"Jane",
 			"11987654321",
 			"11987654321",
-			"PhoneNumber");
+			nameof(PixKeyType.PhoneNumber));
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -126,7 +126,7 @@ public class RegisterUserUseCaseTests : BaseUserUseCaseTests
 			"Jane",
 			"11987654321",
 			"11987654321",
-			"PhoneNumber");
+			nameof(PixKeyType.PhoneNumber));
 
 		// Act
 		var result = await useCase.HandleAsync(command);

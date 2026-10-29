@@ -26,8 +26,3 @@ public class PixController(IUseCase<ConfirmPixPaymentCommand> confirmPixPaymentU
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 }
-
-public sealed class PixWebhookRequest
-{
-	public string ExternalPaymentId { get; set; } = string.Empty;
-}

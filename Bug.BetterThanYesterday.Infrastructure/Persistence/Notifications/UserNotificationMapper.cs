@@ -35,27 +35,27 @@ internal sealed class UserNotificationMapper : IDocumentMapper<UserNotification,
 	{
 		CheckInReviewedPayload reviewed => new NotificationPayloadDocument
 		{
-			Type = "CheckInReviewed",
+			Type = nameof(NotificationKind.CheckInReviewed),
 			ChallengeId = reviewed.ChallengeId,
 			CheckInId = reviewed.CheckInId,
 			ReviewerId = reviewed.ReviewerId
 		},
 		CheckInRejectionRiskPayload risk => new NotificationPayloadDocument
 		{
-			Type = "CheckInRejectionRisk",
+			Type = nameof(NotificationKind.CheckInRejectionRisk),
 			ChallengeId = risk.ChallengeId,
 			CheckInId = risk.CheckInId
 		},
 		CheckInMadePayload made => new NotificationPayloadDocument
 		{
-			Type = "CheckInMade",
+			Type = nameof(NotificationKind.CheckInMade),
 			ChallengeId = made.ChallengeId,
 			CheckInId = made.CheckInId,
 			AuthorId = made.AuthorId
 		},
 		CheckInReportedPayload reported => new NotificationPayloadDocument
 		{
-			Type = "CheckInReported",
+			Type = nameof(NotificationKind.CheckInReported),
 			ChallengeId = reported.ChallengeId,
 			CheckInId = reported.CheckInId,
 			ReporterId = reported.ReporterId,
@@ -75,33 +75,33 @@ internal sealed class UserNotificationMapper : IDocumentMapper<UserNotification,
 
 		return type switch
 		{
-			"CheckInReviewed" => new CheckInReviewedPayload
+			nameof(NotificationKind.CheckInReviewed) => new CheckInReviewedPayload
 			{
 				ChallengeId = resolvedChallengeId,
 				CheckInId = document?.CheckInId ?? Guid.Empty,
 				ReviewerId = document?.ReviewerId ?? Guid.Empty
 			},
-			"CheckInRejectionRisk" => new CheckInRejectionRiskPayload
+			nameof(NotificationKind.CheckInRejectionRisk) => new CheckInRejectionRiskPayload
 			{
 				ChallengeId = resolvedChallengeId,
 				CheckInId = document?.CheckInId ?? Guid.Empty
 			},
-			"CheckInMade" => new CheckInMadePayload
+			nameof(NotificationKind.CheckInMade) => new CheckInMadePayload
 			{
 				ChallengeId = resolvedChallengeId,
 				CheckInId = document?.CheckInId ?? Guid.Empty,
 				AuthorId = document?.AuthorId ?? Guid.Empty
 			},
-			"CheckInReported" => new CheckInReportedPayload
+			nameof(NotificationKind.CheckInReported) => new CheckInReportedPayload
 			{
 				ChallengeId = resolvedChallengeId,
 				CheckInId = document?.CheckInId ?? Guid.Empty,
 				ReporterId = document?.ReporterId ?? Guid.Empty,
 				TargetUserId = document?.TargetUserId ?? Guid.Empty
 			},
-			"RestAtRisk" => new RestAtRiskPayload { ChallengeId = resolvedChallengeId },
-			"FineAtRisk" => new FineAtRiskPayload { ChallengeId = resolvedChallengeId },
-			"ChallengeCancelledForQuorum" => new ChallengeCancelledForQuorumPayload { ChallengeId = resolvedChallengeId },
+			nameof(NotificationKind.RestAtRisk) => new RestAtRiskPayload { ChallengeId = resolvedChallengeId },
+			nameof(NotificationKind.FineAtRisk) => new FineAtRiskPayload { ChallengeId = resolvedChallengeId },
+			nameof(NotificationKind.ChallengeCancelledForQuorum) => new ChallengeCancelledForQuorumPayload { ChallengeId = resolvedChallengeId },
 			_ => NotificationPayload.ForChallenge(NotificationKind.Get(string.IsNullOrWhiteSpace(type) ? kind : type), resolvedChallengeId)
 		};
 	}

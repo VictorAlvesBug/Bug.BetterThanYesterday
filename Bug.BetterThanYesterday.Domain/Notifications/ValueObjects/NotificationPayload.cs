@@ -3,14 +3,14 @@ using System.Text.Json.Serialization;
 namespace Bug.BetterThanYesterday.Domain.Notifications.ValueObjects;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(CheckInReviewedPayload), "CheckInReviewed")]
-[JsonDerivedType(typeof(CheckInRejectionRiskPayload), "CheckInRejectionRisk")]
-[JsonDerivedType(typeof(CheckInMadePayload), "CheckInMade")]
-[JsonDerivedType(typeof(CheckInReportedPayload), "CheckInReported")]
-[JsonDerivedType(typeof(RestAtRiskPayload), "RestAtRisk")]
-[JsonDerivedType(typeof(FineAtRiskPayload), "FineAtRisk")]
-[JsonDerivedType(typeof(ChallengeStartsTodayPayload), "ChallengeStartsToday")]
-[JsonDerivedType(typeof(ChallengeCancelledForQuorumPayload), "ChallengeCancelledForQuorum")]
+[JsonDerivedType(typeof(CheckInReviewedPayload), nameof(NotificationKind.CheckInReviewed))]
+[JsonDerivedType(typeof(CheckInRejectionRiskPayload), nameof(NotificationKind.CheckInRejectionRisk))]
+[JsonDerivedType(typeof(CheckInMadePayload), nameof(NotificationKind.CheckInMade))]
+[JsonDerivedType(typeof(CheckInReportedPayload), nameof(NotificationKind.CheckInReported))]
+[JsonDerivedType(typeof(RestAtRiskPayload), nameof(NotificationKind.RestAtRisk))]
+[JsonDerivedType(typeof(FineAtRiskPayload), nameof(NotificationKind.FineAtRisk))]
+[JsonDerivedType(typeof(ChallengeStartsTodayPayload), nameof(NotificationKind.ChallengeStartsToday))]
+[JsonDerivedType(typeof(ChallengeCancelledForQuorumPayload), nameof(NotificationKind.ChallengeCancelledForQuorum))]
 public abstract class NotificationPayload
 {
 	public Guid ChallengeId { get; init; }
@@ -41,35 +41,3 @@ public abstract class NotificationPayload
 		_ => null
 	};
 }
-
-public sealed class CheckInReviewedPayload : NotificationPayload
-{
-	public Guid CheckInId { get; init; }
-	public Guid ReviewerId { get; init; }
-}
-
-public sealed class CheckInRejectionRiskPayload : NotificationPayload
-{
-	public Guid CheckInId { get; init; }
-}
-
-public sealed class CheckInMadePayload : NotificationPayload
-{
-	public Guid CheckInId { get; init; }
-	public Guid AuthorId { get; init; }
-}
-
-public sealed class CheckInReportedPayload : NotificationPayload
-{
-	public Guid CheckInId { get; init; }
-	public Guid ReporterId { get; init; }
-	public Guid TargetUserId { get; init; }
-}
-
-public sealed class RestAtRiskPayload : NotificationPayload;
-
-public sealed class FineAtRiskPayload : NotificationPayload;
-
-public sealed class ChallengeStartsTodayPayload : NotificationPayload;
-
-public sealed class ChallengeCancelledForQuorumPayload : NotificationPayload;

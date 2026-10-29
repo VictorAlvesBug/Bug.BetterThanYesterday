@@ -13,11 +13,6 @@ using Bug.BetterThanYesterday.Domain.Challenges.ValueObjects;
 
 namespace Bug.BetterThanYesterday.Application.Penalties;
 
-public interface IChallengeDayClosureProcessor
-{
-	Task ProcessChallengeAsync(Guid challengeId);
-}
-
 public sealed class ChallengeDayClosureProcessor(
 	ICheckInRepository checkInRepository,
 	IPenaltyRepository penaltyRepository,
@@ -91,7 +86,7 @@ public sealed class ChallengeDayClosureProcessor(
 					continue;
 
 				// Cria a multa para o membro nesse dia					
-                var penalty = Penalty.CreateNew(challengeId, member.UserId, day, challenge.PenaltyValue);
+                var penalty = Penalty.CreateNew(challengeId: challengeId, userId: member.UserId, date: day, amount: challenge.PenaltyValue);
 				await penaltyRepository.AddAsync(penalty);
 				memberPenalties.Add(penalty);
 

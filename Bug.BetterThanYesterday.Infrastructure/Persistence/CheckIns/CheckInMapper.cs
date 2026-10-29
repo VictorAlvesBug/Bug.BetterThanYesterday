@@ -16,7 +16,7 @@ internal sealed class CheckInMapper : IDocumentMapper<CheckIn, CheckInDocument>
 		Title = checkIn.Title,
 		PhotoUrl = checkIn.PhotoUrl,
 		Status = checkIn.Status.Name,
-		Reviews = checkIn.Reviews.Select(review => new ReviewObject()
+		Reviews = checkIn.Reviews.Select(review => new ReviewDocument()
 		{
 			ReviewerId = review.ReviewerId,
 			Status = review.Status.Name,

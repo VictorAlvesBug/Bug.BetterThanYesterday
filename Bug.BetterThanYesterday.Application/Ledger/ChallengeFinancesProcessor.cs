@@ -15,11 +15,6 @@ using Bug.BetterThanYesterday.Domain.Users;
 
 namespace Bug.BetterThanYesterday.Application.Ledger;
 
-public interface IChallengeFinancesProcessor
-{
-	Task ProcessAsync(Guid challengeId);
-}
-
 public sealed class ChallengeFinancesProcessor(
 	IChallengeRepository challengeRepository,
 	IChallengeMemberRepository challengeMemberRepository,

@@ -47,7 +47,7 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 			nickname: "NewNick",
 			phoneNumber: "11987654321",
 			pixKey: "11987654321",
-			pixKeyType: "PhoneNumber");
+			pixKeyType: nameof(PixKeyType.PhoneNumber));
 
 		// Act
 		var result = await useCase.HandleAsync(command);
@@ -61,7 +61,7 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 		Assert.Equal("NewNick", resultData.Nickname);
 		Assert.Equal("11987654321", resultData.PhoneNumber);
 		Assert.Equal("11987654321", resultData.PixKey);
-		Assert.Equal("PhoneNumber", resultData.PixKeyType);
+		Assert.Equal(nameof(PixKeyType.PhoneNumber), resultData.PixKeyType);
 		Assert.Equal("https://example.com/photo.jpg", resultData.PhotoUrl);
 
 		_mock.UserRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -183,7 +183,7 @@ public class UpdateUserUseCaseTests : BaseUserUseCaseTests
 		var command = new UpdateUserCommand(
 			firstUser.Id,
 			pixKey: "not-a-phone",
-			pixKeyType: "PhoneNumber");
+			pixKeyType: nameof(PixKeyType.PhoneNumber));
 
 		// Act
 		var result = await useCase.HandleAsync(command);

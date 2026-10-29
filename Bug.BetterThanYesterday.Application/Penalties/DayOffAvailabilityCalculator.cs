@@ -5,13 +5,6 @@ using Bug.BetterThanYesterday.Domain.Challenges.Entities;
 
 namespace Bug.BetterThanYesterday.Application.Penalties;
 
-public enum DayCoverage
-{
-	Covered,
-	Missed,
-	Deferred,
-}
-
 public static class DayOffAvailabilityCalculator
 {
 	// Avalia se o dia foi coberto por um checkin validado

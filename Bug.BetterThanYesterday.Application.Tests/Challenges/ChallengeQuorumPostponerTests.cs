@@ -1,6 +1,7 @@
 using Bug.BetterThanYesterday.Application.Challenges;
 using Bug.BetterThanYesterday.Domain.Challenges;
 using Bug.BetterThanYesterday.Domain.Challenges.Entities;
+using Bug.BetterThanYesterday.Domain.Challenges.ValueObjects;
 using Moq;
 using Xunit;
 
@@ -66,7 +67,7 @@ public class ChallengeQuorumPostponerTests
 			"Treino",
 			startsAt.ToDateTime(TimeOnly.MinValue),
 			endsAt.ToDateTime(TimeOnly.MinValue),
-			"Public",
+			nameof(ChallengeType.Public),
 			daysOffPerWeek: 1,
 			penaltyValue: 10,
 			isCancelled,

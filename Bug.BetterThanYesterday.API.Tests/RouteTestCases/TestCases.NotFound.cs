@@ -224,7 +224,7 @@ public partial class TestCases
 			},
 			new()
 			{
-				Name = "GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDate_WhenChallengeDoesNotExist_ShouldReturnNotFound",
+				Name = "GetChallengeUserDateWithCheckIns_WhenChallengeDoesNotExist_ShouldReturnNotFound",
 				MocksSetUp = new MocksCollection
 				{
 					Habits = "[{\"Name\":\"Habit f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"Id\":\"f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit 0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"Id\":\"0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit f523e101-d4b9-453e-8669-c9e8a6918544\",\"Id\":\"f523e101-d4b9-453e-8669-c9e8a6918544\",\"CreatedAt\":\"1967-06-20T00:00:00\"},{\"Name\":\"Habit f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"Id\":\"f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"CreatedAt\":\"2005-04-02T00:00:00\"},{\"Name\":\"Habit 809e7984-9eba-460e-be7d-955e229f7dce\",\"Id\":\"809e7984-9eba-460e-be7d-955e229f7dce\",\"CreatedAt\":\"1991-01-16T00:00:00\"}]",
@@ -240,7 +240,7 @@ public partial class TestCases
 			},
 			new()
 			{
-				Name = "GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDate_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Name = "GetChallengeUserDateWithCheckIns_WhenHabitDoesNotExist_ShouldReturnNotFound",
 				MocksSetUp = new MocksCollection
 				{
 					Habits = "[{\"Name\":\"Habit f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"Id\":\"f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit 0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"Id\":\"0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit f523e101-d4b9-453e-8669-c9e8a6918544\",\"Id\":\"f523e101-d4b9-453e-8669-c9e8a6918544\",\"CreatedAt\":\"1967-06-20T00:00:00\"},{\"Name\":\"Habit f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"Id\":\"f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"CreatedAt\":\"2005-04-02T00:00:00\"},{\"Name\":\"Habit 809e7984-9eba-460e-be7d-955e229f7dce\",\"Id\":\"809e7984-9eba-460e-be7d-955e229f7dce\",\"CreatedAt\":\"1991-01-16T00:00:00\"}]",
@@ -256,7 +256,7 @@ public partial class TestCases
 			},
 			new()
 			{
-				Name = "GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDate_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Name = "GetChallengeUserDateWithCheckIns_WhenUserDoesNotExist_ShouldReturnNotFound",
 				MocksSetUp = new MocksCollection
 				{
 					Habits = "[{\"Name\":\"Habit f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"Id\":\"f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit 0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"Id\":\"0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit f523e101-d4b9-453e-8669-c9e8a6918544\",\"Id\":\"f523e101-d4b9-453e-8669-c9e8a6918544\",\"CreatedAt\":\"1967-06-20T00:00:00\"},{\"Name\":\"Habit f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"Id\":\"f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"CreatedAt\":\"2005-04-02T00:00:00\"},{\"Name\":\"Habit 809e7984-9eba-460e-be7d-955e229f7dce\",\"Id\":\"809e7984-9eba-460e-be7d-955e229f7dce\",\"CreatedAt\":\"1991-01-16T00:00:00\"}]",
@@ -272,7 +272,7 @@ public partial class TestCases
 			},
 			new()
 			{
-				Name = "GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDate_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Name = "GetChallengeUserDateWithCheckIns_WhenOwnerDoesNotExist_ShouldReturnNotFound",
 				MocksSetUp = new MocksCollection
 				{
 					Habits = "[{\"Name\":\"Habit f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"Id\":\"f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit 0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"Id\":\"0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit f523e101-d4b9-453e-8669-c9e8a6918544\",\"Id\":\"f523e101-d4b9-453e-8669-c9e8a6918544\",\"CreatedAt\":\"1967-06-20T00:00:00\"},{\"Name\":\"Habit f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"Id\":\"f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"CreatedAt\":\"2005-04-02T00:00:00\"},{\"Name\":\"Habit 809e7984-9eba-460e-be7d-955e229f7dce\",\"Id\":\"809e7984-9eba-460e-be7d-955e229f7dce\",\"CreatedAt\":\"1991-01-16T00:00:00\"}]",
@@ -288,7 +288,7 @@ public partial class TestCases
 			},
 			new()
 			{
-				Name = "GetChallengeUserWithCheckInsByChallengeIdAndUserId_WhenChallengeDoesNotExist_ShouldReturnNotFound",
+				Name = "GetChallengeUserWithCheckIns_WhenChallengeDoesNotExist_ShouldReturnNotFound",
 				MocksSetUp = new MocksCollection
 				{
 					Habits = "[{\"Name\":\"Habit f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"Id\":\"f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit 0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"Id\":\"0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit f523e101-d4b9-453e-8669-c9e8a6918544\",\"Id\":\"f523e101-d4b9-453e-8669-c9e8a6918544\",\"CreatedAt\":\"1967-06-20T00:00:00\"},{\"Name\":\"Habit f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"Id\":\"f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"CreatedAt\":\"2005-04-02T00:00:00\"},{\"Name\":\"Habit 809e7984-9eba-460e-be7d-955e229f7dce\",\"Id\":\"809e7984-9eba-460e-be7d-955e229f7dce\",\"CreatedAt\":\"1991-01-16T00:00:00\"}]",
@@ -304,7 +304,7 @@ public partial class TestCases
 			},
 			new()
 			{
-				Name = "GetChallengeUserWithCheckInsByChallengeIdAndUserId_WhenHabitDoesNotExist_ShouldReturnNotFound",
+				Name = "GetChallengeUserWithCheckIns_WhenHabitDoesNotExist_ShouldReturnNotFound",
 				MocksSetUp = new MocksCollection
 				{
 					Habits = "[{\"Name\":\"Habit f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"Id\":\"f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit 0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"Id\":\"0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit f523e101-d4b9-453e-8669-c9e8a6918544\",\"Id\":\"f523e101-d4b9-453e-8669-c9e8a6918544\",\"CreatedAt\":\"1967-06-20T00:00:00\"},{\"Name\":\"Habit f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"Id\":\"f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"CreatedAt\":\"2005-04-02T00:00:00\"},{\"Name\":\"Habit 809e7984-9eba-460e-be7d-955e229f7dce\",\"Id\":\"809e7984-9eba-460e-be7d-955e229f7dce\",\"CreatedAt\":\"1991-01-16T00:00:00\"}]",
@@ -320,7 +320,7 @@ public partial class TestCases
 			},
 			new()
 			{
-				Name = "GetChallengeUserWithCheckInsByChallengeIdAndUserId_WhenUserDoesNotExist_ShouldReturnNotFound",
+				Name = "GetChallengeUserWithCheckIns_WhenUserDoesNotExist_ShouldReturnNotFound",
 				MocksSetUp = new MocksCollection
 				{
 					Habits = "[{\"Name\":\"Habit f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"Id\":\"f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit 0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"Id\":\"0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit f523e101-d4b9-453e-8669-c9e8a6918544\",\"Id\":\"f523e101-d4b9-453e-8669-c9e8a6918544\",\"CreatedAt\":\"1967-06-20T00:00:00\"},{\"Name\":\"Habit f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"Id\":\"f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"CreatedAt\":\"2005-04-02T00:00:00\"},{\"Name\":\"Habit 809e7984-9eba-460e-be7d-955e229f7dce\",\"Id\":\"809e7984-9eba-460e-be7d-955e229f7dce\",\"CreatedAt\":\"1991-01-16T00:00:00\"}]",
@@ -336,7 +336,7 @@ public partial class TestCases
 			},
 			new()
 			{
-				Name = "GetChallengeUserWithCheckInsByChallengeIdAndUserId_WhenOwnerDoesNotExist_ShouldReturnNotFound",
+				Name = "GetChallengeUserWithCheckIns_WhenOwnerDoesNotExist_ShouldReturnNotFound",
 				MocksSetUp = new MocksCollection
 				{
 					Habits = "[{\"Name\":\"Habit f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"Id\":\"f3c7d661-30b5-4ceb-a5da-57e2db41f0b1\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit 0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"Id\":\"0160269d-1e78-4ca2-b100-ee42805b5c1e\",\"CreatedAt\":\"1999-01-10T00:00:00\"},{\"Name\":\"Habit f523e101-d4b9-453e-8669-c9e8a6918544\",\"Id\":\"f523e101-d4b9-453e-8669-c9e8a6918544\",\"CreatedAt\":\"1967-06-20T00:00:00\"},{\"Name\":\"Habit f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"Id\":\"f8cfc6a0-7304-41bb-985e-a3ce9c955bde\",\"CreatedAt\":\"2005-04-02T00:00:00\"},{\"Name\":\"Habit 809e7984-9eba-460e-be7d-955e229f7dce\",\"Id\":\"809e7984-9eba-460e-be7d-955e229f7dce\",\"CreatedAt\":\"1991-01-16T00:00:00\"}]",

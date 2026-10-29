@@ -12,12 +12,6 @@ using Microsoft.Extensions.Options;
 
 namespace Bug.BetterThanYesterday.Application.Reports.CreateCheckInReport;
 
-public sealed class PlatformAdminOptions
-{
-	public const string SectionName = "Admin";
-	public string UserId { get; set; } = string.Empty;
-}
-
 public sealed class CreateCheckInReportUseCase(
 	ICheckInRepository checkInRepository,
 	IChallengeMemberRepository challengeMemberRepository,
@@ -46,11 +40,11 @@ public sealed class CreateCheckInReportUseCase(
 				return Result.Rejected(Messages.UserIsNotInTheChallenge, RejectionType.NotFound);
 
 			var report = CheckInReport.CreateNew(
-				checkIn.Id,
-				checkIn.ChallengeId,
-				command.ReporterId,
-				checkIn.UserId,
-				command.Reason);
+				checkInId: checkIn.Id,
+				challengeId: checkIn.ChallengeId,
+				reporterId: command.ReporterId,
+				targetUserId: checkIn.UserId,
+				reason: command.Reason);
 
 			await checkInReportRepository.AddAsync(report);
 
@@ -71,12 +65,12 @@ public sealed class CreateCheckInReportUseCase(
 					recipients.Add(adminId);
 
 				await notificationProcessor.NotifyCheckInReportedAsync(
-					checkIn.ChallengeId,
-					checkIn.Id,
-					command.ReporterId,
-					checkIn.UserId,
-					message,
-					recipients);
+					challengeId: checkIn.ChallengeId,
+					checkInId: checkIn.Id,
+					reporterId: command.ReporterId,
+					targetUserId: checkIn.UserId,
+					message: message,
+					recipientIds: recipients);
 			}
 			catch
 			{

@@ -1,5 +1,5 @@
 using Bug.BetterThanYesterday.Application.CheckIns;
-using Bug.BetterThanYesterday.Application.CheckIns.GetChallengeUserWithCheckInsByChallengeIdAndUserId;
+using Bug.BetterThanYesterday.Application.CheckIns.GetChallengeUserWithCheckIns;
 using Bug.BetterThanYesterday.Application.CheckIns.Models;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Challenges.ValueObjects;
@@ -9,19 +9,19 @@ using Xunit;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.CheckInUseCases;
 
-public class GetChallengeUserWithCheckInsByChallengeIdAndUserIdUseCaseTests : BaseCheckInUseCaseTests
+public class GetChallengeUserWithCheckInsUseCaseTests : BaseCheckInUseCaseTests
 {
     [Fact]
-    public async Task Test_GetChallengeUserWithCheckInsByChallengeIdAndUserIdUseCase_ChallengeUserSuccessfullyFound_ShouldReturnSuccess()
+    public async Task Test_GetChallengeUserWithCheckInsUseCase_ChallengeUserSuccessfullyFound_ShouldReturnSuccess()
     {
         // Arrange
-        var useCase = _mocker.CreateInstance<GetChallengeUserWithCheckInsByChallengeIdAndUserIdUseCase>();
+        var useCase = _mocker.CreateInstance<GetChallengeUserWithCheckInsUseCase>();
         var firstChallenge = _mock.Challenges[0];
         var firstUser = _mock.Users[0];
         var checkIns = _mock.CheckIns.Where(x =>
             x.ChallengeId == firstChallenge.Id &&
             x.UserId == firstUser.Id).ToList();
-        var command = new GetChallengeUserWithCheckInsByChallengeIdAndUserIdCommand(firstChallenge.Id, firstUser.Id);
+        var command = new GetChallengeUserWithCheckInsCommand(firstChallenge.Id, firstUser.Id);
 
         // Act
         var result = await useCase.HandleAsync(command);
@@ -74,12 +74,12 @@ public class GetChallengeUserWithCheckInsByChallengeIdAndUserIdUseCaseTests : Ba
     }
 
     [Fact]
-    public async Task Test_GetChallengeUserWithCheckInsByChallengeIdAndUserIdUseCase_ChallengeNotFound_ShouldReturnRejected()
+    public async Task Test_GetChallengeUserWithCheckInsUseCase_ChallengeNotFound_ShouldReturnRejected()
     {
         // Arrange
-        var useCase = _mocker.CreateInstance<GetChallengeUserWithCheckInsByChallengeIdAndUserIdUseCase>();
+        var useCase = _mocker.CreateInstance<GetChallengeUserWithCheckInsUseCase>();
         var firstUser = _mock.Users[0];
-        var command = new GetChallengeUserWithCheckInsByChallengeIdAndUserIdCommand(Guid.NewGuid(), firstUser.Id);
+        var command = new GetChallengeUserWithCheckInsCommand(Guid.NewGuid(), firstUser.Id);
 
         // Act
         var result = await useCase.HandleAsync(command);
@@ -95,12 +95,12 @@ public class GetChallengeUserWithCheckInsByChallengeIdAndUserIdUseCaseTests : Ba
     }
 
     [Fact]
-    public async Task Test_GetChallengeUserWithCheckInsByChallengeIdAndUserIdUseCase_UserNotFound_ShouldReturnRejected()
+    public async Task Test_GetChallengeUserWithCheckInsUseCase_UserNotFound_ShouldReturnRejected()
     {
         // Arrange
-        var useCase = _mocker.CreateInstance<GetChallengeUserWithCheckInsByChallengeIdAndUserIdUseCase>();
+        var useCase = _mocker.CreateInstance<GetChallengeUserWithCheckInsUseCase>();
         var firstChallenge = _mock.Challenges[0];
-        var command = new GetChallengeUserWithCheckInsByChallengeIdAndUserIdCommand(firstChallenge.Id, Guid.NewGuid());
+        var command = new GetChallengeUserWithCheckInsCommand(firstChallenge.Id, Guid.NewGuid());
 
         // Act
         var result = await useCase.HandleAsync(command);

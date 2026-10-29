@@ -87,13 +87,3 @@ public class PenaltiesController(
 		return StatusCode(StatusCodes.Status500InternalServerError, result);
 	}
 }
-
-public sealed class PayPenaltyRequest
-{
-	public Guid ConfirmedByUserId { get; set; }
-}
-
-public sealed class CreatePixChargeRequest
-{
-	public Guid UserId { get; set; }
-}

@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Bug.BetterThanYesterday.Application.Tests;
 
-public class Tests
+public class DependencyInjectionTests
 {
 
 	[Fact]

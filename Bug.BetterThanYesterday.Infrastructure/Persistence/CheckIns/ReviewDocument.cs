@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Bug.BetterThanYesterday.Infrastructure.Persistence.CheckIns;
 
-    public class ReviewObject
+    public class ReviewDocument
 	{
 		[BsonRepresentation(BsonType.String)]
 		public Guid ReviewerId { get; set; }

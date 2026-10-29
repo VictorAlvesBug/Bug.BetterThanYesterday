@@ -3,7 +3,10 @@ using Bug.BetterThanYesterday.Domain.CheckIns.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Habits.Entities;
 using Bug.BetterThanYesterday.Domain.ChallengeMembers.Entities;
 using Bug.BetterThanYesterday.Domain.Challenges.Entities;
+using Bug.BetterThanYesterday.Domain.ChallengeMembers.ValueObjects;
+using Bug.BetterThanYesterday.Domain.Challenges.ValueObjects;
 using Bug.BetterThanYesterday.Domain.Users.Entities;
+using Bug.BetterThanYesterday.Domain.Users.ValueObjects;
 
 namespace Bug.BetterThanYesterday.API.Tests.Commons
 {
@@ -44,7 +47,7 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 			nickname = string.IsNullOrWhiteSpace(nickname) ? $"user{id.ToString()[..4]}" : nickname;
 			phoneNumber = string.IsNullOrWhiteSpace(phoneNumber) ? $"11987654321" : phoneNumber;
 			pixKey = string.IsNullOrWhiteSpace(pixKey) ? phoneNumber : pixKey;
-			pixKeyType = string.IsNullOrWhiteSpace(pixKeyType) ? $"PhoneNumber" : pixKeyType;
+			pixKeyType = string.IsNullOrWhiteSpace(pixKeyType) ? nameof(PixKeyType.PhoneNumber) : pixKeyType;
 			createdAt = createdAt == default ? DateTime.Now : createdAt;
 
 			return User.Restore(
@@ -66,7 +69,7 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 			string? description = "",
 			DateTime startsAt = default,
 			DateTime endsAt = default,
-			string type = "Public",
+			string type = nameof(ChallengeType.Public),
 			int daysOffPerWeek = 2,
 			decimal penaltyValue = 10m,
 			bool isCancelled = false,
@@ -108,7 +111,7 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 			challengeId = challengeId == default ? Guid.NewGuid() : challengeId;
 			userId = userId == default ? Guid.NewGuid() : userId;
 			joinedAt = joinedAt == default ? DateTime.Today.AddDays(-1) : joinedAt;
-			status = string.IsNullOrWhiteSpace(status) ? "Active" : status;
+			status = string.IsNullOrWhiteSpace(status) ? nameof(ChallengeMemberStatus.Active) : status;
 			createdAt = createdAt == default ? DateTime.Now : createdAt;
 
 			return ChallengeMember.Restore(
@@ -139,7 +142,7 @@ namespace Bug.BetterThanYesterday.API.Tests.Commons
 			date = date == default ? DateTime.Today : date;
 			title = string.IsNullOrWhiteSpace(title) ? $"CheckIn {id.ToString()[..4]}" : title;
 			photoUrl = string.IsNullOrWhiteSpace(photoUrl) ? $"checkin-{id.ToString()[..4]}-photo.jpg" : photoUrl;
-			status = string.IsNullOrWhiteSpace(status) ? "Pending" : status;
+			status = string.IsNullOrWhiteSpace(status) ? nameof(CheckInStatus.Pending) : status;
 			reviews = reviews == default ? [] : reviews;
 			createdAt = createdAt == default ? DateTime.Now : createdAt;
 

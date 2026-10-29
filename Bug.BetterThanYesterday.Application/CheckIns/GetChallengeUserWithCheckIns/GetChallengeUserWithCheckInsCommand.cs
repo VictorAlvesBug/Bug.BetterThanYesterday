@@ -1,11 +1,11 @@
 using Bug.BetterThanYesterday.Application.SeedWork;
 using Bug.BetterThanYesterday.Domain.Strings;
 
-namespace Bug.BetterThanYesterday.Application.CheckIns.GetChallengeUserWithCheckInsByChallengeIdAndUserId;
+namespace Bug.BetterThanYesterday.Application.CheckIns.GetChallengeUserWithCheckIns;
 
-public class GetChallengeUserWithCheckInsByChallengeIdAndUserIdCommand : ICommand
+public class GetChallengeUserWithCheckInsCommand : ICommand
 {
-    public GetChallengeUserWithCheckInsByChallengeIdAndUserIdCommand(
+    public GetChallengeUserWithCheckInsCommand(
         Guid challengeId,
         Guid userId
     )

@@ -1,5 +1,6 @@
 using Bug.BetterThanYesterday.Application.Penalties;
 using Bug.BetterThanYesterday.Domain.Challenges.Entities;
+using Bug.BetterThanYesterday.Domain.Challenges.ValueObjects;
 using Xunit;
 
 namespace Bug.BetterThanYesterday.Application.Tests.Penalties;
@@ -18,7 +19,7 @@ public class DayOffAvailabilityCalculatorTests
 			"Treino",
 			monday.ToDateTime(TimeOnly.MinValue),
 			monday.AddDays(30).ToDateTime(TimeOnly.MinValue),
-			"Public",
+			nameof(ChallengeType.Public),
 			daysOffPerWeek: 1,
 			penaltyValue: 10,
 			isCancelled: false,

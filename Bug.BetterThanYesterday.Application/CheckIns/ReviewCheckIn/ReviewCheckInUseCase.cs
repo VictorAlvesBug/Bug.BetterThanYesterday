@@ -92,13 +92,13 @@ public sealed class ReviewCheckInUseCase(
                     && rejections > activeReviews.Count / 2;
 
                 await notificationProcessor.NotifyCheckInReviewedAsync(
-                    challenge.Id,
-                    checkIn.Id,
-                    checkIn.UserId,
-                    reviewer.Id,
-                    reviewer.Nickname,
-                    command.Status == CheckInStatus.Rejected.Name,
-                    atRisk);
+                    challengeId: challenge.Id,
+                    checkInId: checkIn.Id,
+                    authorId: checkIn.UserId,
+                    reviewerId: reviewer.Id,
+                    reviewerName: reviewer.Nickname,
+                    rejected: command.Status == CheckInStatus.Rejected.Name,
+                    atRiskOfRejection: atRisk);
             }
             catch
             {

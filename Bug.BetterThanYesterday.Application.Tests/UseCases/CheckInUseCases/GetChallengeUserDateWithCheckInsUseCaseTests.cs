@@ -1,5 +1,5 @@
 using Bug.BetterThanYesterday.Application.CheckIns;
-using Bug.BetterThanYesterday.Application.CheckIns.GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDate;
+using Bug.BetterThanYesterday.Application.CheckIns.GetChallengeUserDateWithCheckIns;
 using Bug.BetterThanYesterday.Application.CheckIns.Models;
 using Bug.BetterThanYesterday.Application.SeedWork.UseCaseStructure;
 using Bug.BetterThanYesterday.Domain.Challenges.ValueObjects;
@@ -9,13 +9,13 @@ using Xunit;
 
 namespace Bug.BetterThanYesterday.Application.Tests.UseCases.CheckInUseCases;
 
-public class GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCaseTests : BaseCheckInUseCaseTests
+public class GetChallengeUserDateWithCheckInsUseCaseTests : BaseCheckInUseCaseTests
 {
     [Fact]
-    public async Task Test_GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCase_ChallengeUserDateSuccessfullyFound_ShouldReturnSuccess()
+    public async Task Test_GetChallengeUserDateWithCheckInsUseCase_ChallengeUserDateSuccessfullyFound_ShouldReturnSuccess()
     {
         // Arrange
-        var useCase = _mocker.CreateInstance<GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCase>();
+        var useCase = _mocker.CreateInstance<GetChallengeUserDateWithCheckInsUseCase>();
         var firstChallenge = _mock.Challenges[0];
         var firstUser = _mock.Users[0];
         var checkInDate = _mock.CheckIns.First(x => x.ChallengeId == firstChallenge.Id && x.UserId == firstUser.Id).Date;
@@ -23,7 +23,7 @@ public class GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCas
             x.ChallengeId == firstChallenge.Id &&
             x.UserId == firstUser.Id &&
             DateOnly.FromDateTime(x.Date) == DateOnly.FromDateTime(checkInDate)).ToList();
-        var command = new GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateCommand(
+        var command = new GetChallengeUserDateWithCheckInsCommand(
             firstChallenge.Id,
             firstUser.Id,
             checkInDate
@@ -86,12 +86,12 @@ public class GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCas
     }
 
     [Fact]
-    public async Task Test_GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCase_ChallengeNotFound_ShouldReturnRejected()
+    public async Task Test_GetChallengeUserDateWithCheckInsUseCase_ChallengeNotFound_ShouldReturnRejected()
     {
         // Arrange
-        var useCase = _mocker.CreateInstance<GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCase>();
+        var useCase = _mocker.CreateInstance<GetChallengeUserDateWithCheckInsUseCase>();
         var firstUser = _mock.Users[0];
-        var command = new GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateCommand(
+        var command = new GetChallengeUserDateWithCheckInsCommand(
             Guid.NewGuid(),
             firstUser.Id,
             DateTime.Today
@@ -111,12 +111,12 @@ public class GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCas
     }
 
     [Fact]
-    public async Task Test_GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCase_UserNotFound_ShouldReturnRejected()
+    public async Task Test_GetChallengeUserDateWithCheckInsUseCase_UserNotFound_ShouldReturnRejected()
     {
         // Arrange
-        var useCase = _mocker.CreateInstance<GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCase>();
+        var useCase = _mocker.CreateInstance<GetChallengeUserDateWithCheckInsUseCase>();
         var firstChallenge = _mock.Challenges[0];
-        var command = new GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateCommand(
+        var command = new GetChallengeUserDateWithCheckInsCommand(
             firstChallenge.Id,
             Guid.NewGuid(),
             DateTime.Today
@@ -136,13 +136,13 @@ public class GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCas
     }
 
     [Fact]
-    public async Task Test_GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCase_NoCheckInsFound_ShouldReturnSuccess()
+    public async Task Test_GetChallengeUserDateWithCheckInsUseCase_NoCheckInsFound_ShouldReturnSuccess()
     {
         // Arrange
-        var useCase = _mocker.CreateInstance<GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateUseCase>();
+        var useCase = _mocker.CreateInstance<GetChallengeUserDateWithCheckInsUseCase>();
         var firstChallenge = _mock.Challenges[0];
         var firstUser = _mock.Users[0];
-        var command = new GetChallengeUserDateWithCheckInsByChallengeIdAndUserIdAndDateCommand(
+        var command = new GetChallengeUserDateWithCheckInsCommand(
             firstChallenge.Id,
             firstUser.Id,
             DateTime.Today.AddYears(1)

@@ -16,7 +16,7 @@ public class CheckInDocument : Document
 	public string Title { get; set; }
 	public string PhotoUrl { get; set; }
 	public string Status { get; set; }
-	public ReviewObject[] Reviews { get; set; }
+	public ReviewDocument[] Reviews { get; set; }
 	public DateTime ReviewClosesAt { get; set; }
 	public bool IsReplacement { get; set; }
 }

@@ -395,7 +395,7 @@ TODO - On Create User Screen and Update User Screen, add mask validation to fiel
 - NotFoundChallengeId
 
 
---> GetChallengeUserWithCheckInsByChallengeIdAndUserId
+--> GetChallengeUserWithCheckIns
 (challengeId,userId)
 - Valid
 - ChallengeUserWithoutCheckIns
